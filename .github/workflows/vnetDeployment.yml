@@ -1,0 +1,45 @@
+name: Virtual Network Deployment
+
+on:
+  push:
+    branches: [ master ]
+    paths: 
+      - 'infra/VirtualNetwork/**'
+      - '.github/workflows/vnetDeployment.yml'
+
+env:
+  AZURE_RESOURCE_GROUP: datahub-network
+  AZURE_LOCATION: northeurope
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploys vnet
+    - name: Deploy vnet
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
+
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
