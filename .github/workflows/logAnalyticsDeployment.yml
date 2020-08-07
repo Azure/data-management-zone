@@ -2,7 +2,7 @@ name: Log Analytics Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'infra/LogAnalytics/**'
       - '.github/workflows/logAnalyticsDeployment.yml'

@@ -2,7 +2,7 @@ name: Virtual Network Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'infra/VirtualNetwork/**'
       - '.github/workflows/vnetDeployment.yml'

@@ -2,7 +2,7 @@ name: Data Hub Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'infra/KeyVault/**'
       - 'infra/PrivateEndpoint/**'
