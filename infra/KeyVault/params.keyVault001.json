@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "keyVaultName": {
-            "value": "datahub-keyvault"
+            "value": "datahub-keyvault001"
         },
         "subnetResourceId": {
             "value": "/subscriptions/4acba331-889b-4626-91a1-b64fc7dd884f/resourceGroups/data-mesh-network/providers/Microsoft.Network/virtualNetworks/data-mesh-vnet/subnets/private-endpoints-subnet"
