@@ -2,7 +2,7 @@ name: Private DNS Zone Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'infra/PrivateDns/**'
       - '.github/workflows/privateDnsDeployment.yml'
