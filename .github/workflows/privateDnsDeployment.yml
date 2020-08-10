@@ -42,7 +42,7 @@ jobs:
           az logout
 
   validation:
-    needs: [create-resource-group ]
+    needs: [ create-resource-group ]
     runs-on: ubuntu-latest
     
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -94,7 +94,7 @@ jobs:
           az logout
   
   deployment:
-    needs: [create-resource-group, validation ]
+    needs: [ create-resource-group, validation ]
     runs-on: ubuntu-latest
     
     # Steps represent a sequence of tasks that will be executed as part of the job
