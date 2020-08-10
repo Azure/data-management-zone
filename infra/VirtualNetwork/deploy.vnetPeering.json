@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "originVnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the origin vnet."
+            }
+        },
+        "destinationVnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the destination vnet."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "originVnetId": "[parameters('originVnetId')]",
+        "originVnetName": "[last(split(variables('originVnetId'), '/'))]",
+        "destinationVnetId": "[parameters('destinationVnetId')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('originVnetName'), '/datahub-peering')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "allowVirtualNetworkAccess": true,
+                "peeringState": "Connected",
+                "remoteVirtualNetwork": {
+                    "id": "[variables('destinationVnetId')]"
+                },
+                "useRemoteGateways": false
+            }
+        }
+    ],
+    "outputs": {}
+}
