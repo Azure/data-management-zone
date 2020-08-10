@@ -61,3 +61,11 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
