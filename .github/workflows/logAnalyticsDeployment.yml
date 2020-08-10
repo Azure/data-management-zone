@@ -29,15 +29,21 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploys log analytics workspace
-    - name: Deploy log analytics workspace
+    # Creating resource group
+    - name: Creating resource group
       uses: azure/CLI@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
-
+    
+    # Deploys log analytics workspace
+    - name: Deploy log analytics workspace
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \

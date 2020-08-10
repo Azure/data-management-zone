@@ -44,30 +44,41 @@
                     "addressPrefixes": [
                         "10.0.0.0/16"
                     ]
-                },
-                "subnets": [
-                    {
-                        "name": "datahub-subnet",
-                        "properties": {
-                            "addressPrefix": "10.0.0.0/24",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'datahub-nsg')]"
-                            }
-                        }
-                        
-                    },
-                    {
-                        "name": "datahub-privatelink-subnet",
-                        "properties": {
-                            "addressPrefix": "10.0.1.0/24",
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
+                }
+            },
+            "resources": [
+                {
+                    "type": "subnets",
+                    "apiVersion": "2020-05-01",
+                    "name": "datahub-subnet",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.0.0.0/24",
+                        "privateEndpointNetworkPolicies": "Enabled",
+                        "privateLinkServiceNetworkPolicies": "Enabled",
+                        "networkSecurityGroup": {
+                            "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'datahub-nsg')]"
                         }
                     }
-                ]
-            }
+                },
+                {
+                    "type": "subnets",
+                    "apiVersion": "2020-05-01",
+                    "name": "datahub-privatelink-subnet",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+                    ],
+                    "properties": {
+                        "addressPrefix": "10.0.1.0/24",
+                        "privateEndpointNetworkPolicies": "Disabled",
+                        "privateLinkServiceNetworkPolicies": "Disabled"
+                    }
+                }
+            ]
         }
     ]
 }
