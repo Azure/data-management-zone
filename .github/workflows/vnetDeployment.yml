@@ -43,3 +43,11 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout

@@ -43,3 +43,11 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/LogAnalytics/deploy.logAnalytics.json \
             --parameters $GITHUB_WORKSPACE/infra/LogAnalytics/params.logAnalytics.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
