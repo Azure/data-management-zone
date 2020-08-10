@@ -12,7 +12,76 @@ env:
   AZURE_LOCATION: northeurope
 
 jobs:
+  create-resource-group:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Create resource group
+    - name: Create resource group
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+
+  validation:
+    needs: [create-resource-group ]
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploys log analytics workspace - validation
+    - name: Deploy log analytics workspace - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/LogAnalytics/deploy.logAnalytics.json \
+            --parameters $GITHUB_WORKSPACE/infra/LogAnalytics/params.logAnalytics.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+  
   deployment:
+    needs: [create-resource-group, validation ]
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -28,15 +97,6 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    # Creating resource group
-    - name: Creating resource group
-      uses: azure/CLI@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
     
     # Deploys log analytics workspace
     - name: Deploy log analytics workspace
