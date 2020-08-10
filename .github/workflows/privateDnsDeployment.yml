@@ -46,6 +46,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
@@ -58,6 +59,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
