@@ -27,13 +27,14 @@
         "location": "[parameters('location')]",
         "originVnetId": "[parameters('originVnetId')]",
         "originVnetName": "[last(split(variables('originVnetId'), '/'))]",
-        "destinationVnetId": "[parameters('destinationVnetId')]"
+        "destinationVnetId": "[parameters('destinationVnetId')]",
+        "destinationVnetName": "[last(split(variables('destinationVnetId'), '/'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2020-05-01",
-            "name": "[concat(variables('originVnetName'), '/datahub-peering')]",
+            "name": "[concat(variables('originVnetName'), '/', variables('destinationVnetName'))]",
             "location": "[variables('location')]",
             "properties": {
                 "allowForwardedTraffic": true,
