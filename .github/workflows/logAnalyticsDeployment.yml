@@ -46,6 +46,7 @@ jobs:
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
+            --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/LogAnalytics/deploy.logAnalytics.json \
             --parameters $GITHUB_WORKSPACE/infra/LogAnalytics/params.logAnalytics.json
