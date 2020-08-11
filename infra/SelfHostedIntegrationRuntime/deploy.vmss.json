@@ -194,7 +194,7 @@
                     "osProfile": {
                         "adminUsername": "[variables('vmssAdminUsername')]",
                         "adminPassword": "[variables('vmssAdminPassword')]",
-                        "computerNamePrefix": "[variables('vmssName')]"
+                        "computerNamePrefix": "[take(variables('vmssName'), 9)]"
                     },
                     "networkProfile": {
                         "networkInterfaceConfigurations": [
