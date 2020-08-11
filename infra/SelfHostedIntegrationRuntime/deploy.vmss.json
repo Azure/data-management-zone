@@ -48,6 +48,12 @@
             "metadata": {
                 "description": "Specifies the ID of the existing subnet to which the scale set should be attached."
             }
+        },
+        "dataFactoryId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the existing data factory for which an integration runtime should be created."
+            }
         }
     },
     "functions": [],
@@ -58,7 +64,10 @@
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
         "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
-        "subnetResourceId": "[parameters('subnetResourceId')]"
+        "subnetResourceId": "[parameters('subnetResourceId')]",
+        "dataFactoryId": "[parameters('dataFactoryId')]",
+        "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
+        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTQCWVTCT3Z5JZD5CLK7HPVFS"
     },
     "resources": [
         {
@@ -183,7 +192,7 @@
                 },
                 "singlePlacementGroup": false,
                 "upgradePolicy": {
-                    "mode": "Manual"
+                    "mode": "Automatic"
                     // "automaticOSUpgradePolicy": {
                     //     "disableAutomaticRollback": false,
                     //     "enableAutomaticOSUpgrade": true
@@ -243,6 +252,42 @@
                     }
                 },
                 "zoneBalance": true
+            }
+        },
+        {
+            "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
+            "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
+            "apiVersion": "2019-07-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]",
+                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "[variables('gatewayInstallScriptUri')]"
+                    ],
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                },
+                "protectedSettings": {
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+            "apiVersion": "2018-06-01",
+            "name": "[concat(variables('dataFactoryName'), '/datahubSelfHostedIntegrationRuntime')]",
+            "properties": {
+                "additionalProperties": {},
+                "type": "SelfHosted",
+                "description": "Data Hub - Self Hosted Integration Runtime"
             }
         }
     ],
