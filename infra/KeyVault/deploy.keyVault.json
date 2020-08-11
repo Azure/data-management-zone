@@ -59,7 +59,7 @@
                     "family": "A"
                 },
                 "networkAcls": {
-                    "bypass": "None",
+                    "bypass": "AzureServices",
                     "defaultAction": "Deny",
                     "ipRules": [
                     ],
