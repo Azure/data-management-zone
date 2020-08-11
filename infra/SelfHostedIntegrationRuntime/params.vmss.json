@@ -15,7 +15,7 @@
             "value": "Standard_A1_v2"
         },
         "vmssAdminUsername": {
-            "value": "admin"
+            "value": "DataHubAdmin"
         },
         "vmssAdminPassword": {
             "reference": {

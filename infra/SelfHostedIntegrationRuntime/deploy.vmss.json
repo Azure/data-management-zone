@@ -165,7 +165,7 @@
             "sku": {
                 "name": "[variables('vmssSkuName')]",
                 "tier": "[variables('vmssSkuTier')]",
-                "capacity": 4
+                "capacity": 1
             },
             "zones": [
                 "1", "2"
