@@ -1,14 +1,14 @@
-name: Virtual Network Deployment
+name: Self Hosted Integration Runtime Deployment
 
 on:
   push:
     branches: [ main ]
     paths:
-      - 'infra/VirtualNetwork/**'
-      - '.github/workflows/vnetDeployment.yml'
+      - 'infra/SelfHostedIntegrationRuntime/**'
+      - '.github/workflows/selfHostedIntegrationRuntimeDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP: datahub-network
+  AZURE_RESOURCE_GROUP: datahub-shir
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -59,8 +59,8 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy vnet - validation
-    - name: Deploy vnet - validation
+    # Deploy vmss - validation
+    - name: Deploy vmss - validation
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -69,21 +69,8 @@ jobs:
           az deployment group validate \
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
-    
-    # Deploy vnet peering - validation
-    - name: Deploy vnet peering - validation
-      uses: azure/CLI@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -111,8 +98,8 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy vnet
-    - name: Deploy vnet
+    # Deploy vmss
+    - name: Deploy vmss
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -121,21 +108,8 @@ jobs:
           az deployment group create \
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
-    
-    # Deploy vnet peering
-    - name: Deploy vnet peering
-      uses: azure/CLI@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss.json
     
     # Log out from Azure
     - name: Log out from Azure

@@ -1,0 +1,277 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "vmssName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the virtual machine scale set."
+            }
+        },
+        "vmssSkuTier": {
+            "type": "string",
+            "allowedValues": [
+                "Standard",
+                "Basic"
+            ],
+            "metadata": {
+                "description": "Specifies the SKU tier of the virtual machine scale set."
+            }
+        },
+        "vmssSkuName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the SKU name of the virtual machine scale set."
+            }
+        },
+        "vmssAdminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the admin username of the virtual machine scale set."
+            }
+        },
+        "vmssAdminPassword": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the admin password of the virtual machine scale set."
+            }
+        },
+        "subnetResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the existing subnet to which the scale set should be attached."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "vmssName": "[parameters('vmssName')]",
+        "vmssSkuTier": "[parameters('vmssSkuTier')]",
+        "vmssSkuName": "[parameters('vmssSkuName')]",
+        "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
+        "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
+        "subnetResourceId": "[parameters('subnetResourceId')]"
+    },
+    "resources": [
+        {
+            "name": "[concat(variables('vmssName'), '-nsg')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "default-allow-rdp",
+                        "properties": {
+                            "priority": 1000,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "3389",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[concat(variables('vmssName'), '-publicip')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "publicIPAddressVersion": "IPv4",
+                "dnsSettings": {
+                    "domainNameLabel": "datahubSelfHostedIntegrationRuntime"
+                },
+                "ddosSettings": {
+                    "protectionCoverage": "Standard",
+                    "protectedIP": true
+                },
+                "ipTags": []
+            }
+        },
+        // {
+        //     "name": "[concat(variables('vmssName'), '-nic')]",
+        //     "type": "Microsoft.Network/networkInterfaces",
+        //     "apiVersion": "2019-11-01",
+        //     "location": "[resourceGroup().location]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
+        //         "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmssName'), '-nic'))]"
+        //     ],
+        //     "properties": {
+        //         "ipConfigurations": [
+        //             {
+        //                 "name": "ipConfig1",
+        //                 "properties": {
+        //                     "privateIPAllocationMethod": "Dynamic",
+        //                     "subnet": {
+        //                         "id": "[variables('subnetResourceId')]"
+        //                     },
+        //                     "publicIPAddress": {
+        //                         "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+        //                     }
+        //                 }
+        //             }
+        //         ],
+        //         "networkSecurityGroup": {
+        //             "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
+        //         }
+        //     }
+        // },
+        {
+            "name": "[concat(variables('vmssName'), '-lb')]",
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+            ],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "loadBalancerFrontEnd",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-backendPool')]"
+                    }
+                ],
+                "inboundNatPools": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-natPool')]",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations/loadBalancerFrontEnd', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPortRangeStart": 50000,
+                            "frontendPortRangeEnd": 50099,
+                            "backendPort": 3389,
+                            "idleTimeoutInMinutes": 4
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('vmssName')]",
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2019-07-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+            ],
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "sku": {
+                "name": "[variables('vmssSkuName')]",
+                "tier": "[variables('vmssSkuTier')]",
+                "capacity": 4
+            },
+            "zones": [
+                "1", "2"
+            ],
+            "properties": {
+                "additionalCapabilities": {},
+                "automaticRepairsPolicy": {},
+                "doNotRunExtensionsOnOverprovisionedVMs": false,
+                "overprovision": true,
+                "platformFaultDomainCount": 3,
+                "proximityPlacementGroup": {},
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ]
+                },
+                "singlePlacementGroup": false,
+                "upgradePolicy": {
+                    "mode": "Automatic",
+                    "automaticOSUpgradePolicy": {
+                        "disableAutomaticRollback": false,
+                        "enableAutomaticOSUpgrade": true
+                    }
+                },
+                "virtualMachineProfile": {
+                    "priority": "Regular",
+                    "osProfile": {
+                        "adminUsername": "[variables('vmssAdminUsername')]",
+                        "adminPassword": "[variables('vmssAdminPassword')]",
+                        "computerNamePrefix": "[variables('vmssName')]"
+                    },
+                    "networkProfile": {
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "[concat(variables('vmssName'), '-nic')]",
+                                "properties": {
+                                    "primary": true,
+                                    "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
+                                    },
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "[concat(variables('vmssName'), '-ipConfig')]",
+                                            "properties": {
+                                                "subnet": {
+                                                    "id": "[variables('subnetResourceId')]"
+                                                },
+                                                "loadBalancerBackendAddressPools": [
+                                                    {
+                                                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
+                                                    }
+                                                ],
+                                                "loadBalancerInboundNatPools": [
+                                                    {
+                                                        "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-natPool'))]"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "storageProfile": {
+                        "osDisk": {
+                            "caching": "ReadWrite",
+                            "createOption": "FromImage"
+                        },
+                        "imageReference": {
+                            "publisher": "MicrosoftWindowsServer",
+                            "offer": "WindowsServer",
+                            "sku": "2019-Datacenter",
+                            "version": "latest"
+                        }
+                    }
+                },
+                "zoneBalance": true
+            }
+        }
+    ],
+    "outputs": {}
+}
