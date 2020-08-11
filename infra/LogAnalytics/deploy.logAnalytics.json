@@ -35,5 +35,6 @@
                 "publicNetworkAccessForQuery": "Disabled"
             }
         }
-    ]
+    ],
+    "outputs": {}
 }
