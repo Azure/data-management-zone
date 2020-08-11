@@ -105,35 +105,6 @@
                 "ipTags": []
             }
         },
-        // {
-        //     "name": "[concat(variables('vmssName'), '-nic')]",
-        //     "type": "Microsoft.Network/networkInterfaces",
-        //     "apiVersion": "2019-11-01",
-        //     "location": "[resourceGroup().location]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
-        //         "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmssName'), '-nic'))]"
-        //     ],
-        //     "properties": {
-        //         "ipConfigurations": [
-        //             {
-        //                 "name": "ipConfig1",
-        //                 "properties": {
-        //                     "privateIPAllocationMethod": "Dynamic",
-        //                     "subnet": {
-        //                         "id": "[variables('subnetResourceId')]"
-        //                     },
-        //                     "publicIPAddress": {
-        //                         "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
-        //                     }
-        //                 }
-        //             }
-        //         ],
-        //         "networkSecurityGroup": {
-        //             "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
-        //         }
-        //     }
-        // },
         {
             "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
@@ -163,7 +134,7 @@
                         "name": "[concat(variables('vmssName'), '-natPool')]",
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations/loadBalancerFrontEnd', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
                             },
                             "protocol": "Tcp",
                             "frontendPortRangeStart": 50000,
