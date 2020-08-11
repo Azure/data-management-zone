@@ -183,11 +183,11 @@
                 },
                 "singlePlacementGroup": false,
                 "upgradePolicy": {
-                    "mode": "Automatic",
-                    "automaticOSUpgradePolicy": {
-                        "disableAutomaticRollback": false,
-                        "enableAutomaticOSUpgrade": true
-                    }
+                    // "mode": "Automatic",
+                    // "automaticOSUpgradePolicy": {
+                    //     "disableAutomaticRollback": false,
+                    //     "enableAutomaticOSUpgrade": true
+                    // }
                 },
                 "virtualMachineProfile": {
                     "priority": "Regular",
