@@ -96,7 +96,7 @@
                 "publicIPAllocationMethod": "Dynamic",
                 "publicIPAddressVersion": "IPv4",
                 "dnsSettings": {
-                    "domainNameLabel": "datahubSelfHostedIntegrationRuntime"
+                    "domainNameLabel": "datahubshir"
                 },
                 "ddosSettings": {
                     "protectionCoverage": "Standard",
