@@ -176,7 +176,6 @@
                 "doNotRunExtensionsOnOverprovisionedVMs": false,
                 "overprovision": true,
                 "platformFaultDomainCount": 5,
-                "proximityPlacementGroup": {},
                 "scaleInPolicy": {
                     "rules": [
                         "Default"
