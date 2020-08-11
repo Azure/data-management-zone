@@ -45,7 +45,7 @@
             "location": "[variables('location')]",
             "properties": {
                 "enabledForDeployment": false,
-                "enabledForTemplateDeployment": false,
+                "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": false,
                 "enablePurgeProtection": true,
                 "enableSoftDelete": true,
