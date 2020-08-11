@@ -98,10 +98,7 @@
                 "dnsSettings": {
                     "domainNameLabel": "datahubshir"
                 },
-                "ddosSettings": {
-                    "protectionCoverage": "Standard",
-                    "protectedIP": true
-                },
+                "ddosSettings": {},
                 "ipTags": []
             }
         },
