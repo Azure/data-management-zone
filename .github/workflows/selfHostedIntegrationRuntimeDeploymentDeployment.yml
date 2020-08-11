@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/DataFactory/**'
       - '.github/workflows/selfHostedIntegrationRuntimeDeployment.yml'
 
 env:
@@ -59,6 +60,19 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    # Deploy data factory - validation
+    - name: Deploy data factory - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+    
     # Deploy vmss - validation
     - name: Deploy vmss - validation
       uses: azure/CLI@v1
@@ -97,6 +111,19 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploy data factory
+    - name: Deploy data factory
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
     # Deploy vmss
     - name: Deploy vmss
