@@ -113,6 +113,9 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
             ],
+            "sku": {
+                "name": "Standard"
+            },
             "properties": {
                 "frontendIPConfigurations": [
                     {
