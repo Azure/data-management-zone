@@ -183,7 +183,7 @@
                 },
                 "singlePlacementGroup": false,
                 "upgradePolicy": {
-                    // "mode": "Automatic",
+                    "mode": "Automatic"
                     // "automaticOSUpgradePolicy": {
                     //     "disableAutomaticRollback": false,
                     //     "enableAutomaticOSUpgrade": true
