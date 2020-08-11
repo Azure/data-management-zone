@@ -175,7 +175,7 @@
                 "automaticRepairsPolicy": {},
                 "doNotRunExtensionsOnOverprovisionedVMs": false,
                 "overprovision": true,
-                "platformFaultDomainCount": 3,
+                "platformFaultDomainCount": 5,
                 "proximityPlacementGroup": {},
                 "scaleInPolicy": {
                     "rules": [
