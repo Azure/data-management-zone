@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "vmssName": {
+            "value": "datahubSHIR"
+        },
+        "vmssSkuTier": {
+            "value": "Standard"
+        },
+        "vmssSkuName": {
+            "value": "Standard_A1_v2"
+        },
+        "vmssAdminUsername": {
+            "value": "admin"
+        },
+        "vmssAdminPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datahub-kv001"
+                },
+                "secretName": "vmssAdminPassword"
+            }
+        },
+        "subnetResourceId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-network/providers/Microsoft.Network/virtualNetworks/datahub-vnet/subnets/datahub-subnet"
+        }
+    }
+}
