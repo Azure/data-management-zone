@@ -263,7 +263,8 @@
                 "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]",
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime')]"
             ],
             "properties": {
                 "publisher": "Microsoft.Compute",
