@@ -96,7 +96,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsContainerRegistry.json
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
     # Deploys private DNS zone for key vault - validation
     - name: Deploy private DNS zone for key vault - validation
@@ -122,7 +122,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsMlWorkspace.json
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -187,7 +187,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsContainerRegistry.json
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
     # Deploys private DNS zone for key vault
     - name: Deploy private DNS zone for key vault
@@ -213,7 +213,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsMlWorkspace.json
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
     # Log out from Azure
     - name: Log out from Azure
