@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policySetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the policy Set to which the policy gets assigned to."
+            }
+        },
+        "policySetDescription": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies a description of the policy set."
+            }
+        },
+        "policySetParameters": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies a description of the policy set."
+            }
+        },
+        "policyIds": {
+            "type": "string",
+            "metadata": {
+                "description": "List of policy IDs that will be assigned to this policy set."
+            }
+        },
+        "policySetMetadata": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies key-value pairs for the policy set."
+            }
+        }
+    },
+    "variables": {
+        "policySetName": "[parameters('policySetName')]",
+        "policySetDescription": "[parameters('policySetDescription')]",
+        "policySetParameters": "[parameters('policySetParameters')]",
+        "policyIds": "[parameters('policyIds')]",
+        "policySetMetadata": "[parameters('policySetMetadata')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policySetDefinitions",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('policySetName')]",
+            "properties": {
+                "policyType": "Custom",
+                "displayName": "[variables('policySetName')]",
+                "description": "[variables('policySetDescription')]",
+                "parameters": "[variables('policySetParameters')]",
+                "policyDefinitions": "[variables('policyIds')]",
+                "metadata": "[variables('policySetMetadata')]"
+            }
+        }
+    ]
+}
