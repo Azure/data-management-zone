@@ -226,9 +226,9 @@
                                 "name": "[concat(variables('vmssName'), '-nic')]",
                                 "properties": {
                                     "primary": true,
-                                    // "networkSecurityGroup": {
-                                    //     "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
-                                    // },
+                                    "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
+                                    },
                                     "ipConfigurations": [
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
@@ -236,14 +236,14 @@
                                                 "subnet": {
                                                     "id": "[variables('subnetResourceId')]"
                                                 },
-                                                "publicIPAddressConfiguration": {
-                                                    "name": "vmpublicip",
-                                                    "properties": {
-                                                        "idleTimeoutInMinutes": 15,
-                                                        "publicIPAddressVersion": "IPv4",
-                                                        "ipTags": []
-                                                    }
-                                                },
+                                                // "publicIPAddressConfiguration": {
+                                                //     "name": "vmpublicip",
+                                                //     "properties": {
+                                                //         "idleTimeoutInMinutes": 15,
+                                                //         "publicIPAddressVersion": "IPv4",
+                                                //         "ipTags": []
+                                                //     }
+                                                // },
                                                 "loadBalancerBackendAddressPools": [
                                                     {
                                                         "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
