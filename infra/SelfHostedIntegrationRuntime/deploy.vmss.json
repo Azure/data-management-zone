@@ -67,7 +67,7 @@
         "subnetResourceId": "[parameters('subnetResourceId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTWJAC5TDQ7Z2RAMXSS7HTTXS",
+        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTVOFB6WTLTJ2FCKNYC7HUDQQ",
         "gatewayInstallScriptUriToken": "AIHRGTQCWVTCT3Z5JZD5CLK7HPVFS"
     },
     "resources": [
