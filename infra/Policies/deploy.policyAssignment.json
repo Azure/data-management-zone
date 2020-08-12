@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the location of the policy assignment."
+            }
+        },
+        "policyAssignmentName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the policy assignment."
+            }
+        },
+        "policyAssignmentScope": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the scope for the policy assignment."
+            }
+        },
+        "policySetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the policy set that should be assigned."
+            }
+        },
+        "policySetParameters": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the parameters of the policy set that should be assigned."
+            }
+        },
+        "policyAssignmentEnforcementMode": {
+            "type": "string",
+            "defaultValue": "Default",
+            "allowedValues": [
+                "Default",
+                "DoNotEnforce"
+            ],
+            "metadata": {
+                "description": "Specifies the enforcement mode that should be used for the policy set assignnment."
+            }
+        }
+    },
+    "variables": {
+        "location": "[parameters('location')]",
+        "policyAssignmentName": "[parameters('policyAssignmentName')]",
+        "policyAssignmentScope": "[parameters('policyAssignmentScope')]",
+        "policySetName": "[parameters('policySetName')]",
+        "policySetParameters": "[parameters('policySetParameters')]",
+        "policyAssignmentEnforcementMode": "[parameters('policyAssignmentEnforcementMode')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyAssignments",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('policyAssignmentName')]",
+            "location": "[variables('location')]",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "displayName": "[variables('policyAssignmentName')]",
+                "policyDefinitionId": "[resourceId('Microsoft.Authorization/policySetDefinitions', variables('policySetName'))]",
+                "scope": "[variables('policyAssignmentScope')]",
+                "notScopes": [
+                ],
+                "parameters": "[variables('policySetParameters')]",
+                "description": "string",
+                "enforcementMode": "[variables('policyAssignmentEnforcementMode')]"
+            }
+        }
+    ]
+}

@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-Cosmos-DenyCosmosKeyBasedMetadataWriteAccess"
+        },
+        "policyDescription": {
+            "value": "Deny key based metadata write access for Cosmos DB accounts."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DocumentDB/databaseAccounts"
+                        },
+                        {
+                            "field": "Microsoft.DocumentDB/databaseAccounts/disableKeyBasedMetadataWriteAccess",
+                            "notequals": true
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.DocumentDB/databaseAccounts/disableKeyBasedMetadataWriteAccess",
+                            "value": true
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cosmos DB",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

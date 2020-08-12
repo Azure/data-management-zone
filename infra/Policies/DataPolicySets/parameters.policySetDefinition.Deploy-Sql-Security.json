@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policySetName": {
+            "value": "Deploy-Cosmos-Security"
+        },
+        "policySetDescription": {
+            "value": "Recommended built-in security policies for Cosmos DB."
+        },
+        "policySetParameters": {
+            "value": {}
+        },
+        "policyIds": {
+            "value": [
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/3965c43d-b5f4-482e-b74a-d89ee0e0b3a8",
+                    "parameters": {}
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/9677b740-f641-4f3c-b9c5-466005c85278",
+                    "parameters": {}
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/abfb7388-5bf4-4ad7-ba99-2cd2f41cebb9",
+                    "parameters": {}
+                } // TODO: Add other public Policies
+            ]
+        },
+        "policySetMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
