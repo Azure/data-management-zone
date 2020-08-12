@@ -67,7 +67,8 @@
         "subnetResourceId": "[parameters('subnetResourceId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTQCWVTCT3Z5JZD5CLK7HPVFS"
+        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1",
+        "gatewayInstallScriptUriToken": "AIHRGTQCWVTCT3Z5JZD5CLK7HPVFS"
     },
     "resources": [
         {
@@ -250,6 +251,28 @@
                             "version": "latest"
                         }
                     }
+                    // "extensionProfile": {
+                    //     "extensions": [
+                    //         {
+                    //             "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
+                    //             "properties": {
+                    //                 "type": "CustomScriptExtension",
+                    //                 "autoUpgradeMinorVersion": true,
+                    //                 "protectedSettings": {
+                    //                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                    //                 },
+                    //                 "publisher": "Microsoft.Compute",
+                    //                 "typeHandlerVersion": "1.9",
+                    //                 "settings": {
+                    //                     "fileUris": [
+                    //                         "[first(split(variables('gatewayInstallScriptUri'), '?'))]"
+                    //                     ],
+                    //                     "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
+                    //                 }
+                    //             }
+                    //         }
+                    //     ]
+                    // }
                 },
                 "zoneBalance": true
             }
@@ -269,15 +292,16 @@
             "properties": {
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.10",
+                "typeHandlerVersion": "1.7",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
                         "[variables('gatewayInstallScriptUri')]"
-                    ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                    ]
+                    // "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
                 },
                 "protectedSettings": {
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
                 }
             }
         },
