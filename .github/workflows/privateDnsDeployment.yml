@@ -72,6 +72,32 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
+    # Deploys private DNS zone for file storage - validation
+    - name: Deploy private DNS zone for file storage - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
+    
+    # Deploys private DNS zone for container registry - validation
+    - name: Deploy private DNS zone for container registry - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsContainerRegistry.json
+    
     # Deploys private DNS zone for key vault - validation
     - name: Deploy private DNS zone for key vault - validation
       uses: azure/CLI@v1
@@ -84,6 +110,19 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
+    
+    # Deploys private DNS zone for ml workspace - validation
+    - name: Deploy private DNS zone for ml workspace - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsMlWorkspace.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -124,6 +163,32 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
+    # Deploys private DNS zone for file storage
+    - name: Deploy private DNS zone for file storage
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
+    
+    # Deploys private DNS zone for container registry
+    - name: Deploy private DNS zone for container registry
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsContainerRegistry.json
+    
     # Deploys private DNS zone for key vault
     - name: Deploy private DNS zone for key vault
       uses: azure/CLI@v1
@@ -136,6 +201,19 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
+    
+    # Deploys private DNS zone for ml workspace
+    - name: Deploy private DNS zone for ml workspace
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.params.privateDnsMlWorkspace.json
     
     # Log out from Azure
     - name: Log out from Azure
