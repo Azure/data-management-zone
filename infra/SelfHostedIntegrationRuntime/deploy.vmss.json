@@ -68,7 +68,6 @@
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
         "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTVOFB6WTLTJ2FCKNYC7HUDQQ",
-        "gatewayInstallScriptUriToken": "AIHRGTQCWVTCT3Z5JZD5CLK7HPVFS"
     },
     "resources": [
         {
@@ -169,6 +168,24 @@
                             "idleTimeoutInMinutes": 4
                         }
                     }
+                ],
+                "outboundRules": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-outboundRule')]",
+                        "properties": {
+                            "protocol": "TCP",
+                            "enableTcpReset": true,
+                            "idleTimeoutInMinutes": 4,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
+                            },
+                            "frontendIPConfigurations": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                                }
+                            ]
+                        }
+                    }
                 ]
             }
         },
@@ -197,7 +214,7 @@
             "properties": {
                 "additionalCapabilities": {},
                 "automaticRepairsPolicy": {},
-                "doNotRunExtensionsOnOverprovisionedVMs": false,
+                "doNotRunExtensionsOnOverprovisionedVMs": true,
                 "overprovision": true,
                 "platformFaultDomainCount": 5,
                 "scaleInPolicy": {
@@ -233,6 +250,7 @@
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
                                             "properties": {
+                                                "privateIPAddressVersion": "IPv4",
                                                 "subnet": {
                                                     "id": "[variables('subnetResourceId')]"
                                                 },
@@ -273,27 +291,6 @@
                             "version": "latest"
                         }
                     }
-                    // "extensionProfile": {
-                    //     "extensions": [
-                    //         {
-                    //             "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
-                    //             "properties": {
-                    //                 "type": "CustomScriptExtension",
-                    //                 "autoUpgradeMinorVersion": true,
-                    //                 "protectedSettings": {
-                    //                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
-                    //                 },
-                    //                 "publisher": "Microsoft.Compute",
-                    //                 "typeHandlerVersion": "1.9",
-                    //                 "settings": {
-                    //                     "fileUris": [
-                    //                         "[variables('gatewayInstallScriptUri')]"
-                    //                     ]
-                    //                 }
-                    //             }
-                    //         }
-                    //     ]
-                    // }
                 },
                 "zoneBalance": true
             }
@@ -319,7 +316,6 @@
                     "fileUris": [
                         "[variables('gatewayInstallScriptUri')]"
                     ]
-                    // "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
                 },
                 "protectedSettings": {
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
