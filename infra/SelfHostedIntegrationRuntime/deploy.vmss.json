@@ -250,61 +250,60 @@
                             "sku": "2019-Datacenter",
                             "version": "latest"
                         }
+                    },
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
+                                "properties": {
+                                    "type": "CustomScriptExtension",
+                                    "autoUpgradeMinorVersion": true,
+                                    "protectedSettings": {
+                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                                    },
+                                    "publisher": "Microsoft.Compute",
+                                    "typeHandlerVersion": "1.9",
+                                    "settings": {
+                                        "fileUris": [
+                                            "[variables('gatewayInstallScriptUri')]"
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
                     }
-                    // "extensionProfile": {
-                    //     "extensions": [
-                    //         {
-                    //             "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
-                    //             "properties": {
-                    //                 "type": "CustomScriptExtension",
-                    //                 "autoUpgradeMinorVersion": true,
-                    //                 "protectedSettings": {
-                    //                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
-                    //                 },
-                    //                 "publisher": "Microsoft.Compute",
-                    //                 "typeHandlerVersion": "1.9",
-                    //                 "settings": {
-                    //                     "fileUris": [
-                    //                         "[first(split(variables('gatewayInstallScriptUri'), '?'))]"
-                    //                     ],
-                    //                     "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
-                    //                 }
-                    //             }
-                    //         }
-                    //     ]
-                    // }
                 },
                 "zoneBalance": true
             }
         },
-        {
-            "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
-            "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
-            "apiVersion": "2019-07-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.7",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[variables('gatewayInstallScriptUri')]"
-                    ]
-                    // "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
-                }
-            }
-        },
+        // {
+        //     "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
+        //     "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
+        //     "apiVersion": "2019-07-01",
+        //     "location": "[variables('location')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]",
+        //         "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
+        //         "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
+        //         "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
+        //         "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime')]"
+        //     ],
+        //     "properties": {
+        //         "publisher": "Microsoft.Compute",
+        //         "type": "CustomScriptExtension",
+        //         "typeHandlerVersion": "1.7",
+        //         "autoUpgradeMinorVersion": true,
+        //         "settings": {
+        //             "fileUris": [
+        //                 "[variables('gatewayInstallScriptUri')]"
+        //             ]
+        //             // "token": "[last(split(variables('gatewayInstallScriptUri'), '?'))]"
+        //         },
+        //         "protectedSettings": {
+        //             "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+        //         }
+        //     }
+        // },
         {
             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
             "apiVersion": "2018-06-01",
