@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataFactoryId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.DataFactory/factories/dataproduct001-datafactory001"
+        },
+        "datahubDataFactoryId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-shir/providers/Microsoft.DataFactory/factories/datahub-datafactory001"
+        },
+        "datahubDataFactoryShirId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-shir/providers/Microsoft.DataFactory/factories/datahub-datafactory001/integrationruntimes/datahubSelfHostedIntegrationRuntime"
+        }
+    }
+}
