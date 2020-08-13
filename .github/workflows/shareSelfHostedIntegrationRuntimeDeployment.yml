@@ -1,0 +1,90 @@
+name: Share Self Hosted Integration Runtime
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/ShareSelfHostedIntegrationRuntime/**'
+      - '.github/workflows/shareSelfHostedIntegrationRuntimeDeployment.yml'
+
+env:
+  AZURE_LOCATION: northeurope
+
+jobs:
+
+  validation:
+    runs-on: ubuntu-latest
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Share Self Hosted Integration Runtime - validation
+    - name: Share Self Hosted Integration Runtime - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
+            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
+
+  deployment:
+    needs: [ validation ]
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Share Self Hosted Integration Runtime
+    - name: Share Self Hosted Integration Runtime
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
+            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
