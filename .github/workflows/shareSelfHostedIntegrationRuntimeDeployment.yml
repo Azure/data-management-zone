@@ -41,6 +41,8 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+      env:
+        AZURE_RESOURCE_GROUP: dataproduct001
     
     # Log out from Azure
     - name: Log out from Azure
@@ -80,6 +82,8 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+      env:
+        AZURE_RESOURCE_GROUP: dataproduct001
     
     # Log out from Azure
     - name: Log out from Azure
