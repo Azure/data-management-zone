@@ -38,7 +38,7 @@
             }
         },
         "vmssAdminPassword": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "Specifies the admin password of the virtual machine scale set."
             }
