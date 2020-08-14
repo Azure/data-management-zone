@@ -137,6 +137,19 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
+    # Deploys private DNS zone for sql server - validation
+    - name: Deploy private DNS zone for cosmos sql - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
+    
     # Log out from Azure
     - name: Log out from Azure
       uses: azure/CLI@v1
@@ -228,8 +241,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
-    # Deploys private DNS zone for cosmos sql - validation
-    - name: Deploy private DNS zone for cosmos sql - validation
+    # Deploys private DNS zone for cosmos sql
+    - name: Deploy private DNS zone for cosmos sql
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -240,6 +253,19 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
+    
+    # Deploys private DNS zone for sql server
+    - name: Deploy private DNS zone for cosmos sql
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
     
     # Log out from Azure
     - name: Log out from Azure
