@@ -44,8 +44,8 @@ stages:
             continueOnError: false
             inputs:
               deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: '$AZURE_RESOURCE_MANAGER_CONNECTION_NAME'
-              subscriptionId: '$AZURE_SUBSCRIPTION_ID'
+              azureResourceManagerConnection: $AZURE_RESOURCE_MANAGER_CONNECTION_NAME
+              subscriptionId: $AZURE_SUBSCRIPTION_ID
               action: 'Create Or Update Resource Group'
               resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
               location: '$AZURE_LOCATION'
@@ -84,8 +84,8 @@ stages:
           continueOnError: false
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$AZURE_RESOURCE_MANAGER_CONNECTION_NAME'
-            subscriptionId: '$AZURE_SUBSCRIPTION_ID'
+            azureResourceManagerConnection: $AZURE_RESOURCE_MANAGER_CONNECTION_NAME
+            subscriptionId: $AZURE_SUBSCRIPTION_ID
             action: 'Create Or Update Resource Group'
             resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
             location: '$AZURE_LOCATION'
