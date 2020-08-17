@@ -1,7 +1,4 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+name: Log Analytics Deployment
 
 trigger:
   branches:
@@ -12,14 +9,87 @@ trigger:
       - 'infra/LogAnalytics/**'
       - '.ado/workflows/logAnalyticsDeployment.yml'
 
-pool:
-  vmImage: 'ubuntu-latest'
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
+  AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
+  AZURE_RESOURCE_GROUP_NAME: 'datahub-mgmt'
+  AZURE_LOCATION: 'North Europe'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+  - stage: Validation
+    displayName: 'Validation of ARM templates'
+    jobs:
+      - job: Validation
+        displayName: 'Validation of ARM templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+          # Checkout code
+          - checkout: self
+            name: checkout_repository
+            displayName: 'Checkout repository'
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+          
+          # Deploy log analytics workspace - validation
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: log_analytics_validation
+            displayName: Deploy log analytics workspace - validation
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: '$AZURE_RESOURCE_MANAGER_CONNECTION_NAME'
+              subscriptionId: '$AZURE_SUBSCRIPTION_ID'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
+              location: '$AZURE_LOCATION'
+              templateLocation: 'Linked artifact'
+              csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
+              csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+              deploymentMode: 'Validation'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - stage: Deployment
+    displayName: 'Deployment of ARM templates'
+    dependsOn: Validation
+    condition: succeeded()
+    jobs:
+      - job: Deployment
+        displayName: 'Deployment of ARM templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+        # Checkout code
+        - checkout: self
+          name: checkout_repository
+          displayName: 'Checkout repository'
+          submodules: true
+          lfs: false
+          clean: true
+          continueOnError: false
+          enabled: true
+        
+        # Deploy log analytics workspace
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: log_analytics_deployment
+          displayName: Deploy log analytics workspace
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$AZURE_RESOURCE_MANAGER_CONNECTION_NAME'
+            subscriptionId: '$AZURE_SUBSCRIPTION_ID'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
+            location: '$AZURE_LOCATION'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
+            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+            deploymentMode: 'Incremental'
