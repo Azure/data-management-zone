@@ -4,7 +4,13 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - 'infra/LogAnalytics/**'
+      - '.ado/workflows/logAnalyticsDeployment.yml'
 
 pool:
   vmImage: 'ubuntu-latest'
