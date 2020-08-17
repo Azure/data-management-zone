@@ -12,7 +12,7 @@ trigger:
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'datahub-mgmt1'
+  AZURE_RESOURCE_GROUP_NAME: 'datahub-mgmt'
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -44,11 +44,11 @@ stages:
             continueOnError: false
             inputs:
               deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: $AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-              subscriptionId: $AZURE_SUBSCRIPTION_ID
+              azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+              subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
               action: 'Create Or Update Resource Group'
-              resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
-              location: '$AZURE_LOCATION'
+              resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+              location: '$(AZURE_LOCATION)'
               templateLocation: 'Linked artifact'
               csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
               csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
@@ -84,11 +84,11 @@ stages:
           continueOnError: false
           inputs:
             deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: $AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-            subscriptionId: $AZURE_SUBSCRIPTION_ID
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$AZURE_RESOURCE_GROUP_NAME'
-            location: '$AZURE_LOCATION'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
             csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
