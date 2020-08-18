@@ -67,7 +67,7 @@
         "subnetResourceId": "[parameters('subnetResourceId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTRNXVOOUDT4G7KWTS27HVHFE"
+        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTU337WRVUVBA5GFFFK7IU52Y"
     },
     "resources": [
         {
@@ -313,11 +313,11 @@
                 "typeHandlerVersion": "1.9",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "fileUris": [
-                        "[variables('gatewayInstallScriptUri')]"
-                    ]
                 },
                 "protectedSettings": {
+                    "fileUris": [
+                        "[variables('gatewayInstallScriptUri')]"
+                    ],
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
                 }
             }
