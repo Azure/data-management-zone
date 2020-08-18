@@ -1,4 +1,4 @@
-name: Log Analytics Deployment
+name: Self Hosted Integration Runtime Deployment
 
 trigger:
   branches:
