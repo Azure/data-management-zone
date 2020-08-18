@@ -1,0 +1,329 @@
+name: Log Analytics Deployment
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - 'infra/PrivateDns/**'
+      - '.ado/workflows/privateDnsDeployment.yml'
+
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
+  AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
+  AZURE_RESOURCE_GROUP_NAME: 'datahub-global-dns'
+  AZURE_LOCATION: 'North Europe'
+
+stages:
+  - stage: Validation
+    displayName: 'Validation of ARM templates'
+    jobs:
+      - job: Validation
+        displayName: 'Validation of ARM templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+        # Checkout repository
+        - checkout: self
+          name: checkout_repository
+          displayName: 'Checkout repository'
+          submodules: true
+          lfs: false
+          clean: true
+          continueOnError: false
+          enabled: true
+        
+        # Deploy private DNS zone for blob storage - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_blob_validation
+          displayName: Deploy private DNS zone for blob storage - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsBlob.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for file storage - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_file_validation
+          displayName: Deploy private DNS zone for file storage - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsFile.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for container registry - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: container_registry_validation
+          displayName: Deploy private DNS zone for container registry - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsContainerRegistry.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for key vault - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_validation
+          displayName: Deploy private DNS zone for key vault - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsKeyVault.json'
+            deploymentMode: 'Validation'
+
+        # Deploy private DNS zone for ml workspace - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: ml_workspace_validation
+          displayName: Deploy private DNS zone for ml workspace - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsMlWorkspace.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for cosmos sql - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: cosmos_sql_validation
+          displayName: Deploy private DNS zone for cosmos sql - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsCosmosSql.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for sql server - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: sql_server_validation
+          displayName: Deploy private DNS zone for sql server - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
+            deploymentMode: 'Validation'
+
+  - stage: Deployment
+    displayName: 'Deployment of ARM templates'
+    dependsOn: Validation
+    condition: succeeded()
+    jobs:
+      - job: Deployment
+        displayName: 'Deployment of ARM templates'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+        # Checkout repository
+        - checkout: self
+          name: checkout_repository
+          displayName: 'Checkout repository'
+          submodules: true
+          lfs: false
+          clean: true
+          continueOnError: false
+          enabled: true
+        
+        # Deploy log analytics workspace
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: log_analytics_deployment
+          displayName: Deploy log analytics workspace
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
+            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for blob storage
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_blob_deployment
+          displayName: Deploy private DNS zone for blob storage
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsBlob.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for file storage
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_file_deployment
+          displayName: Deploy private DNS zone for file storage
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsFile.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for container registry
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: container_registry_deployment
+          displayName: Deploy private DNS zone for container registry
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsContainerRegistry.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for key vault
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_deployment
+          displayName: Deploy private DNS zone for key vault
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsKeyVault.json'
+            deploymentMode: 'Incremental'
+
+        # Deploy private DNS zone for ml workspace
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: ml_workspace_deployment
+          displayName: Deploy private DNS zone for ml workspace
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsMlWorkspace.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for cosmos sql
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: cosmos_sql_deployment
+          displayName: Deploy private DNS zone for cosmos sql
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsCosmosSql.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for sql server
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: sql_server_deployment
+          displayName: Deploy private DNS zone for sql server
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
+            deploymentMode: 'Incremental'
