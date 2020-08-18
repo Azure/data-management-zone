@@ -60,8 +60,8 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy key vault - validation
-    - name: Deploy key vault - validation
+    # Deploy key vault 001 - validation
+    - name: Deploy key vault 001 - validation
       uses: azure/CLI@v1
       with:
         azcliversion: latest
