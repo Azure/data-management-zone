@@ -313,12 +313,12 @@
                 "typeHandlerVersion": "1.9",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                },
-                "protectedSettings": {
                     "fileUris": [
                         "[variables('gatewayInstallScriptUri')]"
                     ],
                     "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                },
+                "protectedSettings": {
                 }
             }
         },
