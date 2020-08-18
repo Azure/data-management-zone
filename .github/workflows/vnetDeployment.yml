@@ -83,7 +83,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -135,7 +135,7 @@ jobs:
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering.json
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnetPeering001.json
     
     # Log out from Azure
     - name: Log out from Azure
