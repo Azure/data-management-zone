@@ -314,7 +314,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "[variables('gatewayInstallScriptUri')]"
+                        "[uri('https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime', concat('gatewayInstall.ps1', ''))]"
                     ]
                 },
                 "protectedSettings": {
