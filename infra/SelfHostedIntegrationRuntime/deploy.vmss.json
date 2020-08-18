@@ -67,7 +67,7 @@
         "subnetResourceId": "[parameters('subnetResourceId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1?token=AIHRGTU337WRVUVBA5GFFFK7IU52Y"
+        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1"
     },
     "resources": [
         {
@@ -315,10 +315,10 @@
                 "settings": {
                     "fileUris": [
                         "[variables('gatewayInstallScriptUri')]"
-                    ],
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
+                    ]
                 },
                 "protectedSettings": {
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(variables('dataFactoryId'), '2018-06-01').authKey1)]"
                 }
             }
         },
