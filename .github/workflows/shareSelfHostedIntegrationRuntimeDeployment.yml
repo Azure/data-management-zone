@@ -29,8 +29,8 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Share Self Hosted Integration Runtime - validation
-    - name: Share Self Hosted Integration Runtime - validation
+    # Share Self Hosted Integration Runtime 001 - validation
+    - name: Share Self Hosted Integration Runtime 001 - validation
       uses: azure/CLI@v1
       with:
         azcliversion: latest
@@ -43,6 +43,21 @@ jobs:
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
       env:
         AZURE_RESOURCE_GROUP: dataproduct001
+    
+    # Share Self Hosted Integration Runtime 002 - validation
+    - name: Share Self Hosted Integration Runtime 002 - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
+            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+      env:
+        AZURE_RESOURCE_GROUP: dataproduct002
     
     # Log out from Azure
     - name: Log out from Azure
@@ -84,6 +99,21 @@ jobs:
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
       env:
         AZURE_RESOURCE_GROUP: dataproduct001
+      
+      # Share Self Hosted Integration Runtime 002
+    - name: Share Self Hosted Integration Runtime 002
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
+            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+      env:
+        AZURE_RESOURCE_GROUP: dataproduct002
     
     # Log out from Azure
     - name: Log out from Azure
