@@ -1,4 +1,4 @@
-name: Log Analytics Deployment
+name: Private DNS Zone Deployment
 
 trigger:
   branches:
