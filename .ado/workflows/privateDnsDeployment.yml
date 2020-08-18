@@ -3,7 +3,7 @@ name: Log Analytics Deployment
 trigger:
   branches:
     include:
-      - master
+      - main
   paths:
     include:
       - 'infra/PrivateDns/**'

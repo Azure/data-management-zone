@@ -6,13 +6,14 @@ trigger:
       - main
   paths:
     include:
-      - 'infra/LogAnalytics/**'
-      - '.ado/workflows/logAnalyticsDeployment.yml'
+      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/DataFactory/**'
+      - '.ado/workflows/selfHostedIntegrationRuntimeDeployment.yml'
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'datahub-mgmt'
+  AZURE_RESOURCE_GROUP_NAME: 'datahub-shir'
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -36,10 +37,10 @@ stages:
           continueOnError: false
           enabled: true
         
-        # Deploy log analytics workspace - validation
+        # Deploy data factory - validation
         - task: AzureResourceManagerTemplateDeployment@3
-          name: log_analytics_validation
-          displayName: Deploy log analytics workspace - validation
+          name: data_factory_validation
+          displayName: Deploy data factory - validation
           enabled: true
           continueOnError: false
           inputs:
@@ -50,8 +51,26 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy vmss - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vmss_validation
+          displayName: Deploy vmss - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -76,10 +95,10 @@ stages:
           continueOnError: false
           enabled: true
         
-        # Deploy log analytics workspace
+        # Deploy data factory
         - task: AzureResourceManagerTemplateDeployment@3
-          name: log_analytics_deployment
-          displayName: Deploy log analytics workspace
+          name: data_factory_deployment
+          displayName: Deploy data factory
           enabled: true
           continueOnError: false
           inputs:
@@ -90,6 +109,24 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy vmss
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vmss_deployment
+          displayName: Deploy vmss
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss.json'
             deploymentMode: 'Incremental'
