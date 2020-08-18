@@ -296,7 +296,7 @@
             }
         },
         {
-            "name": "[concat(variables('vmssName'), '/' , 'installShirGateway')]",
+            "name": "[concat(variables('vmssName'), '/' , 'CustomScriptExtension')]",
             "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
             "apiVersion": "2019-07-01",
             "location": "[variables('location')]",
