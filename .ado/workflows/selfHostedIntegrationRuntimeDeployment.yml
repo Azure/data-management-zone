@@ -8,6 +8,7 @@ trigger:
     include:
       - 'infra/SelfHostedIntegrationRuntime/**'
       - 'infra/DataFactory/**'
+      - 'infra/Storage/**'
       - '.ado/workflows/selfHostedIntegrationRuntimeDeployment.yml'
 
 variables:
@@ -36,6 +37,24 @@ stages:
           clean: true
           continueOnError: false
           enabled: true
+        
+        # Deploy storage account - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_validation
+          displayName: Deploy storage account - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Validation'
         
         # Deploy data factory - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -94,6 +113,24 @@ stages:
           clean: true
           continueOnError: false
           enabled: true
+        
+        # Deploy storage account
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_deployment
+          displayName: Deploy storage account
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Incremental'
         
         # Deploy data factory
         - task: AzureResourceManagerTemplateDeployment@3
