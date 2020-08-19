@@ -139,19 +139,30 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
             --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
     
+    # # Upload file to storage account
+    # - name: Upload file to storage account
+    #   uses: azure/CLI@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Uploading file to storage account"
+    #       az storage blob upload \
+    #         --account-name datahubshirsa \
+    #         --container-name shir \
+    #         --name gatewayInstall.ps1 \
+    #         --file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1 \
+    #         --auth-mode login
+    
     # Upload file to storage account
     - name: Upload file to storage account
-      uses: azure/CLI@v1
+      uses: azure/powershell@v1
       with:
-        azcliversion: latest
+        azPSVersion: latest
         inlineScript: |
-          echo "Uploading file to storage account"
-          az storage blob upload \
-            --account-name datahubshirstorageaccount \
-            --container-name shir \
-            --name gatewayInstall.ps1 \
-            --file infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1 \
-            --auth-mode login
+          "Uploading file to storage account"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "datahub-shir" -Name "datahubshirsa"
+          $ctx = $storageAccount.Context
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container shir -Blob "gatewayInstall.ps1" -Context $ctx
     
     # Deploy data factory
     - name: Deploy data factory
