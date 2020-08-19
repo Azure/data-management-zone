@@ -65,54 +65,52 @@
                     ],
                     "virtualNetworkRules": [
                     ]
-                },
-                "resources": [
-                    {
-                        "type": "secrets",
-                        "name": "storageAccountKey",
-                        "apiVersion": "2019-09-01",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
-                        ],
-                        "properties": {
-                            "contentType": "text/plain",
-                            "value": "PleaseUpdate",
-                            "attributes": {
-                                "enabled": true
-                            }
-                        }
-                    },
-                    {
-                        "type": "secrets",
-                        "name": "vmssAdminUsername",
-                        "apiVersion": "2019-09-01",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
-                        ],
-                        "properties": {
-                            "contentType": "text/plain",
-                            "value": "PleaseUpdate",
-                            "attributes": {
-                                "enabled": true
-                            }
-                        }
-                    },
-                    {
-                        "type": "secrets",
-                        "name": "vmssAdminPassword",
-                        "apiVersion": "2019-09-01",
-                        "dependsOn": [
-                            "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
-                        ],
-                        "properties": {
-                            "contentType": "text/plain",
-                            "value": "PleaseUpdate",
-                            "attributes": {
-                                "enabled": true
-                            }
-                        }
-                    }
-                ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
+            "apiVersion": "2019-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
+            ],
+            "properties": {
+                "contentType": "text/plain",
+                "value": "PleaseUpdate",
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('keyVaultName'), '/vmssAdminUsername')]",
+            "apiVersion": "2019-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
+            ],
+            "properties": {
+                "contentType": "text/plain",
+                "value": "PleaseUpdate",
+                "attributes": {
+                    "enabled": true
+                }
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(variables('keyVaultName'), '/vmssAdminPassword')]",
+            "apiVersion": "2019-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
+            ],
+            "properties": {
+                "contentType": "text/plain",
+                "value": "PleaseUpdate",
+                "attributes": {
+                    "enabled": true
+                }
             }
         },
         {
