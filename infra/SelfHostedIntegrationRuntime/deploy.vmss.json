@@ -296,7 +296,7 @@
             }
         },
         {
-            "name": "[concat(variables('vmssName'), '/' , 'CustomScriptExtension')]",
+            "name": "[concat(variables('vmssName'), '/' , 'installGateway')]",
             "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
             "apiVersion": "2019-07-01",
             "location": "[variables('location')]",
