@@ -181,19 +181,41 @@
             ]
         },
         {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
-            "apiVersion": "2019-09-01",
+            "name": "SecretDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
             "properties": {
-                "contentType": "text/plain",
-                "value": "[listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value]",
-                "attributes": {
-                    "enabled": true
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": {}
                 }
-            }
+            },
+            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
+            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
     "outputs": {}
