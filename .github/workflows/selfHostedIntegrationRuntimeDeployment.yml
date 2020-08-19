@@ -60,6 +60,19 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    # Deploy storage account - validation
+    - name: Deploy storage account - validation
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    
     # Deploy data factory - validation
     - name: Deploy data factory - validation
       uses: azure/CLI@v1
@@ -111,6 +124,33 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploy storage account
+    - name: Deploy storage account
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    
+    # Upload file to storage account
+    - name: Upload file to storage account
+      uses: azure/CLI@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Uploading file to storage account"
+          az storage blob upload \
+            --account-name datahubshirstorageaccount \
+            --container-name shir \
+            --name gatewayInstall.ps1 \
+            --file infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1 \
+            --auth-mode login
     
     # Deploy data factory
     - name: Deploy data factory

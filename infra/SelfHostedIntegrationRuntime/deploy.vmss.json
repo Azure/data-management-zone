@@ -54,6 +54,18 @@
             "metadata": {
                 "description": "Specifies the ID of the existing data factory for which an integration runtime should be created."
             }
+        },
+        "storageAccountId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the existing storage account where the powershell script is stored."
+            }
+        },
+        "storageAccountKey": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the existing storage account where the powershell script is stored."
+            }
         }
     },
     "functions": [],
@@ -67,7 +79,11 @@
         "subnetResourceId": "[parameters('subnetResourceId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1"
+        "storageAccountId": "[parameters('storageAccountId')]",
+        "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
+        "storageAccountKey": "[parameters('storageAccountKey')]",
+        "gatewayInstallScriptUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', 'shir', '/gatewayInstall.ps1')]"
+        // "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1"
     },
     "resources": [
         {
@@ -310,15 +326,17 @@
             "properties": {
                 "publisher": "Microsoft.Compute",
                 "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.9",
+                "typeHandlerVersion": "1.10",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1"
+                        "[variables('gatewayInstallScriptUri')]"
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime'), '2018-06-01').authKey1)]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime'), '2018-06-01').authKey1)]",
+                    "storageAccountName": "[variables('storageAccountName')]",
+                    "storageAccountKey": "[variables('storageAccountKey')]"
                 }
             }
         },
