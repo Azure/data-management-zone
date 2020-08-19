@@ -6,6 +6,7 @@ on:
     paths:
       - 'infra/SelfHostedIntegrationRuntime/**'
       - 'infra/DataFactory/**'
+      - 'infra/Storage/**'
       - '.github/workflows/selfHostedIntegrationRuntimeDeployment.yml'
 
 env:
