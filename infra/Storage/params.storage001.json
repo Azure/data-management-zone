@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "datahubshirstorageaccount"
+            "value": "datahubshirsa"
         },
         "storageAccountType": {
             "value": "Standard_LRS"
