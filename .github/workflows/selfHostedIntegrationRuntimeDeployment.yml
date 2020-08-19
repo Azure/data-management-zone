@@ -163,7 +163,7 @@ jobs:
           "Uploading file to storage account"
           $storageAccount = Get-AzStorageAccount -ResourceGroupName "datahub-shir" -Name "datahubshirsa"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container shir -Blob "gatewayInstall.ps1" -Context $ctx
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container shir -Blob "gatewayInstall.ps1" -Context $ctx -Force
     
     # Deploy data factory
     - name: Deploy data factory
