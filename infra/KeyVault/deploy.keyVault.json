@@ -76,7 +76,7 @@
                         ],
                         "properties": {
                             "contentType": "text/plain",
-                            "value": "",
+                            "value": "PleaseUpdate",
                             "attributes": {
                                 "enabled": true
                             }
@@ -91,7 +91,7 @@
                         ],
                         "properties": {
                             "contentType": "text/plain",
-                            "value": "",
+                            "value": "PleaseUpdate",
                             "attributes": {
                                 "enabled": true
                             }
