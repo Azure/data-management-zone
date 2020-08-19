@@ -10,6 +10,9 @@
         },
         "storageAccountType": {
             "value": "Standard_LRS"
+        },
+        "keyVaultId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datahub-kv001"
         }
     }
 }
