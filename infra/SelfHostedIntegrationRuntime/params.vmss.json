@@ -15,7 +15,12 @@
             "value": "Standard_A1_v2"
         },
         "vmssAdminUsername": {
-            "value": "DataHubAdmin"
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datahub-kv001"
+                },
+                "secretName": "vmssAdminUsername"
+            }
         },
         "vmssAdminPassword": {
             "reference": {

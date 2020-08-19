@@ -94,7 +94,7 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "default-allow-rdp",
+                        "name": "AllowRDP",
                         "properties": {
                             "priority": 1000,
                             "sourceAddressPrefix": "*",
