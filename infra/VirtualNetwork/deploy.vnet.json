@@ -28,6 +28,19 @@
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
+                    {
+                        "name": "AllowRDP",
+                        "properties": {
+                            "priority": 1000,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "Tcp",
+                            "destinationPortRange": "3389",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
                 ]
             }
         },
