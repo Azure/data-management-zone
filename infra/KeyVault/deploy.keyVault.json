@@ -41,7 +41,7 @@
         {
             "name": "[variables('keyVaultName')]",
             "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2016-10-01",
+            "apiVersion": "2019-09-01",
             "location": "[variables('location')]",
             "properties": {
                 "enabledForDeployment": false,
@@ -68,8 +68,8 @@
                 },
                 "resources": [
                     {
-                        "type": "Microsoft.KeyVault/vaults/secrets",
-                        "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
+                        "type": "secrets",
+                        "name": "storageAccountKey",
                         "apiVersion": "2019-09-01",
                         "dependsOn": [
                             "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
@@ -83,8 +83,8 @@
                         }
                     },
                     {
-                        "type": "Microsoft.KeyVault/vaults/secrets",
-                        "name": "[concat(variables('keyVaultName'), '/vmssAdminUsername')]",
+                        "type": "secrets",
+                        "name": "vmssAdminUsername",
                         "apiVersion": "2019-09-01",
                         "dependsOn": [
                             "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
@@ -98,8 +98,8 @@
                         }
                     },
                     {
-                        "type": "Microsoft.KeyVault/vaults/secrets",
-                        "name": "[concat(variables('keyVaultName'), '/vmssAdminPassword')]",
+                        "type": "secrets",
+                        "name": "vmssAdminPassword",
                         "apiVersion": "2019-09-01",
                         "dependsOn": [
                             "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
