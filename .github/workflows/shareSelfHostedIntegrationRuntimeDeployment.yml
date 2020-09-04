@@ -9,6 +9,7 @@ on:
 
 env:
   AZURE_LOCATION: northeurope
+  AZURE_RESOURCE_GROUP: dh-mgmt
 
 jobs:
 
@@ -25,13 +26,13 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Share Self Hosted Integration Runtime 001 - validation
     - name: Share Self Hosted Integration Runtime 001 - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -46,7 +47,7 @@ jobs:
     
     # Share Self Hosted Integration Runtime 002 - validation
     - name: Share Self Hosted Integration Runtime 002 - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -61,7 +62,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -81,13 +82,13 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Share Self Hosted Integration Runtime
     - name: Share Self Hosted Integration Runtime
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -102,7 +103,7 @@ jobs:
       
       # Share Self Hosted Integration Runtime 002
     - name: Share Self Hosted Integration Runtime 002
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -117,7 +118,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
