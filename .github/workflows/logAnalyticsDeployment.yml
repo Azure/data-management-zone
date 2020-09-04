@@ -8,7 +8,7 @@ on:
       - '.github/workflows/logAnalyticsDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP: datahub-mgmt
+  AZURE_RESOURCE_GROUP: dh-mgmt
   AZURE_LOCATION: northeurope
 
 jobs:
