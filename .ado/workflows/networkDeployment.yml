@@ -1,4 +1,4 @@
-name: Private DNS Zone Deployment
+name: Network Deployment
 
 trigger:
   branches:
@@ -6,13 +6,16 @@ trigger:
       - main
   paths:
     include:
-      - 'infra/PrivateDns/**'
-      - '.ado/workflows/privateDnsDeployment.yml'
+      - infra/VirtualNetwork/*
+      - infra/VirtualNetworkPeering/*
+      - infra/PrivateDns/*
+      - .ado/workflows/vnetDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'datahub-global-dns'
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -26,7 +29,7 @@ stages:
           vmImage: 'ubuntu-latest'
         
         steps:
-        # Checkout repository
+        # Checkout code
         - checkout: self
           name: checkout_repository
           displayName: 'Checkout repository'
@@ -35,6 +38,24 @@ stages:
           clean: true
           continueOnError: false
           enabled: true
+        
+        # Deploy vnet - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_validation
+          displayName: Deploy vnet - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            deploymentMode: 'Validation'
         
         # Deploy private DNS zone for blob storage - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -161,6 +182,42 @@ stages:
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
             deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for event hub - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: event_hub_validation
+          displayName: Deploy private DNS zone for event hub - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsEventHub.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy vnet peering 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_001_validation
+          displayName: Deploy vnet peering 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
+            deploymentMode: 'Validation'
 
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -184,10 +241,10 @@ stages:
           continueOnError: false
           enabled: true
         
-        # Deploy log analytics workspace
+        # Deploy vnet
         - task: AzureResourceManagerTemplateDeployment@3
-          name: log_analytics_deployment
-          displayName: Deploy log analytics workspace
+          name: vnet_deployment
+          displayName: Deploy vnet
           enabled: true
           continueOnError: false
           inputs:
@@ -195,11 +252,11 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics.json'
+            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zone for blob storage
@@ -326,4 +383,40 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for event hub
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: event_hub_deployment
+          displayName: Deploy private DNS zone for event hub
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsEventHub.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy vnet peering
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vnet_peering_001_deployment
+          displayName: Deploy vnet peering 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
             deploymentMode: 'Incremental'
