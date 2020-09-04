@@ -44,8 +44,8 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
     
     # Log out from Azure
     - name: Log out from Azure
@@ -97,7 +97,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
@@ -110,7 +110,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
     
@@ -123,7 +123,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
@@ -136,7 +136,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
     
@@ -149,7 +149,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
@@ -162,7 +162,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
@@ -175,7 +175,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
     
@@ -188,7 +188,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
     
@@ -256,7 +256,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
@@ -269,7 +269,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
     
@@ -282,7 +282,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
@@ -295,7 +295,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
     
@@ -308,7 +308,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
@@ -321,7 +321,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
@@ -334,7 +334,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
     
@@ -347,7 +347,7 @@ jobs:
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
     
