@@ -1,14 +1,17 @@
-name: Private DNS Zone Deployment
+name: Network Deployment
 
 on:
   push:
     branches: [ main ]
     paths:
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
       - 'infra/PrivateDns/**'
-      - '.github/workflows/privateDnsDeployment.yml'
+      - '.github/workflows/vnetDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP: datahub-global-dns
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -26,16 +29,28 @@ jobs:
     
     # Create resource group
     - name: Create resource group
-      uses: azure/CLI@v1
+      id: resource_group_network
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
+          echo "Creating resource group ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_gloabl_dns
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -59,109 +74,151 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploys private DNS zone for blob storage - validation
-    - name: Deploy private DNS zone for blob storage - validation
-      uses: azure/CLI@v1
+    # Deploy vnet - validation
+    - name: Deploy vnet - validation
+      id: vnet_validation
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+    
+    # Deploys private DNS zone for blob storage - validation
+    - name: Deploy private DNS zone for blob storage - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
     # Deploys private DNS zone for file storage - validation
     - name: Deploy private DNS zone for file storage - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
     
     # Deploys private DNS zone for container registry - validation
     - name: Deploy private DNS zone for container registry - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
     # Deploys private DNS zone for key vault - validation
     - name: Deploy private DNS zone for key vault - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
     
     # Deploys private DNS zone for ml workspace - validation
     - name: Deploy private DNS zone for ml workspace - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
     # Deploys private DNS zone for cosmos sql - validation
     - name: Deploy private DNS zone for cosmos sql - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
     # Deploys private DNS zone for sql server - validation
     - name: Deploy private DNS zone for cosmos sql - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
     
+    # Deploys private DNS zone for event hub - validation
+    - name: Deploy private DNS zone for event hub - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
+    
+    # Deploy vnet peering - validation
+    - name: Deploy vnet peering - validation
+      id: vnet_peering_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+    
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           az logout
-  
+
   deployment:
     needs: [ create-resource-group, validation ]
     runs-on: ubuntu-latest
-    
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -176,100 +233,142 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploys private DNS zone for blob storage
-    - name: Deploy private DNS zone for blob storage
-      uses: azure/CLI@v1
+    # Deploy vnet
+    - name: Deploy vnet
+      id: vnet_deployment
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+    
+    # Deploys private DNS zone for blob storage
+    - name: Deploy private DNS zone for blob storage
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
     
     # Deploys private DNS zone for file storage
     - name: Deploy private DNS zone for file storage
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
     
     # Deploys private DNS zone for container registry
     - name: Deploy private DNS zone for container registry
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
     
     # Deploys private DNS zone for key vault
     - name: Deploy private DNS zone for key vault
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
     
     # Deploys private DNS zone for ml workspace
     - name: Deploy private DNS zone for ml workspace
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
     
     # Deploys private DNS zone for cosmos sql
     - name: Deploy private DNS zone for cosmos sql
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
     # Deploys private DNS zone for sql server
     - name: Deploy private DNS zone for cosmos sql
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
     
+    # Deploys private DNS zone for event hub
+    - name: Deploy private DNS zone for event hub
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.azure/AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
+    
+    # Deploy vnet peering
+    - name: Deploy vnet peering
+      id: vnet_peering_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.azure/cliAZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+    
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
