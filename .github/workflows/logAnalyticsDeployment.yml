@@ -20,13 +20,13 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Create resource group
     - name: Create resource group
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -35,7 +35,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -55,13 +55,13 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Deploys log analytics workspace - validation
     - name: Deploy log analytics workspace - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -74,7 +74,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -94,13 +94,13 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Deploys log analytics workspace
     - name: Deploy log analytics workspace
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -113,7 +113,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |

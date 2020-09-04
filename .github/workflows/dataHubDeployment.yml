@@ -5,11 +5,14 @@ on:
     branches: [ main ]
     paths:
       - 'infra/KeyVault/**'
+      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/DataFactory/**'
+      - 'infra/Storage/**'
       - 'infra/PrivateEndpoint/**'
       - '.github/workflows/dataHubDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP: datahub-mgmt
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -21,22 +24,23 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Create resource group
     - name: Create resource group
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
+          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
     
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -56,26 +60,66 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # Deploy key vault 001 - validation
     - name: Deploy key vault 001 - validation
-      uses: azure/CLI@v1
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group validate \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
             --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
+    # Deploy storage account 001 - validation
+    - name: Deploy storage account 001 - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    
+    # Deploy data factory 001 - validation
+    - name: Deploy data factory 001 - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+    
+    # Deploy vmss 001 - validation
+    - name: Deploy vmss 001 - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss001.json
+    
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
@@ -95,26 +139,78 @@ jobs:
     # Login to Azure
     - name: Azure Login
       id: azure_login
-      uses: azure/login@v1.1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true 
     
-    # Deploy key vault
-    - name: Deploy key vault
-      uses: azure/CLI@v1
+    # Deploy key vault 001
+    - name: Deploy key vault 001
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |
           echo "Creating deployment in resource group"
           az deployment group create \
             --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
             --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
+    # Deploy storage account 001
+    - name: Deploy storage account 001
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
+            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+    
+    # Upload file to storage account 001
+    - name: Upload file to storage account 001
+      uses: azure/powershell@v1
+      with:
+        azPSVersion: latest
+        inlineScript: |
+          "Uploading file to storage account"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "dhshirsa"
+          $ctx = $storageAccount.Context
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container shir -Blob "gatewayInstall.ps1" -Context $ctx -Force
+    
+    # Deploy data factory 001
+    - name: Deploy data factory 001
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
+            --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
+    
+    # Deploy vmss 001
+    - name: Deploy vmss 001
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss001.json
+    
     # Log out from Azure
     - name: Log out from Azure
-      uses: azure/CLI@v1
+      id: azure_logout
+      uses: azure/cli@v1
       with:
         azcliversion: latest
         inlineScript: |

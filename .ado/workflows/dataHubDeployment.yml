@@ -6,14 +6,17 @@ trigger:
       - main
   paths:
     include:
-      - 'infra/KeyVault/**'
-      - 'infra/PrivateEndpoint/**'
-      - '.github/workflows/dataHubDeployment.yml'
+      - infra/KeyVault/*
+      - infra/PrivateEndpoint/*
+      - infra/SelfHostedIntegrationRuntime/*
+      - infra/DataFactory/*
+      - infra/Storage/*
+      - .ado/workflows/dataHubDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
-  AZURE_RESOURCE_GROUP_NAME: 'datahub-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dh-mgmt'
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -54,6 +57,60 @@ stages:
             csmFile: 'infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
+        
+        # Deploy storage account 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_001_validation
+          displayName: Deploy storage account 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy data factory 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: data_factory_001_validation
+          displayName: Deploy data factory 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy vmss 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vmss_001_validation
+          displayName: Deploy vmss 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss001.json'
+            deploymentMode: 'Validation'
 
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -93,4 +150,74 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy storage account 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_001_deployment
+          displayName: Deploy storage account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Incremental'
+        
+        # Upload file to storage account 001
+        - task: AzureFileCopy@4
+          name: upload_file
+          displayName: Upload file to storage account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            sourcePath: '$(Build.ArtifactStagingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
+            additionalArgumentsForBlobCopy: |
+              '/Y' # Supresses all AZCopy Confirmations. Used here to allow overwrites
+              '/S' # Recursive Copy
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            destination: AzureBlob
+            storage: dhshirsa
+            containerName: shir
+        
+        # Deploy data factory 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: data_factory_001_deployment
+          displayName: Deploy data factory 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy vmss 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: vmss_001_deployment
+          displayName: Deploy vmss 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss.json'
             deploymentMode: 'Incremental'
