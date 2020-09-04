@@ -12,7 +12,7 @@ on:
       - '.github/workflows/dataHubDeployment.yml'
 
 env:
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-la
   AZURE_LOCATION: northeurope
 
 jobs:
