@@ -7,7 +7,7 @@ on:
       - 'infra/VirtualNetwork/**'
       - 'infra/VirtualNetworkPeering/**'
       - 'infra/PrivateDns/**'
-      - '.github/workflows/vnetDeployment.yml'
+      - '.github/workflows/networkDeployment.yml'
 
 env:
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
