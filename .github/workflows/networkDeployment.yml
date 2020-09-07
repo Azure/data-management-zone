@@ -206,6 +206,20 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
     
+    # Deploy vnet peering 002 - validation
+    - name: Deploy vnet peering 002 - validation
+      id: vnet_peering_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
+    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -364,6 +378,20 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+      
+    # Deploy vnet peering 002
+    - name: Deploy vnet peering 002
+      id: vnet_peering_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
+            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
     
     # Log out from Azure
     - name: Log out from Azure
