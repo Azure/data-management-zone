@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "dataFactoryName": {
-            "value": "datahub-datafactory001"
+            "value": "dh-datafactory001"
         },
         "dataFactoryGitAccount": {
             "value": ""

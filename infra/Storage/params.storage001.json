@@ -6,13 +6,13 @@
             "value": "northeurope"
         },
         "storageAccountName": {
-            "value": "datahubshirsa"
+            "value": "dhshirsa"
         },
         "storageAccountType": {
             "value": "Standard_LRS"
         },
         "keyVaultId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-mgmt/providers/Microsoft.KeyVault/vaults/datahub-kv001"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.KeyVault/vaults/dh-kv001"
         }
     }
 }
