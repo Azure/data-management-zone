@@ -192,8 +192,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
     
-    # Deploy vnet peering - validation
-    - name: Deploy vnet peering - validation
+    # Deploy vnet peering 001 - validation
+    - name: Deploy vnet peering 001 - validation
       id: vnet_peering_validation
       uses: azure/cli@v1
       with:
@@ -351,8 +351,8 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
     
-    # Deploy vnet peering
-    - name: Deploy vnet peering
+    # Deploy vnet peering 001
+    - name: Deploy vnet peering 001
       id: vnet_peering_deployment
       uses: azure/cli@v1
       with:
