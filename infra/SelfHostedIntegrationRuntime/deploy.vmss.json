@@ -134,7 +134,7 @@
                 "publicIPAllocationMethod": "Static",
                 "publicIPAddressVersion": "IPv4",
                 "dnsSettings": {
-                    "domainNameLabel": "datahubshir"
+                    "domainNameLabel": "[toLower(variables('vmssName'))]"
                 },
                 // "ddosSettings": {
                 //     "protectionCoverage": "Standard",
