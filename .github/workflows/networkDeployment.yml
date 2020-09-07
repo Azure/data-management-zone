@@ -192,6 +192,19 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
     
+    # Deploys private DNS zone for dfs - validation
+    - name: Deploy private DNS zone for dfs - validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDfs.json
+    
     # Deploy vnet peering 001 - validation
     - name: Deploy vnet peering 001 - validation
       id: vnet_peering_001_validation
@@ -364,6 +377,19 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
+    
+    # Deploys private DNS zone for dfs
+    - name: Deploy private DNS zone for dfs
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDfs.json
     
     # Deploy vnet peering 001
     - name: Deploy vnet peering 001
