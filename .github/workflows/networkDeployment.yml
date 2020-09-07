@@ -167,7 +167,7 @@ jobs:
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
     # Deploys private DNS zone for sql server - validation
-    - name: Deploy private DNS zone for cosmos sql - validation
+    - name: Deploy private DNS zone for sql server - validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -326,7 +326,7 @@ jobs:
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
     
     # Deploys private DNS zone for sql server
-    - name: Deploy private DNS zone for cosmos sql
+    - name: Deploy private DNS zone for sql server
       uses: azure/cli@v1
       with:
         azcliversion: latest
