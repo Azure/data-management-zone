@@ -9,7 +9,7 @@
             "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet"
         },
         "destinationVnetId": {
-            "value": "/subscriptions/***/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-network/providers/Microsoft.Network/virtualNetworks/dn001-vnet"
         }
     }
 }
