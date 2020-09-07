@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "logAnalyticsWorkspaceName": {
-            "value": "dh-la"
+            "value": "dh-la001"
         }
     }
 }
