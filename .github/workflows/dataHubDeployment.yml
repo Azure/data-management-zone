@@ -115,6 +115,7 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
             --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss001.json
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
