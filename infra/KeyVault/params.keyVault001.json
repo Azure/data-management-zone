@@ -6,13 +6,13 @@
             "value": "northeurope"
         },
         "keyVaultName": {
-            "value": "datahub-kv001"
+            "value": "dh-kv001"
         },
         "subnetResourceId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-network/providers/Microsoft.Network/virtualNetworks/datahub-vnet/subnets/datahub-privatelink-subnet"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
         },
         "privateDnsZoneResourceGroupId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-global-dns"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns"
         }
     }
 }
