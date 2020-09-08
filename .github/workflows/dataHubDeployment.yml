@@ -129,6 +129,7 @@ jobs:
   deployment:
     needs: [ create-resource-group, validation ]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
