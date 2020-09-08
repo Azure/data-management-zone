@@ -77,6 +77,28 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled"
                         }
+                    },
+                    {
+                        "name": "dh-databricks-function-subnet",
+                        "properties": {
+                            "addressPrefix": "10.0.2.0/24",
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                            },
+                            "delegations": [
+                                {
+                                    "name": "delegation",
+                                    "properties": {
+                                        "serviceName": "Microsoft.Web/serverFarms",
+                                        "actions": [
+                                            "Microsoft.Network/virtualNetworks/subnets/action"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
                     }
                 ]
             }
