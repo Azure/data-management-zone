@@ -1,0 +1,113 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "functionName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the azure function."
+            }
+        },
+        "logAnalyticsWorkspaceResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource ID of the log analytics workspace that should be used for the Azure Machine Learning workspace."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "functionName": "[parameters('functionName')]",
+        "serverFarmName": "[concat(variables('functionName'), '-server-farm')]",
+        "applicationInsightsName": "[concat(variables('functionName'), '-application-insights')]",
+        "logAnalyticsWorkspaceResourceId": "[parameters('logAnalyticsWorkspaceResourceId')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2019-08-01",
+            "name": "[variables('serverFarmName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[variables('skuName')]",
+                "tier": "[variables('skuTier')]"
+            },
+            "kind": "[variables('skuKind')]",
+            "properties": {
+                "maximumElasticWorkerCount": 20
+            }
+        },
+        {
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2018-05-01-preview",
+            "name": "[variables('applicationInsightsName')]",
+            "location": "[variables('location')]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "ApplicationId": "[variables('applicationInsightsName')]",
+                "Flow_Type": "Bluefield",
+                "Request_Source": "rest",
+                "DisableIpMasking": false,
+                "WorkspaceResourceId": "[variables('logAnalyticsWorkspaceResourceId')]",
+                "publicNetworkAccessForIngestion": "Disabled",
+                "publicNetworkAccessForQuery": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[variables('functionName')]",
+            "location": "[variables('location')]",
+            "kind": "functionapp",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', 'storageAccountName')]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', 'storageAccountName', ';AccountKey=', listKeys('storageAccountID','2015-05-01-preview').key1)]"    // @Microsoft.KeyVault(SecretUri=https://secure-settings-demo.vault.azure.net/secrets/my-secret/)
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[toLower('functionName')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('microsoft.insights/components/', 'applicationInsightsName'), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

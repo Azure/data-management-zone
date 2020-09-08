@@ -31,16 +31,29 @@
                     {
                         "name": "AllowRDP",
                         "properties": {
-                            "priority": 1000,
-                            "sourceAddressPrefix": "*",
-                            "protocol": "Tcp",
-                            "destinationPortRange": "3389",
                             "access": "Allow",
                             "direction": "Inbound",
+                            "priority": 1000,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
                             "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*"
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "3389"
                         }
                     },
+                    {
+                        "name": "AllowSSH",
+                        "properties": {
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "priority": 1010,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22"                            
+                        }
+                    }
                 ]
             }
         },
@@ -76,28 +89,6 @@
                             "addressPrefix": "10.0.1.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled"
-                        }
-                    },
-                    {
-                        "name": "dh-databricks-function-subnet",
-                        "properties": {
-                            "addressPrefix": "10.0.2.0/24",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
-                            },
-                            "delegations": [
-                                {
-                                    "name": "delegation",
-                                    "properties": {
-                                        "serviceName": "Microsoft.Web/serverFarms",
-                                        "actions": [
-                                            "Microsoft.Network/virtualNetworks/subnets/action"
-                                        ]
-                                    }
-                                }
-                            ]
                         }
                     }
                 ]
