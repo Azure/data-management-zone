@@ -9,7 +9,6 @@ on:
 
 env:
   AZURE_LOCATION: northeurope
-  AZURE_RESOURCE_GROUP: dh-mgmt
 
 jobs:
 
@@ -44,7 +43,7 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
       env:
-        AZURE_RESOURCE_GROUP: dataproduct001
+        AZURE_RESOURCE_GROUP: dn001-processing
     
     # Share Self Hosted Integration Runtime 002 - validation
     - name: Share Self Hosted Integration Runtime 002 - validation
@@ -60,7 +59,7 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
       env:
-        AZURE_RESOURCE_GROUP: dataproduct002
+        AZURE_RESOURCE_GROUP: dn002-processing
     
     # Log out from Azure
     - name: Log out from Azure
@@ -103,7 +102,7 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
       env:
-        AZURE_RESOURCE_GROUP: dataproduct001
+        AZURE_RESOURCE_GROUP: dn001-processing
       
       # Share Self Hosted Integration Runtime 002
     - name: Share Self Hosted Integration Runtime 002
@@ -119,7 +118,7 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
             --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
       env:
-        AZURE_RESOURCE_GROUP: dataproduct002
+        AZURE_RESOURCE_GROUP: dn002-processing
     
     # Log out from Azure
     - name: Log out from Azure
