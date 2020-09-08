@@ -82,8 +82,7 @@
         "storageAccountId": "[parameters('storageAccountId')]",
         "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
         "storageAccountKey": "[parameters('storageAccountKey')]",
-        "gatewayInstallScriptUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', 'shir', '/gatewayInstall.ps1')]"
-        // "gatewayInstallScriptUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vms-with-selfhost-integration-runtime/gatewayInstall.ps1"
+        "setupScriptUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', 'shir', '/gatewayInstall.ps1')]"
     },
     "resources": [
         {
@@ -330,7 +329,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "[variables('gatewayInstallScriptUri')]"
+                        "[variables('setupScriptUri')]"
                     ]
                 },
                 "protectedSettings": {
