@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "dataFactoryId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/dataproduct001/providers/Microsoft.DataFactory/factories/dataproduct001-datafactory001"
+            "value": "/subscriptions/2f68ca09-59d9-4ab5-ad11-c54872bfa28d/resourceGroups/dn001-processing/providers/Microsoft.DataFactory/factories/dn001-datafactory001"
         },
         "datahubDataFactoryId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-shir/providers/Microsoft.DataFactory/factories/datahub-datafactory001"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.DataFactory/factories/dh-datafactory001"
         },
         "datahubDataFactoryShirId": {
-            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/datahub-shir/providers/Microsoft.DataFactory/factories/datahub-datafactory001/integrationruntimes/datahubSelfHostedIntegrationRuntime"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.DataFactory/factories/dh-datafactory001/integrationruntimes/datahubSelfHostedIntegrationRuntime"
         }
     }
 }

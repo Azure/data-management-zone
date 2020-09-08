@@ -52,10 +52,6 @@
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[reference(variables('dataFactoryId'), '2018-06-01', 'Full').identity.principalId]"
-                                // "principalType": "ServicePrincipal",
-                                // "canDelegate": false,
-                                // "scope": "[variables('datahubDataFactoryId')]",
-                                // "description": "Role assignment to share self hosted integration runtime in datahub."
                             }
                         }
                     ],
