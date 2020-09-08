@@ -32,6 +32,7 @@ jobs:
     
     # Share Self Hosted Integration Runtime 001 - validation
     - name: Share Self Hosted Integration Runtime 001 - validation
+      id: share_shir_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -47,6 +48,7 @@ jobs:
     
     # Share Self Hosted Integration Runtime 002 - validation
     - name: Share Self Hosted Integration Runtime 002 - validation
+      id: share_shir_002_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -62,6 +64,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -88,6 +91,7 @@ jobs:
     
     # Share Self Hosted Integration Runtime
     - name: Share Self Hosted Integration Runtime
+      id: share_shir_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -103,6 +107,7 @@ jobs:
       
       # Share Self Hosted Integration Runtime 002
     - name: Share Self Hosted Integration Runtime 002
+      id: share_shir_002_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -118,6 +123,7 @@ jobs:
     
     # Log out from Azure
     - name: Log out from Azure
+      id: azure_logout
       uses: azure/cli@v1
       with:
         azcliversion: latest
