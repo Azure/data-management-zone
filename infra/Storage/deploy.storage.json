@@ -44,6 +44,7 @@
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountType": "[parameters('storageAccountType')]",
+        "containerName": "scripts",
         "keyVaultId": "[parameters('keyVaultId')]",
         "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
     },
@@ -170,7 +171,7 @@
                 {
                     "type": "blobServices/containers",
                     "apiVersion": "2019-06-01",
-                    "name": "[concat('default/', 'shir')]",
+                    "name": "[concat('default/', variables('containerName'))]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
