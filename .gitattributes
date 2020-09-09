@@ -1,0 +1,48 @@
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+* text=auto
+
+###############################################################################
+# Set the merge driver for project and solution files
+###############################################################################
+*.sh        text eol=lf
+*.py        text eol=lf diff=python
+*.json      text
+*.yaml      text
+*.yml       text
+Dockerfile  text
+
+###############################################################################
+# behavior for image files
+#
+# image files are treated as binary by default.
+###############################################################################
+*.jpg   binary
+*.png   binary
+*.gif   binary
+
+###############################################################################
+# diff behavior for common document formats
+# 
+# Convert binary document formats to text before diffing them. This feature
+# is only available from the command line. Turn it on by uncommenting the 
+# entries below.
+###############################################################################
+*.doc   diff=astextplain
+*.DOC   diff=astextplain
+*.docx  diff=astextplain
+*.DOCX  diff=astextplain
+*.dot   diff=astextplain
+*.DOT   diff=astextplain
+*.pdf   diff=astextplain
+*.PDF   diff=astextplain
+*.rtf   diff=astextplain
+*.RTF   diff=astextplain
+*.md    text
+
+###############################################################################
+# Exclude files from exporting
+###############################################################################
+.gitattributes  export-ignore
+.gitignore      export-ignore
