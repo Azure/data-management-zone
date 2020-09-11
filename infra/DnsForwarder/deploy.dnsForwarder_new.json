@@ -78,20 +78,80 @@
     },
     "resources": [
         {
+            "name": "[concat(variables('vmssName'), '-nsg')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "AllowSSH",
+                        "properties": {
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "priority": 1000,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22"                            
+                        }
+                    },
+                    {
+                        "name": "AllowHTTPInBound",
+                        "properties": {
+                            "priority": 1010,
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "destinationPortRange": "80",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[concat(variables('vmssName'), '-publicip')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4",
+                "dnsSettings": {
+                    "domainNameLabel": "[toLower(variables('vmssName'))]"
+                },
+                // "ddosSettings": {
+                //     "protectionCoverage": "Standard",
+                //     "protectedIP": true
+                // },
+                "ipTags": []
+            }
+        },
+        {
             "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+            ],
             "sku": {
-                "name": "Basic"
+                "name": "Standard"
             },
             "properties": {
                 "frontendIPConfigurations": [
                     {
                         "name": "loadBalancerFrontEnd",
                         "properties": {
-                            "subnet": {
-                                "id": "[variables('subnetId')]"
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
                             }
                         }
                     }
@@ -130,7 +190,6 @@
                             "frontendPort": 53,
                             "backendPort": 53,
                             "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 5,
                             "probe": {
                                 "id": "[resourceId('Microsoft.Network/loadBalancers/probes', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-probe'))]"
                             }
@@ -156,7 +215,8 @@
             "apiVersion": "2019-07-01",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"
+                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
             ],
             "identity": {
                 "type": "SystemAssigned"
@@ -166,23 +226,23 @@
                 "tier": "[variables('vmssSkuTier')]",
                 "capacity": 1
             },
-            // "zones": [
-            //     "1",
-            //     "2"
-            // ],
+            "zones": [
+                "1",
+                "2"
+            ],
             "properties": {
                 "additionalCapabilities": {},
                 "automaticRepairsPolicy": {},
-                // "doNotRunExtensionsOnOverprovisionedVMs": true,
+                "doNotRunExtensionsOnOverprovisionedVMs": true,
                 "overprovision": true,
-                // "platformFaultDomainCount": 5,
-                // "zoneBalance": true,
-                // "scaleInPolicy": {
-                //     "rules": [
-                //         "Default"
-                //     ]
-                // },
-                // "singlePlacementGroup": true, // set to false for improved stability
+                "platformFaultDomainCount": 1,
+                "zoneBalance": true,
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ]
+                },
+                "singlePlacementGroup": false,
                 "upgradePolicy": {
                     "mode": "Manual" // Maybe set to Automatic
                 },
@@ -209,10 +269,17 @@
                                 "name": "[concat(variables('vmssName'), '-nic')]",
                                 "properties": {
                                     "primary": true,
+                                    "enableAcceleratedNetworking": false,
+                                    "networkSecurityGroup": {
+                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
+                                    },
+                                    "dnsSettings": {},
+                                    "enableIPForwarding": false,
                                     "ipConfigurations": [
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
                                             "properties": {
+                                                "primary": true,
                                                 "privateIPAddressVersion": "IPv4",
                                                 "subnet": {
                                                     "id": "[variables('subnetId')]"
@@ -257,10 +324,14 @@
                                     "typeHandlerVersion": "1.3",
                                     "autoUpgradeMinorVersion": true,
                                     "settings": {
-                                        "commandToExecute": "./automate_nginx.sh",
                                         "fileUris": [
-                                            "https://raw.githubusercontent.com/microsoft/PL-DNS-Proxy/master/automate_nginx.sh"
+                                            "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', variables('storageAccountContainerName'), '/forwarderSetup_new.sh')]"
                                         ]
+                                    },
+                                    "protectedSettings": {
+                                        "commandToExecute": "sh forwarderSetup_new.sh",
+                                        "storageAccountName": "[variables('storageAccountName')]",
+                                        "storageAccountKey": "[variables('storageAccountKey')]"
                                     }
                                 }
                             }
