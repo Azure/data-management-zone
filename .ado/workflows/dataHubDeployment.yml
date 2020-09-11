@@ -111,6 +111,24 @@ stages:
             csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
             csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss001.json'
             deploymentMode: 'Validation'
+        
+        # Deploy function 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: function_001_validation
+          displayName: Deploy function 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Function/deploy.function.json'
+            csmParametersFile: 'infra/Function/params.function001.json'
+            deploymentMode: 'Validation'
 
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -220,4 +238,22 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
             csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy function 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: function_001_deployment
+          displayName: Deploy function 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Function/deploy.function.json'
+            csmParametersFile: 'infra/Function/params.function001.json'
             deploymentMode: 'Incremental'
