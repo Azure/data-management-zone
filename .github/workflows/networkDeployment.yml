@@ -91,6 +91,7 @@ jobs:
     
     # Deploy private DNS zone for blob storage - validation
     - name: Deploy private DNS zone for blob storage - validation
+      id: private_dns_blob_storage_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -104,6 +105,7 @@ jobs:
     
     # Deploy private DNS zone for file storage - validation
     - name: Deploy private DNS zone for file storage - validation
+      id: private_dns_file_storage_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -117,6 +119,7 @@ jobs:
     
     # Deploy private DNS zone for container registry - validation
     - name: Deploy private DNS zone for container registry - validation
+      id: private_dns_container_registry_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -130,6 +133,7 @@ jobs:
     
     # Deploy private DNS zone for key vault - validation
     - name: Deploy private DNS zone for key vault - validation
+      id: private_dns_key_vault_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -143,6 +147,7 @@ jobs:
     
     # Deploy private DNS zone for ml workspace - validation
     - name: Deploy private DNS zone for ml workspace - validation
+      id: private_dns_ml_workspace_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -156,6 +161,7 @@ jobs:
     
     # Deploy private DNS zone for cosmos sql - validation
     - name: Deploy private DNS zone for cosmos sql - validation
+      id: private_dns_cosmos_sql_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -169,6 +175,7 @@ jobs:
     
     # Deploy private DNS zone for sql server - validation
     - name: Deploy private DNS zone for sql server - validation
+      id: private_dns_sql_server_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -182,6 +189,7 @@ jobs:
     
     # Deploy private DNS zone for event hub - validation
     - name: Deploy private DNS zone for event hub - validation
+      id: private_dns_event_hub_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -195,6 +203,7 @@ jobs:
     
     # Deploy private DNS zone for dfs - validation
     - name: Deploy private DNS zone for dfs - validation
+      id: private_dns_dfs_storage_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -206,8 +215,9 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDfs.json
     
-    # Deploy private DNS zone for web apps - validation
-    - name: Deploy private DNS zone for web apps - validation
+    # Deploy private DNS zone for web app - validation
+    - name: Deploy private DNS zone for web app - validation
+      id: private_dns_web_apps_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -291,6 +301,7 @@ jobs:
     
     # Deploys private DNS zone for blob storage
     - name: Deploy private DNS zone for blob storage
+      id: private_dns_blob_storage_deplyoment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -304,6 +315,7 @@ jobs:
     
     # Deploys private DNS zone for file storage
     - name: Deploy private DNS zone for file storage
+      id: private_dns_file_storage_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -317,6 +329,7 @@ jobs:
     
     # Deploys private DNS zone for container registry
     - name: Deploy private DNS zone for container registry
+      id: private_dns_container_registry_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -330,6 +343,7 @@ jobs:
     
     # Deploys private DNS zone for key vault
     - name: Deploy private DNS zone for key vault
+      id: private_dns_key_vault_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -343,6 +357,7 @@ jobs:
     
     # Deploys private DNS zone for ml workspace
     - name: Deploy private DNS zone for ml workspace
+      id: private_dns_ml_workspace_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -356,6 +371,7 @@ jobs:
     
     # Deploys private DNS zone for cosmos sql
     - name: Deploy private DNS zone for cosmos sql
+      id: private_dns_cosmos_sql_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -369,6 +385,7 @@ jobs:
     
     # Deploys private DNS zone for sql server
     - name: Deploy private DNS zone for sql server
+      id: private_dns_sql_server_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -382,6 +399,7 @@ jobs:
     
     # Deploys private DNS zone for event hub
     - name: Deploy private DNS zone for event hub
+      id: private_dns_event_hub_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -395,6 +413,7 @@ jobs:
     
     # Deploys private DNS zone for dfs
     - name: Deploy private DNS zone for dfs
+      id: private_dns_dfs_storage_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -408,6 +427,7 @@ jobs:
     
     # Deploys private DNS zone for web apps
     - name: Deploy private DNS zone for web apps
+      id: private_dns_web_apps_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
