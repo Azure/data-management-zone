@@ -10,6 +10,7 @@ on:
       - '.github/workflows/networkDeployment.yml'
 
 env:
+  AZURE_SUBSCRIPTION_ID: ''
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
   AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
   AZURE_LOCATION: northeurope
