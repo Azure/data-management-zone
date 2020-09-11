@@ -89,6 +89,20 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
     
+    # Deploy firewall - validation
+    - name: Deploy firewall - validation
+      id: firewall_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
+            --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
+    
     # Deploy private DNS zone for blob storage - validation
     - name: Deploy private DNS zone for blob storage - validation
       id: private_dns_blob_storage_validation
@@ -298,6 +312,20 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
             --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
             --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+    
+    # Deploy firewall
+    - name: Deploy firewall
+      id: firewall_deplyoment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
+            --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
+            --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
     
     # Deploys private DNS zone for blob storage
     - name: Deploy private DNS zone for blob storage

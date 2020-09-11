@@ -73,6 +73,15 @@
                 },
                 "subnets": [
                     {
+                        "name": "AzureFirewallSubnet",
+                        "properties": {
+                            "addressPrefix": "10.0.3.0/24",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
                         "name": "dh-subnet",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24",
