@@ -43,7 +43,7 @@
                 "description": "Specifies the admin password of the virtual machine scale set."
             }
         },
-        "subnetResourceId": {
+        "subnetId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the existing subnet to which the scale set should be attached."
@@ -76,7 +76,7 @@
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
         "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
-        "subnetResourceId": "[parameters('subnetResourceId')]",
+        "subnetId": "[parameters('subnetId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
         "storageAccountId": "[parameters('storageAccountId')]",
@@ -85,63 +85,6 @@
         "setupScriptUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', 'shir', '/gatewayInstall.ps1')]"
     },
     "resources": [
-        {
-            "name": "[concat(variables('vmssName'), '-nsg')]",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2020-05-01",
-            "location": "[variables('location')]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "AllowRDP",
-                        "properties": {
-                            "priority": 1000,
-                            "sourceAddressPrefix": "*",
-                            "protocol": "Tcp",
-                            "destinationPortRange": "3389",
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*"
-                        }
-                    },
-                    {
-                        "name": "AllowHTTPInBound",
-                        "properties": {
-                            "priority": 1010,
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "destinationPortRange": "80",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "name": "[concat(variables('vmssName'), '-publicip')]",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2020-05-01",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "Standard"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Static",
-                "publicIPAddressVersion": "IPv4",
-                "dnsSettings": {
-                    "domainNameLabel": "[toLower(variables('vmssName'))]"
-                },
-                // "ddosSettings": {
-                //     "protectionCoverage": "Standard",
-                //     "protectedIP": true
-                // },
-                "ipTags": []
-            }
-        },
         {
             "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
@@ -158,8 +101,8 @@
                     {
                         "name": "loadBalancerFrontEnd",
                         "properties": {
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                            "subnet": {
+                                "id": "[variables('subnetId')]"
                             }
                         }
                     }
@@ -210,9 +153,7 @@
             "apiVersion": "2019-07-01",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"
             ],
             "identity": {
                 "type": "SystemAssigned"
@@ -232,6 +173,7 @@
                 "doNotRunExtensionsOnOverprovisionedVMs": true,
                 "overprovision": true,
                 "platformFaultDomainCount": 5,
+                "zoneBalance": true,
                 "scaleInPolicy": {
                     "rules": [
                         "Default"
@@ -258,16 +200,13 @@
                                 "name": "[concat(variables('vmssName'), '-nic')]",
                                 "properties": {
                                     "primary": true,
-                                    "networkSecurityGroup": {
-                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
-                                    },
                                     "ipConfigurations": [
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
                                             "properties": {
                                                 "privateIPAddressVersion": "IPv4",
                                                 "subnet": {
-                                                    "id": "[variables('subnetResourceId')]"
+                                                    "id": "[variables('subnetId')]"
                                                 },
                                                 // "publicIPAddressConfiguration": {
                                                 //     "name": "vmpublicip",
@@ -306,8 +245,7 @@
                             "version": "latest"
                         }
                     }
-                },
-                "zoneBalance": true
+                }
             }
         },
         {

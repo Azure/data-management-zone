@@ -12,6 +12,7 @@ on:
       - '.github/workflows/dataHubDeployment.yml'
 
 env:
+  AZURE_SUBSCRIPTION_ID: ''
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
   AZURE_LOCATION: northeurope
 
@@ -66,6 +67,7 @@ jobs:
     
     # Deploy key vault 001 - validation
     - name: Deploy key vault 001 - validation
+      id: key_vault_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -79,6 +81,7 @@ jobs:
     
     # Deploy storage account 001 - validation
     - name: Deploy storage account 001 - validation
+      id: storage_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -92,6 +95,7 @@ jobs:
     
     # Deploy data factory 001 - validation
     - name: Deploy data factory 001 - validation
+      id: data_factory_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -103,8 +107,9 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
             --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
-    # Deploy vmss 001 - validation
-    - name: Deploy vmss 001 - validation
+    # Deploy shir 001 - validation
+    - name: Deploy shir 001 - validation
+      id: shir_001_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -113,9 +118,23 @@ jobs:
           az deployment group validate \
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
-            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss001.json
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.shir.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.shir001.json
       continue-on-error: true
+    
+    # Deploy function 001 - validation
+    - name: Deploy function 001 - validation
+      id: function_001_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/Function/deploy.function.json \
+            --parameters $GITHUB_WORKSPACE/infra/Function/params.function001.json
     
     # Log out from Azure
     - name: Log out from Azure
@@ -148,6 +167,7 @@ jobs:
     
     # Deploy key vault 001
     - name: Deploy key vault 001
+      id: key_vault_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -161,6 +181,7 @@ jobs:
     
     # Deploy storage account 001
     - name: Deploy storage account 001
+      id: storage_account_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -174,6 +195,7 @@ jobs:
     
     # Upload file to storage account 001
     - name: Upload file to storage account 001
+      id: upload_file_001
       uses: azure/powershell@v1
       with:
         azPSVersion: latest
@@ -185,6 +207,7 @@ jobs:
     
     # Deploy data factory 001
     - name: Deploy data factory 001
+      id: data_factory_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -196,8 +219,9 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/DataFactory/deploy.dataFactory.json \
             --parameters $GITHUB_WORKSPACE/infra/DataFactory/params.dataFactory001.json
     
-    # Deploy vmss 001
-    - name: Deploy vmss 001
+    # Deploy shir 001
+    - name: Deploy shir 001
+      id: shir_001_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -206,8 +230,22 @@ jobs:
           az deployment group create \
             --mode Incremental \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.vmss.json \
-            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.vmss001.json
+            --template-file $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/deploy.shir.json \
+            --parameters $GITHUB_WORKSPACE/infra/SelfHostedIntegrationRuntime/params.shir001.json
+    
+    # Deploy function 001
+    - name: Deploy function 001
+      id: function_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/Function/deploy.function.json \
+            --parameters $GITHUB_WORKSPACE/infra/Function/params.function001.json
     
     # Log out from Azure
     - name: Log out from Azure
