@@ -8,6 +8,7 @@ on:
       - '.github/workflows/shareSelfHostedIntegrationRuntimeDeployment.yml'
 
 env:
+  AZURE_SUBSCRIPTION_ID: ''
   AZURE_LOCATION: northeurope
 
 jobs:
