@@ -43,7 +43,7 @@
                 "description": "Specifies the admin password of the virtual machine scale set."
             }
         },
-        "subnetResourceId": {
+        "subnetId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the existing subnet to which the scale set should be attached."
@@ -76,7 +76,7 @@
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
         "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
-        "subnetResourceId": "[parameters('subnetResourceId')]",
+        "subnetId": "[parameters('subnetId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
         "storageAccountId": "[parameters('storageAccountId')]",
@@ -267,7 +267,7 @@
                                             "properties": {
                                                 "privateIPAddressVersion": "IPv4",
                                                 "subnet": {
-                                                    "id": "[variables('subnetResourceId')]"
+                                                    "id": "[variables('subnetId')]"
                                                 },
                                                 // "publicIPAddressConfiguration": {
                                                 //     "name": "vmpublicip",
