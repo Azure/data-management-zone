@@ -57,6 +57,24 @@ stages:
             csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Validation'
         
+        # Deploy firewall - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: firewall_validation
+          displayName: Deploy firewall - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Firewall/deploy.firewall.json'
+            csmParametersFile: 'infra/Firewall/params.firewall.json'
+            deploymentMode: 'Validation'
+        
         # Deploy private DNS zone for blob storage - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: private_dns_blob_validation
@@ -311,6 +329,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
             csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy firewall
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: firewall_deployment
+          displayName: Deploy firewall
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Firewall/deploy.firewall.json'
+            csmParametersFile: 'infra/Firewall/params.firewall.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zone for blob storage
