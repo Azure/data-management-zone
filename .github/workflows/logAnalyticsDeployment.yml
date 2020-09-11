@@ -62,6 +62,7 @@ jobs:
     
     # Deploys log analytics workspace - validation
     - name: Deploy log analytics workspace - validation
+      id: log_analytics_validation
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -102,6 +103,7 @@ jobs:
     
     # Deploys log analytics workspace
     - name: Deploy log analytics workspace
+      id: log_analytics_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
