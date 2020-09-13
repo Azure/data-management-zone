@@ -165,19 +165,19 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true 
     
-    # # Deploy key vault 001
-    # - name: Deploy key vault 001
-    #   id: key_vault_001_deployment
-    #   uses: azure/cli@v1
-    #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
+    # Deploy key vault 001
+    - name: Deploy key vault 001
+      id: key_vault_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
+            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault001.json
     
     # Deploy storage account 001
     - name: Deploy storage account 001
