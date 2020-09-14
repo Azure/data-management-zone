@@ -103,6 +103,20 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
             --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
     
+    # Deploy private DNS zone for data factory - validation
+    - name: Deploy private DNS zone for data factory - validation
+      id: private_dns_data_factory_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDataFactory.json
+    
     # Deploy private DNS zone for blob storage - validation
     - name: Deploy private DNS zone for blob storage - validation
       id: private_dns_blob_storage_validation
@@ -326,6 +340,20 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
             --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
             --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
+    
+    # Deploy private DNS zone for data factory
+    - name: Deploy private DNS zone for data factory
+      id: private_dns_data_factory_deplyoment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDataFactory.json
     
     # Deploys private DNS zone for blob storage
     - name: Deploy private DNS zone for blob storage
