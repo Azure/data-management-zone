@@ -35,7 +35,7 @@
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
-        "templateUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTUOJ6QWX4DQKJVYOI27L4FQA"
+        "templateUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTX24ZRZSACX3ANKGMK7NGJ3W"
     },
     "resources": [
         {
@@ -69,7 +69,7 @@
             }
         },
         {
-            "name": "KeyVaultPrivateEndpointDeployment",
+            "name": "PrivateEndpointDeployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
             "dependsOn": [
