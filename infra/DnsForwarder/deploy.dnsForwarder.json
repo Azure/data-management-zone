@@ -1,0 +1,274 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "vmssName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the virtual machine scale set."
+            }
+        },
+        "vmssSkuTier": {
+            "type": "string",
+            "allowedValues": [
+                "Standard",
+                "Basic"
+            ],
+            "defaultValue": "Standard",
+            "metadata": {
+                "description": "Specifies the SKU tier of the virtual machine scale set."
+            }
+        },
+        "vmssSkuName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the SKU name of the virtual machine scale set."
+            }
+        },
+        "vmssAdminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the admin username of the virtual machine scale set."
+            }
+        },
+        "vmssAdminKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the admin ssh key of the virtual machine scale set."
+            }
+        },
+        "storageAccountContainerId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of an existing storage account."
+            }
+        },
+        "storageAccountKey": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the existing storage account where the powershell script is stored."
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource Id of the subnet to which the virtual machine should connect."
+            }
+        }
+    },
+    "variables": {
+        "location": "[parameters('location')]",
+        "vmssName": "[parameters('vmssName')]",
+        "vmssSkuTier": "[parameters('vmssSkuTier')]",
+        "vmssSkuName": "[parameters('vmssSkuName')]",
+        "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
+        "vmssAdminKey": "[parameters('vmssAdminKey')]",
+        "storageAccountContainerId": "[parameters('storageAccountContainerId')]",
+        "storageAccountName": "[split(variables('storageAccountContainerId'), '/')[8]]",
+        "storageAccountContainerName": "[last(split(variables('storageAccountContainerId'), '/'))]",
+        "storageAccountKey": "[parameters('storageAccountKey')]",
+        "subnetId": "[parameters('subnetId')]"
+    },
+    "resources": [
+        {
+            "name": "[concat(variables('vmssName'), '-lb')]",
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2020-05-01",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "loadBalancerFrontEnd",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetId')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-backendPool')]"
+                    }
+                ],
+                "inboundNatPools": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-natPool')]",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                            },
+                            "protocol": "Tcp",
+                            "frontendPortRangeStart": 50000,
+                            "frontendPortRangeEnd": 50099,
+                            "backendPort": 22,
+                            "idleTimeoutInMinutes": 4
+                        }
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "roundRobinLBRule",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
+                            },
+                            "protocol": "Udp",
+                            "frontendPort": 53,
+                            "backendPort": 53,
+                            "enableFloatingIP": false,
+                            "probe": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-probe'))]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-probe')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 22,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[variables('vmssName')]",
+            "type": "Microsoft.Compute/virtualMachineScaleSets",
+            "apiVersion": "2019-07-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"
+            ],
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "sku": {
+                "name": "[variables('vmssSkuName')]",
+                "tier": "[variables('vmssSkuTier')]",
+                "capacity": 2
+            },
+            "properties": {
+                "additionalCapabilities": {},
+                "automaticRepairsPolicy": {},
+                "doNotRunExtensionsOnOverprovisionedVMs": true,
+                "overprovision": true,
+                "platformFaultDomainCount": 1,
+                "scaleInPolicy": {
+                    "rules": [
+                        "Default"
+                    ]
+                },
+                "singlePlacementGroup": true,
+                "upgradePolicy": {
+                    "mode": "Manual"
+                },
+                "virtualMachineProfile": {
+                    "priority": "Regular",
+                    "osProfile": {
+                        "computerNamePrefix": "[take(variables('vmssName'), 9)]",
+                        "adminUsername": "[variables('vmssAdminUsername')]",
+                        "linuxConfiguration": {
+                            "disablePasswordAuthentication": true,
+                            "ssh": {
+                                "publicKeys": [
+                                    {
+                                        "path": "[concat('/home/', variables('vmssAdminUsername'), '/.ssh/authorized_keys')]",
+                                        "keyData": "[variables('vmssAdminKey')]"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "networkProfile": {
+                        "networkInterfaceConfigurations": [
+                            {
+                                "name": "[concat(variables('vmssName'), '-nic')]",
+                                "properties": {
+                                    "primary": true,
+                                    "enableAcceleratedNetworking": false,
+                                    "dnsSettings": {},
+                                    "enableIPForwarding": false,
+                                    "ipConfigurations": [
+                                        {
+                                            "name": "[concat(variables('vmssName'), '-ipConfig')]",
+                                            "properties": {
+                                                "primary": true,
+                                                "privateIPAddressVersion": "IPv4",
+                                                "subnet": {
+                                                    "id": "[variables('subnetId')]"
+                                                },
+                                                "loadBalancerBackendAddressPools": [
+                                                    {
+                                                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
+                                                    }
+                                                ],
+                                                "loadBalancerInboundNatPools": [
+                                                    {
+                                                        "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-natPool'))]"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "storageProfile": {
+                        "osDisk": {
+                            "createOption": "FromImage",
+                            "caching": "ReadWrite"
+                        },
+                        "imageReference": {
+                            "publisher": "Canonical",
+                            "offer": "UbuntuServer",
+                            "sku": "18.04-LTS",
+                            "version": "latest"
+                        }
+                    },
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "[concat(parameters('vmssName'),'-LinuxCustomScriptExtension')]",
+                                "properties": {
+                                    "publisher": "Microsoft.OSTCExtensions",
+                                    "type": "CustomScriptForLinux",
+                                    "typeHandlerVersion": "1.3",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "fileUris": [
+                                            "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', variables('storageAccountContainerName'), '/forwarderSetup.sh')]"
+                                        ]
+                                    },
+                                    "protectedSettings": {
+                                        "commandToExecute": "sh forwarderSetup.sh",
+                                        "storageAccountName": "[variables('storageAccountName')]",
+                                        "storageAccountKey": "[variables('storageAccountKey')]"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -75,6 +75,24 @@ stages:
             csmParametersFile: 'infra/Firewall/params.firewall.json'
             deploymentMode: 'Validation'
         
+        # Deploy dns forwarder - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: dns_forwarder_validation
+          displayName: Deploy dns forwarder - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/DnsForwarder/deploy.dnsForwarder.json'
+            csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
+            deploymentMode: 'Validation'
+        
         # Deploy private DNS zone for data factory - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: private_dns_data_factory_validation
@@ -367,6 +385,24 @@ stages:
             csmParametersFile: 'infra/Firewall/params.firewall.json'
             deploymentMode: 'Incremental'
         
+        # Deploy dns forwarder
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: dns_forwarder_deployment
+          displayName: Deploy dns forwarder
+          enabled: false
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/DnsForwarder/deploy.dnsForwarder.json'
+            csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
+            deploymentMode: 'Incremental'
+        
         # Deploy private DNS zone for data factory
         - task: AzureResourceManagerTemplateDeployment@3
           name: private_dns_data_factory_deployment
@@ -564,6 +600,8 @@ stages:
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsWebApps.json'
             deploymentMode: 'Incremental'
+        
+
         
         # Deploy vnet peering 001
         - task: AzureResourceManagerTemplateDeployment@3
