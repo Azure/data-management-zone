@@ -31,7 +31,7 @@
             }
         },
         "storageAccountContainerId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001/blobServices/default/containers/shir"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001/blobServices/default/containers/scripts"
         },
         "storageAccountKey": {
             "reference": {
