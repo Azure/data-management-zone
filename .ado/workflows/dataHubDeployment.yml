@@ -190,7 +190,7 @@ stages:
         
         # Upload file to storage account 001
         - task: AzureFileCopy@4
-          name: upload_file
+          name: upload_file_001
           displayName: Upload file to storage account 001
           enabled: true
           continueOnError: false
@@ -206,7 +206,7 @@ stages:
         
         # Upload file to storage account 001
         - task: AzureFileCopy@4
-          name: upload_file
+          name: upload_file_002
           displayName: Upload file to storage account 001
           enabled: true
           continueOnError: false
