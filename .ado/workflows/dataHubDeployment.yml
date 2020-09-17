@@ -94,12 +94,12 @@ stages:
             csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Validation'
         
-        # Deploy vmss 001 - validation
+        # Deploy shir 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
-          name: vmss_001_validation
-          displayName: Deploy vmss 001 - validation
+          name: shir_001_validation
+          displayName: Deploy shir 001 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -108,8 +108,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
-            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss001.json'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.shir.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.shir001.json'
             deploymentMode: 'Validation'
         
         # Deploy function 001 - validation
@@ -201,8 +201,24 @@ stages:
               '/S' # Recursive Copy
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             destination: AzureBlob
-            storage: dhshirsa
-            containerName: shir
+            storage: datahubstorage001
+            containerName: scripts
+        
+        # Upload file to storage account 001
+        - task: AzureFileCopy@4
+          name: upload_file
+          displayName: Upload file to storage account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            sourcePath: '$(Build.ArtifactStagingDirectory)/infra/SelfHostedIntegrationRuntime/forwarderSetup.sh'
+            additionalArgumentsForBlobCopy: |
+              '/Y' # Supresses all AZCopy Confirmations. Used here to allow overwrites
+              '/S' # Recursive Copy
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            destination: AzureBlob
+            storage: datahubstorage001
+            containerName: scripts
         
         # Deploy data factory 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -222,10 +238,10 @@ stages:
             csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Incremental'
         
-        # Deploy vmss 001
+        # Deploy shir 001
         - task: AzureResourceManagerTemplateDeployment@3
-          name: vmss_001_deployment
-          displayName: Deploy vmss 001
+          name: shir_001_deployment
+          displayName: Deploy shir 001
           enabled: true
           continueOnError: false
           inputs:
@@ -236,8 +252,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.vmss.json'
-            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.vmss.json'
+            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.shir.json'
+            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.shir001.json'
             deploymentMode: 'Incremental'
         
         # Deploy function 001
