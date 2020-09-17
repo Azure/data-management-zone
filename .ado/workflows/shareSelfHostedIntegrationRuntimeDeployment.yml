@@ -6,8 +6,8 @@ trigger:
       - main
   paths:
     include:
-      - 'infra/ShareSelfHostedIntegrationRuntime/**'
-      - '.ado/workflows/shareSelfHostedIntegrationRuntimeDeployment.yml'
+      - infra/ShareSelfHostedIntegrationRuntime/*
+      - .ado/workflows/shareSelfHostedIntegrationRuntimeDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription(558bd446-4212-46a2-908c-9ab0a628705e)'
