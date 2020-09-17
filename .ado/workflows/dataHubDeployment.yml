@@ -189,32 +189,30 @@ stages:
             deploymentMode: 'Incremental'
         
         # Upload file to storage account 001
-        - task: AzureFileCopy@4
+        - task: AzureFileCopy@3
           name: upload_file_001
           displayName: Upload file to storage account 001
           enabled: true
           continueOnError: false
           inputs:
-            sourcePath: '$(Build.ArtifactStagingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
+            sourcePath: 'infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
             additionalArgumentsForBlobCopy: |
-              '/Y' # Supresses all AZCopy Confirmations. Used here to allow overwrites
-              '/S' # Recursive Copy
+              '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             destination: AzureBlob
             storage: datahubstorage001
             containerName: scripts
         
-        # Upload file to storage account 001
-        - task: AzureFileCopy@4
+        # Upload file to storage account 002
+        - task: AzureFileCopy@3
           name: upload_file_002
-          displayName: Upload file to storage account 001
+          displayName: Upload file to storage account 002
           enabled: true
           continueOnError: false
           inputs:
-            sourcePath: '$(Build.ArtifactStagingDirectory)/infra/SelfHostedIntegrationRuntime/forwarderSetup.sh'
+            sourcePath: 'infra/DnsForwarder/forwarderSetup.sh'
             additionalArgumentsForBlobCopy: |
-              '/Y' # Supresses all AZCopy Confirmations. Used here to allow overwrites
-              '/S' # Recursive Copy
+              '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             destination: AzureBlob
             storage: datahubstorage001
