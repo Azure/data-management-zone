@@ -9,6 +9,7 @@ trigger:
       - infra/VirtualNetwork/*
       - infra/VirtualNetworkPeering/*
       - infra/PrivateDns/*
+      - infra/DnsForwarder/*
       - .ado/workflows/networkDeployment.yml
 
 variables:
