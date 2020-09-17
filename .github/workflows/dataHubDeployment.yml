@@ -201,9 +201,21 @@ jobs:
         azPSVersion: latest
         inlineScript: |
           "Uploading file to storage account"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "dhshirsa"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "datahubstorage001"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container shir -Blob "gatewayInstall.ps1" -Context $ctx -Force
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container scripts -Blob "gatewayInstall.ps1" -Context $ctx -Force
+    
+    # Upload file to storage account 002
+    - name: Upload file to storage account 002
+      id: upload_file_002
+      uses: azure/powershell@v1
+      with:
+        azPSVersion: latest
+        inlineScript: |
+          "Uploading file to storage account"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "datahubstorage001"
+          $ctx = $storageAccount.Context
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container scripts -Blob "gatewayInstall.ps1" -Context $ctx -Force
     
     # Deploy data factory 001
     - name: Deploy data factory 001

@@ -219,5 +219,14 @@
             "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "storageAccountName": {
+            "type": "string",
+            "value": "[variables('storageAccountName')]"
+        },
+        "containerName": {
+            "type": "string",
+            "value": "[variables('containerName')]"
+        }
+    }
 }

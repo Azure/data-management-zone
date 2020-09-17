@@ -15,7 +15,7 @@
             "value": "ElasticPremium"
         },
         "storageAccountId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/dhshirsa"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001"
         },
         "logAnalyticsWorkspaceId": {
             "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-la/providers/Microsoft.OperationalInsights/workspaces/dh-la001"

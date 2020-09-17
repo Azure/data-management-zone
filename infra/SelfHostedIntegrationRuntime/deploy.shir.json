@@ -55,7 +55,7 @@
                 "description": "Specifies the ID of the existing data factory for which an integration runtime should be created."
             }
         },
-        "storageAccountId": {
+        "storageAccountContainerId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the existing storage account where the powershell script is stored."
@@ -76,90 +76,31 @@
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
         "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
-        "subnetId": "[parameters('subnetId')]",
         "dataFactoryId": "[parameters('dataFactoryId')]",
         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-        "storageAccountId": "[parameters('storageAccountId')]",
-        "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
+        "dataFactorySelfHostedIntegrationRuntimeName": "datahubSelfHostedIntegrationRuntimeNew",
+        "storageAccountContainerId": "[parameters('storageAccountContainerId')]",
+        "storageAccountName": "[split(variables('storageAccountContainerId'), '/')[8]]",
+        "storageAccountContainerName": "[last(split(variables('storageAccountContainerId'), '/'))]",
         "storageAccountKey": "[parameters('storageAccountKey')]",
-        "setupScriptUri": "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', 'shir', '/gatewayInstall.ps1')]"
+        "subnetId": "[parameters('subnetId')]"
     },
     "resources": [
-        {
-            "name": "[concat(variables('vmssName'), '-nsg')]",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2020-05-01",
-            "location": "[variables('location')]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "AllowRDP",
-                        "properties": {
-                            "priority": 1000,
-                            "sourceAddressPrefix": "*",
-                            "protocol": "Tcp",
-                            "destinationPortRange": "3389",
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*"
-                        }
-                    },
-                    {
-                        "name": "AllowHTTPInBound",
-                        "properties": {
-                            "priority": 1010,
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "destinationPortRange": "80",
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "name": "[concat(variables('vmssName'), '-publicip')]",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2020-05-01",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "Standard"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Static",
-                "publicIPAddressVersion": "IPv4",
-                "dnsSettings": {
-                    "domainNameLabel": "[toLower(variables('vmssName'))]"
-                },
-                // "ddosSettings": {
-                //     "protectionCoverage": "Standard",
-                //     "protectedIP": true
-                // },
-                "ipTags": []
-            }
-        },
         {
             "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
             "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
-            ],
             "sku": {
-                "name": "Standard"
+                "name": "Basic"
             },
             "properties": {
                 "frontendIPConfigurations": [
                     {
                         "name": "loadBalancerFrontEnd",
                         "properties": {
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                            "subnet": {
+                                "id": "[variables('subnetId')]"
                             }
                         }
                     }
@@ -184,21 +125,37 @@
                         }
                     }
                 ],
-                "outboundRules": [
+                "loadBalancingRules": [
                     {
-                        "name": "[concat(variables('vmssName'), '-outboundRule')]",
+                        "name": "ProbeRule",
                         "properties": {
-                            "protocol": "TCP",
-                            "enableTcpReset": true,
-                            "idleTimeoutInMinutes": 4,
+                            "loadDistribution": "Default",
+                            "frontendIPConfiguration": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
+                            },
                             "backendAddressPool": {
                                 "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
                             },
-                            "frontendIPConfigurations": [
-                                {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', concat(variables('vmssName'), '-lb'), 'loadBalancerFrontEnd')]"
-                                }
-                            ]
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 5,
+                            "probe": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes/', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-probe'))]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "[concat(variables('vmssName'), '-probe')]",
+                        "properties": {
+                            "protocol": "Http",
+                            "port": 80,
+                            "requestPath": "/",
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
                         }
                     }
                 ]
@@ -211,8 +168,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
+                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName'))]"
             ],
             "identity": {
                 "type": "SystemAssigned"
@@ -222,22 +178,18 @@
                 "tier": "[variables('vmssSkuTier')]",
                 "capacity": 1
             },
-            "zones": [
-                "1",
-                "2"
-            ],
             "properties": {
                 "additionalCapabilities": {},
                 "automaticRepairsPolicy": {},
                 "doNotRunExtensionsOnOverprovisionedVMs": true,
                 "overprovision": true,
-                "platformFaultDomainCount": 5,
+                "platformFaultDomainCount": 1,
                 "scaleInPolicy": {
                     "rules": [
                         "Default"
                     ]
                 },
-                "singlePlacementGroup": false,
+                "singlePlacementGroup": true,
                 "upgradePolicy": {
                     "mode": "Automatic"
                     // "automaticOSUpgradePolicy": {
@@ -258,9 +210,9 @@
                                 "name": "[concat(variables('vmssName'), '-nic')]",
                                 "properties": {
                                     "primary": true,
-                                    "networkSecurityGroup": {
-                                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
-                                    },
+                                    "enableAcceleratedNetworking": false,
+                                    "dnsSettings": {},
+                                    "enableIPForwarding": false,
                                     "ipConfigurations": [
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
@@ -269,14 +221,6 @@
                                                 "subnet": {
                                                     "id": "[variables('subnetId')]"
                                                 },
-                                                // "publicIPAddressConfiguration": {
-                                                //     "name": "vmpublicip",
-                                                //     "properties": {
-                                                //         "idleTimeoutInMinutes": 15,
-                                                //         "publicIPAddressVersion": "IPv4",
-                                                //         "ipTags": []
-                                                //     }
-                                                // },
                                                 "loadBalancerBackendAddressPools": [
                                                     {
                                                         "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
@@ -305,44 +249,37 @@
                             "sku": "2019-Datacenter",
                             "version": "latest"
                         }
+                    },
+                    "extensionProfile": {
+                        "extensions": [
+                            {
+                                "name": "[concat(variables('vmssName'), '-installGateway')]",
+                                "properties": {
+                                    "publisher": "Microsoft.Compute",
+                                    "type": "CustomScriptExtension",
+                                    "typeHandlerVersion": "1.10",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "fileUris": [
+                                            "[concat('https://', variables('storageAccountName'), '.blob.core.windows.net/', variables('storageAccountContainerName'), '/gatewayInstall.ps1')]"
+                                        ]
+                                    },
+                                    "protectedSettings": {
+                                        "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), variables('dataFactorySelfHostedIntegrationRuntimeName')), '2018-06-01').authKey1)]",
+                                        "storageAccountName": "[variables('storageAccountName')]",
+                                        "storageAccountKey": "[variables('storageAccountKey')]"
+                                    }
+                                }
+                            }
+                        ]
                     }
-                },
-                "zoneBalance": true
-            }
-        },
-        {
-            "name": "[concat(variables('vmssName'), '/' , 'installGateway')]",
-            "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
-            "apiVersion": "2019-07-01",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachineScaleSets', variables('vmssName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]",
-                "[resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.10",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[variables('setupScriptUri')]"
-                    ]
-                },
-                "protectedSettings": {
-                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ', listAuthKeys(resourceId('Microsoft.DataFactory/factories/integrationRuntimes', variables('dataFactoryName'), 'datahubSelfHostedIntegrationRuntime'), '2018-06-01').authKey1)]",
-                    "storageAccountName": "[variables('storageAccountName')]",
-                    "storageAccountKey": "[variables('storageAccountKey')]"
                 }
             }
         },
         {
             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
             "apiVersion": "2018-06-01",
-            "name": "[concat(variables('dataFactoryName'), '/datahubSelfHostedIntegrationRuntime')]",
+            "name": "[concat(variables('dataFactoryName'), '/', variables('dataFactorySelfHostedIntegrationRuntimeName'))]",
             "properties": {
                 "additionalProperties": {},
                 "type": "SelfHosted",
