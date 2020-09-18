@@ -58,6 +58,25 @@ stages:
             csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Validation'
         
+        # Deploy storage account 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_001_validation
+          displayName: Deploy storage account 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Validation'
+        
+        
         # Deploy firewall - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: firewall_validation
@@ -80,8 +99,8 @@ stages:
         - task: AzureResourceManagerTemplateDeployment@3
           name: dns_forwarder_validation
           displayName: Deploy dns forwarder - validation
-          enabled: true
-          continueOnError: false
+          enabled: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -337,7 +356,7 @@ stages:
         displayName: 'Deployment of ARM templates'
         continueOnError: false
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'vs2017-win2016'
         
         steps:
         # Checkout repository
@@ -367,6 +386,39 @@ stages:
             csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
             csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Incremental'
+        
+        # Deploy storage account 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: storage_account_001_deployment
+          displayName: Deploy storage account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Storage/deploy.storage.json'
+            csmParametersFile: 'infra/Storage/params.storage001.json'
+            deploymentMode: 'Incremental'
+        
+        # Upload file to storage account 001
+        - task: AzureFileCopy@3
+          name: upload_file_001
+          displayName: Upload file to storage account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            sourcePath: 'infra/DnsForwarder/forwarderSetup.sh'
+            additionalArgumentsForBlobCopy: |
+              '/Y'
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            destination: AzureBlob
+            storage: datahubstorage001
+            containerName: scripts
         
         # Deploy firewall
         - task: AzureResourceManagerTemplateDeployment@3
@@ -601,8 +653,6 @@ stages:
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsWebApps.json'
             deploymentMode: 'Incremental'
-        
-
         
         # Deploy vnet peering 001
         - task: AzureResourceManagerTemplateDeployment@3

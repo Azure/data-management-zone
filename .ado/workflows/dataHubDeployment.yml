@@ -139,7 +139,7 @@ stages:
         displayName: 'Deployment of ARM templates'
         continueOnError: false
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: 'vs2017-win2016'
         
         steps:
         # Checkout repository
@@ -196,21 +196,6 @@ stages:
           continueOnError: false
           inputs:
             sourcePath: 'infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
-            additionalArgumentsForBlobCopy: |
-              '/Y'
-            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            destination: AzureBlob
-            storage: datahubstorage001
-            containerName: scripts
-        
-        # Upload file to storage account 002
-        - task: AzureFileCopy@3
-          name: upload_file_002
-          displayName: Upload file to storage account 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            sourcePath: 'infra/DnsForwarder/forwarderSetup.sh'
             additionalArgumentsForBlobCopy: |
               '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
