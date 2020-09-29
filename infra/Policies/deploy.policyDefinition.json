@@ -57,7 +57,7 @@
     "resources": [
         {
             "type": "Microsoft.Authorization/policyDefinitions",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2019-09-01",
             "name": "[variables('policyName')]",
             "properties": {
                 "policyType": "Custom",
