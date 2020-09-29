@@ -20,7 +20,7 @@
                 "description": "Specifies a description of the policy set."
             }
         },
-        "policyIds": {
+        "policyDefinitions": {
             "type": "string",
             "metadata": {
                 "description": "List of policy IDs that will be assigned to this policy set."
@@ -29,7 +29,13 @@
         "policySetMetadata": {
             "type": "string",
             "metadata": {
-                "description": "Specifies key-value pairs for the policy set."
+                "description": "Specifies list of policy definition references."
+            }
+        },
+        "policyDefinitionGroups": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies list of groups of policy definition references within the policy set definition."
             }
         }
     },
@@ -37,21 +43,23 @@
         "policySetName": "[parameters('policySetName')]",
         "policySetDescription": "[parameters('policySetDescription')]",
         "policySetParameters": "[parameters('policySetParameters')]",
-        "policyIds": "[parameters('policyIds')]",
-        "policySetMetadata": "[parameters('policySetMetadata')]"
+        "policyDefinitions": "[parameters('policyDefinitions')]",
+        "policySetMetadata": "[parameters('policySetMetadata')]",
+        "policyDefinitionGroups": "[parameters('policyDefinitionGroups')]"
     },
     "resources": [
         {
             "type": "Microsoft.Authorization/policySetDefinitions",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2019-09-01",
             "name": "[variables('policySetName')]",
             "properties": {
                 "policyType": "Custom",
                 "displayName": "[variables('policySetName')]",
                 "description": "[variables('policySetDescription')]",
+                "metadata": "[variables('policySetMetadata')]",
                 "parameters": "[variables('policySetParameters')]",
-                "policyDefinitions": "[variables('policyIds')]",
-                "metadata": "[variables('policySetMetadata')]"
+                "policyDefinitions": "[variables('policyDefinitions')]",
+                "policyDefinitionGroups": "[variables('policyDefinitionGroups')]"
             }
         }
     ]

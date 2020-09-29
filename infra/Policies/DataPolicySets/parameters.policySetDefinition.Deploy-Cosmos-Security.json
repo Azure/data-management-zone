@@ -8,10 +8,18 @@
         "policySetDescription": {
             "value": "Recommended built-in security policies for Cosmos DB."
         },
+        "policySetMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cosmos DB",
+                "preview": false,
+                "deprecated": false
+            }
+        },
         "policySetParameters": {
             "value": {}
         },
-        "policyIds": {
+        "policyDefinitions": {
             "value": [
                 {
                     "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/4750c32b-89c0-46af-bfcb-2e4541a818d5",
@@ -27,13 +35,8 @@
                 }
             ]
         },
-        "policySetMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Cosmos DB",
-                "preview": false,
-                "deprecated": false
-            }
+        "policyDefinitionGroups": {
+            "value": []
         }
     }
 }

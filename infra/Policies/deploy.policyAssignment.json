@@ -26,6 +26,12 @@
                 "description": "Specifies the name of the policy set that should be assigned."
             }
         },
+        "policyAssignmentDescription": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the description of the policy assignment."
+            }
+        },
         "policySetParameters": {
             "type": "string",
             "metadata": {
@@ -49,13 +55,14 @@
         "policyAssignmentName": "[parameters('policyAssignmentName')]",
         "policyAssignmentScope": "[parameters('policyAssignmentScope')]",
         "policySetName": "[parameters('policySetName')]",
+        "policyAssignmentDescription": "[parameters('policyAssignmentDescription')]",
         "policySetParameters": "[parameters('policySetParameters')]",
         "policyAssignmentEnforcementMode": "[parameters('policyAssignmentEnforcementMode')]"
     },
     "resources": [
         {
             "type": "Microsoft.Authorization/policyAssignments",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2019-09-01",
             "name": "[variables('policyAssignmentName')]",
             "location": "[variables('location')]",
             "identity": {
@@ -63,12 +70,13 @@
             },
             "properties": {
                 "displayName": "[variables('policyAssignmentName')]",
+                "description": "[variables('policyAssignmentDescription')]",
+                "metadata": {},
                 "policyDefinitionId": "[resourceId('Microsoft.Authorization/policySetDefinitions', variables('policySetName'))]",
                 "scope": "[variables('policyAssignmentScope')]",
                 "notScopes": [
                 ],
                 "parameters": "[variables('policySetParameters')]",
-                "description": "string",
                 "enforcementMode": "[variables('policyAssignmentEnforcementMode')]"
             }
         }
