@@ -136,6 +136,20 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/Function/deploy.function.json \
             --parameters $GITHUB_WORKSPACE/infra/Function/params.function001.json
     
+    # # Deploy power bi 001 - validation
+    # - name: Deploy power bi 001 - validation
+    #   id: power_bi_validation
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group validate \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Function/deploy.powerBi.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Function/params.powerBi001.json
+    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -246,6 +260,20 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
             --template-file $GITHUB_WORKSPACE/infra/Function/deploy.function.json \
             --parameters $GITHUB_WORKSPACE/infra/Function/params.function001.json
+    
+    # # Deploy power bi 001
+    # - name: Deploy power bi 001
+    #   id: power_bi_001_deployment
+    #   uses: azure/cli@v1
+    #   with:
+    #     azcliversion: latest
+    #     inlineScript: |
+    #       echo "Creating deployment in resource group"
+    #       az deployment group create \
+    #         --mode Incremental \
+    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
+    #         --template-file $GITHUB_WORKSPACE/infra/Function/deploy.powerBi.json \
+    #         --parameters $GITHUB_WORKSPACE/infra/Function/params.powerBi001.json
     
     # Log out from Azure
     - name: Log out from Azure

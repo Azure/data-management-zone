@@ -287,6 +287,48 @@ jobs:
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsWebApps.json
     
+    # Deploy private DNS zone for power bi 001 - validation
+    - name: Deploy private DNS zone for power bi 001 - validation
+      id: private_dns_power_bi_001_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi001.json
+    
+    # Deploy private DNS zone for power bi 002 - validation
+    - name: Deploy private DNS zone for power bi 002 - validation
+      id: private_dns_power_bi_002_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi002.json
+    
+    # Deploy private DNS zone for power bi 003 - validation
+    - name: Deploy private DNS zone for power bi 003 - validation
+      id: private_dns_power_bi_003_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi003.json
+    
     # Deploy vnet peering 001 - validation
     - name: Deploy vnet peering 001 - validation
       id: vnet_peering_001_validation
@@ -565,6 +607,48 @@ jobs:
             --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
             --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
             --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsWebApps.json
+    
+    # Deploy private DNS zone for power bi 001
+    - name: Deploy private DNS zone for power bi 001
+      id: private_dns_power_bi_001_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi001.json
+    
+    # Deploy private DNS zone for power bi 002
+    - name: Deploy private DNS zone for power bi 002
+      id: private_dns_power_bi_002_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi002.json
+    
+    # Deploy private DNS zone for power bi 003
+    - name: Deploy private DNS zone for power bi 003
+      id: private_dns_power_bi_003_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
+            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
+            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi003.json
     
     # Deploy vnet peering 001
     - name: Deploy vnet peering 001
