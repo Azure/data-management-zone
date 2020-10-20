@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "vmssName": {
+            "value": "dhPBIGatewaytest"
+        },
+        "vmssSkuTier": {
+            "value": "Standard"
+        },
+        "vmssSkuName": {
+            "value": "Standard_A1_v2"
+        },
+        "vmssAdminUsername": {
+            "value": "vmssMainUser"
+        },
+        "vmssAdminPassword": {
+            "value": "<your-secure-password>!"
+        },
+        "storageAccountContainerId": {
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001/blobServices/default/containers/scripts"
+        },
+        "storageAccountKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.KeyVault/vaults/dh-keyvault001"
+                },
+                "secretName": "storageAccountKey"
+            }
+        },
+        "subnetId": {
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-subnet"
+        },
+        "powerBiTenantId": {
+            "value": "<your-power-bi-tenant-id>"
+        },
+        "powerBiGatewayClientId": {
+            "value": "<your-power-bi-client-id>"
+        },
+        "powerBiGatewayClientSecret": {
+            "value": "<your-power-bi-client-secret>"
+        },
+        "powerBiGatewayRecoveryKey": {
+            "value": "<your-power-bi-recovery-key>"
+        },
+        "powerBiGatewayAdminGroupObjectId": {
+            "value": "<your-power-bi-admin-group-object-id>"
+        }
+    }
+}
