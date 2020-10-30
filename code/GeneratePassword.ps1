@@ -1,5 +1,5 @@
 # Define script arguments
-param (
+Param (
     [Parameter(Mandatory = $true)]
     [String]
     $VaultName,
@@ -12,6 +12,7 @@ param (
     [Switch]
     $Force
 )
+
 
 function New-Password {
     <#

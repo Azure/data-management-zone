@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "vmssName": {
+            "value": "dhDevOpsAgentstest"
+        },
+        "vmssSkuTier": {
+            "value": "Standard"
+        },
+        "vmssSkuName": {
+            "value": "Standard_A1_v2"
+        },
+        "vmssAdminUsername": {
+            "value": "vmssMainUser"
+        },
+        "vmssAdminPassword": {
+            "value": "Qwertz12345!"
+        },
+        "subnetId": {
+            "value": "/subscriptions/558bd446-4212-46a2-908c-9ab0a628705e/resourceGroups/bp-rg/providers/Microsoft.Network/virtualNetworks/bp-rg-vnet/subnets/default"
+        },
+        "devOpsOrgName": {
+            "value": "marvinbuss"
+        },
+        "devOpsProjectName": {
+            "value": "DataMesh"
+        },
+        "devOpsDeploymentGroupName": {
+            "value": "testgroup"
+        },
+        "devOpsAgentName": {
+            "value": "dhDevOpsAgent"
+        },
+        "devOpsAgentTags": {
+            "value": ""
+        },
+        "devOpsPatToken": {
+            "value": "4kfc3nu5o7vqfwgl75y6lksgcyk654uqmlkpqbzoj363gojzq5za"
+        }
+    }
+}
