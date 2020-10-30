@@ -14,6 +14,7 @@ on:
 env:
   AZURE_SUBSCRIPTION_ID: ''
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
+  AZURE_RESOURCE_GROUP_NAME_DEPLOYMENT: dh-deployment
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -31,6 +32,17 @@ jobs:
     
     # Create resource group
     - name: Create resource group
+      id: resource_group_management
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}"
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_deployment
       uses: azure/cli@v1
       with:
         azcliversion: latest
@@ -217,7 +229,7 @@ jobs:
           "Uploading file to storage account"
           $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "datahubstorage001"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1" -Container scripts -Blob "gatewayInstall.ps1" -Context $ctx -Force
+          Set-AzStorageBlobContent -File "infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" -Container scripts -Blob "installSHIRGateway.ps1" -Context $ctx -Force
     
     # Deploy data factory 001
     - name: Deploy data factory 001
