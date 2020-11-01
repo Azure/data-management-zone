@@ -36,6 +36,24 @@ stages:
           continueOnError: false
           enabled: true
         
+        # Deploy key vault 002 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_002_validation
+          displayName: Deploy key vault 002 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            deploymentMode: 'Validation'
+        
         # Deploy log analytics workspace - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: log_analytics_validation
@@ -75,6 +93,24 @@ stages:
           clean: true
           continueOnError: false
           enabled: true
+        
+        # Deploy key vault 002
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_002_deployment
+          displayName: Deploy key vault 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            deploymentMode: 'Incremental'
         
         # Deploy log analytics workspace
         - task: AzureResourceManagerTemplateDeployment@3
