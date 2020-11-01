@@ -14,17 +14,25 @@
             "metadata": {
                 "description": "Specifies the name of the log analytics workspace."
             }
+        },
+        "keyVaultId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the key vault to store the storage access key."
+            }
         }
-     },
+    },
     "variables": {
         "location": "[parameters('location')]",
-        "logAnalyticsWorkspaceName": "[parameters('logAnalyticsWorkspaceName')]"
+        "logAnalyticsWorkspaceName": "[parameters('logAnalyticsWorkspaceName')]",
+        "keyVaultId": "[parameters('keyVaultId')]",
+        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
     },
     "resources": [
         {
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logAnalyticsWorkspaceName')]",
-            "apiVersion": "2020-03-01-preview",
+            "apiVersion": "2020-08-01",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {
@@ -34,6 +42,55 @@
                 "publicNetworkAccessForIngestion": "Disabled",
                 "publicNetworkAccessForQuery": "Disabled"
             }
+        },
+        {
+            "name": "SecretDeployment",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceId')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName')), '2020-08-01').customerId]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceKey')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "contentType": "text/plain",
+                                "value": "[listkeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName')), '2020-08-01').primarySharedKey]",
+                                "attributes": {
+                                    "enabled": true
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
+            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
     "outputs": {}

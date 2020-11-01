@@ -60,6 +60,20 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    # Deploy key vault 002 - validation
+    - name: Deploy key vault 002 - validation
+      id: key_vault_002_validation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group validate \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
+            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault002.json
+    
     # Deploys log analytics workspace - validation
     - name: Deploy log analytics workspace - validation
       id: log_analytics_validation
@@ -100,6 +114,20 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploy key vault 002
+    - name: Deploy key vault 002
+      id: key_vault_002_deployment
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating deployment in resource group"
+          az deployment group create \
+            --mode Incremental \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --template-file $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json \
+            --parameters $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault002.json
     
     # Deploys log analytics workspace
     - name: Deploy log analytics workspace
