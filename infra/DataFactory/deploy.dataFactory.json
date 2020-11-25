@@ -24,10 +24,11 @@
         "privateDnsZoneId": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the private dns zones."
+                "description": "Specifies the ID of the private dns zone."
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
@@ -76,9 +77,9 @@
             }
         },
         {
-            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointName'))]"
             ],
