@@ -93,6 +93,7 @@
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "vmssName": "[parameters('vmssName')]",
@@ -113,9 +114,9 @@
     },
     "resources": [
         {
-            "name": "[concat(variables('vmssName'), '-publicip')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('vmssName'), '-publicip')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Standard"
@@ -134,9 +135,9 @@
             }
         },
         {
-            "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('vmssName'), '-lb')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmssName'), '-publicip'))]"
@@ -215,9 +216,9 @@
             }
         },
         {
-            "name": "[variables('vmssName')]",
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "apiVersion": "2019-07-01",
+            "name": "[variables('vmssName')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"

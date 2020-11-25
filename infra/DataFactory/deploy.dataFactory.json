@@ -21,21 +21,20 @@
                 "description": "Specifies the id of the subnet which the private endpoint uses."
             }
         },
-        "privateDnsZoneResourceGroupId": {
+        "privateDnsZoneId": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the resource group of the private dns zones."
+                "description": "Specifies the ID of the private dns zone."
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
         "subnetId": "[parameters('subnetId')]",
-        "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
-        "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
+        "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
         "privateEndpointName": "[concat(variables('dataFactoryName'), '-private-endpoint')]"
-        "templateUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTX24ZRZSACX3ANKGMK7NGJ3W"
     },
     "resources": [
         {
@@ -54,41 +53,6 @@
             ]
         },
         {
-            "name": "PrivateEndpointDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('templateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "privateEndpointName": {
-                        "value": "[concat(variables('dataFactoryName'), '-private-endpoint')]"
-                    },
-                    "privateEndpointLocation": {
-                        "value": "[variables('location')]"
-                    },
-                    "privateLinkServiceResourceId": {
-                        "value": "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
-                    },
-                    "privateLinkServiceGroupId": {
-                        "value": "dataFactory"
-                    },
-                    "subnetResourceId": {
-                        "value": "[variables('subnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.datafactory.azure.net')]"
-                    }
-                }
-            }
-        },
-        {
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
@@ -98,9 +62,9 @@
                     {
                         "name": "[variables('privateEndpointName')]",
                         "properties": {
-                            "privateLinkServiceId": "[variables('privateLinkServiceResourceId')]",
+                            "privateLinkServiceId": "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                             "groupIds": [
-                                "[variables('privateLinkServiceGroupId')]"
+                                "dataFactory"
                             ]
                         }
                     }
@@ -113,13 +77,13 @@
             }
         },
         {
-            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointName'))]"
             ],
-            "location": "[variables('privateEndpointLocation')]",
+            "location": "[variables('location')]",
             "properties": {
                 "privateDnsZoneConfigs": [
                     {

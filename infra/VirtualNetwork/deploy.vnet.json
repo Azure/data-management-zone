@@ -16,15 +16,16 @@
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "vnetName": "[parameters('vnetName')]"
     },
     "resources": [
         {
-            "name": "dh-nsg",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-11-01",
+            "name": "dh-nsg",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -58,9 +59,9 @@
             }
         },
         {
-            "name": "[variables('vnetName')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-04-01",
+            "name": "[variables('vnetName')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
