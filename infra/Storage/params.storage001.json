@@ -10,9 +10,6 @@
         },
         "storageAccountType": {
             "value": "Standard_LRS"
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.KeyVault/vaults/dh-keyvault001"
         }
     }
 }
