@@ -31,12 +31,6 @@
             "metadata": {
                 "description": "Specifies the SKU of the storage account."
             }
-        },
-        "keyVaultId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the resource id of the key vault to store the storage access key."
-            }
         }
     },
     "functions": [],
@@ -44,14 +38,12 @@
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountType": "[parameters('storageAccountType')]",
-        "containerName": "scripts",
-        "keyVaultId": "[parameters('keyVaultId')]",
-        "keyVaultName": "[last(split(variables('keyVaultId'), '/'))]"
+        "containerName": "scripts"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-06-01",
+            "apiVersion": "2020-08-01-preview",
             "name": "[variables('storageAccountName')]",
             "location": "[variables('location')]",
             "identity": {
@@ -95,136 +87,42 @@
                 },
                 "accessTier": "Hot",
                 "supportsHttpsTrafficOnly": true,
-                "isHnsEnabled": true,
+                "isHnsEnabled": false,
                 "largeFileSharesState": "Disabled",
                 "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false
-                // "routingPreference": {
-                //     "routingChoice": "MicrosoftRouting",
-                //     "publishMicrosoftEndpoints": false,
-                //     "publishInternetEndpoints": false
-                // }
+                "allowBlobPublicAccess": false,
+                "routingPreference": {
+                    "routingChoice": "MicrosoftRouting",
+                    "publishMicrosoftEndpoints": false,
+                    "publishInternetEndpoints": false
+                }
             },
             "resources": [
                 {
-                    "type": "managementPolicies",
-                    "apiVersion": "2019-06-01",
-                    "name": "default",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    ],
-                    "properties": {
-                        "policy": {
-                            "rules": [
-                                {
-                                    "enabled": true,
-                                    "name": "default",
-                                    "type": "Lifecycle",
-                                    "definition": {
-                                        "actions": {
-                                            "baseBlob": {
-                                                "tierToCool": {
-                                                    "daysAfterModificationGreaterThan": 90
-                                                }
-                                                // "tierToArchive": {
-                                                //     "daysAfterModificationGreaterThan": 365
-                                                // }
-                                            }
-                                            // "snapshot": {
-                                            //     "delete": {
-                                            //         "daysAfterCreationGreaterThan": 90
-                                            //     }
-                                            // }
-                                        },
-                                        "filters": {
-                                            "prefixMatch": [
-                                            ],
-                                            "blobTypes": [
-                                                "blockBlob"
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "type": "blobServices",
-                    "apiVersion": "2019-06-01",
-                    "name": "default",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-                    ],
-                    "properties": {
-                        // "deleteRetentionPolicy": {
-                        //     "enabled": true,
-                        //     "days": 7
-                        // }
-                        // "isVersioningEnabled": true,
-                        // "automaticSnapshotPolicyEnabled": true,
-                        // "changeFeed": {
-                        //     "enabled": true
-                        // }
-                    }
-                },
-                {
                     "type": "blobServices/containers",
-                    "apiVersion": "2019-06-01",
+                    "apiVersion": "2020-08-01-preview",
                     "name": "[concat('default/', variables('containerName'))]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
                     ],
                     "properties": {
-                        "publicAccess": "None"
+                        "publicAccess": "None",
+                        "metadata": {}
                     }
                 }
             ]
-        },
-        {
-            "name": "SecretDeployment",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-            ],
-            "properties": {
-                "expressionEvaluationOptions": {
-                    "scope": "outer"
-                },
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "parameters": {},
-                    "variables": {},
-                    "resources": [
-                        {
-                            "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/storageAccountKey')]",
-                            "apiVersion": "2019-09-01",
-                            "properties": {
-                                "contentType": "text/plain",
-                                "value": "[listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').keys[0].value]",
-                                "attributes": {
-                                    "enabled": true
-                                }
-                            }
-                        }
-                    ],
-                    "outputs": {}
-                }
-            },
-            "subscriptionId": "[split(variables('keyVaultId'), '/')[2]]",
-            "resourceGroup": "[split(variables('keyVaultId'), '/')[4]]"
         }
     ],
     "outputs": {
+        "storageAccountId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+        },
         "storageAccountName": {
             "type": "string",
             "value": "[variables('storageAccountName')]"
         },
-        "containerName": {
+        "storageAccountContainerName": {
             "type": "string",
             "value": "[variables('containerName')]"
         }
