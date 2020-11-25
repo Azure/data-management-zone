@@ -15,40 +15,6 @@
                 "description": "Specifies the name of the data factory."
             }
         },
-        "dataFactoryGitAccount": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the account name for the repository connection."
-            }
-        },
-        "dataFactoryGitRepo": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the repo name for the repository connection."
-            }
-        },
-        "dataFactoryGitCollaborationBranch": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the collaboration branch name for the repository connection."
-            }
-        },
-        "dataFactoryGitRootFolder": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the root folder in the branch for the repository connection."
-            }
-        },
-        "dataFactoryGitType": {
-            "type": "string",
-            "allowedValues": [
-                "FactoryGitHubConfiguration",
-                "FactoryVSTSConfiguration"
-            ],
-            "metadata": {
-                "description": "Specifies the type of git connection."
-            }
-        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -65,14 +31,10 @@
     "variables": {
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
-        "dataFactoryGitAccount": "[parameters('dataFactoryGitAccount')]",
-        "dataFactoryGitRepo": "[parameters('dataFactoryGitRepo')]",
-        "dataFactoryGitCollaborationBranch": "[parameters('dataFactoryGitCollaborationBranch')]",
-        "dataFactoryGitRootFolder": "[parameters('dataFactoryGitRootFolder')]",
-        "dataFactoryGitType": "[parameters('dataFactoryGitType')]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
+        "privateEndpointName": "[concat(variables('dataFactoryName'), '-private-endpoint')]"
         "templateUri": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateEndpoint/deploy.privateEndpoint.json?token=AIHRGTX24ZRZSACX3ANKGMK7NGJ3W"
     },
     "resources": [
@@ -85,13 +47,6 @@
                 "type": "SystemAssigned"
             },
             "properties": {
-                // "repoConfiguration": {
-                //     "accountName": "[variables('dataFactoryGitAccount')]",
-                //     "repositoryName": "[variables('dataFactoryGitRepo')]",
-                //     "collaborationBranch": "[variables('dataFactoryGitCollaborationBranch')]",
-                //     "rootFolder": "[variables('dataFactoryGitRootFolder')]",
-                //     "type": "[variables('dataFactoryGitType')]"
-                // },
                 "globalParameters": {
                 }
             },
@@ -131,6 +86,49 @@
                         "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.datafactory.azure.net')]"
                     }
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[variables('privateLinkServiceResourceId')]",
+                            "groupIds": [
+                                "[variables('privateLinkServiceGroupId')]"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointName'))]"
+            ],
+            "location": "[variables('privateEndpointLocation')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointName'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneId')]"
+                        }
+                    }
+                ]
             }
         }
     ],
