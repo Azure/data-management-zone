@@ -11,8 +11,8 @@
         "subnetId": {
             "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
         },
-        "privateDnsZoneResourceGroupId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns"
+        "privateDnsZoneId": {
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
         }
     }
 }

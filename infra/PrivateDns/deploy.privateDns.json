@@ -16,6 +16,7 @@
             }
         }
     },
+    "functions": [],
     "variables": {
         "privateDnsZoneName": "[parameters('privateDnsZoneName')]",
         "virtualNetworkId": "[parameters('virtualNetworkId')]"

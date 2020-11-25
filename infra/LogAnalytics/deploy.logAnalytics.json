@@ -22,6 +22,7 @@
             }
         }
     },
+    "functions": [],
     "variables": {
         "location": "[parameters('location')]",
         "logAnalyticsWorkspaceName": "[parameters('logAnalyticsWorkspaceName')]",
@@ -31,8 +32,8 @@
     "resources": [
         {
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('logAnalyticsWorkspaceName')]",
             "apiVersion": "2020-08-01",
+            "name": "[variables('logAnalyticsWorkspaceName')]",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {
@@ -44,9 +45,9 @@
             }
         },
         {
-            "name": "SecretDeployment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
+            "name": "SecretDeployment",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName'))]"
             ],
@@ -63,8 +64,8 @@
                     "resources": [
                         {
                             "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceId')]",
                             "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceId')]",
                             "properties": {
                                 "contentType": "text/plain",
                                 "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName')), '2020-08-01').customerId]",
@@ -75,8 +76,8 @@
                         },
                         {
                             "type": "Microsoft.KeyVault/vaults/secrets",
-                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceKey')]",
                             "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/logAnalyticsWorkspaceKey')]",
                             "properties": {
                                 "contentType": "text/plain",
                                 "value": "[listkeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsWorkspaceName')), '2020-08-01').primarySharedKey]",

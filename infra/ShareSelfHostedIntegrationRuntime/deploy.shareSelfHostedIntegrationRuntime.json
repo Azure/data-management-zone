@@ -31,9 +31,9 @@
     },
     "resources": [
         {
-            "name": "AdfRoleAssignment",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-10-01",
+            "name": "AdfRoleAssignment",
             "properties": {
                 "expressionEvaluationOptions": {
                     "scope": "outer"
@@ -62,9 +62,9 @@
             "resourceGroup": "[split(variables('datahubDataFactoryId'), '/')[4]]"
         },
         {
-            "name": "[concat(variables('dataFactoryName'), '/datahubSharedSelfHostedIntegrationRuntime')]",
             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
             "apiVersion": "2018-06-01",
+            "name": "[concat(variables('dataFactoryName'), '/datahubSharedSelfHostedIntegrationRuntime')]",
             "dependsOn": [
                 "AdfRoleAssignment"
             ],
