@@ -32,8 +32,8 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP }}"
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP }}
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME }}
     
     # Log out from Azure
     - name: Log out from Azure
