@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'infra/VirtualNetwork/**'
+      - 'infra/Firewall/**'
       - 'infra/VirtualNetworkPeering/**'
       - 'infra/PrivateDns/**'
       - 'infra/DnsForwarder/**'
@@ -372,7 +373,7 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        enable-AzPSSession: true 
+        enable-AzPSSession: true
 
     # Deploy Vnet
     - name: Deploy Vnet
@@ -400,14 +401,14 @@ jobs:
         parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
         deploymentMode: Incremental
     
-    # Upload file to storage account 001
-    - name: Upload file to storage account 001
+    # Upload file to Storage Account 001
+    - name: Upload file to Storage Account 001
       id: upload_file_001
       uses: azure/powershell@v1
       with:
         azPSVersion: latest
         inlineScript: |
-          "Uploading file to storage account"
+          "Uploading file to Storage Account 001"
           $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
           $ctx = $storageAccount.Context
           Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
