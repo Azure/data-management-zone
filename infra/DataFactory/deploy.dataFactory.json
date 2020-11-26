@@ -56,6 +56,9 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
             "location": "[variables('location')]",
             "properties": {
                 "privateLinkServiceConnections": [

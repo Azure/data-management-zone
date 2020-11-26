@@ -71,6 +71,9 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.PowerBI/privateLinkServicesForPowerBI', variables('powerBiName'))]"
+            ],
             "location": "[variables('location')]",
             "properties": {
                 "privateLinkServiceConnections": [
