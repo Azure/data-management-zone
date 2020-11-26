@@ -11,9 +11,10 @@ on:
       - '.github/workflows/networkDeployment.yml'
 
 env:
-  AZURE_SUBSCRIPTION_ID: ''
+  AZURE_SUBSCRIPTION_ID: 'feab2d15-66b4-438b-accf-51f889b30ec3'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
   AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
+  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -36,7 +37,7 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}"
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
     
     # Create resource group
@@ -46,8 +47,18 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}"
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_gloabl_dns
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
     
     # Log out from Azure
     - name: Log out from Azure
@@ -62,7 +73,6 @@ jobs:
     needs: [ create-resource-group ]
     runs-on: ubuntu-latest
     
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
@@ -76,286 +86,278 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    # Deploy vnet - validation
-    - name: Deploy vnet - validation
+    # Deploy Vnet - validation
+    - name: Deploy Vnet - validation
       id: vnet_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Validate
     
-    # Deploy storage account 001 - validation
-    - name: Deploy storage account 001 - validation
+    # Deploy Storage Account - validation
+    - name: Deploy Storage Account 001 - validation
       id: storage_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        deploymentMode: Validate
     
-    # Deploy firewall - validation
-    - name: Deploy firewall - validation
-      id: firewall_validation
-      uses: azure/cli@v1
+    # Deploy Firewall 001 - validation
+    - name: Deploy Firewall 001 - validation
+      id: firewall_001_validation
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
-            --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
+        deploymentMode: Validate
     
-    # Deploy dns forwarder - validation
-    - name: Deploy firewall - validation
-      id: dns_forwarder_validation
-      uses: azure/cli@v1
+    # Deploy DNS Forwarder 001 - validation
+    - name: Deploy DNS Forwarder 001 - validation
+      id: dns_forwarder_001_validation
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/DnsForwarder/deploy.dnsForwarder.json \
-            --parameters $GITHUB_WORKSPACE/infra/DnsForwarder/params.dnsForwarder001.json
-      continue-on-error: true
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
+        parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for data factory - validation
-    - name: Deploy private DNS zone for data factory - validation
+    # Deploy Private DNS Zone for Data Factory - validation
+    - name: Deploy Private DNS Zone for Data Factory - validation
       id: private_dns_data_factory_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDataFactory.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDataFactory.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for blob storage - validation
-    - name: Deploy private DNS zone for blob storage - validation
+    # Deploy Private DNS Zone for Blob Storage - validation
+    - name: Deploy Private DNS Zone for Blob Storage - validation
       id: private_dns_blob_storage_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsBlob.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for file storage - validation
-    - name: Deploy private DNS zone for file storage - validation
+    # Deploy Private DNS Zone for File Storage - validation
+    - name: Deploy Private DNS Zone for File Storage - validation
       id: private_dns_file_storage_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsFile.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for container registry - validation
-    - name: Deploy private DNS zone for container registry - validation
-      id: private_dns_container_registry_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
-    
-    # Deploy private DNS zone for key vault - validation
-    - name: Deploy private DNS zone for key vault - validation
-      id: private_dns_key_vault_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
-    
-    # Deploy private DNS zone for ml workspace - validation
-    - name: Deploy private DNS zone for ml workspace - validation
-      id: private_dns_ml_workspace_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
-    
-    # Deploy private DNS zone for cosmos sql - validation
-    - name: Deploy private DNS zone for cosmos sql - validation
-      id: private_dns_cosmos_sql_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
-    
-    # Deploy private DNS zone for sql server - validation
-    - name: Deploy private DNS zone for sql server - validation
-      id: private_dns_sql_server_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
-    
-    # Deploy private DNS zone for event hub - validation
-    - name: Deploy private DNS zone for event hub - validation
-      id: private_dns_event_hub_validation
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
-    
-    # Deploy private DNS zone for dfs - validation
-    - name: Deploy private DNS zone for dfs - validation
+    # Deploy Private DNS Zone for DFS Storage - validation
+    - name: Deploy Private DNS Zone for DFS Storage - validation
       id: private_dns_dfs_storage_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDfs.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDfs.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for web app - validation
-    - name: Deploy private DNS zone for web app - validation
-      id: private_dns_web_apps_validation
-      uses: azure/cli@v1
+    # Deploy Private DNS Zone for DFS Storage - validation
+    - name: Deploy Private DNS Zone for DFS Storage - validation
+      id: private_dns_dfs_storage_validation
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsWebApps.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDfs.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for power bi 001 - validation
-    - name: Deploy private DNS zone for power bi 001 - validation
+    # Deploy Private DNS Zone for Container Registry - validation
+    - name: Deploy Private DNS Zone for Container Registry - validation
+      id: private_dns_container_registry_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsContainerRegistry.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for Key Vault - validation
+    - name: Deploy Private DNS Zone for Key Vault - validation
+      id: private_dns_key_vault_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsKeyVault.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for Machine Learning - validation
+    - name: Deploy Private DNS Zone for Machine Learning - validation
+      id: private_dns_ml_workspace_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsMlWorkspace.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for Cosmos DB SQL - validation
+    - name: Deploy Private DNS Zone for Cosmos DB SQL - validation
+      id: private_dns_cosmos_sql_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsCosmosSql.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for SQL Server - validation
+    - name: Deploy Private DNS Zone for SQL Server - validation
+      id: private_dns_sql_server_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSqlServer.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for Event Hub - validation
+    - name: Deploy Private DNS Zone for Event Hub - validation
+      id: private_dns_event_hub_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsEventHub.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for App Service - validation
+    - name: Deploy Private DNS Zone for App Service - validation
+      id: private_dns_app_service_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsWebApps.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zone for Power BI 001 - validation
+    - name: Deploy Private DNS Zone for Power BI 001 - validation
       id: private_dns_power_bi_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi001.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for power bi 002 - validation
-    - name: Deploy private DNS zone for power bi 002 - validation
+    # Deploy Private DNS Zone for Power BI 002 - validation
+    - name: Deploy Private DNS Zone for Power BI 002 - validation
       id: private_dns_power_bi_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi002.json
+        deploymentMode: Validate
     
-    # Deploy private DNS zone for power bi 003 - validation
-    - name: Deploy private DNS zone for power bi 003 - validation
+    # Deploy Private DNS Zone for Power BI 003 - validation
+    - name: Deploy Private DNS Zone for Power BI 003 - validation
       id: private_dns_power_bi_003_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi003.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi003.json
+        deploymentMode: Validate
     
-    # Deploy vnet peering 001 - validation
-    - name: Deploy vnet peering 001 - validation
+    # Deploy Vnet Peering 001 - validation
+    - name: Deploy Vnet Peering 001 - validation
       id: vnet_peering_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Validate
     
-    # Deploy vnet peering 002 - validation
-    - name: Deploy vnet peering 002 - validation
+    # Deploy Vnet Peering 002 - validation
+    - name: Deploy Vnet Peering 002 - validation
       id: vnet_peering_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        deploymentMode: Validate
     
     # Log out from Azure
     - name: Log out from Azure
@@ -371,7 +373,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
@@ -385,34 +386,32 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true 
-    
-    # Deploy vnet
-    - name: Deploy vnet
+
+    # Deploy Vnet
+    - name: Deploy Vnet
       id: vnet_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetwork/deploy.vnet.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetwork/params.vnet.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        deploymentMode: Incremental
     
-    # Deploy storage account 001
-    - name: Deploy storage account 001
-      id: storage_account_001_deployment
-      uses: azure/cli@v1
+    # Deploy Storage Account
+    - name: Deploy Storage Account 001
+      id: storage_001_deployment
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }} \
-            --template-file $GITHUB_WORKSPACE/infra/Storage/deploy.storage.json \
-            --parameters $GITHUB_WORKSPACE/infra/Storage/params.storage001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        deploymentMode: Incremental
     
     # Upload file to storage account 001
     - name: Upload file to storage account 001
@@ -422,261 +421,256 @@ jobs:
         azPSVersion: latest
         inlineScript: |
           "Uploading file to storage account"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "dh-mgmt" -Name "datahubstorage001"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -File "infra/DnsForwarder/forwarderSetup.sh" -Container scripts -Blob "forwarderSetup.sh" -Context $ctx -Force
+          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
     
-    # Deploy firewall
-    - name: Deploy firewall
-      id: firewall_deployment
-      uses: azure/cli@v1
+    # Deploy Firewall 001
+    - name: Deploy Firewall 001
+      id: firewall_001_deployment
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/Firewall/deploy.firewall.json \
-            --parameters $GITHUB_WORKSPACE/infra/Firewall/params.firewall.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
+        deploymentMode: Incremental
     
-    # # Deploy dns forwarder
-    # - name: Deploy firewall
-    #   id: dns_forwarder_deployment
-    #   uses: azure/cli@v1
+    # # Deploy DNS Forwarder 001
+    # - name: Deploy DNS Forwarder 001
+    #   id: dns_forwarder_001_deployment
+    #   uses: azure/arm-deploy@v1
     #   with:
-    #     azcliversion: latest
-    #     inlineScript: |
-    #       echo "Creating deployment in resource group"
-    #       az deployment group create \
-    #         --mode Incremental \
-    #         --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-    #         --template-file $GITHUB_WORKSPACE/infra/DnsForwarder/deploy.dnsForwarder.json \
-    #         --parameters $GITHUB_WORKSPACE/infra/DnsForwarder/params.dnsForwarder001.json
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
+    #     parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
+    #     deploymentMode: Incremental
     
-    # Deploy private DNS zone for data factory
-    - name: Deploy private DNS zone for data factory
+    # Deploy Private DNS Zone for Data Factory
+    - name: Deploy Private DNS Zone for Data Factory
       id: private_dns_data_factory_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDataFactory.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDataFactory.json
+        deploymentMode: Incremental
     
-    # Deploys private DNS zone for blob storage
-    - name: Deploy private DNS zone for blob storage
+    # Deploy Private DNS Zone for Blob Storage
+    - name: Deploy Private DNS Zone for Blob Storage
       id: private_dns_blob_storage_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsBlob.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsBlob.json
+        deploymentMode: Incremental
     
-    # Deploys private DNS zone for file storage
-    - name: Deploy private DNS zone for file storage
+    # Deploy Private DNS Zone for File Storage
+    - name: Deploy Private DNS Zone for File Storage
       id: private_dns_file_storage_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsFile.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsFile.json
+        deploymentMode: Incremental
     
-    # Deploys private DNS zone for container registry
-    - name: Deploy private DNS zone for container registry
-      id: private_dns_container_registry_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsContainerRegistry.json
-    
-    # Deploys private DNS zone for key vault
-    - name: Deploy private DNS zone for key vault
-      id: private_dns_key_vault_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsKeyVault.json
-    
-    # Deploys private DNS zone for ml workspace
-    - name: Deploy private DNS zone for ml workspace
-      id: private_dns_ml_workspace_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsMlWorkspace.json
-    
-    # Deploys private DNS zone for cosmos sql
-    - name: Deploy private DNS zone for cosmos sql
-      id: private_dns_cosmos_sql_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsCosmosSql.json
-    
-    # Deploys private DNS zone for sql server
-    - name: Deploy private DNS zone for sql server
-      id: private_dns_sql_server_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsSqlServer.json
-    
-    # Deploys private DNS zone for event hub
-    - name: Deploy private DNS zone for event hub
-      id: private_dns_event_hub_deployment
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsEventHub.json
-    
-    # Deploys private DNS zone for dfs
-    - name: Deploy private DNS zone for dfs
+    # Deploy Private DNS Zone for DFS Storage
+    - name: Deploy Private DNS Zone for DFS Storage
       id: private_dns_dfs_storage_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsDfs.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDfs.json
+        deploymentMode: Incremental
     
-    # Deploys private DNS zone for web apps
-    - name: Deploy private DNS zone for web apps
-      id: private_dns_web_apps_deployment
-      uses: azure/cli@v1
+    # Deploy Private DNS Zone for DFS Storage
+    - name: Deploy Private DNS Zone for DFS Storage
+      id: private_dns_dfs_storage_deployment
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsWebApps.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsDfs.json
+        deploymentMode: Incremental
     
-    # Deploy private DNS zone for power bi 001
-    - name: Deploy private DNS zone for power bi 001
+    # Deploy Private DNS Zone for Container Registry
+    - name: Deploy Private DNS Zone for Container Registry
+      id: private_dns_container_registry_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsContainerRegistry.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Key Vault
+    - name: Deploy Private DNS Zone for Key Vault
+      id: private_dns_key_vault_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsKeyVault.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Machine Learning
+    - name: Deploy Private DNS Zone for Machine Learning
+      id: private_dns_ml_workspace_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsMlWorkspace.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Cosmos DB SQL
+    - name: Deploy Private DNS Zone for Cosmos DB SQL
+      id: private_dns_cosmos_sql_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsCosmosSql.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for SQL Server
+    - name: Deploy Private DNS Zone for SQL Server
+      id: private_dns_sql_server_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSqlServer.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Event Hub
+    - name: Deploy Private DNS Zone for Event Hub
+      id: private_dns_event_hub_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsEventHub.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for App Service
+    - name: Deploy Private DNS Zone for App Service
+      id: private_dns_app_service_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsWebApps.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Power BI 001
+    - name: Deploy Private DNS Zone for Power BI 001
       id: private_dns_power_bi_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi001.json
+        deploymentMode: Incremental
     
-    # Deploy private DNS zone for power bi 002
-    - name: Deploy private DNS zone for power bi 002
+    # Deploy Private DNS Zone for Power BI 002
+    - name: Deploy Private DNS Zone for Power BI 002
       id: private_dns_power_bi_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi002.json
+        deploymentMode: Incremental
     
-    # Deploy private DNS zone for power bi 003
-    - name: Deploy private DNS zone for power bi 003
+    # Deploy Private DNS Zone for Power BI 003
+    - name: Deploy Private DNS Zone for Power BI 003
       id: private_dns_power_bi_003_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }} \
-            --template-file $GITHUB_WORKSPACE/infra/PrivateDns/deploy.privateDns.json \
-            --parameters $GITHUB_WORKSPACE/infra/PrivateDns/params.privateDnsPowerBi003.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsPowerBi003.json
+        deploymentMode: Incremental
     
-    # Deploy vnet peering 001
-    - name: Deploy vnet peering 001
+    # Deploy Vnet Peering 001
+    - name: Deploy Vnet Peering 001
       id: vnet_peering_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering001.json
-      
-    # Deploy vnet peering 002
-    - name: Deploy vnet peering 002
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Incremental
+    
+    # Deploy Vnet Peering 002
+    - name: Deploy Vnet Peering 002
       id: vnet_peering_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }} \
-            --template-file $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/deploy.vnetPeering.json \
-            --parameters $GITHUB_WORKSPACE/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
+        deploymentMode: Incremental
     
     # Log out from Azure
     - name: Log out from Azure

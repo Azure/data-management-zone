@@ -38,22 +38,22 @@
                 "description": "Specifies the admin username of the virtual machine scale set."
             }
         },
-        "vmssAdminKey": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Specifies the admin ssh key of the virtual machine scale set."
-            }
-        },
-        "storageAccountContainerId": {
-            "type": "string",
-            "metadata": {
-                "description": "Specifies the resource id of an existing storage account."
-            }
-        },
-        "storageAccountKey": {
+        // "vmssAdminPublicKey": {
+        //     "type": "string",
+        //     "metadata": {
+        //         "description": "Specifies the admin public ssh key of the virtual machine scale set."
+        //     }
+        // },
+        "storageAccountId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the ID of the existing storage account where the powershell script is stored."
+            }
+        },
+        "storageAccountContainerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the storage account container name where the powershell script is stored."
             }
         },
         "subnetId": {
@@ -69,14 +69,22 @@
         "vmssSkuTier": "[parameters('vmssSkuTier')]",
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
-        "vmssAdminKey": "[parameters('vmssAdminKey')]",
-        "storageAccountContainerId": "[parameters('storageAccountContainerId')]",
-        "storageAccountName": "[split(variables('storageAccountContainerId'), '/')[8]]",
-        "storageAccountContainerName": "[last(split(variables('storageAccountContainerId'), '/'))]",
-        "storageAccountKey": "[parameters('storageAccountKey')]",
+        // "vmssAdminPublicKey": "[parameters('vmssAdminPublicKey')]",
+        "storageAccountId": "[parameters('storageAccountId')]",
+        "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
+        "storageAccountContainerName": "[parameters('storageAccountContainerName')]",
         "subnetId": "[parameters('subnetId')]"
     },
     "resources": [
+        // {
+        //     "type": "Microsoft.Compute/sshPublicKeys",
+        //     "apiVersion": "2019-12-01",
+        //     "name": "[concat(variables('vmssName'), '-sshKey')]",
+        //     "location": "[variables('location')]",
+        //     "properties": {
+        //         "publicKey": "[variables('vmssAdminPublicKey')]"
+        //     }
+        // },
         {
             "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
@@ -186,15 +194,15 @@
                         "computerNamePrefix": "[take(variables('vmssName'), 9)]",
                         "adminUsername": "[variables('vmssAdminUsername')]",
                         "linuxConfiguration": {
-                            "disablePasswordAuthentication": true,
-                            "ssh": {
-                                "publicKeys": [
-                                    {
-                                        "path": "[concat('/home/', variables('vmssAdminUsername'), '/.ssh/authorized_keys')]",
-                                        "keyData": "[variables('vmssAdminKey')]"
-                                    }
-                                ]
-                            }
+                            "disablePasswordAuthentication": true
+                            // "ssh": {
+                            //     "publicKeys": [
+                            //         {
+                            //             "path": "[concat('/home/', variables('vmssAdminUsername'), '/.ssh/authorized_keys')]",
+                            //             "keyData": "[reference(resourceId('Microsoft.Compute/sshPublicKeys', concat(variables('vmssName'), '-sshKey')), '2019-12-01').publicKey]"
+                            //         }
+                            //     ]
+                            // }
                         }
                     },
                     "networkProfile": {
@@ -261,7 +269,7 @@
                                     "protectedSettings": {
                                         "commandToExecute": "sh forwarderSetup.sh",
                                         "storageAccountName": "[variables('storageAccountName')]",
-                                        "storageAccountKey": "[variables('storageAccountKey')]"
+                                        "storageAccountKey": "[listkeys(variables('storageAccountId'), '2020-08-01-preview').keys[0].value]"
                                     }
                                 }
                             }
