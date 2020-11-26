@@ -1,0 +1,127 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "containerRegistryName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the container registry."
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the id of the subnet which the private endpoint uses."
+            }
+        },
+        "privateDnsZoneId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the private dns zone."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "containerRegistryName": "[parameters('containerRegistryName')]",
+        "subnetId": "[parameters('subnetId')]",
+        "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
+        "privateEndpointName": "[concat(variables('containerRegistryName'), '-private-endpoint')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2019-12-01-preview",
+            "name": "[variables('containerRegistryName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Premium"
+            },
+            "properties": {
+                "adminUserEnabled": true,
+                "dataEndpointEnabled": false,
+                "encryption": {
+                    "status": "disabled",
+                    "keyVaultProperties": {
+                        "identity": "",
+                        "keyIdentifier": ""
+                    }
+                },
+                "networkRuleSet": {
+                    "defaultAction": "Deny",
+                    "ipRules": [],
+                    "virtualNetworkRules": []
+                },
+                "policies": {
+                    "quarantinePolicy": {
+                        "status": "enabled"
+                    },
+                    "retentionPolicy": {
+                        "status": "disabled",
+                        "days": 1
+                    },
+                    "trustPolicy": {
+                        "status": "disabled",
+                        "type": "Notary"
+                    }
+                },
+                "publicNetworkAccess": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName'))]",
+                            "groupIds": [
+                                "registry"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointName'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneId')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
