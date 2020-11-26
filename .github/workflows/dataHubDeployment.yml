@@ -118,7 +118,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
@@ -131,7 +131,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
@@ -144,7 +144,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
         region: ${{ env.AZURE_LOCATION }}
         template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
         parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
@@ -258,7 +258,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
@@ -271,7 +271,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
@@ -284,7 +284,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
         region: ${{ env.AZURE_LOCATION }}
         template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
         parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
