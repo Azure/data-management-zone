@@ -70,6 +70,13 @@ jobs:
       id: checkout_repository
       uses: actions/checkout@v2
     
+    # Generate Password
+    - name: Generate Password
+      id: generate_password
+      run: |
+        echo "Generating Password"
+        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
+    
     # Login to Azure
     - name: Azure Login
       id: azure_login
