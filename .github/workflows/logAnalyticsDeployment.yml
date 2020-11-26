@@ -83,8 +83,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         region: ${{ env.AZURE_LOCATION }}
-        template:  $GITHUB_WORKSPACE/infra/LogAnalytics/deploy.logAnalytics.json
-        parameters: $GITHUB_WORKSPACE/infra/LogAnalytics/params.logAnalytics001.json
+        template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
+        parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
         deploymentMode: Validate
     
     # Log out from Azure
@@ -123,8 +123,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         region: ${{ env.AZURE_LOCATION }}
-        template: $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json
-        parameters: $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault002.json
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
         deploymentMode: Incremental
     
     # Deploy Log Analytics Workspace 001
@@ -136,8 +136,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         region: ${{ env.AZURE_LOCATION }}
-        template:  $GITHUB_WORKSPACE/infra/LogAnalytics/deploy.logAnalytics.json
-        parameters: $GITHUB_WORKSPACE/infra/LogAnalytics/params.logAnalytics001.json
+        template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
+        parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
         deploymentMode: Incremental
     
     # Log out from Azure
