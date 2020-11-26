@@ -70,8 +70,8 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         region: ${{ env.AZURE_LOCATION }}
-        template: $GITHUB_WORKSPACE/infra/KeyVault/deploy.keyVault.json
-        parameters: $GITHUB_WORKSPACE/infra/KeyVault/params.keyVault002.json
+        template: ${{ env.GITHUB_WORKSPACE }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ env.GITHUB_WORKSPACE }}/infra/KeyVault/params.keyVault002.json
         deploymentMode: Validate
     
     # Deploy Log Analytics Workspace 001 - validation
