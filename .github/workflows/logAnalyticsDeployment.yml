@@ -9,7 +9,7 @@ on:
       - '.github/workflows/logAnalyticsDeployment.yml'
 
 env:
-  AZURE_SUBSCRIPTION_ID: ''
+  AZURE_SUBSCRIPTION_ID: 'feab2d15-66b4-438b-accf-51f889b30ec3'
   AZURE_RESOURCE_GROUP_NAME: dh-la
   AZURE_LOCATION: northeurope
 
