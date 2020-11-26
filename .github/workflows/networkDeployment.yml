@@ -52,7 +52,7 @@ jobs:
     
     # Create resource group
     - name: Create resource group
-      id: resource_group_gloabl_dns
+      id: resource_group_integration
       uses: azure/cli@v1
       with:
         azcliversion: latest
