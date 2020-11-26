@@ -15,13 +15,13 @@
             "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
         },
         "privateDnsZoneIdAnalysis": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net"
         },
         "privateDnsZoneIdPbiDedicated": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net"
         },
         "privateDnsZoneIdPowerQuery": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/Microsoft.Network/privateDnsZones/privatelink.tip1.powerquery.microsoft.com"
+            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.tip1.powerquery.microsoft.com"
         }
     }
 }
