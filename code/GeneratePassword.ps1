@@ -186,7 +186,7 @@ function New-Password {
 
 # Generate password
 Write-Output "Generating password"
-$Password = New-Password | ConvertFrom-SecureString -AsPlainText
+$Password = New-Password -Template "lusdA16dlu" | ConvertFrom-SecureString -AsPlainText
 
 if ($GitHub) {
     # Mask password
