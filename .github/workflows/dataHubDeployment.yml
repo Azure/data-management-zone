@@ -194,7 +194,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminUsername="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
         deploymentMode: Validate
     
     # Deploy Container Registry 001 - validation
@@ -346,7 +346,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminUsername="${{ steps.generate_password.outputs.password }}"
+        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
         deploymentMode: Incremental
     
     # Deploy Container Registry 001
