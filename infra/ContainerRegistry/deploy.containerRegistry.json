@@ -48,13 +48,13 @@
             "properties": {
                 "adminUserEnabled": true,
                 "dataEndpointEnabled": false,
-                "encryption": {
-                    "status": "disabled",
-                    "keyVaultProperties": {
-                        "identity": "",
-                        "keyIdentifier": ""
-                    }
-                },
+                // "encryption": {
+                //     "status": "disabled",
+                //     "keyVaultProperties": {
+                //         "identity": "",
+                //         "keyIdentifier": ""
+                //     }
+                // },
                 "networkRuleSet": {
                     "defaultAction": "Deny",
                     "ipRules": [],
