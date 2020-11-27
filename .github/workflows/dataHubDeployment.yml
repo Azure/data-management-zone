@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
+      - 'code/GeneratePassword.ps1'
       - 'infra/KeyVault/**'
       - 'infra/LogAnalytics/**'
       - 'infra/ContainerRegistry/**'
