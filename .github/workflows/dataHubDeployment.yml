@@ -314,7 +314,7 @@ jobs:
           "Uploading file to Storage Account 001"
           $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
+          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" -Blob "installSHIRGateway.ps1" -Force
     
     # Deploy Data Factory 001
     - name: Deploy Data Factory 001
