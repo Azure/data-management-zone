@@ -1,3 +1,8 @@
+# Enterprise Scale Analytics - Data Hub
+
+The Data Hub is classified as a management function and is at the heart of the Enterprise Scale Analytics platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, 3rd Party Clouds and On-Premises data sources.
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-hub%2Fmain%2Fdocs%2Freference%2Fdeploy.dataHub.json%3Ftoken%3DAIHRGTRLNNZOG6LN5VO3JCK7ZUZTU)
 
 # Contributing
 
