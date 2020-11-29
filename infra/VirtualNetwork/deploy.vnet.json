@@ -129,6 +129,14 @@
         "firewallSubnetId": {
             "type": "string",
             "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'AzureFirewallSubnet')]"
+        },
+        "subnetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dh-subnet')]"
+        },
+        "privateLinkSubnetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dh-privatelink-subnet')]"
         }
     }
 }

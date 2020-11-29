@@ -9,19 +9,18 @@
                 "description": "Provide the prefix (max 5 characters) for all services that will be created"
             }
         },
-        "dataHubSubscriptionId": {
-            "type": "string",
-            "defaultValue": "",
-            "maxLength": 36,
-            "metadata": {
-                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for your data hub. If you don't want to bring a subscription, leave this parameter empty as is."
-            }
-        },
         "location": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
                 "description": "Specifies the location for all resources."
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the id of the subnet that should be used for non private link private endpoints."
             }
         },
         "privateLinkSubnetId": {
@@ -47,8 +46,8 @@
     "functions": [],
     "variables": {
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
-        "dataHubSubscriptionId": "[parameters('dataHubSubscriptionId')]",
         "location": "[parameters('location')]",
+        "subnetId": "[parameters('subnetId')]",
         "privateLinkSubnetId": "[parameters('privateLinkSubnetId')]",
         "vmAdminPassword": "[parameters('vmAdminPassword')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
@@ -59,14 +58,14 @@
         "integrationResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-integration')]",
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
         "loggingResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-logging')]",
-        "containerRegistryTemplateLink": "url",
-        "keyVaultTemplateLink": "url",
-        "logAnalyticsTemplateLink": "url",
-        "storageTemplateLink": "url",
-        "dataFactoryTemplateLink": "url",
-        "powerBiTemplateLink": "url",
-        "shirTemplateLink": "url",
-        "shirScriptLink": "url"
+        "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json?token=AIHRGTSRM73QRE6H3LWUOW27ZUINA",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTSAQYWCWNIO6EPJINK7ZUIOM",
+        "logAnalyticsTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/LogAnalytics/deploy.logAnalytics.json?token=AIHRGTTSPGFGLNRI62P5BY27ZUIP4",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Storage/deploy.storage.json?token=AIHRGTVK2RBW7RJIHYSXQT27ZUIRC",
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSCAD4KPOJKEPOOIDS7ZUISS",
+        "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTRMQ5DVXAR6UIRVAC27ZUIT2",
+        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTSQ4ZYVDJ6ORVVALXS7ZUIYG",
+        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTU4DB7ARUZBQJWISK27ZUIWQ"
     },
     "resources": [
         {
@@ -118,7 +117,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('containerResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -136,11 +134,10 @@
                         "value": "[variables('privateLinkSubnetId')]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.azurecr.io')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('containerResourceGroupName')]"
         },
         {
@@ -150,7 +147,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('managementResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -168,11 +164,10 @@
                         "value": "[variables('privateLinkSubnetId')]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.vaultcore.azure.net')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('managementResourceGroupName')]"
         },
         {
@@ -182,7 +177,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('loggingResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -200,11 +194,10 @@
                         "value": "[variables('privateLinkSubnetId')]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.vaultcore.azure.net')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('loggingResourceGroupName')]"
         },
         {
@@ -213,9 +206,8 @@
             "name": "logAnalytics001Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('loggingResourceGroupName'))]",
-                "[resourceId('Microsoft.Resources/deployments', 'keyVault002Deployment')]"
+                "keyVault002Deployment"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -234,7 +226,6 @@
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('loggingResourceGroupName')]"
         },
         {
@@ -244,7 +235,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -263,7 +253,6 @@
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('integrationResourceGroupName')]"
         },
         {
@@ -273,7 +262,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -291,22 +279,21 @@
                         "value": "[variables('privateLinkSubnetId')]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.datafactory.azure.net')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('integrationResourceGroupName')]"
         },
         {
+            "condition": true,
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "name": "shir001Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]",
-                "[resourceId('Microsoft.Resources/deployments', 'dataFactory001Deployment')]"
+                "dataFactory001Deployment"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -336,14 +323,13 @@
                         "value": "[reference('dataFactory001Deployment').outputs.dataFactoryId.value]"
                     },
                     "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
+                        "value": "[variables('subnetId')]"
                     },
                     "fileUri": {
                         "value": "[variables('shirScriptLink')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('integrationResourceGroupName')]"
         },
         {
@@ -354,7 +340,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]"
             ],
-            "location": "[variables('location')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -375,17 +360,16 @@
                         "value": "[variables('privateLinkSubnetId')]"
                     },
                     "privateDnsZoneIdAnalysis": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.analysis.windows.net')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net')]"
                     },
                     "privateDnsZoneIdPbiDedicated": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.pbidedicated.windows.net')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net')]"
                     },
                     "privateDnsZoneIdPowerQuery": {
-                        "value": "[resourceId(reference(variables('privateDnsZoneResourceGroupId'), '2020-06-01', 'Full').subscriptionId, variables('privateDnsZoneResourceGroupName'), 'Microsoft.Network/privateDnsZones', 'privatelink.tip1.powerquery.microsoft.com')]"
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.tip1.powerquery.microsoft.com')]"
                     }
                 }
             },
-            "subscriptionId": "[variables('dataHubSubscriptionId')]",
             "resourceGroup": "[variables('consumptionResourceGroupName')]"
         }
     ],
