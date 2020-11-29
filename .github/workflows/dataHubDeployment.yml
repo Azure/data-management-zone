@@ -21,6 +21,7 @@ env:
   AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS: dh-la
   AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: dh-consumption
   AZURE_RESOURCE_GROUP_NAME_CONTAINER: dh-container
+  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: dh-governance
   AZURE_LOCATION: northeurope
 
 jobs:
@@ -84,6 +85,16 @@ jobs:
         inlineScript: |
           echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_governance
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
     
     # Log out from Azure
     - name: Log out from Azure
@@ -177,6 +188,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
         deploymentMode: Validate
     
+    # Deploy Container Registry 001 - validation
+    - name: Deploy Container Registry  001 - validation
+      id: container_registry_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
+        parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
+        deploymentMode: Validate
+    
     # Generate Password
     - name: Generate Password
       id: generate_password
@@ -195,19 +219,6 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
         parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
-        deploymentMode: Validate
-    
-    # Deploy Container Registry 001 - validation
-    - name: Deploy Container Registry  001 - validation
-      id: container_registry_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
-        parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
         deploymentMode: Validate
     
     # # Deploy Power BI Private Link 001 - validation
@@ -329,6 +340,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
         deploymentMode: Incremental
     
+    # Deploy Container Registry 001
+    - name: Deploy Container Registry  001
+      id: container_registry_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
+        parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
+        deploymentMode: Incremental
+    
     # Generate Password
     - name: Generate Password
       id: generate_password
@@ -347,19 +371,6 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
         parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
-        deploymentMode: Incremental
-    
-    # Deploy Container Registry 001
-    - name: Deploy Container Registry  001
-      id: container_registry_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
-        parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
         deploymentMode: Incremental
     
     # # Deploy Power BI Private Link 001

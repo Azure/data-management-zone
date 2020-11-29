@@ -121,5 +121,14 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "vnetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+        },
+        "firewallSubnetId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'AzureFirewallSubnet')]"
+        }
+    }
 }
