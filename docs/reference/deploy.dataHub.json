@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-08-01/tenantDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "enterpriseScaleAnalyticsCompanyPrefix": {
+            "type": "string",
+            "maxLength": 5,
+            "metadata": {
+                "description": "Provide the prefix (max 5 characters) for all services that will be created"
+            }
+        },
+        "dataHubSubscriptionId": {
+            "type": "string",
+            "defaultValue": "",
+            "maxLength": 36,
+            "metadata": {
+                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for your data hub. If you don't want to bring a subscription, leave this parameter empty as is."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "vmAdminPassword": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the admin password of the virtual machines."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
+        "dataHubSubscriptionId": "[parameters('dataHubSubscriptionId')]",
+        "location": "[parameters('location')]",
+        "vmAdminPassword": "[parameters('vmAdminPassword')]",
+        "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTWUPJHNBFC34RWSGK27ZUX72",
+        "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTSKR52YEJ4WWSWOFW27ZUYBI"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "networkDeployment",
+            "location": "[variables('location')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('networkTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "enterpriseScaleAnalyticsCompanyPrefix": {
+                        "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
+                    }
+                }
+            },
+            "subscriptionId": "[variables('dataHubSubscriptionId')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "servicesDeployment",
+            "dependsOn": [
+                "networkDeployment"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('servicesTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "enterpriseScaleAnalyticsCompanyPrefix": {
+                        "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('networkDeployment').outputs.subnetId.value]"
+                    },
+                    "privateLinkSubnetId": {
+                        "value": "[reference('networkDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneResourceGroupId": {
+                        "value": "[reference('networkDeployment').outputs.privateDnsZoneResourceGroupId.value]"
+                    },
+                    "vmAdminPassword": {
+                        "value": "[variables('vmAdminPassword')]"
+                    }
+                }
+            },
+            "subscriptionId": "[variables('dataHubSubscriptionId')]"
+        }
+    ],
+    "outputs": {}
+}
