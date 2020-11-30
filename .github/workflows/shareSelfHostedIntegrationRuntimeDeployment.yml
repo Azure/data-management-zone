@@ -33,37 +33,33 @@ jobs:
     # Share Self Hosted Integration Runtime 001 - validation
     - name: Share Self Hosted Integration Runtime 001 - validation
       id: share_self_hosted_integration_runtime_001_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
-            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Validate
       env:
-        AZURE_RESOURCE_GROUP: dn001-processing
+        AZURE_RESOURCE_GROUP: dn001-processing-domain
         AZURE_SUBSCRIPTION_ID: 2f68ca09-59d9-4ab5-ad11-c54872bfa28d
-    
+
     # Share Self Hosted Integration Runtime 002 - validation
     - name: Share Self Hosted Integration Runtime 002 - validation
       id: share_self_hosted_integration_runtime_002_validation
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group validate \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
-            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+        deploymentMode: Validate
       env:
-        AZURE_RESOURCE_GROUP: dn002-processing
+        AZURE_RESOURCE_GROUP: dn002-processing-domain
         AZURE_SUBSCRIPTION_ID: 558bf93d-0c7b-4436-82ab-a7ed6fda34aa
     
     # Log out from Azure
@@ -94,40 +90,37 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    
     # Share Self Hosted Integration Runtime 001
     - name: Share Self Hosted Integration Runtime 001
       id: share_self_hosted_integration_runtime_001_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
-            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json
+        deploymentMode: Incremental
       env:
-        AZURE_RESOURCE_GROUP: dn001-processing
+        AZURE_RESOURCE_GROUP: dn001-processing-domain
         AZURE_SUBSCRIPTION_ID: 2f68ca09-59d9-4ab5-ad11-c54872bfa28d
-      
-      # Share Self Hosted Integration Runtime 002
+    
+    # Share Self Hosted Integration Runtime 002
     - name: Share Self Hosted Integration Runtime 002
       id: share_self_hosted_integration_runtime_002_deployment
-      uses: azure/cli@v1
+      uses: azure/arm-deploy@v1
       with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating deployment in resource group"
-          az deployment group create \
-            --mode Incremental \
-            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-            --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} \
-            --template-file $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json \
-            --parameters $GITHUB_WORKSPACE/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json
+        parameters: ${{ github.workspace }}/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json
+        deploymentMode: Incremental
       env:
-        AZURE_RESOURCE_GROUP: dn002-processing
+        AZURE_RESOURCE_GROUP: dn002-processing-domain
         AZURE_SUBSCRIPTION_ID: 558bf93d-0c7b-4436-82ab-a7ed6fda34aa
     
     # Log out from Azure

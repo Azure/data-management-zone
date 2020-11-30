@@ -162,7 +162,7 @@ jobs:
         parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
         deploymentMode: Validate
     
-    # Deploy Storage Account - validation
+    # Deploy Storage Account 001 - validation
     - name: Deploy Storage Account 001 - validation
       id: storage_001_validation
       uses: azure/arm-deploy@v1
@@ -203,7 +203,7 @@ jobs:
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_001
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -220,6 +220,19 @@ jobs:
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
         parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
         deploymentMode: Validate
+    
+    # # Deploy Function 001 - validation
+    # - name: Deploy Function 001 - validation
+    #   id: function_001_validation
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/Function/deploy.function.json
+    #     parameters: ${{ github.workspace }}/infra/Function/params.function001.json
+    #     deploymentMode: Validate
     
     # # Deploy Power BI Private Link 001 - validation
     # - name: Deploy Power BI Private Link 001 - validation
@@ -355,7 +368,7 @@ jobs:
     
     # Generate Password
     - name: Generate Password
-      id: generate_password
+      id: generate_password_001
       run: |
         echo "Generating Password"
         pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
@@ -372,6 +385,19 @@ jobs:
         template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
         parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password.outputs.password }}"
         deploymentMode: Incremental
+    
+    # # Deploy Function 001
+    # - name: Deploy Function 001
+    #   id: function_001_deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/Function/deploy.function.json
+    #     parameters: ${{ github.workspace }}/infra/Function/params.function001.json
+    #     deploymentMode: Incremental
     
     # # Deploy Power BI Private Link 001
     # - name: Deploy Power BI Private Link 001
