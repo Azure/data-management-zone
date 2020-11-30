@@ -17,6 +17,7 @@ variables:
   AZURE_SUBSCRIPTION_ID: '558bd446-4212-46a2-908c-9ab0a628705e'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
   AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
+  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -75,7 +76,6 @@ stages:
             csmFile: 'infra/Storage/deploy.storage.json'
             csmParametersFile: 'infra/Storage/params.storage001.json'
             deploymentMode: 'Validation'
-        
         
         # Deploy firewall - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -165,6 +165,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsFile.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy private DNS zone for dfs - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: data_lake_validation
+          displayName: Deploy private DNS zone for dfs - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsDfs.json'
             deploymentMode: 'Validation'
         
         # Deploy private DNS zone for container registry - validation
@@ -275,24 +293,6 @@ stages:
             csmParametersFile: 'infra/PrivateDns/params.privateDnsEventHub.json'
             deploymentMode: 'Validation'
         
-        # Deploy private DNS zone for dfs - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_lake_validation
-          displayName: Deploy private DNS zone for dfs - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
-            csmParametersFile: 'infra/PrivateDns/params.privateDnsDfs.json'
-            deploymentMode: 'Validation'
-        
         # Deploy private DNS zone for web app - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: web_app_validation
@@ -309,6 +309,60 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsWebApps.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Private DNS Zone for Power BI 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_001_validation
+          displayName: Deploy Private DNS Zone for Power BI 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Private DNS Zone for Power BI 002 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_002_validation
+          displayName: Deploy Private DNS Zone for Power BI 002 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi002.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Private DNS Zone for Power BI 003 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_003_validation
+          displayName: Deploy Private DNS Zone for Power BI 003 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi003.json'
             deploymentMode: 'Validation'
         
         # Deploy vnet peering 001 - validation
@@ -404,6 +458,26 @@ stages:
             csmFile: 'infra/Storage/deploy.storage.json'
             csmParametersFile: 'infra/Storage/params.storage001.json'
             deploymentMode: 'Incremental'
+            deploymentOutputs: 'storageDetails'
+        
+        # Generate Pipeline Variables 001
+        - task: AzureCLI@2
+          name: generate_pipeline_variables_001
+          displayName: Generate Pipeline Variables 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            scriptType: pscore
+            scriptLocation: 'scriptPath'
+            scriptPath: '$(System.DefaultWorkingDirectory)/code/GeneratePipelineVariables.ps1'
+            powerShellErrorActionPreference: 'stop'
+            addSpnToEnvironment: false
+            failOnStandardError: false
+            powerShellIgnoreLASTEXITCODE: false
+            arguments: >
+              -ArmOutputString  '$(storageDetails)'
+              -MakeOutput
         
         # Upload file to storage account 001
         - task: AzureFileCopy@3
@@ -417,8 +491,8 @@ stages:
               '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             destination: AzureBlob
-            storage: datahubstorage001
-            containerName: scripts
+            storage: $(storageAccountName)
+            containerName: $(storageAccountContainerName)
         
         # Deploy firewall
         - task: AzureResourceManagerTemplateDeployment@3
@@ -508,6 +582,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsFile.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for dfs
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: data_lake_deployment
+          displayName: Deploy private DNS zone for dfs
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsDfs.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zone for container registry
@@ -618,24 +710,6 @@ stages:
             csmParametersFile: 'infra/PrivateDns/params.privateDnsEventHub.json'
             deploymentMode: 'Incremental'
         
-        # Deploy private DNS zone for dfs
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: data_lake_deployment
-          displayName: Deploy private DNS zone for dfs
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
-            csmParametersFile: 'infra/PrivateDns/params.privateDnsDfs.json'
-            deploymentMode: 'Incremental'
-        
         # Deploy private DNS zone for web app
         - task: AzureResourceManagerTemplateDeployment@3
           name: web_app_deployment
@@ -652,6 +726,60 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsWebApps.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Private DNS Zone for Power BI 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_001_deployment
+          displayName: Deploy Private DNS Zone for Power BI 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Private DNS Zone for Power BI 002
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_002_deployment
+          displayName: Deploy Private DNS Zone for Power BI 002
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi002.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Private DNS Zone for Power BI 003
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_power_bi_003_deployment
+          displayName: Deploy Private DNS Zone for Power BI 003
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsPowerBi003.json'
             deploymentMode: 'Incremental'
         
         # Deploy vnet peering 001
