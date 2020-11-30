@@ -14,7 +14,7 @@
             "defaultValue": "",
             "maxLength": 36,
             "metadata": {
-                "description": "Provide the subscription id of an existing, empty subscription you want to dedicate for your data hub. If you don't want to bring a subscription, leave this parameter empty as is."
+                "description": "Provide the subscription id of an existing subscription you want to dedicate for your data hub."
             }
         },
         "location": {
@@ -29,6 +29,14 @@
             "metadata": {
                 "description": "Specifies the admin password of the virtual machines."
             }
+        },
+        "enableAzFw": {
+            "type": "string",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "defaultValue": "No"
         }
     },
     "functions": [],
@@ -37,6 +45,7 @@
         "dataHubSubscriptionId": "[parameters('dataHubSubscriptionId')]",
         "location": "[parameters('location')]",
         "vmAdminPassword": "[parameters('vmAdminPassword')]",
+        "enableAzFw": "[parameters('enableAzFw')]",
         "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTWUPJHNBFC34RWSGK27ZUX72",
         "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTSKR52YEJ4WWSWOFW27ZUYBI"
     },
@@ -58,6 +67,9 @@
                     },
                     "enterpriseScaleAnalyticsCompanyPrefix": {
                         "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
+                    },
+                    "enableAzFw": {
+                        "value": "[variables('enableAzFw')]"
                     }
                 }
             },
