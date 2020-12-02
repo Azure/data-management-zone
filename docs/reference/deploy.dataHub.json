@@ -30,7 +30,7 @@
                 "description": "Specifies the admin password of the virtual machines."
             }
         },
-        "enableAzFw": {
+        "enableAzureFirewall": {
             "type": "bool",
             "defaultValue": true
         }
@@ -41,7 +41,7 @@
         "dataHubSubscriptionId": "[parameters('dataHubSubscriptionId')]",
         "location": "[parameters('location')]",
         "vmAdminPassword": "[parameters('vmAdminPassword')]",
-        "enableAzFw": "[parameters('enableAzFw')]",
+        "enableAzureFirewall": "[parameters('enableAzureFirewall')]",
         "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTWUPJHNBFC34RWSGK27ZUX72",
         "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTSKR52YEJ4WWSWOFW27ZUYBI"
     },
@@ -64,8 +64,8 @@
                     "enterpriseScaleAnalyticsCompanyPrefix": {
                         "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
                     },
-                    "enableAzFw": {
-                        "value": "[variables('enableAzFw')]"
+                    "enableAzureFirewall": {
+                        "value": "[variables('enableAzureFirewall')]"
                     }
                 }
             },
@@ -109,5 +109,14 @@
             "subscriptionId": "[variables('dataHubSubscriptionId')]"
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "firewallPrivateIp": {
+            "type": "string",
+            "value": "[reference('networkDeployment').outputs.firewallName.value]"
+        },
+        "privateDnsZoneResourceGroupId": {
+            "type": "string",
+            "value": "[reference('networkDeployment').outputs.privateDnsZoneResourceGroupId.value]"
+        }
+    }
 }

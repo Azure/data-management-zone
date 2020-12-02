@@ -86,5 +86,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "firewallPrivateIp": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.Network/azureFirewalls', variables('firewallName')), '2020-05-01').ipConfigurations[0].properties.privateIPAddress]"
+        }
+    }
 }

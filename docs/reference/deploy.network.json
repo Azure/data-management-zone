@@ -16,7 +16,7 @@
                 "description": "Specifies the location for all resources."
             }
         },
-        "enableAzFw": {
+        "enableAzureFirewall": {
             "type": "bool",
             "defaultValue": true
         }
@@ -25,7 +25,7 @@
     "variables": {
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "location": "[parameters('location')]",
-        "enableAzFw": "[parameters('enableAzFw')]",
+        "enableAzureFirewall": "[parameters('enableAzureFirewall')]",
         "vnetResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-network')]",
         "privateDnsZoneResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-global-dns')]",
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTS53DUNM5BNR422CQS7ZTYAC",
@@ -118,7 +118,7 @@
             }
         },
         {
-            "condition": "[variables('enableAzFw')]",
+            "condition": "[variables('enableAzureFirewall')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "name": "firewallDeployment",
@@ -159,6 +159,10 @@
         "privateDnsZoneResourceGroupId": {
             "type": "string",
             "value": "[resourceId('Microsoft.Resources/resourceGroups', variables('privateDnsZoneResourceGroupName'))]"
+        },
+        "firewallPrivateIp": {
+            "type": "string",
+            "value": "[if(variables('enableAzureFirewall'), reference('firewallDeployment').outputs.firewallName.value, null())]"
         }
     }
 }
