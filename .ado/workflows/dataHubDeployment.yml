@@ -84,6 +84,42 @@ stages:
             csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Validation'
         
+        # Deploy Key Vault 003 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_003_validation
+          displayName: Deploy Key Vault 003 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Purview 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: purview_001_validation
+          displayName: Deploy Purview 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Purview/deploy.purview.json'
+            csmParametersFile: 'infra/Purview/deploy.purview001.json'
+            deploymentMode: 'Validation'
+        
         # Deploy Log Analytics Workspace 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: log_analytics_001_validation
@@ -282,6 +318,42 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Key Vault 003
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: key_vault_003_deployment
+          displayName: Deploy Key Vault 003
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Purview 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: purview_001_deployment
+          displayName: Deploy Purview 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/Purview/deploy.purview.json'
+            csmParametersFile: 'infra/Purview/deploy.purview001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Log Analytics Workspace 001

@@ -149,6 +149,32 @@ jobs:
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
         deploymentMode: Validate
     
+    # Deploy Key Vault 003 - validation
+    - name: Deploy Key Vault 003 - validation
+      id: key_vault_003_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
+        deploymentMode: Validate
+    
+    # Deploy Purview 001 - validation
+    - name: Deploy Purview 001 - validation
+      id: purview_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
+        parameters: ${{ github.workspace }}/infra/Purview/deploy.purview001.json
+        deploymentMode: Validate
+    
     # Deploy Log Analytics Workspace 001 - validation
     - name: Deploy Log Analytics Workspace 001 - validation
       id: log_analytics_001_validation
@@ -300,6 +326,32 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
+        deploymentMode: Incremental
+    
+    # Deploy Key Vault 003
+    - name: Deploy Key Vault 003
+      id: key_vault_003_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
+        deploymentMode: Incremental
+    
+    # Deploy Purview 001
+    - name: Deploy Purview 001
+      id: purview_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
+        parameters: ${{ github.workspace }}/infra/Purview/deploy.purview001.json
         deploymentMode: Incremental
     
     # Deploy Log Analytics Workspace 001
