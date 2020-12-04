@@ -45,7 +45,9 @@
             "privatelink.pbidedicated.windows.net",
             "privatelink.tip1.powerquery.microsoft.com",
             "privatelink.database.windows.net",
-            "privatelink.azurewebsites.net"
+            "privatelink.azurewebsites.net",
+            "privatelink.sql.azuresynapse.net",
+            "privatelink.dev.azuresynapse.net"
         ]
     },
     "resources": [
@@ -162,7 +164,7 @@
         },
         "firewallPrivateIp": {
             "type": "string",
-            "value": "[if(variables('enableAzureFirewall'), reference('firewallDeployment').outputs.firewallName.value, null())]"
+            "value": "[if(variables('enableAzureFirewall'), reference('firewallDeployment').outputs.firewallPrivateIp.value, null())]"
         }
     }
 }
