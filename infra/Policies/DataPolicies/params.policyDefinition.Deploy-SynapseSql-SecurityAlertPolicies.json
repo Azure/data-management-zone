@@ -1,0 +1,106 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-SynapseSql-SecurityAlertPolicies"
+        },
+        "policyDescription": {
+            "value": "Deploy Synapse sql security alert policy."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "field": "type",
+                    "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                }
+            },
+            "then": {
+                "effect": "deployIfNotExists",
+                "details": {
+                    "type": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies",
+                    "existenceCondition": {
+                        "allOf": [
+                            {
+                                "field": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies/state",
+                                "equals": "enabled"
+                            }
+                        ]
+                    },
+                    "name": "setByPolicy",
+                    "roleDefinitionIds": [
+                        "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                    ],
+                    "deployment": {
+                        "properties": {
+                            "mode": "incremental",
+                            "template": {
+                                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                "contentVersion": "1.0.0.0",
+                                "parameters": {
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "synapseWorkspaceName": {
+                                        "type": "string"
+                                    },
+                                    "synapseSqlPoolName": {
+                                        "type": "string"
+                                    }
+                                },
+                                "variables": {},
+                                "resources": [
+                                    {
+                                        "type": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies",
+                                        "apiVersion": "2019-06-01-preview",
+                                        "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
+                                        "location": "",
+                                        "properties": {
+                                            "state": "Enabled",
+                                            "disabledAlerts": [
+                                                ""
+                                            ],
+                                            "emailAddresses": [
+                                                "admin@contoso.com"
+                                            ],
+                                            "emailAccountAdmins": true,
+                                            "storageEndpoint": null,
+                                            "storageAccountAccessKey": "",
+                                            "retentionDays": 0
+                                        }
+                                    }
+                                ],
+                                "outputs": {}
+                            },
+                            "parameters": {
+                                "location": {
+                                    "value": "[field('location')]"
+                                },
+                                "synapseWorkspaceName": {
+                                    "value": "[first(split(field('fullname'),'/'))]"
+                                },
+                                "synapseSqlPoolName": {
+                                    "value": "[field('name')]"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

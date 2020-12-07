@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-SynapseSql-Sku"
+        },
+        "policyDescription": {
+            "value": "Denies certain Synapse Sql Pool Sku's."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                        },
+                        {
+                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
+                            "notin": ["DW100c", "DW200c", "DW300c", "DW400c", "DW500c", "DW1000c"]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
