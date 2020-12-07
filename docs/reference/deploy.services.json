@@ -58,6 +58,7 @@
         "integrationResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-integration')]",
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
         "loggingResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-logging')]",
+        "purviewRegions": ["brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope"],
         "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json?token=AIHRGTSRM73QRE6H3LWUOW27ZUINA",
         "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTSAQYWCWNIO6EPJINK7ZUIOM",
         "logAnalyticsTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/LogAnalytics/deploy.logAnalytics.json?token=AIHRGTTSPGFGLNRI62P5BY27ZUIP4",
@@ -65,6 +66,7 @@
         "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSCAD4KPOJKEPOOIDS7ZUISS",
         "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTRMQ5DVXAR6UIRVAC27ZUIT2",
         "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTSQ4ZYVDJ6ORVVALXS7ZUIYG",
+        "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json?token=AIHRGTVR4TFRRSZA6AK4LDS72MYQC",
         "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTU4DB7ARUZBQJWISK27ZUIWQ"
     },
     "resources": [
@@ -199,6 +201,60 @@
                 }
             },
             "resourceGroup": "[variables('loggingResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "keyVault003Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('keyVaultTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault003')]"
+                    },
+                    "subnetId": {
+                        "value": "[variables('privateLinkSubnetId')]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('governanceResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "purview003Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('purviewTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[if(contains(variables('purviewRegions'), variables('location')), variables('location'), 'westeurope')]"
+                    },
+                    "purviewName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('governanceResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
