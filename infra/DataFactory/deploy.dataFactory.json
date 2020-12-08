@@ -21,10 +21,16 @@
                 "description": "Specifies the id of the subnet which the private endpoint uses."
             }
         },
-        "privateDnsZoneId": {
+        "privateDnsZoneIdDataFactory": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the private dns zone."
+                "description": "Specifies the ID of the private dns zone for data factory."
+            }
+        },
+        "privateDnsZoneIdPortal": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the ID of the private dns zone for data factory portal."
             }
         }
     },
@@ -33,8 +39,10 @@
         "location": "[parameters('location')]",
         "dataFactoryName": "[parameters('dataFactoryName')]",
         "subnetId": "[parameters('subnetId')]",
-        "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
-        "privateEndpointName": "[concat(variables('dataFactoryName'), '-private-endpoint')]"
+        "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
+        "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
+        "privateEndpointNameDataFactory": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]",
+        "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]"
     },
     "resources": [
         {
@@ -47,7 +55,8 @@
             },
             "properties": {
                 "globalParameters": {
-                }
+                },
+                "publicNetworkAccess": "Disabled"
             },
             "resources": [
             ]
@@ -55,7 +64,7 @@
         {
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
-            "name": "[variables('privateEndpointName')]",
+            "name": "[variables('privateEndpointNameDataFactory')]",
             "dependsOn": [
                 "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
             ],
@@ -63,7 +72,7 @@
             "properties": {
                 "privateLinkServiceConnections": [
                     {
-                        "name": "[variables('privateEndpointName')]",
+                        "name": "[variables('privateEndpointNameDataFactory')]",
                         "properties": {
                             "privateLinkServiceId": "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
                             "groupIds": [
@@ -82,17 +91,63 @@
         {
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
             "apiVersion": "2020-05-01",
-            "name": "[concat(variables('privateEndpointName'), '/aRecord')]",
+            "name": "[concat(variables('privateEndpointNameDataFactory'), '/aRecord')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointName'))]"
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNameDataFactory'))]"
             ],
             "location": "[variables('location')]",
             "properties": {
                 "privateDnsZoneConfigs": [
                     {
-                        "name": "[concat(variables('privateEndpointName'), '-aRecord')]",
+                        "name": "[concat(variables('privateEndpointNameDataFactory'), '-aRecord')]",
                         "properties": {
-                            "privateDnsZoneId": "[variables('privateDnsZoneId')]"
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdDataFactory')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('privateEndpointNamePortal')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('privateEndpointNamePortal')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]",
+                            "groupIds": [
+                                "portal"
+                            ]
+                        }
+                    }
+                ],
+                "manualPrivateLinkServiceConnections": [
+                ],
+                "subnet": {
+                    "id": "[variables('subnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('privateEndpointNamePortal'), '/aRecord')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('privateEndpointNamePortal'))]"
+            ],
+            "location": "[variables('location')]",
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "[concat(variables('privateEndpointNamePortal'), '-aRecord')]",
+                        "properties": {
+                            "privateDnsZoneId": "[variables('privateDnsZoneIdPortal')]"
                         }
                     }
                 ]
