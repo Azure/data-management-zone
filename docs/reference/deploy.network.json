@@ -32,6 +32,7 @@
         "privateDnsZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateDns/deploy.privateDns.json?token=AIHRGTSYVNDFX3NXSA3DZZS7ZTX6Q",
         "firewallTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Firewall/deploy.firewall.json?token=AIHRGTSM5KVH4A3EBPQBA627ZTX46",
         "privateDnsZoneNames": [
+            "privatelink.azure.com",
             "privatelink.blob.core.windows.net",
             "privatelink.dfs.core.windows.net",
             "privatelink.file.core.windows.net",
