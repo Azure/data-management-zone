@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Append-MachineLearning-PublicAccessWhenBehindVnet"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Deny public access behind vnet for machine learning workspaces."
         },
         "policyMode": {
             "value": "All"
@@ -20,30 +20,29 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.MachineLearningServices/workspaces"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notin": [
-                                "DW100c",
-                                "DW200c",
-                                "DW300c",
-                                "DW400c",
-                                "DW500c",
-                                "DW1000c"
-                            ]
+                            "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                            "notequals": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                            "value": false
+                        }
+                    ]
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Machine Learning",
                 "preview": false,
                 "deprecated": false
             }

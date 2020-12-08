@@ -17,65 +17,69 @@
         "policyDefinition": {
             "value": {
                 "if": {
-                    "field": "type",
-                    "equals": "Microsoft.Synapse/workspaces/sqlPools"
-                }
-            },
-            "then": {
-                "effect": "deployIfNotExists",
-                "details": {
-                    "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
-                    "existenceCondition": {
-                        "allOf": [
-                            {
-                                "field": "Microsoft.Synapse/workspaces/sqlPools/metadataSync/enabled",
-                                "equals": "true"
-                            }
-                        ]
-                    },
-                    "name": "setByPolicy",
-                    "roleDefinitionIds": [
-                        "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
-                    ],
-                    "deployment": {
-                        "properties": {
-                            "mode": "incremental",
-                            "template": {
-                                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-                                "contentVersion": "1.0.0.0",
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/metadataSync/enabled",
+                                    "equals": "true"
+                                }
+                            ]
+                        },
+                        "name": "setByPolicy",
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "synapseWorkspaceName": {
+                                            "type": "string"
+                                        },
+                                        "synapseSqlPoolName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
+                                            "apiVersion": "2019-06-01-preview",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
+                                            "properties": {
+                                                "enabled": true
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
                                 "parameters": {
                                     "location": {
-                                        "type": "string"
+                                        "value": "[field('location')]"
                                     },
                                     "synapseWorkspaceName": {
-                                        "type": "string"
+                                        "value": "[first(split(field('fullname'),'/'))]"
                                     },
                                     "synapseSqlPoolName": {
-                                        "type": "string"
+                                        "value": "[field('name')]"
                                     }
-                                },
-                                "variables": {},
-                                "resources": [
-                                    {
-                                        "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
-                                        "apiVersion": "2019-06-01-preview",
-                                        "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
-                                        "properties": {
-                                            "enabled": true
-                                        }
-                                    }
-                                ],
-                                "outputs": {}
-                            },
-                            "parameters": {
-                                "location": {
-                                    "value": "[field('location')]"
-                                },
-                                "synapseWorkspaceName": {
-                                    "value": "[first(split(field('fullname'),'/'))]"
-                                },
-                                "synapseSqlPoolName": {
-                                    "value": "[field('name')]"
                                 }
                             }
                         }

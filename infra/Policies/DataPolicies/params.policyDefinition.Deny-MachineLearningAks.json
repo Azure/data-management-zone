@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Deny-MachineLearningAks-AksNetworkingConfiguration"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Deny AKS creation (not attaching) in machine learning."
         },
         "policyMode": {
             "value": "All"
@@ -20,18 +20,15 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.MachineLearningServices/workspaces/computes"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notin": [
-                                "DW100c",
-                                "DW200c",
-                                "DW300c",
-                                "DW400c",
-                                "DW500c",
-                                "DW1000c"
-                            ]
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
+                            "equals": "AKS"
+                        },
+                        {
+                            "field": "[empty(field('Microsoft.MachineLearningServices/workspaces/computes/resourceId'))]",
+                            "equals": true
                         }
                     ]
                 },
@@ -43,7 +40,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Machine Learning",
                 "preview": false,
                 "deprecated": false
             }

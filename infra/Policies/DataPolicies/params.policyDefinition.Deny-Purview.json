@@ -17,8 +17,12 @@
         "policyDefinition": {
             "value": {
                 "if": {
-                    "field": "type",
-                    "equals": "Microsoft.Purview/accounts"
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Purview/accounts"
+                        }
+                    ]
                 },
                 "then": {
                     "effect": "Deny"

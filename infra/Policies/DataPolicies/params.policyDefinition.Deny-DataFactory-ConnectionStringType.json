@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Deny-DataFactory-ConnectionStringType"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Denies non Key Vault stored screts for linked services."
         },
         "policyMode": {
             "value": "All"
@@ -20,18 +20,11 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.DataFactory/factories/linkedservices"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notin": [
-                                "DW100c",
-                                "DW200c",
-                                "DW300c",
-                                "DW400c",
-                                "DW500c",
-                                "DW1000c"
-                            ]
+                            "field": "Microsoft.DataFactory/factories/linkedservices/typeProperties.connectionString.type",
+                            "notequals": "AzureKeyVaultSecret"
                         }
                     ]
                 },
@@ -43,7 +36,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Data Factory",
                 "preview": false,
                 "deprecated": false
             }

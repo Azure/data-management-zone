@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Append-MachineLearning-HbiWorkspace"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Enforce high business impact machine learning workspaces across the environment."
         },
         "policyMode": {
             "value": "All"
@@ -20,30 +20,29 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.MachineLearningServices/workspaces"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notin": [
-                                "DW100c",
-                                "DW200c",
-                                "DW300c",
-                                "DW400c",
-                                "DW500c",
-                                "DW1000c"
-                            ]
+                            "field": "Microsoft.MachineLearningServices/workspaces/hbiWorkspace",
+                            "notequals": true
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/hbiWorkspace",
+                            "value": true
+                        }
+                    ]
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Machine Learning",
                 "preview": false,
                 "deprecated": false
             }

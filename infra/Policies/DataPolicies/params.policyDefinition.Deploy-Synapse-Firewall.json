@@ -17,8 +17,12 @@
         "policyDefinition": {
             "value": {
                 "if": {
-                    "field": "type",
-                    "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                        }
+                    ]
                 },
                 "then": {
                     "effect": "deployIfNotExists",
