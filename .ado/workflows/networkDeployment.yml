@@ -113,6 +113,24 @@ stages:
             csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
             deploymentMode: 'Validation'
         
+        # Deploy private DNS zone for azure private link - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_azure_privatelink_validation
+          displayName: Deploy private DNS zone for azure private link - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsAzure.json'
+            deploymentMode: 'Validation'
+        
         # Deploy private DNS zone for data factory - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: private_dns_data_factory_validation
@@ -564,6 +582,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/DnsForwarder/deploy.dnsForwarder.json'
             csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for azure private link
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_azure_privatelink_deployment
+          displayName: Deploy private DNS zone for azure private link
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsAzure.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zone for data factory

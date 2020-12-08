@@ -139,6 +139,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
         deploymentMode: Validate
     
+    # Deploy Private DNS Zone for Azure Private Link - validation
+    - name: Deploy Private DNS Zone for Azure Private Link - validation
+      id: private_dns_azure_privatelink_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsAzure.json
+        deploymentMode: Validate
+    
     # Deploy Private DNS Zone for Data Factory - validation
     - name: Deploy Private DNS Zone for Data Factory - validation
       id: private_dns_data_factory_validation
@@ -464,6 +477,19 @@ jobs:
     #     template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
     #     parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
     #     deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Azure Private Link
+    - name: Deploy Private DNS Zone for Azure Private Link
+      id: private_dns_azure_privatelink_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsAzure.json
+        deploymentMode: Incremental
     
     # Deploy Private DNS Zone for Data Factory
     - name: Deploy Private DNS Zone for Data Factory
