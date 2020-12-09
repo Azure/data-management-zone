@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-ContainerInstance-PublicIpAddress"
+        },
+        "policyDescription": {
+            "value": "Denies public container instances created from azure machine learning."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.ContainerInstance/containerGroups"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.ContainerInstance/containerGroups/ipAddress.type",
+                                    "notEquals": "Private"
+                                },
+                                {
+                                    "field": "[empty(field('Microsoft.ContainerInstance/containerGroups/networkProfile.id'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "ContainerInstance",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
