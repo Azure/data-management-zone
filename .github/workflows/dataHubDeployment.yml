@@ -12,6 +12,7 @@ on:
       - 'infra/DataFactory/**'
       - 'infra/Storage/**'
       - 'infra/PowerBi/**'
+      - 'infra/Purview/**'
       - '.github/workflows/dataHubDeployment.yml'
 
 env:
