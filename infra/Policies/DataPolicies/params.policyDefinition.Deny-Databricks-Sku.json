@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Databricks-Sku"
+        },
+        "policyDescription": {
+            "value": "Deny non-premium databricks sku."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Databricks/workspaces"
+                        },
+                        {
+                            "field": "Microsoft.DataBricks/workspaces/sku.name",
+                            "notequals": "premium"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Databricks",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
