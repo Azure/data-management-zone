@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.DataBricks/workspaces/sku.name",
-                            "notequals": "premium"
+                            "notEquals": "premium"
                         }
                     ]
                 },

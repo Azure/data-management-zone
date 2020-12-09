@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.MachineLearningServices/workspaces/hbiWorkspace",
-                            "notequals": true
+                            "notEquals": true
                         }
                     ]
                 },

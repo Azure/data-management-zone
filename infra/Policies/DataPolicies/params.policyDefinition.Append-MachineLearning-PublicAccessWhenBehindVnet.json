@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
-                            "notequals": false
+                            "notEquals": false
                         }
                     ]
                 },

@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.DataFactory/factories/linkedservices/typeProperties.connectionString.type",
-                            "notequals": "AzureKeyVaultSecret"
+                            "notEquals": "AzureKeyVaultSecret"
                         }
                     ]
                 },

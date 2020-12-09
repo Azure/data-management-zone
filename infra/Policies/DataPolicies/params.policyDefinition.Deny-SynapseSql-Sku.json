@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notin": [
+                            "notIn": [
                                 "DW100c",
                                 "DW200c",
                                 "DW300c",

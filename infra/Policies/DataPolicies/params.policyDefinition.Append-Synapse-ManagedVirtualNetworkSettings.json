@@ -26,15 +26,15 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
-                                    "notequals": true
+                                    "notEquals": true
                                 },
                                 {
                                     "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
-                                    "notequals": true
+                                    "notEquals": true
                                 },
                                 {
                                     "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.allowedAadTenantIdsForLinking[*]",
-                                    "notequals": "[subscription().tenantId]"
+                                    "notEquals": "[subscription().tenantId]"
                                 }
                             ]
                         }

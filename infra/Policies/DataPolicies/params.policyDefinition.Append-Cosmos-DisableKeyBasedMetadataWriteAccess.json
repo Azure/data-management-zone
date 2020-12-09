@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.DocumentDB/databaseAccounts/disableKeyBasedMetadataWriteAccess",
-                            "notequals": true
+                            "notEquals": true
                         }
                     ]
                 },

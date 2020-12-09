@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.Synapse/workspaces/bigDataPools/sessionLevelPackagesEnabled",
-                            "notequals": false
+                            "notEquals": false
                         }
                     ]
                 },

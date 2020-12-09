@@ -32,7 +32,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Purview",
+                "category": "Power BI",
                 "preview": false,
                 "deprecated": false
             }

@@ -26,7 +26,7 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.enabled",
-                                    "notequals": true
+                                    "notEquals": true
                                 },
                                 {
                                     "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.maxNodeCount",

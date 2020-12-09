@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
-                            "notequals": true
+                            "notEquals": true
                         }
                     ]
                 },

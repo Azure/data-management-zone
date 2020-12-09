@@ -28,7 +28,7 @@
                         },
                         {
                             "field": "Microsoft.MachineLearningServices/workspaces/computes/remoteLoginPortPublicAccess",
-                            "notequals": "Disabled"
+                            "notEquals": "Disabled"
                         }
                     ]
                 },

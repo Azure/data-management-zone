@@ -31,7 +31,7 @@
                         },
                         {
                             "field": "Microsoft.MachineLearningServices/workspaces/computes/vmSize",
-                            "notin": [
+                            "notIn": [
                                 "Standard_D1_v2",
                                 "Standard_D2_v2",
                                 "Standard_D3_v2",
