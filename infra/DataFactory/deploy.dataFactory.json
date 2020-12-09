@@ -42,7 +42,7 @@
         "privateDnsZoneIdDataFactory": "[parameters('privateDnsZoneIdDataFactory')]",
         "privateDnsZoneIdPortal": "[parameters('privateDnsZoneIdPortal')]",
         "privateEndpointNameDataFactory": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]",
-        "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-datafactory-private-endpoint')]"
+        "privateEndpointNamePortal": "[concat(variables('dataFactoryName'), '-portal-private-endpoint')]"
     },
     "resources": [
         {
