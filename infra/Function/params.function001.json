@@ -15,19 +15,19 @@
             "value": "ElasticPremium"
         },
         "storageAccountId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-mgmt/providers/Microsoft.Storage/storageAccounts/datahubstorage001"
         },
         "logAnalyticsWorkspaceId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-la/providers/Microsoft.OperationalInsights/workspaces/dh-la001"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-la/providers/Microsoft.OperationalInsights/workspaces/dh-la001"
         },
         "integrationSubnetId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-function001-subnet"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-function001-subnet"
         },
         "privateEndpointSubnetId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
         },
         "privateDnsZoneId": {
-            "value": "/subscriptions/feab2d15-66b4-438b-accf-51f889b30ec3/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net"
         }
     }
 }

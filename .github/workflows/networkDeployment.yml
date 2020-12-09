@@ -12,7 +12,7 @@ on:
       - '.github/workflows/networkDeployment.yml'
 
 env:
-  AZURE_SUBSCRIPTION_ID: 'feab2d15-66b4-438b-accf-51f889b30ec3'
+  AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
   AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
