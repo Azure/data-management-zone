@@ -117,7 +117,7 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/Purview/deploy.purview.json'
-            csmParametersFile: 'infra/Purview/deploy.purview001.json'
+            csmParametersFile: 'infra/Purview/params.purview001.json'
             deploymentMode: 'Validation'
         
         # Deploy Log Analytics Workspace 001 - validation
@@ -353,7 +353,7 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: 'infra/Purview/deploy.purview.json'
-            csmParametersFile: 'infra/Purview/deploy.purview001.json'
+            csmParametersFile: 'infra/Purview/params.purview001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Log Analytics Workspace 001

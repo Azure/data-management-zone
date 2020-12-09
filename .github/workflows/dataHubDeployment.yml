@@ -172,7 +172,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-        parameters: ${{ github.workspace }}/infra/Purview/deploy.purview001.json
+        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
         deploymentMode: Validate
     
     # Deploy Log Analytics Workspace 001 - validation
@@ -351,7 +351,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-        parameters: ${{ github.workspace }}/infra/Purview/deploy.purview001.json
+        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
         deploymentMode: Incremental
     
     # Deploy Log Analytics Workspace 001
