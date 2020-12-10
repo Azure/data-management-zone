@@ -28,6 +28,7 @@
                     "effect": "deployIfNotExists",
                     "details": {
                         "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
+                        "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
@@ -40,7 +41,6 @@
                                 }
                             ]
                         },
-                        "name": "setByPolicy",
                         "roleDefinitionIds": [
                             "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
                         ],
