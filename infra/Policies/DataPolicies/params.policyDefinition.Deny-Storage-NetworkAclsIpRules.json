@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-NetworkAclsIpRules"
+        },
+        "policyDescription": {
+            "value": "Enforces network ip rules for storage account."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.Storage/storageAccounts/networkAcls.ipRules[*]"
+                            },
+                            "greater": 0
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

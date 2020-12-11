@@ -1,0 +1,111 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-Storage-Encryption"
+        },
+        "policyDescription": {
+            "value": "Enforce encryption for storage accounts."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.file.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.file.keyType",
+                                    "notEquals": "Account"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.keyType",
+                                    "notEquals": "Account"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.table.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.table.keyType",
+                                    "notEquals": "Service"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.keyType",
+                                    "notEquals": "Service"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.file.enabled",
+                            "value": true
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.file.keyType",
+                            "value": "Account"
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.enabled",
+                            "value": true
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.keyType",
+                            "value": "Account"
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.table.enabled",
+                            "value": true
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.table.keyType",
+                            "value": "Service"
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.enabled",
+                            "value": true
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.keyType",
+                            "value": "Service"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

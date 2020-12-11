@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces storage account SKUs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/sku.name",
+                            "notIn": [
+                                "Standard_GRS",
+                                "Standard_RAGRS",
+                                "Standard_ZRS",
+                                "Premium_ZRS",
+                                "Standard_GZRS",
+                                "Standard_RAGZRS"
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

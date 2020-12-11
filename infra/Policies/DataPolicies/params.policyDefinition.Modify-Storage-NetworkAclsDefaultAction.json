@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Modify-Storage-NetworkAclsDefaultAction"
+        },
+        "policyDescription": {
+            "value": "Enforces default  tls version 1.2 for storage account."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                            "notEquals": "Deny"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Modify",
+                    "details": {
+                        "roleDefinitionIds": [
+                            "/providers/microsoft.authorization/roleDefinitions/17d1049b-9a84-46fb-8f53-869881c3d3ab"
+                        ],
+                        "conflictEffect": "Deny",
+                        "operations": [
+                            {
+                                "condition": "[greaterOrEquals(requestContext().apiVersion, '2017-06-01')]",
+                                "operation": "addOrReplace",
+                                "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                                "value": "Deny"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

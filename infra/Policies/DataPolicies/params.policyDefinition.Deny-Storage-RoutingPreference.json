@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-RoutingPreference"
+        },
+        "policyDescription": {
+            "value": "Enforce infrastructure (double) encryption for storage accounts."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/routingPreference.routingChoice",
+                                    "equals": "InternetRouting"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/routingPreference.publishInternetEndpoints",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
