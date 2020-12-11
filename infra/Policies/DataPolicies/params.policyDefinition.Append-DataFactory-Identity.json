@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-DataFactory-PublicNetworkAccess"
+            "value": "Append-DataFactory-IdentityType"
         },
         "policyDescription": {
-            "value": "Denies public access to data factory."
+            "value": "Enforces use of system assigned identity for data factory."
         },
         "policyMode": {
             "value": "All"
@@ -23,8 +23,8 @@
                             "equals": "Microsoft.DataFactory/factories"
                         },
                         {
-                            "field": "Microsoft.DataFactory/factories/publicNetworkAccess",
-                            "notEquals": "Disabled"
+                            "field": "identity.type",
+                            "notEquals": "SystemAssigned"
                         }
                     ]
                 },
@@ -32,8 +32,8 @@
                     "effect": "Append",
                     "details": [
                         {
-                            "field": "Microsoft.DataFactory/factories/publicNetworkAccess",
-                            "value": "Disabled"
+                            "field": "identity.type",
+                            "value": "SystemAssigned"
                         }
                     ]
                 }
