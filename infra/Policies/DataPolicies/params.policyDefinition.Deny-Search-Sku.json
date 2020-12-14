@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Search-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces search SKUs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Search/searchServices"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Search/searchServices/sku.name",
+                                    "notIn": [
+                                        "basic",
+                                        "standard",
+                                        "standard2",
+                                        "standard3",
+                                        "storage_optimized_l1",
+                                        "storage_optimized_l2"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Search/searchServices/replicaCount",
+                                    "greater": 12
+                                },
+                                {
+                                    "field": "Microsoft.Search/searchServices/partitionCount",
+                                    "notIn": [
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        6,
+                                        12
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Search/searchServices/hostingMode",
+                                    "notIn": [
+                                        "default",
+                                        "highDensity"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Search",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
