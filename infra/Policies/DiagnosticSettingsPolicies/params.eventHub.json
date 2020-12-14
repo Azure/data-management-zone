@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for event hub to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Function",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -149,6 +141,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Event Hub",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for function to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Function",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -133,6 +125,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Function",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

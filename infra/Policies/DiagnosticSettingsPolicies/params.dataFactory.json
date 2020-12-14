@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for data factory to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Data Factory",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -157,6 +149,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Data Factory",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

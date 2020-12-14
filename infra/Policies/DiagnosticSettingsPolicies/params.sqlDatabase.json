@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for sql database to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Function",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -191,6 +183,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL Database",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

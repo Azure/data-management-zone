@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for storage (service, blob, table, file, queue) to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Key Vault",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -305,6 +297,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

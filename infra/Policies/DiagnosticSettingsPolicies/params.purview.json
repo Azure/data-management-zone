@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for purview to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Purview",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -125,6 +117,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Purview",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

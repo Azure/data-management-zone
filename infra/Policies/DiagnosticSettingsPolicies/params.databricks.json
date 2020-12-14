@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for databricks to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Databricks",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -151,6 +143,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Databricks",
+                "preview": false,
+                "deprecated": false
             }
         }
     }

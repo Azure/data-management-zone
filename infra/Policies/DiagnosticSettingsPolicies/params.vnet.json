@@ -8,14 +8,6 @@
         "policyDescription": {
             "value": "Send diagnostic settings for virtual network to log analytics workspace."
         },
-        "policyMetadata": {
-            "value": {
-                "version": "1.0.0",
-                "category": "Key Vault",
-                "preview": false,
-                "deprecated": false
-            }
-        },
         "policyMode": {
             "value": "All"
         },
@@ -125,6 +117,14 @@
                         }
                     }
                 }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Virtual Network",
+                "preview": false,
+                "deprecated": false
             }
         }
     }
