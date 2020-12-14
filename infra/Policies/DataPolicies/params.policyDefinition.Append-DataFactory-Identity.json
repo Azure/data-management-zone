@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "identity.type",
-                            "notEquals": "SystemAssigned"
+                            "exists": false
                         }
                     ]
                 },
