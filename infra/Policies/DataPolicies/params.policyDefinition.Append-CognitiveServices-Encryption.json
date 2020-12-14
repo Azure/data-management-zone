@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-CognitiveServices-Encryption"
+        },
+        "policyDescription": {
+            "value": "Enforces use of microsoft managed encryption for cognitive services."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.CognitiveServices/accounts"
+                        },
+                        {
+                            "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
+                            "exists": "false"
+                          }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
+                            "value": "Microsoft.CognitiveServices"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cognitive Services",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
