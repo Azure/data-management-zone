@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-KeyVault-NetworkAclsBypass"
+        },
+        "policyDescription": {
+            "value": "Enforces bypass network level rules for key vault."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.KeyVault/vaults"
+                        },
+                        {
+                            "field": "Microsoft.Keyvault/vaults/networkAcls.bypass",
+                            "notIn": [
+                                "None",
+                                "AzureServices"
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Key Vault",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
