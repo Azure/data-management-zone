@@ -49,7 +49,8 @@
             "privatelink.azurewebsites.net",
             "privatelink.sql.azuresynapse.net",
             "privatelink.dev.azuresynapse.net",
-            "privatelink.cognitiveservices.azure.com"
+            "privatelink.cognitiveservices.azure.com",
+            "privatelink.search.windows.net"
         ]
     },
     "resources": [

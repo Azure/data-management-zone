@@ -437,6 +437,24 @@ stages:
             csmParametersFile: 'infra/PrivateDns/params.privateDnsCognitiveService.json'
             deploymentMode: 'Validation'
         
+        # Deploy Private DNS Zone for Search - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_search_validation
+          displayName: Deploy Private DNS Zone for Search - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsSearch.json'
+            deploymentMode: 'Validation'
+        
         # Deploy vnet peering 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: vnet_peering_001_validation
@@ -924,6 +942,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsCognitiveService.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Private DNS Zone for Search
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: private_dns_search_deployment
+          displayName: Deploy Private DNS Zone for Search
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsSearch.json'
             deploymentMode: 'Incremental'
         
         # Deploy vnet peering 001
