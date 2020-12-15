@@ -6,7 +6,7 @@
             "value": "Deny-PrivateEndpoint-ManualPrivateLinkServiceConnections"
         },
         "policyDescription": {
-            "value": "Deny private endpoints to resources outside of the aad tenant or subscription."
+            "value": "Deny private endpoints to resources outside of the aad tenant and subscription."
         },
         "policyMode": {
             "value": "All"
@@ -22,6 +22,12 @@
                             "field": "type",
                             "equals": "Microsoft.Network/privateEndpoints"
                         },
+                        // {
+                        //     "count": {
+                        //         "field": "Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*]"
+                        //     },
+                        //     "greater": 0
+                        // },
                         {
                             "field": "[split(field('Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
                             "notEquals": "[subscription().subscriptionId]"
