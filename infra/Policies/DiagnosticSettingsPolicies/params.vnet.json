@@ -122,7 +122,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Virtual Network",
+                "category": "Network",
                 "preview": false,
                 "deprecated": false
             }

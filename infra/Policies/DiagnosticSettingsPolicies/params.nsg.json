@@ -117,7 +117,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Network Security Group",
+                "category": "Network",
                 "preview": false,
                 "deprecated": false
             }

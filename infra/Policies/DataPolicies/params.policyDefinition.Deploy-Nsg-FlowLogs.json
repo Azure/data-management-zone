@@ -1,0 +1,191 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-Nsg-FlowLogs"
+        },
+        "policyDescription": {
+            "value": "Deploy nsg flow logs and traffic analytics."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "retention": {
+                    "type": "Integer",
+                    "metadata": {
+                        "displayName": "Retention",
+                        "description": "Specify the retention in number of days."
+                    },
+                    "defaultValue": 5
+                },
+                "storageAccountId": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Storage Account",
+                        "description": "Select the Storage account for NSG Flow Logs from the dropdown list.",
+                        "strongType": "Microsoft.Storage/storageAccounts"
+                    }
+                },
+                "trafficAnalyticsInterval": {
+                    "type": "Integer",
+                    "metadata": {
+                        "displayName": "Traffic Analytics processing interval",
+                        "description": "Select the traffic analytics processing interval in minutes (10/60)"
+                    },
+                    "defaultValue": 60
+                },
+                "flowAnalyticsEnabled": {
+                    "type": "Boolean",
+                    "metadata": {
+                        "displayName": "Enable Traffic Analytics",
+                        "description": "Select whether traffic analytics should be enabled."
+                    },
+                    "defaultValue": false
+                },
+                "logAnalytics": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Resource ID of Log Analytics workspace",
+                        "description": "Select Log Analytics workspace for traffic analytics from the dropdown list.",
+                        "strongType": "omsWorkspace"
+                    },
+                    "defaultValue": ""
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "field": "type",
+                    "equals": "Microsoft.Network/networkSecurityGroups"
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Network/networkWatchers/flowLogs",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Network/networkWatchers/flowLogs/enabled",
+                                    "equals": "true"
+                                },
+                                {
+                                    "field": "Microsoft.Network/networkWatchers/flowLogs/flowAnalyticsConfiguration.networkWatcherFlowAnalyticsConfiguration.enabled",
+                                    "equals": "[parameters('flowAnalyticsEnabled')]"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "networkSecurityGroupName": {
+                                            "type": "string"
+                                        },
+                                        "resourceGroupName": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "storageAccountId": {
+                                            "type": "string"
+                                        },
+                                        "retention": {
+                                            "type": "int"
+                                        },
+                                        "flowAnalyticsEnabled": {
+                                            "type": "bool"
+                                        },
+                                        "trafficAnalyticsInterval": {
+                                            "type": "int"
+                                        },
+                                        "logAnalytics": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Network/networkWatchers/flowLogs",
+                                            "apiVersion": "2020-06-01",
+                                            "name": "[take(concat('NetworkWatcher_', toLower(parameters('location')),  '/', parameters('networkSecurityGroupName'), '-', parameters('resourceGroupName'), '-flowlog' ), 80)]",
+                                            "location": "[parameters('location')]",
+                                            "properties": {
+                                                "targetResourceId": "[resourceId(parameters('resourceGroupName'), 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+                                                "storageId": "[parameters('storageAccountId')]",
+                                                "enabled": true,
+                                                "retentionPolicy": {
+                                                    "enabled": true,
+                                                    "days": "[parameters('retention')]"
+                                                },
+                                                "format": {
+                                                    "type": "JSON",
+                                                    "version": 2
+                                                },
+                                                "flowAnalyticsConfiguration": {
+                                                    "networkWatcherFlowAnalyticsConfiguration": {
+                                                        "enabled": "[bool(parameters('flowAnalyticsEnabled'))]",
+                                                        "trafficAnalyticsInterval": "[parameters('trafficAnalyticsInterval')]",
+                                                        "workspaceId": "[if(not(empty(parameters('logAnalytics'))), reference(parameters('logAnalytics'), '2020-03-01-preview', 'Full').properties.customerId, json('null')) ]",
+                                                        "workspaceRegion": "[if(not(empty(parameters('logAnalytics'))), reference(parameters('logAnalytics'), '2020-03-01-preview', 'Full').location, json('null')) ]",
+                                                        "workspaceResourceId": "[if(not(empty(parameters('logAnalytics'))), parameters('logAnalytics'), json('null'))]"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "networkSecurityGroupName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "resourceGroupName": {
+                                        "value": "[resourceGroup().name]"
+                                    },
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "storageAccountId": {
+                                        "value": "[parameters('storageAccountId')]"
+                                    },
+                                    "retention": {
+                                        "value": "[parameters('retention')]"
+                                    },
+                                    "flowAnalyticsEnabled": {
+                                        "value": "[parameters('flowAnalyticsEnabled')]"
+                                    },
+                                    "trafficAnalyticsInterval": {
+                                        "value": "[parameters('trafficAnalyticsInterval')]"
+                                    },
+                                    "logAnalytics": {
+                                        "value": "[parameters('logAnalytics')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Network",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
