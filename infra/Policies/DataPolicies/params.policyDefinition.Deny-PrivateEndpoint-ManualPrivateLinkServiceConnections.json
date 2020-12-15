@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-PrivateDnsZones"
+            "value": "Deny-PrivateEndpoint-ManualPrivateLinkServiceConnections"
         },
         "policyDescription": {
-            "value": "Restrict deployment of private dns zones."
+            "value": "Deny private endpoints to resources outside of the aad tenant or subscription."
         },
         "policyMode": {
             "value": "All"
@@ -20,7 +20,15 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Network/privateDnsZones"
+                            "equals": "Microsoft.Network/privateEndpoints"
+                        },
+                        {
+                            "field": "[split(field('Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
+                            "notEquals": "[subscription().subscriptionId]"
+                        },
+                        {
+                            "field": "[split(field('Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
+                            "notEquals": "[subscription().subscriptionId]"
                         }
                     ]
                 },
