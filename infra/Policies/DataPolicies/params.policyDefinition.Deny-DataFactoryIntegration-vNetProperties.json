@@ -48,7 +48,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Data Factory",
                 "preview": false,
                 "deprecated": false
             }

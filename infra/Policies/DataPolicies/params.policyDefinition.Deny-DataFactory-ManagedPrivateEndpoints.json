@@ -3,16 +3,24 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-DataFactory-ConnectionStringType"
+            "value": "Deny-DataFactory-ManagedPrivateEndpoints"
         },
         "policyDescription": {
-            "value": "Denies non Key Vault stored screts for linked services."
+            "value": "Denies external private endpoints for linked services."
         },
         "policyMode": {
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "allowedSubscriptions": {
+                    "type": "array",
+                    "metadata": {
+                        "displayName": "Allowed subscriptions",
+                        "description": "A list of subscriptions IDs that are allowed."
+                    }
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -20,11 +28,11 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.DataFactory/factories/linkedservices"
+                            "equals": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints"
                         },
                         {
-                            "field": "Microsoft.DataFactory/factories/linkedservices/typeProperties.connectionString.type",
-                            "notEquals": "AzureKeyVaultSecret"
+                            "field": "[split(field('Microsoft.DataFactory/factories/managedVirtualNetworks.managedPrivateEndpoints.privateLinkResourceId'), '/')[2]]",
+                            "notIn": "[parameters('allowedSubscriptions')]"
                         }
                     ]
                 },
