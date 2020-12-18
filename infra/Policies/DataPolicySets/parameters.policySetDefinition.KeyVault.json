@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policySetName": {
+            "value": "Deploy-KeyVault-Security"
+        },
+        "policySetDescription": {
+            "value": "Recommended built-in security policies for Key Vault."
+        },
+        "policySetMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Key Vault",
+                "preview": false,
+                "deprecated": false
+            }
+        },
+        "policySetParameters": {
+            "value": {}
+        },
+        "policyDefinitions": {
+            "value": [
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0b60c0b2-2dc2-4e1c-b5c9-abbed971de53",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/1e66c121-a66a-4b1f-9b83-0fd99bf0fc2d",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/55615ac9-af46-4a59-874e-391cc3dfb490",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                }
+            ]
+        },
+        "policyDefinitionGroups": {
+            "value": []
+        }
+    }
+}
