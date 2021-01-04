@@ -67,6 +67,7 @@
         "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTRMQ5DVXAR6UIRVAC27ZUIT2",
         "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTSQ4ZYVDJ6ORVVALXS7ZUIYG",
         "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json?token=AIHRGTVR4TFRRSZA6AK4LDS72MYQC",
+        "synapsePrivateLinkHubTemplateLink": "",
         "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTU4DB7ARUZBQJWISK27ZUIWQ"
     },
     "resources": [
@@ -386,6 +387,36 @@
                     },
                     "fileUri": {
                         "value": "[variables('shirScriptLink')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('integrationResourceGroupName')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "synapsePrivateLinkHubDeployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('synapsePrivateLinkHubTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "synapsePrivateLinkHubName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhsynapseprivatelinkhub')]"
+                    },
+                    "subnetId": {
+                        "value": "[variables('privateLinkSubnetId')]"
+                    },
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net')]"
                     }
                 }
             },
