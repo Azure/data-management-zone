@@ -7,6 +7,9 @@
         },
         "vnetName": {
             "value": "dh-vnet"
+        },
+        "firewallPrivateIp": {
+            "value": "10.0.0.4"
         }
     }
 }

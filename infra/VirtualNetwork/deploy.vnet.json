@@ -14,12 +14,19 @@
             "metadata": {
                 "description": "Specifies the name of the vnet that gets created."
             }
+        },
+        "firewallPrivateIp": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the private IP of the Firewall."
+            }
         }
     },
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "vnetName": "[parameters('vnetName')]"
+        "vnetName": "[parameters('vnetName')]",
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
     },
     "resources": [
         {
@@ -54,8 +61,45 @@
                             "destinationAddressPrefix": "*",
                             "destinationPortRange": "22"                            
                         }
+                    },
+                    {
+                        "name": "DenyInternetInbound",
+                        "properties": {
+                            "description": "Deny Internet Inbound",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "Internet",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 64000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-05-01",
+            "name": "dh-routetable",
+            "location": "[variables('location')]",
+            "properties": {
+                "routes": [
+                    {
+                        "name": "to-firewall-default",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "[variables('firewallPrivateIp')]"
+                        }
+                    }
+                ],
+                "disableBgpRoutePropagation": false
             }
         },
         {
@@ -64,7 +108,8 @@
             "name": "[variables('vnetName')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]",
+                "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
             ],
             "properties": {
                 "addressSpace": {
@@ -76,7 +121,7 @@
                     {
                         "name": "AzureFirewallSubnet",
                         "properties": {
-                            "addressPrefix": "10.0.3.0/24",
+                            "addressPrefix": "10.0.0.0/24",
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
@@ -85,26 +130,32 @@
                     {
                         "name": "dh-subnet",
                         "properties": {
-                            "addressPrefix": "10.0.0.0/24",
+                            "addressPrefix": "10.0.1.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                            },
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
                             }
                         }
                     },
                     {
                         "name": "dh-privatelink-subnet",
                         "properties": {
-                            "addressPrefix": "10.0.1.0/24",
+                            "addressPrefix": "10.0.2.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Disabled"
+                            "privateLinkServiceNetworkPolicies": "Disabled",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     },
                     {
                         "name": "dh-function001-subnet",
                         "properties": {
-                            "addressPrefix": "10.0.2.0/24",
+                            "addressPrefix": "10.0.3.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "delegations": [
@@ -114,7 +165,10 @@
                                         "serviceName": "Microsoft.Web/serverFarms"
                                     }
                                 }
-                            ]
+                            ],
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                            }
                         }
                     }
                 ]
