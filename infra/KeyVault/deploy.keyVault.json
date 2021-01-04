@@ -39,12 +39,12 @@
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2019-09-01",
+            "apiVersion": "2016-10-01",
             "name": "[variables('keyVaultName')]",
             "location": "[variables('location')]",
             "properties": {
                 "enabledForDeployment": false,
-                "enabledForTemplateDeployment": true,
+                "enabledForTemplateDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enablePurgeProtection": true,
                 "enableSoftDelete": true,
