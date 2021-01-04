@@ -30,6 +30,25 @@
     },
     "resources": [
         {
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2020-05-01",
+            "name": "dh-routetable",
+            "location": "[variables('location')]",
+            "properties": {
+                "routes": [
+                    {
+                        "name": "to-firewall-default",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "[variables('firewallPrivateIp')]"
+                        }
+                    }
+                ],
+                "disableBgpRoutePropagation": false
+            }
+        },
+        {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-11-01",
             "name": "dh-nsg",
@@ -61,45 +80,26 @@
                             "destinationAddressPrefix": "*",
                             "destinationPortRange": "22"                            
                         }
-                    },
-                    {
-                        "name": "DenyInternetInbound",
-                        "properties": {
-                            "description": "Deny Internet Inbound",
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "Internet",
-                            "destinationAddressPrefix": "*",
-                            "access": "Deny",
-                            "priority": 4000,
-                            "direction": "Inbound",
-                            "sourcePortRanges": [],
-                            "destinationPortRanges": [],
-                            "sourceAddressPrefixes": [],
-                            "destinationAddressPrefixes": []
-                        }
                     }
+                    // {
+                    //     "name": "DenyInternetInbound",
+                    //     "properties": {
+                    //         "description": "Deny Internet Inbound",
+                    //         "protocol": "*",
+                    //         "sourcePortRange": "*",
+                    //         "destinationPortRange": "*",
+                    //         "sourceAddressPrefix": "Internet",
+                    //         "destinationAddressPrefix": "*",
+                    //         "access": "Deny",
+                    //         "priority": 4000,
+                    //         "direction": "Inbound",
+                    //         "sourcePortRanges": [],
+                    //         "destinationPortRanges": [],
+                    //         "sourceAddressPrefixes": [],
+                    //         "destinationAddressPrefixes": []
+                    //     }
+                    // }
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables",
-            "apiVersion": "2020-05-01",
-            "name": "dh-routetable",
-            "location": "[variables('location')]",
-            "properties": {
-                "routes": [
-                    {
-                        "name": "to-firewall-default",
-                        "properties": {
-                            "addressPrefix": "0.0.0.0/0",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "[variables('firewallPrivateIp')]"
-                        }
-                    }
-                ],
-                "disableBgpRoutePropagation": false
             }
         },
         {
