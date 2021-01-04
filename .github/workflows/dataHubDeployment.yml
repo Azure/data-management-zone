@@ -228,6 +228,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
         deploymentMode: Validate
     
+    # Deploy Synapse Private Link Hub 001 - validation
+    - name: Deploy Synapse Private Link Hub 001 - validation
+      id: synapse_private_link_hub_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
+        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json
+        deploymentMode: Validate
+    
     # Generate Password
     - name: Generate Password
       id: generate_password_001
@@ -417,6 +430,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
         parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
+        deploymentMode: Incremental
+    
+    # Deploy Synapse Private Link Hub 001
+    - name: Deploy Synapse Private Link Hub 001
+      id: synapse_private_link_hub_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
+        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json
         deploymentMode: Incremental
     
     # Generate Password

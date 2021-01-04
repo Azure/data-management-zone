@@ -193,6 +193,24 @@ stages:
             csmParametersFile: 'infra/ContainerRegistry/params.containerRegistry001.json'
             deploymentMode: 'Validation'
         
+        # Deploy Synapse Private Link Hub 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: synapse_private_link_hub_001_validation
+          displayName: Deploy Synapse Private Link Hub 001 - validation
+          enabled: true
+          continueOnError: true
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
+            csmParametersFile: 'infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
+            deploymentMode: 'Validation'
+        
         # Generate Password
         - task: PowerShell@2
           name: generate_password_001
@@ -462,6 +480,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/ContainerRegistry/deploy.containerRegistry.json'
             csmParametersFile: 'infra/ContainerRegistry/params.containerRegistry001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Synapse Private Link Hub 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: synapse_private_link_hub_001_deployment
+          displayName: Deploy Synapse Private Link Hub 001
+          enabled: true
+          continueOnError: true
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
+            csmParametersFile: 'infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
             deploymentMode: 'Incremental'
         
         # Generate Password
