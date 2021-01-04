@@ -360,6 +360,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSynapse002.json
         deploymentMode: Validate
     
+    # Deploy Private DNS Zone for Synapse 003 - validation
+    - name: Deploy Private DNS Zone for Synapse 003 - validation
+      id: private_dns_synapse_003_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSynapse003.json
+        deploymentMode: Validate
+    
     # Deploy Private DNS Zone for Cognitive Services - validation
     - name: Deploy Private DNS Zone for Cognitive Services - validation
       id: private_dns_cognitive_services_validation
@@ -723,6 +736,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
         parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSynapse002.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for Synapse 003
+    - name: Deploy Private DNS Zone for Synapse 003
+      id: private_dns_synapse_003_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSynapse003.json
         deploymentMode: Incremental
     
     # Deploy Private DNS Zone for Cognitive Services
