@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-PostgreSQL-PublicNetworkAccess"
+        },
+        "policyDescription": {
+            "value": "Denies public network access for postgre sql servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "anyOf": [
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.DBforPostgreSQL/servers"
+                                },
+                                {
+                                    "field": "Microsoft.DBforPostgreSQL/servers/publicNetworkAccess",
+                                    "notEquals": "Disabled"
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.DBForPostgreSql/flexibleServers"
+                                },
+                                {
+                                    "field": "Microsoft.DBForPostgreSql/flexibleServers/publicNetworkAccess",
+                                    "notEquals": "Disabled"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

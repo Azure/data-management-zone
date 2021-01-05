@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-Sql-SecurityAlertPolicies"
+            "value": "Deploy-PostgreSql-SecurityAlertPolicies"
         },
         "policyDescription": {
-            "value": "Deploy SQL security alert policies for sql server."
+            "value": "Deploy SQL security alert policies for postgre sql."
         },
         "policyMode": {
             "value": "All"
@@ -28,19 +28,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Sql/servers/databases"
+                            "equals": "Microsoft.DBforPostgreSQL/servers"
                         }
                     ]
                 },
                 "then": {
                     "effect": "deployIfNotExists",
                     "details": {
-                        "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
+                        "type": "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies",
                         "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Sql/servers/databases/securityAlertPolicies/state",
+                                    "field": "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies/state",
                                     "equals": "Enabled"
                                 }
                             ]
@@ -71,8 +71,8 @@
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
-                                            "apiVersion": "2018-06-01-preview",
+                                            "type": "Microsoft.DBforPostgreSQL/servers/securityAlertPolicies",
+                                            "apiVersion": "2017-12-01",
                                             "name": "[concat(parameters('sqlServerName'),'/',parameters('sqlServerDataBaseName'),'/default')]",
                                             "properties": {
                                                 "state": "Enabled",

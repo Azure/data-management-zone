@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-PostgreSQL-MinimalTlsVersion"
+        },
+        "policyDescription": {
+            "value": "Enforces minimal tls version for postgre sql servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DBforPostgreSQL/servers"
+                        },
+                        {
+                            "field": "Microsoft.DBforPostgreSQL/servers/minimalTlsVersion",
+                            "notEquals": "TLS1_2"
+                        },
+                        {
+                            "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement",
+                            "notEquals": "Enabled"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.DBforPostgreSQL/servers/minimalTlsVersion",
+                            "value": "TLS1_2"
+                        },
+                        {
+                            "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement",
+                            "value": "Enabled"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
