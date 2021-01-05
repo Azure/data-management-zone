@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Batch-InboundNatPools"
+        },
+        "policyDescription": {
+            "value": "Denies inbound nat pools for batch account vm pools."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Batch/batchAccounts/pools"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.Batch/batchAccounts/pools/networkConfiguration.endpointConfiguration.inboundNatPools[*]"
+                            },
+                            "greater": 0
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Batch",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

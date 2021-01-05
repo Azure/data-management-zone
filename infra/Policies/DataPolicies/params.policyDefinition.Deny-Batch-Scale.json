@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Batch-Scale"
+        },
+        "policyDescription": {
+            "value": "Denies certain scale configurations for batch account vm pools."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Batch/batchAccounts/pools"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Batch/batchAccounts/pools/scaleSettings.fixedScale.targetDedicatedNodes",
+                                    "greater": 10
+                                },
+                                {
+                                    "field": "Microsoft.Batch/batchAccounts/pools/scaleSettings.fixedScale.targetLowPriorityNodes",
+                                    "greater": 15
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Batch",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
