@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-MariaDb-PublicNetworkAccess"
+        },
+        "policyDescription": {
+            "value": "Denies public network access for my maria db servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DBforMariaDB/servers"
+                        },
+                        {
+                            "field": "Microsoft.DBforMariaDB/servers/publicNetworkAccess",
+                            "notEquals": "Disabled"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
