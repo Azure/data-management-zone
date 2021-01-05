@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-MySql-SecurityAlertPolicies"
+        },
+        "policyDescription": {
+            "value": "Deploy SQL security alert policies for my sql."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "securityAlertPoliciyEmail": {
+                    "type": "String",
+                    "metadata": {
+                        "description": "The email address to send alerts",
+                        "displayName": "Email Address"
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DBforMySQL/servers"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.DBforMySQL/servers/securityAlertPolicies",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.DBforMySQL/servers/securityAlertPolicies/state",
+                                    "equals": "Enabled"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "sqlServerName": {
+                                            "type": "string"
+                                        },
+                                        "sqlServerDataBaseName": {
+                                            "type": "string"
+                                        },
+                                        "securityAlertPoliciyEmail": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.DBforMySQL/servers/securityAlertPolicies",
+                                            "apiVersion": "2017-12-01",
+                                            "name": "[concat(parameters('sqlServerName'),'/',parameters('sqlServerDataBaseName'),'/default')]",
+                                            "properties": {
+                                                "state": "Enabled",
+                                                "disabledAlerts": [
+                                                    ""
+                                                ],
+                                                "emailAddresses": [
+                                                    "[parameters('securityAlertPoliciyEmail')]"
+                                                ],
+                                                "emailAccountAdmins": true,
+                                                "storageEndpoint": null,
+                                                "storageAccountAccessKey": "",
+                                                "retentionDays": 0
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "sqlServerName": {
+                                        "value": "[first(split(field('fullname'),'/'))]"
+                                    },
+                                    "sqlServerDataBaseName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "securityAlertPoliciyEmail": {
+                                        "value": "[parameters('securityAlertPoliciyEmail')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

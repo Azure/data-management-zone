@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-MySQL-PublicNetworkAccess"
+        },
+        "policyDescription": {
+            "value": "Denies public network access for my sql servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "anyOf": [
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.DBforMySQL/servers"
+                                },
+                                {
+                                    "field": "Microsoft.DBforMySQL/servers/publicNetworkAccess",
+                                    "notEquals": "Disabled"
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.DBForMySql/flexibleServers"
+                                },
+                                {
+                                    "field": "Microsoft.DBForMySql/flexibleServers/publicNetworkAccess",
+                                    "notEquals": "Disabled"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

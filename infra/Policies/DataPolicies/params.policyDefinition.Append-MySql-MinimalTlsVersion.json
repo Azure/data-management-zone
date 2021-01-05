@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-MySQL-MinimalTlsVersion"
+        },
+        "policyDescription": {
+            "value": "Enforces minimal tls version for my sql servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DBforMySQL/servers"
+                        },
+                        {
+                            "field": "Microsoft.DBforMySQL/servers/minimalTlsVersion",
+                            "notEquals": "TLS1_2"
+                        },
+                        {
+                            "field": "Microsoft.DBforMySQL/servers/sslEnforcement",
+                            "notEquals": "Enabled"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.DBforMySQL/servers/minimalTlsVersion",
+                            "value": "TLS1_2"
+                        },
+                        {
+                            "field": "Microsoft.DBforMySQL/servers/sslEnforcement",
+                            "value": "Enabled"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
