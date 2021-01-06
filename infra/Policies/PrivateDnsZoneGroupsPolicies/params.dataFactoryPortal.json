@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-DNSZoneGroup-DataFactory-PrivateEndpoint"
+            "value": "Deploy-DNSZoneGroup-DataFactoryPortal-PrivateEndpoint"
         },
         "policyDescription": {
-            "value": "Deploys the configurations of a Private DNS Zone Group by a parameter for Data Factory Private Endpoint. Used to enforce the configuration to a single Private DNS Zone."
+            "value": "Deploys the configurations of a Private DNS Zone Group by a parameter for Data Factory Portal Private Endpoint. Used to enforce the configuration to a single Private DNS Zone."
         },
         "policyMode": {
             "value": "All"
@@ -57,7 +57,7 @@
                                 "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
                                 "where": {
                                     "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
-                                    "equals": "dataFactory"
+                                    "equals": "portal"
                                 }
                             },
                             "greaterOrEquals": 1
