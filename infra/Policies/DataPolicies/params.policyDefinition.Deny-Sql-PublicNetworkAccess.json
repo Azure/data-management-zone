@@ -24,7 +24,7 @@
                         },
                         {
                             "field": "Microsoft.Sql/servers/publicNetworkAccess",
-                            "notequals": "Disabled"
+                            "notEquals": "Disabled"
                         }
                     ]
                 },
