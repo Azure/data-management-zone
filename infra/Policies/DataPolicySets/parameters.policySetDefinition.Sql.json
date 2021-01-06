@@ -33,14 +33,6 @@
                     "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/abfb7388-5bf4-4ad7-ba99-2cd2f41cebb9",
                     "parameters": {}
                 }
-                // {
-                //     "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/057d6cfe-9c4f-4a6d-bc60-14420ea1f1a9",
-                //     "parameters": {
-                //         "effect": {
-                //             "value": "Deny"
-                //         }
-                //     }
-                // }
             ]
         },
         "policyDefinitionGroups": {
