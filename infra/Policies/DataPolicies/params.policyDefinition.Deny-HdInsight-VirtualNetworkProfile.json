@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-HdInsight-VirtualNetworkProfile"
+        },
+        "policyDescription": {
+            "value": "Enforces virtual network injection for hd insight clusters."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "anyOf": [
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.HDInsight/clusters"
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].virtualNetworkProfile",
+                                            "exists": false
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].virtualNetworkProfile.id",
+                                            "exists": false
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].virtualNetworkProfile.subnet",
+                                            "exists": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.HDInsight/clusters/applications"
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].virtualNetworkProfile",
+                                            "exists": false
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].virtualNetworkProfile.id",
+                                            "exists": false
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].virtualNetworkProfile.subnet",
+                                            "exists": false
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "HD Insight",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
