@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-LogicApps-NetworkConfiguration"
+        },
+        "policyDescription": {
+            "value": "Enforces network configuration for logic app integration service environments."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Logic/integrationServiceEnvironments"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Logic/integrationServiceEnvironments/networkConfiguration.accessEndpoint",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Logic/integrationServiceEnvironments/networkConfiguration.accessEndpoint.type",
+                                    "notEquals": "Internal"
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Logic/integrationServiceEnvironments/networkConfiguration.subnets[*]"
+                                    },
+                                    "lessOrEquals": 0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Logic Apps",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
