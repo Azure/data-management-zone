@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Sql-PublicNetworkAccess"
+            "value": "Append-Sql-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Denies public network access for sql servers."
+            "value": "Enforces minimal tls version for sql servers."
         },
         "policyMode": {
             "value": "All"
@@ -23,13 +23,19 @@
                             "equals": "Microsoft.Sql/servers"
                         },
                         {
-                            "field": "Microsoft.Sql/servers/publicNetworkAccess",
-                            "notequals": "Disabled"
+                            "field": "Microsoft.Sql/servers/minimalTlsVersion",
+                            "notEquals": "1.2"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Sql/servers/minimalTlsVersion",
+                            "value": "1.2"
+                        }
+                    ]
                 }
             }
         },

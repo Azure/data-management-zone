@@ -6,14 +6,14 @@
             "value": "Deploy-Sql-SecurityAlertPolicies"
         },
         "policyDescription": {
-            "value": "Deploy SQL security alert policies for sql server."
+            "value": "Deploy SQL security alert policies."
         },
         "policyMode": {
             "value": "All"
         },
         "policyParameters": {
             "value": {
-                "securityAlertPoliciyEmail": {
+                "securityAlertPolicyEmail": {
                     "type": "String",
                     "metadata": {
                         "description": "The email address to send alerts",
@@ -64,7 +64,7 @@
                                         "sqlServerDataBaseName": {
                                             "type": "string"
                                         },
-                                        "securityAlertPoliciyEmail": {
+                                        "securityAlertPolicyEmail": {
                                             "type": "string"
                                         }
                                     },
@@ -80,7 +80,7 @@
                                                     ""
                                                 ],
                                                 "emailAddresses": [
-                                                    "[parameters('securityAlertPoliciyEmail')]"
+                                                    "[parameters('securityAlertPolicyEmail')]"
                                                 ],
                                                 "emailAccountAdmins": true,
                                                 "storageEndpoint": null,
@@ -101,8 +101,8 @@
                                     "sqlServerDataBaseName": {
                                         "value": "[field('name')]"
                                     },
-                                    "securityAlertPoliciyEmail": {
-                                        "value": "[parameters('securityAlertPoliciyEmail')]"
+                                    "securityAlertPolicyEmail": {
+                                        "value": "[parameters('securityAlertPolicyEmail')]"
                                     }
                                 }
                             }
