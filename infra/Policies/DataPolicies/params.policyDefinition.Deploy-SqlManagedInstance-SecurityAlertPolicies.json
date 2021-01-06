@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-SqlManagedInstance-SecurityAlertPolicies"
+        },
+        "policyDescription": {
+            "value": "Deploy SQL Managed Instance security alert policies."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "securityAlertPolicyEmail": {
+                    "type": "String",
+                    "metadata": {
+                        "description": "The email address to send alerts",
+                        "displayName": "Email Address"
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/managedInstances"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Sql/managedInstances/databases/securityAlertPolicies",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Sql/managedInstances/databases/securityAlertPolicies/state",
+                                    "equals": "Enabled"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "sqlManagedInstanceName": {
+                                            "type": "string"
+                                        },
+                                        "sqlManagedInstanceDataBaseName": {
+                                            "type": "string"
+                                        },
+                                        "securityAlertPolicyEmail": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Sql/managedInstances/databases/securityAlertPolicies",
+                                            "apiVersion": "2017-03-01-preview",
+                                            "name": "[concat(parameters('sqlManagedInstanceName'), '/', parameters('sqlManagedInstanceDataBaseName'), '/default')]",
+                                            "properties": {
+                                                "state": "Enabled",
+                                                "disabledAlerts": [
+                                                    ""
+                                                ],
+                                                "emailAddresses": [
+                                                    "[parameters('securityAlertPolicyEmail')]"
+                                                ],
+                                                "emailAccountAdmins": true,
+                                                "storageEndpoint": null,
+                                                "storageAccountAccessKey": "",
+                                                "retentionDays": 0
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "sqlManagedInstanceName": {
+                                        "value": "[first(split(field('fullname'),'/'))]"
+                                    },
+                                    "sqlManagedInstanceDataBaseName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "securityAlertPolicyEmail": {
+                                        "value": "[parameters('securityAlertPolicyEmail')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
