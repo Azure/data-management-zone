@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataExplorer-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces data explorer SKUs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Kusto/clusters"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Kusto/clusters/sku.tier",
+                                    "notIn": [
+                                        "Basic",
+                                        "Standard"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/sku.name",
+                                    "notIn": [
+                                        "Dev(No SLA)_Standard_D11_v2",
+                                        "Dev(No SLA)_Standard_E2a_v4",
+                                        "Standard_D11_v2",
+                                        "Standard_D12_v2",
+                                        "Standard_D13_v2",
+                                        "Standard_D14_v2",
+                                        "Standard_DS13_v2+1TB_PS",
+                                        "Standard_DS13_v2+2TB_PS",
+                                        "Standard_DS14_v2+3TB_PS",
+                                        "Standard_DS14_v2+4TB_PS",
+                                        "Standard_L4s",
+                                        "Standard_L8s",
+                                        "Standard_L16s",
+                                        "Standard_E2a_v4",
+                                        "Standard_E4a_v4",
+                                        "Standard_E8a_v4",
+                                        "Standard_E16a_v4",
+                                        "Standard_E8as_v4+1TB_PS",
+                                        "Standard_E8as_v4+2TB_PS",
+                                        "Standard_E16as_v4+3TB_PS",
+                                        "Standard_E16as_v4+4TB_PS"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/sku.capacity",
+                                    "greater": 1000
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Data Explorer",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policySetName": {
+            "value": "Deploy-DataExplorer-Security"
+        },
+        "policySetDescription": {
+            "value": "Recommended built-in security policies for Data Explorer."
+        },
+        "policySetMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Data Explorer",
+                "preview": false,
+                "deprecated": false
+            }
+        },
+        "policySetParameters": {
+            "value": {}
+        },
+        "policyDefinitions": {
+            "value": [
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/9ad2fd1f-b25f-47a2-aa01-1a5a779e6413",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/ec068d99-e9c7-401f-8cef-5bdde4e6ccf1",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                },
+                {
+                    "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/f4b53539-8df9-40e4-86c6-6b607703bd4e",
+                    "parameters": {
+                        "effect": {
+                            "value": "Deny"
+                        }
+                    }
+                }
+            ]
+        },
+        "policyDefinitionGroups": {
+            "value": []
+        }
+    }
+}

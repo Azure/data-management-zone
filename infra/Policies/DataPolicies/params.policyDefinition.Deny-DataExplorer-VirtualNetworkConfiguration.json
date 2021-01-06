@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataExplorer-VirtualNetworkConfiguration"
+        },
+        "policyDescription": {
+            "value": "Enforces virtual network ingestion for data explorer."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Kusto/Clusters"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Kusto/clusters/virtualNetworkConfiguration",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/virtualNetworkConfiguration.subnetId",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/virtualNetworkConfiguration.enginePublicIpId",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/virtualNetworkConfiguration.dataManagementPublicIpId",
+                                    "exists": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Data Explorer",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
