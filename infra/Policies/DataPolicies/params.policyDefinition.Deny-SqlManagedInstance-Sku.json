@@ -67,14 +67,6 @@
                                         "ZRS",
                                         "LRS"
                                     ]
-                                },
-                                {
-                                    "field": "Microsoft.Sql/managedInstances/storageAccountType",
-                                    "notIn": [
-                                        "GRS",
-                                        "ZRS",
-                                        "LRS"
-                                    ]
                                 }
                             ]
                         }
