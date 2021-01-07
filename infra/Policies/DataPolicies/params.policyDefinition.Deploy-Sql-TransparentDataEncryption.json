@@ -28,6 +28,7 @@
                     "effect": "deployIfNotExists",
                     "details": {
                         "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+                        "name": "current",
                         "existenceCondition": {
                             "allOf": [
                                 {
@@ -61,7 +62,7 @@
                                         {
                                             "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
                                             "apiVersion": "2014-04-01",
-                                            "name": "[concat( parameters('sqlServerName'),'/',parameters('sqlServerDataBaseName'),'/current')]",
+                                            "name": "[concat(parameters('sqlServerName'), '/', parameters('sqlServerDataBaseName'), '/current')]",
                                             "properties": {
                                                 "status": "Enabled"
                                             }

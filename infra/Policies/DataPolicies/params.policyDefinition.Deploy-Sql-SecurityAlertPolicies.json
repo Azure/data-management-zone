@@ -73,7 +73,7 @@
                                         {
                                             "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
                                             "apiVersion": "2018-06-01-preview",
-                                            "name": "[concat(parameters('sqlServerName'),'/',parameters('sqlServerDataBaseName'),'/default')]",
+                                            "name": "[concat(parameters('sqlServerName'), '/', parameters('sqlServerDataBaseName'), '/default')]",
                                             "properties": {
                                                 "state": "Enabled",
                                                 "disabledAlerts": [
