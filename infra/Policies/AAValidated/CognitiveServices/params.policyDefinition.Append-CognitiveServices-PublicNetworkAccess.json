@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-CognitiveServices-PublicNetworkAccess"
+            "value": "Append-CognitiveServices-PublicNetworkAccess"
         },
         "policyDescription": {
             "value": "Enforces no public network access for cognitive services."
@@ -29,7 +29,13 @@
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.CognitiveServices/accounts/publicNetworkAccess",
+                            "value": "Disabled"
+                        }
+                    ]
                 }
             }
         },

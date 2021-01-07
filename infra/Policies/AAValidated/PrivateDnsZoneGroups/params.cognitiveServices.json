@@ -43,14 +43,8 @@
                             "equals": "Microsoft.Network/privateEndpoints"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                "where": {
-                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                    "contains": "Microsoft.CognitiveServices/accounts"
-                                }
-                            },
-                            "greaterOrEquals": 1
+                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                            "contains": "Microsoft.CognitiveServices/accounts"
                         },
                         {
                             "count": {
@@ -69,7 +63,7 @@
                     "details": {
                         "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                         "roleDefinitionIds": [
-                            "/providers/Microsoft.Authorization/roleDefinitions/b12aa53e-6015-4669-85d0-8515ebb3ae7f"
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
                         ],
                         "deployment": {
                             "properties": {

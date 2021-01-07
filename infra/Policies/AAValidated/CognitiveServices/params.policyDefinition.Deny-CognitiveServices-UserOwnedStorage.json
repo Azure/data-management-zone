@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-CognitiveServices-PublicNetworkAccess"
+            "value": "Deny-CognitiveServices-UserOwnedStorage"
         },
         "policyDescription": {
-            "value": "Enforces no public network access for cognitive services."
+            "value": "Enforces user owned storage for cognitive services."
         },
         "policyMode": {
             "value": "All"
@@ -26,7 +26,7 @@
                             "count": {
                                 "field": "Microsoft.CognitiveServices/accounts/userOwnedStorage[*]"
                             },
-                            "less": 1
+                            "lessOrEquals": 0
                         }
                     ]
                 },

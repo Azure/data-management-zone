@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policySetName": {
@@ -15,25 +15,25 @@
             }
         },
         "policySetParameters": {
-            "type": "string",
+            "type": "object",
             "metadata": {
                 "description": "Specifies a description of the policy set."
             }
         },
         "policyDefinitions": {
-            "type": "string",
+            "type": "array",
             "metadata": {
                 "description": "List of policy IDs that will be assigned to this policy set."
             }
         },
         "policySetMetadata": {
-            "type": "string",
+            "type": "object",
             "metadata": {
                 "description": "Specifies list of policy definition references."
             }
         },
         "policyDefinitionGroups": {
-            "type": "string",
+            "type": "array",
             "metadata": {
                 "description": "Specifies list of groups of policy definition references within the policy set definition."
             }
