@@ -67,7 +67,6 @@
                                             "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
                                             "apiVersion": "2019-06-01-preview",
                                             "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
-                                            "location": "",
                                             "properties": {
                                                 "auditActionsAndGroups": [
                                                     "APPLICATION_ROLE_CHANGE_PASSWORD_GROUP",

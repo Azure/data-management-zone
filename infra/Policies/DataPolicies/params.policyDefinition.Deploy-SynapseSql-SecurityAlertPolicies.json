@@ -74,7 +74,6 @@
                                             "type": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies",
                                             "apiVersion": "2019-06-01-preview",
                                             "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
-                                            "location": "",
                                             "properties": {
                                                 "state": "Enabled",
                                                 "disabledAlerts": [
