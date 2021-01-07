@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Databricks-PublicIp"
+            "value": "Deny-Databricks-VirtualNetwork"
         },
         "policyDescription": {
-            "value": "Enforces no public on Databricks workspaces."
+            "value": "Deny non -virtual network deployment for databricks."
         },
         "policyMode": {
             "value": "All"
@@ -23,8 +23,20 @@
                             "equals": "Microsoft.Databricks/workspaces"
                         },
                         {
-                            "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DataBricks/workspaces/parameters.customVirtualNetworkId.value",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DataBricks/workspaces/parameters.customPublicSubnetName.value",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DataBricks/workspaces/parameters.customPrivateSubnetName.value",
+                                    "exists": false
+                                }
+                            ]
                         }
                     ]
                 },
