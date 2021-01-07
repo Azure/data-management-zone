@@ -6,13 +6,21 @@
             "value": "Deploy-SynapseSql-SecurityAlertPolicies"
         },
         "policyDescription": {
-            "value": "Deploy Synapse sql security alert policy."
+            "value": "Deploy Synapse sql pool security alert policy."
         },
         "policyMode": {
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "securityAlertPolicyEmail": {
+                    "type": "String",
+                    "metadata": {
+                        "description": "The email address to send alerts",
+                        "displayName": "Email Address"
+                    }
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -55,6 +63,9 @@
                                         },
                                         "synapseSqlPoolName": {
                                             "type": "string"
+                                        },
+                                        "securityAlertPolicyEmail": {
+                                            "type": "string"
                                         }
                                     },
                                     "variables": {},
@@ -70,7 +81,7 @@
                                                     ""
                                                 ],
                                                 "emailAddresses": [
-                                                    "admin@contoso.com"
+                                                    "[parameters('securityAlertPolicyEmail')]"
                                                 ],
                                                 "emailAccountAdmins": true,
                                                 "storageEndpoint": null,
@@ -90,6 +101,9 @@
                                     },
                                     "synapseSqlPoolName": {
                                         "value": "[field('name')]"
+                                    },
+                                    "securityAlertPolicyEmail": {
+                                        "value": "[parameters('securityAlertPolicyEmail')]"
                                     }
                                 }
                             }
