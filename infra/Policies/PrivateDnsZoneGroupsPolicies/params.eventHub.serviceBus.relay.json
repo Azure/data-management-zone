@@ -45,34 +45,16 @@
                         {
                             "anyOf": [
                                 {
-                                    "count": {
-                                        "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                        "where": {
-                                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                            "contains": "Microsoft.EventHub/namespaces"
-                                        }
-                                    },
-                                    "greaterOrEquals": 1
+                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                                    "contains": "Microsoft.EventHub/namespaces"
                                 },
                                 {
-                                    "count": {
-                                        "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                        "where": {
-                                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                            "contains": "Microsoft.ServiceBus/namespaces"
-                                        }
-                                    },
-                                    "greaterOrEquals": 1
+                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                                    "contains": "Microsoft.ServiceBus/namespaces"
                                 },
                                 {
-                                    "count": {
-                                        "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                        "where": {
-                                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                            "contains": "Microsoft.Relay/namespaces"
-                                        }
-                                    },
-                                    "greaterOrEquals": 1
+                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                                    "contains": "Microsoft.Relay/namespaces"
                                 }
                             ]
                         },

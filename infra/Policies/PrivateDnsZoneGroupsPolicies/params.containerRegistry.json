@@ -43,14 +43,8 @@
                             "equals": "Microsoft.Network/privateEndpoints"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                "where": {
-                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                                    "contains": "Microsoft.ContainerRegistry/registries"
-                                }
-                            },
-                            "greaterOrEquals": 1
+                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                            "contains": "Microsoft.ContainerRegistry/registries"
                         },
                         {
                             "count": {
