@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-SynapseSpark-AutoPause"
+            "value": "Deny-SynapseSpark-AutoScale"
         },
         "policyDescription": {
-            "value": "When a Synapse Spark Pool is created without autopause then this will add it."
+            "value": "Enforces autoscale for Synapse Spark Pools."
         },
         "policyMode": {
             "value": "All"
@@ -25,29 +25,19 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.enabled",
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.enabled",
                                     "notEquals": true
                                 },
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.delayInMinutes",
-                                    "greater": 30
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.maxNodeCount",
+                                    "greater": 20
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.enabled",
-                            "value": true
-                        },
-                        {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.delayInMinutes",
-                            "value": 30
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

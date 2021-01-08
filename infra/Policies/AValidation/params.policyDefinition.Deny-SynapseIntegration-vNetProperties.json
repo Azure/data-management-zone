@@ -25,15 +25,23 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "[empty(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.vNetId'))]",
+                                    "field": "Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.vNetId",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.vNetId'))]",
                                     "equals": true
                                 },
                                 {
-                                    "field": "[empty(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.subnet'))]",
+                                    "field": "Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.subnet",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.subnet'))]",
                                     "equals": true
                                 },
                                 {
-                                    "field": "[length(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.publicIPs'))]",
+                                    "value": "[length(field('Microsoft.Synapse/workspaces/integrationRuntimes/Managed.typeProperties.computeProperties.vNetProperties.publicIPs'))]",
                                     "greater": 0
                                 }
                             ]

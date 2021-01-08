@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Synapse-ManagedVirtualNetwork"
+            "value": "Deny-Synapse-ManagedVirtualNetwork"
         },
         "policyDescription": {
             "value": "When a Synapse Workspace is created without managed virtual network then this will add it."
@@ -29,13 +29,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Synapse/workspaces/managedVirtualNetwork",
-                            "value": "default"
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

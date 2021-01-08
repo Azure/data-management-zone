@@ -23,8 +23,16 @@
                             "equals": "Microsoft.Synapse/workspaces/bigDataPools"
                         },
                         {
-                            "field": "[empty(field('Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder'))]",
-                            "equals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder'))]",
+                                    "equals": true
+                                }
+                            ]
                         }
                     ]
                 },

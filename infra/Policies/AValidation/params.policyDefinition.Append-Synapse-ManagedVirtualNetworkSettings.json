@@ -34,9 +34,7 @@
                                 },
                                 {
                                     "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.allowedAadTenantIdsForLinking[*]",
-                                    "notEquals": [
-                                        "[subscription().tenantId]"
-                                    ]
+                                    "notEquals": "[subscription().tenantId]"
                                 }
                             ]
                         }
