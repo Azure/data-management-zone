@@ -29,7 +29,7 @@
                                     "exists": false
                                 },
                                 {
-                                    "field": "[empty(field('Microsoft.Sql/managedInstances/subnetId'))]",
+                                    "value": "[empty(field('Microsoft.Sql/managedInstances/subnetId'))]",
                                     "equals": true
                                 }
                             ]
