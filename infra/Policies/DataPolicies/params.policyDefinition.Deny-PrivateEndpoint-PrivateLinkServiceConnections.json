@@ -22,19 +22,17 @@
                             "field": "type",
                             "equals": "Microsoft.Network/privateEndpoints"
                         },
-                        // {
-                        //     "count": {
-                        //         "field": "Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*]"
-                        //     },
-                        //     "greater": 0
-                        // },
                         {
-                            "field": "[split(field('Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
-                            "notEquals": "[subscription().subscriptionId]"
-                        },
-                        {
-                            "field": "[split(field('Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
-                            "notEquals": "[subscription().subscriptionId]"
+                            "anyOf": [
+                                {
+                                    "value": "[split(field('Microsoft.Network/privateEndpoints/manualPrivateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
+                                },
+                                {
+                                    "value": "[split(field('Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
+                                }
+                            ]
                         }
                     ]
                 },

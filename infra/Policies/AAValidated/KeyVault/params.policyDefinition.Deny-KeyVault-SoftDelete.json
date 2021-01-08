@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-KeyVault-SoftDeleteRetentionInDays"
+            "value": "Deny-KeyVault-SoftDelete"
         },
         "policyDescription": {
-            "value": "Enforces minimum number of retention days for key vault."
+            "value": "Enforces soft delete with minimum number of retention days for key vault."
         },
         "policyMode": {
             "value": "All"
@@ -23,8 +23,16 @@
                             "equals": "Microsoft.KeyVault/vaults"
                         },
                         {
-                            "field": "Microsoft.KeyVault/vaults/softDeleteRetentionInDays",
-                            "less": 7
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.KeyVault/vaults/enableSoftDelete",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.KeyVault/vaults/softDeleteRetentionInDays",
+                                    "less": 7
+                                }
+                            ]
                         }
                     ]
                 },
