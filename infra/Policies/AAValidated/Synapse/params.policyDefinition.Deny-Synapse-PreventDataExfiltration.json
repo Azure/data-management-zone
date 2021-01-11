@@ -20,11 +20,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/firewallrules"
+                            "equals": "Microsoft.Synapse/workspaces"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
+                                    "notEquals": true
+                                }
+                            ]
                         }
                     ]
                 },

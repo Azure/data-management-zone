@@ -3,23 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-DNSZoneGroup-PostgreSql-PrivateEndpoint"
+            "value": "Deploy-DataFactory-ManagedVirtualNetwork"
         },
         "policyDescription": {
-            "value": "Deploys the configurations of a Private DNS Zone Group by a parameter for PostgreSql Private Endpoint. Used to enforce the configuration to a single Private DNS Zone."
+            "value": "Deploy managed virtualnetwork for data factory."
         },
         "policyMode": {
             "value": "All"
         },
         "policyParameters": {
             "value": {
-                "privateDnsZoneId": {
-                    "type": "String",
-                    "metadata": {
-                        "displayName": "privateDnsZoneId",
-                        "strongType": "Microsoft.Network/privateDnsZones"
-                    }
-                },
                 "effect": {
                     "type": "String",
                     "metadata": {
@@ -40,28 +33,15 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Network/privateEndpoints"
-                        },
-                        {
-                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
-                            "contains": "Microsoft.DBforPostgreSQL/servers"
-                        },
-                        {
-                            "count": {
-                                "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
-                                "where": {
-                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
-                                    "equals": "postgresqlServer"
-                                }
-                            },
-                            "greaterOrEquals": 1
+                            "equals": "Microsoft.DataFactory/factories"
                         }
                     ]
                 },
                 "then": {
                     "effect": "[parameters('effect')]",
                     "details": {
-                        "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+                        "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+                        "name": "default",
                         "roleDefinitionIds": [
                             "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
                         ],
@@ -72,10 +52,7 @@
                                     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
                                     "contentVersion": "1.0.0.0",
                                     "parameters": {
-                                        "privateDnsZoneId": {
-                                            "type": "string"
-                                        },
-                                        "privateEndpointName": {
+                                        "dataFactoryName": {
                                             "type": "string"
                                         },
                                         "location": {
@@ -84,28 +61,35 @@
                                     },
                                     "resources": [
                                         {
-                                            "name": "[concat(parameters('privateEndpointName'), '/deployedByPolicy')]",
-                                            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-                                            "apiVersion": "2020-03-01",
-                                            "location": "[parameters('location')]",
+                                            "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+                                            "apiVersion": "2018-06-01",
+                                            "name": "[concat(parameters('dataFactoryName'), '/default')]",
+                                            "properties": {}
+                                        },
+                                        {
+                                            "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+                                            "apiVersion": "2018-06-01",
+                                            "name": "[concat(parameters('dataFactoryName'), '/AutoResolveIntegrationRuntime')]",
+                                            "dependsOn": [
+                                                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', parameters('dataFactoryName'), 'default')]"
+                                            ],
                                             "properties": {
-                                                "privateDnsZoneConfigs": [
-                                                    {
-                                                        "name": "[concat(parameters('privateEndpointName'), '-aRecord')]",
-                                                        "properties": {
-                                                            "privateDnsZoneId": "[parameters('privateDnsZoneId')]"
-                                                        }
+                                                "type": "Managed",
+                                                "managedVirtualNetwork": {
+                                                    "type": "ManagedVirtualNetworkReference",
+                                                    "referenceName": "default"
+                                                },
+                                                "typeProperties": {
+                                                    "computeProperties": {
+                                                        "location": "AutoResolve"
                                                     }
-                                                ]
+                                                }
                                             }
                                         }
                                     ]
                                 },
                                 "parameters": {
-                                    "privateDnsZoneId": {
-                                        "value": "[parameters('privateDnsZoneId')]"
-                                    },
-                                    "privateEndpointName": {
+                                    "dataFactoryName": {
                                         "value": "[field('name')]"
                                     },
                                     "location": {
@@ -121,7 +105,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "SQL",
+                "category": "Data Factory",
                 "preview": false,
                 "deprecated": false
             }

@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-DataFactory-LinkedServicesConnectionStringType"
+            "value": "Deny-DataFactory-LinkedServicesConnectVia"
         },
         "policyDescription": {
             "value": "Denies use of autoresolve integration runtime for connecting to linked services."

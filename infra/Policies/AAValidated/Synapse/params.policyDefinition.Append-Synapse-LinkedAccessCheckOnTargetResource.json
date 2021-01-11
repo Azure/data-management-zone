@@ -23,8 +23,16 @@
                             "equals": "Microsoft.Synapse/workspaces"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
+                                    "notEquals": true
+                                }
+                            ]
                         }
                     ]
                 },

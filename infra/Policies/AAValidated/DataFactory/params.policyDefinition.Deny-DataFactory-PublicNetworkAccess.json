@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Synapse-AllowedAadTenantIdsForLinking"
+            "value": "Deny-DataFactory-PublicNetworkAccess"
         },
         "policyDescription": {
-            "value": "Enforced prevention of data exfiltration for Synapse managed virtual network."
+            "value": "Denies public access to data factory."
         },
         "policyMode": {
             "value": "All"
@@ -20,17 +20,11 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces"
+                            "equals": "Microsoft.DataFactory/factories"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.allowedAadTenantIdsForLinking[*]",
-                                "where": {
-                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.allowedAadTenantIdsForLinking[*]",
-                                    "notEquals": "[subscription().tenantId]"
-                                }
-                            },
-                            "greaterOrEquals": 1
+                            "field": "Microsoft.DataFactory/factories/publicNetworkAccess",
+                            "notEquals": "Disabled"
                         }
                     ]
                 },
@@ -42,7 +36,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "Data Factory",
                 "preview": false,
                 "deprecated": false
             }

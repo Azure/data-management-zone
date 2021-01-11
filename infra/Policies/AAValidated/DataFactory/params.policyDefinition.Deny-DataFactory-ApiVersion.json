@@ -3,24 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-DataFactory-ManagedPrivateEndpoints"
+            "value": "Deny-DataFactory-ApiVersion"
         },
         "policyDescription": {
-            "value": "Denies external private endpoints for linked services."
+            "value": "Denies old API version for data factory V1."
         },
         "policyMode": {
             "value": "All"
         },
         "policyParameters": {
-            "value": {
-                "allowedSubscriptions": {
-                    "type": "array",
-                    "metadata": {
-                        "displayName": "Allowed subscriptions",
-                        "description": "A list of subscriptions IDs that are allowed."
-                    }
-                }
-            }
+            "value": {}
         },
         "policyDefinition": {
             "value": {
@@ -28,11 +20,11 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints"
+                            "equals": "Microsoft.DataFactory/factories"
                         },
                         {
-                            "field": "[split(field('Microsoft.DataFactory/factories/managedVirtualNetworks.managedPrivateEndpoints.privateLinkResourceId'), '/')[2]]",
-                            "notIn": "[parameters('allowedSubscriptions')]"
+                            "value": "[requestContext().apiVersion]",
+                            "equals": "2015-01-01-preview"
                         }
                     ]
                 },
