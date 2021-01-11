@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-Synapse-Firewall"
+            "value": "Deny-Synapse-Firewall"
         },
         "policyDescription": {
             "value": "Setup firewall of Synapse."

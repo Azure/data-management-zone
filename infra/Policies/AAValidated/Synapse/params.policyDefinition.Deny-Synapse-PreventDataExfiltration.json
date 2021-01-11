@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-SynapseSpark-ComputeIsolation"
+            "value": "Deny-Synapse-PreventDataExfiltration"
         },
         "policyDescription": {
-            "value": "When a Synapse Spark Pool is created without compute isolation then this will add it."
+            "value": "Enforced prevention of data exfiltration for Synapse managed virtual network."
         },
         "policyMode": {
             "value": "All"
@@ -20,22 +20,16 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/bigDataPools"
+                            "equals": "Microsoft.Synapse/workspaces/firewallrules"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
+                            "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
                             "notEquals": true
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
-                            "value": true
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

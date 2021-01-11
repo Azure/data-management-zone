@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-SynapseSql-TransparentDataEncryption"
+            "value": "Deploy-SynapseSql-AuditingSettings"
         },
         "policyDescription": {
-            "value": "Deploy Synapse SQL transparent data encryption."
+            "value": "Send auditing logs for Synapse SQL pools to log analytics."
         },
         "policyMode": {
             "value": "All"
@@ -27,13 +27,17 @@
                 "then": {
                     "effect": "deployIfNotExists",
                     "details": {
-                        "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
-                        "name": "current",
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
+                        "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption/status",
-                                    "equals": "Enabled"
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/state",
+                                    "equals": "enabled"
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/isAzureMonitorTargetEnabled",
+                                    "equals": "true"
                                 }
                             ]
                         },
@@ -60,11 +64,17 @@
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
                                             "apiVersion": "2019-06-01-preview",
-                                            "name": "[concat( parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/current')]",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
                                             "properties": {
-                                                "status": "Enabled"
+                                                "auditActionsAndGroups": [
+                                                    "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+                                                    "FAILED_DATABASE_AUTHENTICATION_GROUP",
+                                                    "BATCH_COMPLETED_GROUP"
+                                                ],
+                                                "isAzureMonitorTargetEnabled": true,
+                                                "state": "Enabled"
                                             }
                                         }
                                     ],
