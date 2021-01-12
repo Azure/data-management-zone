@@ -27,18 +27,14 @@
                                 {
                                     "field": "Microsoft.Devices/IotHubs/sku.name",
                                     "notIn": [
-                                        "F1",
                                         "S1",
                                         "S2",
-                                        "S3",
-                                        "B1",
-                                        "B2",
-                                        "B3"
+                                        "S3"
                                     ]
                                 },
                                 {
                                     "field": "Microsoft.Devices/IotHubs/sku.capacity",
-                                    "greater": 50
+                                    "greater": 40
                                 }
                             ]
                         }
@@ -52,7 +48,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Azure Data Explorer",
+                "category": "Internet of Things",
                 "preview": false,
                 "deprecated": false
             }

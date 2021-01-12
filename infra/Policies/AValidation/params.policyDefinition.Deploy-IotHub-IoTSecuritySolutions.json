@@ -41,12 +41,18 @@
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Sql/servers/databases/auditingSettings/state",
+                                    "field": "Microsoft.Security/iotSecuritySolutions/status",
                                     "equals": "enabled"
                                 },
                                 {
-                                    "field": "Microsoft.Sql/servers/databases/auditingSettings/isAzureMonitorTargetEnabled",
-                                    "equals": "true"
+                                    "count": {
+                                        "field": "Microsoft.Security/iotSecuritySolutions/iotHubs[*]",
+                                        "where": {
+                                            "field": "Microsoft.Security/iotSecuritySolutions/iotHubs[*]",
+                                            "equals": "[field('id')]"
+                                        }
+                                    },
+                                    "greaterOrEquals": 1
                                 }
                             ]
                         },

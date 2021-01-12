@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MySQL-PublicNetworkAccess"
+            "value": "Deny-EventHub-Virtualnetworkrules"
         },
         "policyDescription": {
-            "value": "Denies public network access for my sql servers."
+            "value": "Deny adding virtual network rules for event hub."
         },
         "policyMode": {
             "value": "All"
@@ -20,11 +20,7 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.EventHub/namespaces"
-                        },
-                        {
-                            "field": "Microsoft.EventHub/namespaces/maximumThroughputUnits",
-                            "greater": 20
+                            "equals": "Microsoft.EventHub/namespaces/virtualnetworkrules"
                         }
                     ]
                 },

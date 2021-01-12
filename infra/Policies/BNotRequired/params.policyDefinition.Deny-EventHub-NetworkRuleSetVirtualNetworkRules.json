@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-EventHub-NetworkRuleSetDefaultAction"
+            "value": "Deny-EventHub-NetworkRuleSetVirtualNetworkRules"
         },
         "policyDescription": {
-            "value": "Enforces default virtual network rules for event hub."
+            "value": "Enforces virtual network rules for event hub."
         },
         "policyMode": {
             "value": "All"
@@ -20,11 +20,13 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.EventHub/namespaces"
+                            "equals": "Microsoft.EventHub/namespaces/networkRuleSets"
                         },
                         {
-                            "field": "Microsoft.EventHub/namespaces/networkRuleSets/defaultAction",
-                            "notEquals": "Deny"
+                            "count": {
+                                "field": "Microsoft.EventHub/namespaces/networkRuleSets/virtualNetworkRules[*]"
+                            },
+                            "greater": 0
                         }
                     ]
                 },
