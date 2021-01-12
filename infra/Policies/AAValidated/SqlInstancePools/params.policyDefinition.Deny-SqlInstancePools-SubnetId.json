@@ -29,7 +29,7 @@
                                     "exists": false
                                 },
                                 {
-                                    "field": "[empty(field('Microsoft.Sql/instancePools/subnetId'))]",
+                                    "value": "[empty(field('Microsoft.Sql/instancePools/subnetId'))]",
                                     "equals": true
                                 }
                             ]

@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SqlInstancePools-PublicDataEndpoint"
+            "value": "Deny-SqlInstancePools-Sku"
         },
         "policyDescription": {
-            "value": "Denies public data endpoint for sql instance pools."
+            "value": "Enfoces certain skus for sql instance pools."
         },
         "policyMode": {
             "value": "All"
@@ -38,7 +38,7 @@
                                     ]
                                 },
                                 {
-                                    "field": "Microsoft.Sql/managedInstances/sku.name",
+                                    "field": "Microsoft.Sql/instancePools/sku.name",
                                     "notIn": [
                                         "GP_Gen4",
                                         "GP_Gen5",
@@ -54,7 +54,7 @@
                                     ]
                                 },
                                 {
-                                    "field": "Microsoft.Sql/managedInstances/licenseType",
+                                    "field": "Microsoft.Sql/instancePools/licenseType",
                                     "notIn": [
                                         "LicenseIncluded",
                                         "BasePrice"
