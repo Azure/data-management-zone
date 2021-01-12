@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Storage-AllowSharedKeyAccess"
+            "value": "Deny-Storage-InfrastructureEncryption"
         },
         "policyDescription": {
-            "value": "Enforce no shared access key access to storage accounts."
+            "value": "Enforce infrastructure (double) encryption for storage accounts."
         },
         "policyMode": {
             "value": "All"
@@ -23,19 +23,21 @@
                             "equals": "Microsoft.Storage/storageAccounts"
                         },
                         {
-                            "field": "Microsoft.Storage/storageAccounts/allowSharedKeyAccess",
-                            "notEquals": false
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.requireInfrastructureEncryption",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.requireInfrastructureEncryption",
+                                    "notEquals": true
+                                }
+                            ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Storage/storageAccounts/allowSharedKeyAccess",
-                            "notEquals": false
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

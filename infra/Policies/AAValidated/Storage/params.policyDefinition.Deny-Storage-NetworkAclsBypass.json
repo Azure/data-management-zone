@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-NetworkAclsBypass"
+        },
+        "policyDescription": {
+            "value": "Enforces network bypass to none for storage account."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.bypass",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.bypass",
+                                    "notIn": [
+                                        "None",
+                                        "Logging",
+                                        "Metrics",
+                                        "AzureServices",
+                                        "Logging, Metrics",
+                                        "Logging, AzureServices",
+                                        "Metrics, AzureServices",
+                                        "Logging, Metrics, AzureServices",
+                                        "Logging, Metrics, AzureServices"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

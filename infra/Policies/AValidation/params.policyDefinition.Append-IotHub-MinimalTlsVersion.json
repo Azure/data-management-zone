@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Storage-InfrastructureEncryption"
+            "value": "Append-IotHub-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Enforce infrastructure (double) encryption for storage accounts."
+            "value": "Enforces minimal tls version for iot hub."
         },
         "policyMode": {
             "value": "All"
@@ -20,11 +20,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Storage/storageAccounts"
+                            "equals": "Microsoft.Devices/IotHubs"
                         },
                         {
-                            "field": "kind",
-                            "notEquals": "StorageV2"
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                                    "notEquals": "1.2"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -32,8 +40,8 @@
                     "effect": "Append",
                     "details": [
                         {
-                            "field": "kind",
-                            "value": "StorageV2"
+                            "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                            "value": "1.2"
                         }
                     ]
                 }
@@ -42,7 +50,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Storage",
+                "category": "Internet of Things",
                 "preview": false,
                 "deprecated": false
             }

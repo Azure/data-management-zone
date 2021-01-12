@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Search-PublicNetworkAccess"
+            "value": "Deny-Storage-MinimumTlsVersion"
         },
         "policyDescription": {
-            "value": "Denies public network access for search."
+            "value": "Enforces minimum tls version 1.2 for storage account."
         },
         "policyMode": {
             "value": "All"
@@ -20,11 +20,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Search/searchServices"
+                            "equals": "Microsoft.Storage/storageAccounts"
                         },
                         {
-                            "field": "Microsoft.Search/searchServices/publicNetworkAccess",
-                            "notEquals": "disabled"
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/minimumTlsVersion",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/minimumTlsVersion",
+                                    "notEquals": "TLS1_2"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -36,7 +44,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Search",
+                "category": "Storage",
                 "preview": false,
                 "deprecated": false
             }

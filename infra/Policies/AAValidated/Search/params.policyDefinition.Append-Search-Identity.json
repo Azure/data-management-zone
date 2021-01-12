@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Storage-CorsRules"
+            "value": "Append-Search-IdentityType"
         },
         "policyDescription": {
-            "value": "Deny cors rules for storage account."
+            "value": "Enforces use of system assigned identity for search."
         },
         "policyMode": {
             "value": "All"
@@ -20,25 +20,29 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Storage/storageAccounts/blobServices"
+                            "equals": "Microsoft.Search/searchServices"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.Storage/storageAccounts/blobServices/default.cors.corsRules[*]"
-                            },
-                            "greater": 0
+                            "field": "identity.type",
+                            "exists": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "identity.type",
+                            "value": "SystemAssigned"
+                        }
+                    ]
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Storage",
+                "category": "Search",
                 "preview": false,
                 "deprecated": false
             }

@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-StreamAnalytics-ClusterId"
+        },
+        "policyDescription": {
+            "value": "Enforces use of stram analytics cluster."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.StreamAnalytics/streamingjobs"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.StreamAnalytics/streamingjobs/cluster.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.StreamAnalytics/streamingjobs/cluster.id'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Stream Analytics",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

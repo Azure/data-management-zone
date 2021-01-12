@@ -37,7 +37,7 @@
                                 },
                                 {
                                     "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.days",
-                                    "equals": 7
+                                    "greaterOrEquals": 7
                                 },
                                 {
                                     "count": {

@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-NetworkAclsDefaultAction"
+        },
+        "policyDescription": {
+            "value": "Enforces default  tls version 1.2 for storage account."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/networkAcls.defaultAction",
+                                    "notEquals": "Deny"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

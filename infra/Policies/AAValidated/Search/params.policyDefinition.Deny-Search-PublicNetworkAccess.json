@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Storage-InfrastructureEncryption"
+            "value": "Deny-Search-PublicNetworkAccess"
         },
         "policyDescription": {
-            "value": "Enforce infrastructure (double) encryption for storage accounts."
+            "value": "Denies public network access for search."
         },
         "policyMode": {
             "value": "All"
@@ -20,29 +20,31 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Storage/storageAccounts"
+                            "equals": "Microsoft.Search/searchServices"
                         },
                         {
-                            "field": "Microsoft.Storage/storageAccounts/encryption.requireInfrastructureEncryption",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Search/searchServices/publicNetworkAccess",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Search/searchServices/publicNetworkAccess",
+                                    "notEquals": "disabled"
+                                }
+                            ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Storage/storageAccounts/encryption.requireInfrastructureEncryption",
-                            "value": true
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Storage",
+                "category": "Search",
                 "preview": false,
                 "deprecated": false
             }

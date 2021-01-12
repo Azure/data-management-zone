@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Storage-ContainerDeleteRetentionPolicy"
+            "value": "Append-Storage-AllowSharedKeyAccess"
         },
         "policyDescription": {
-            "value": "Enforce container delete retention policies lower than seven days for storage account."
+            "value": "Enforce no shared access key access to storage accounts."
         },
         "policyMode": {
             "value": "All"
@@ -20,20 +20,22 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Storage/storageAccounts/blobServices"
+                            "equals": "Microsoft.Storage/storageAccounts"
                         },
                         {
-                            "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.enabled",
-                            "notEquals": true
-                        },
-                        {
-                            "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.days",
-                            "less": 7
+                            "field": "Microsoft.Storage/storageAccounts/allowSharedKeyAccess",
+                            "notEquals": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/allowSharedKeyAccess",
+                            "value": false
+                        }
+                    ]
                 }
             }
         },
