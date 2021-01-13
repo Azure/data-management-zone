@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Audit-HdInsight-EncryptionAtHost"
+            "value": "Deny-HdInsight-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Audit encryption at host for hd insight clusters."
+            "value": "Enforces minimal tls version for hd insight clusters."
         },
         "policyMode": {
             "value": "All"
@@ -23,13 +23,21 @@
                             "equals": "Microsoft.HDInsight/clusters"
                         },
                         {
-                            "field": "Microsoft.HDInsight/clusters/diskEncryptionProperties.encryptionAtHost",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/minSupportedTlsVersion",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/minSupportedTlsVersion",
+                                    "notEquals": "1.2"
+                                }
+                            ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Audit"
+                    "effect": "Deny"
                 }
             }
         },

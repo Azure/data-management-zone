@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-HdInsight-NetworkProperties"
+        },
+        "policyDescription": {
+            "value": "Enforces private link enablement for hd insight clusters."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.HDInsight/clusters"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/networkProperties",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/networkProperties.resourceProviderConnection",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/networkProperties.resourceProviderConnection",
+                                    "notEquals": "Outbound"
+                                },
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/networkProperties.privateLink",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.HDInsight/clusters/networkProperties.privateLink",
+                                    "notEquals": "Enabled"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "HD Insight",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-HdInsight-MinimalTlsVersion"
+            "value": "Deny-HdInsight-EncryptionInTransit"
         },
         "policyDescription": {
-            "value": "Enforces minimal tls version for hd insight clusters."
+            "value": "Enforcesencryption in transit for hd insight clusters."
         },
         "policyMode": {
             "value": "All"
@@ -25,8 +25,8 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "Microsoft.HDInsight/clusters/minSupportedTlsVersion",
-                                    "notEquals": "1.2"
+                                    "field": "Microsoft.HDInsight/clusters/encryptionInTransitProperties.isEncryptionInTransitEnabled",
+                                    "exists": false
                                 },
                                 {
                                     "field": "Microsoft.HDInsight/clusters/encryptionInTransitProperties.isEncryptionInTransitEnabled",
@@ -37,17 +37,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.HDInsight/clusters/minSupportedTlsVersion",
-                            "value": "1.2"
-                        },
-                        {
-                            "field": "Microsoft.HDInsight/clusters/encryptionInTransitProperties.isEncryptionInTransitEnabled",
-                            "value": true
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

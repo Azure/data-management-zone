@@ -27,7 +27,7 @@
                                 {
                                     "anyOf": [
                                         {
-                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].virtualNetworkProfile",
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].hardwareProfile.vmSize",
                                             "notIn": [
                                                 "Standard_A1_v2",
                                                 "Standard_A2_v2",
@@ -48,8 +48,24 @@
                                             ]
                                         },
                                         {
-                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].targetInstanceCount",
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].targetInstanceCount",
                                             "greater": 100
+                                        },
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale.capacity",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale.capacity.maxInstanceCount",
+                                                    "greater": 100
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -87,6 +103,22 @@
                                         {
                                             "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].targetInstanceCount",
                                             "greater": 100
+                                        },
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale.capacity",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale.capacity.maxInstanceCount",
+                                                    "greater": 100
+                                                }
+                                            ]
                                         }
                                     ]
                                 }

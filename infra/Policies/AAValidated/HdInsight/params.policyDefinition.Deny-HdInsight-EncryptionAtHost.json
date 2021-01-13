@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-HdInsight-PrivateLink"
+            "value": "Deny-HdInsight-EncryptionAtHost"
         },
         "policyDescription": {
-            "value": "Enforces private link enablement for hd insight clusters."
+            "value": "Enforce encryption at host for hd insight clusters."
         },
         "policyMode": {
             "value": "All"
@@ -23,19 +23,13 @@
                             "equals": "Microsoft.HDInsight/clusters"
                         },
                         {
-                            "field": "Microsoft.HDInsight/clusters/networkProperties.privateLink",
-                            "notEquals": "Enabled"
+                            "field": "Microsoft.HDInsight/clusters/diskEncryptionProperties.encryptionAtHost",
+                            "notEquals": true
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.HDInsight/clusters/networkProperties.privateLink",
-                            "value": "Enabled"
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },
