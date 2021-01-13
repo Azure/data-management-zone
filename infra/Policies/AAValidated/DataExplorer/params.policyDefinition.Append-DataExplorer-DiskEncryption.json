@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-DataExplorer-Identity"
+            "value": "Deny-DataExplorer-DiskEncryption" 
         },
         "policyDescription": {
-            "value": "Enforces use of system assigned identity for data explorer."
+            "value": "Enforces use of disk encryption for data explorer."
         },
         "policyMode": {
             "value": "All"
@@ -23,8 +23,16 @@
                             "equals": "Microsoft.Kusto/clusters"
                         },
                         {
-                            "field": "identity.type",
-                            "exists": false
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                                    "notEquals": true
+                                }
+                            ]
                         }
                     ]
                 },
@@ -32,8 +40,8 @@
                     "effect": "Append",
                     "details": [
                         {
-                            "field": "identity.type",
-                            "value": "SystemAssigned"
+                            "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                            "value": true
                         }
                     ]
                 }

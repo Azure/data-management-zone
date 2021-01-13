@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-DataExplorer-DoubleEncryption" 
+            "value": "Deny-DataExplorer-Identity"
         },
         "policyDescription": {
-            "value": "Enforces use of double encryption for data explorer."
+            "value": "Enforces use of system or user assigned identity for data explorer."
         },
         "policyMode": {
             "value": "All"
@@ -23,19 +23,13 @@
                             "equals": "Microsoft.Kusto/clusters"
                         },
                         {
-                            "field": "Microsoft.Kusto/clusters/enableDoubleEncryption",
-                            "notEquals": true
+                            "field": "identity.type",
+                            "exists": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Kusto/clusters/enableDoubleEncryption",
-                            "notEquals": true
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },
