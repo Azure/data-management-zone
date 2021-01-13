@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-MachineLearningComputeCluster-Scale"
+            "value": "Deny-MachineLearningComputeCluster-Scale"
         },
         "policyDescription": {
             "value": "Enforce scale settings for machine learning compute clusters."
@@ -35,31 +35,13 @@
                                 {
                                     "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.minNodeCount",
                                     "greater": 0
-                                },
-                                {
-                                    "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.nodeIdleTimeBeforeScaleDown",
-                                    "greater": 500
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.maxNodeCount",
-                            "value": 10
-                        },
-                        {
-                            "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.minNodeCount",
-                            "value": 0
-                        },
-                        {
-                            "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.nodeIdleTimeBeforeScaleDown",
-                            "value": 500
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },

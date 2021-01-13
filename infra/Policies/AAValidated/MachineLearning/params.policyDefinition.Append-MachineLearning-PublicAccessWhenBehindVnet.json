@@ -23,8 +23,16 @@
                             "equals": "Microsoft.MachineLearningServices/workspaces"
                         },
                         {
-                            "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
-                            "notEquals": false
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                                    "notEquals": false
+                                }
+                            ]
                         }
                     ]
                 },

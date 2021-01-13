@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MachineLearningAks-AksNetworkingConfiguration"
+            "value": "Deny-MachineLearning-HbiWorkspace"
         },
         "policyDescription": {
-            "value": "Deny AKS creation (not attaching) in machine learning."
+            "value": "Enforce high business impact machine learning workspaces across the environment."
         },
         "policyMode": {
             "value": "All"
@@ -20,15 +20,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.MachineLearningServices/workspaces/computes"
+                            "equals": "Microsoft.MachineLearningServices/workspaces"
                         },
                         {
-                            "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
-                            "equals": "AKS"
-                        },
-                        {
-                            "field": "[empty(field('Microsoft.MachineLearningServices/workspaces/computes/resourceId'))]",
-                            "equals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/hbiWorkspace",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/hbiWorkspace",
+                                    "notEquals": true
+                                }
+                            ]
                         }
                     ]
                 },

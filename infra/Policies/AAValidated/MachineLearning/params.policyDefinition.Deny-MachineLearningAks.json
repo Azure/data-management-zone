@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MachineLearningCompute-SubnetId"
+            "value": "Deny-MachineLearningAks"
         },
         "policyDescription": {
-            "value": "Deny public ip for machine learning compute clusters and instances."
+            "value": "Deny AKS creation (not attaching) in machine learning."
         },
         "policyMode": {
             "value": "All"
@@ -24,14 +24,19 @@
                         },
                         {
                             "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
-                            "in": [
-                                "AmlCompute",
-                                "ComputeInstance"
-                            ]
+                            "equals": "AKS"
                         },
                         {
-                            "field": "[empty(field('Microsoft.MachineLearningServices/workspaces/computes/subnet.id'))]",
-                            "equals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/computes/resourceId",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.MachineLearningServices/workspaces/computes/resourceId'))]",
+                                    "equals": true
+                                }
+                            ]
                         }
                     ]
                 },
