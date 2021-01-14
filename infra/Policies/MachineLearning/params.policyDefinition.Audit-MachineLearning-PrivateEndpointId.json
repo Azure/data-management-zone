@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-ContainerRegistry-PublicNetworkAccess"
+            "value": "Audit-MachineLearning-PrivateEndpointId"
         },
         "policyDescription": {
-            "value": "Denies public network access for container registry."
+            "value": "Audit public endpoints that are created in other subscriptions for machine learning."
         },
         "policyMode": {
             "value": "All"
@@ -20,23 +20,29 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.ContainerRegistry/registries"
+                            "equals": "Microsoft.MachineLearningServices/workspaces"
                         },
                         {
-                            "field": "Microsoft.ContainerRegistry/registries/publicNetworkAccess",
-                            "notEquals": "Disabled"
+                            "count": {
+                                "field": "Microsoft.MachineLearningServices/workspaces/privateEndpointConnections[*]",
+                                "where": {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/privateEndpointConnections[*].privateEndpoint.id",
+                                    "notContains": "[subscription().id]"
+                                }
+                            },
+                            "greaterOrEquals": 1
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Audit"
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Container Registry",
+                "category": "Machine Learning",
                 "preview": false,
                 "deprecated": false
             }

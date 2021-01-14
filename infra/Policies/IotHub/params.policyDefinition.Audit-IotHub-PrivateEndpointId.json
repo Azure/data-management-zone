@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-ContainerRegistry-PublicNetworkAccess"
+            "value": "Audit-IotHub-PrivateEndpointId"
         },
         "policyDescription": {
-            "value": "Denies public network access for container registry."
+            "value": "Audit public endpoints that are created in other subscriptions for iot hubs."
         },
         "policyMode": {
             "value": "All"
@@ -20,23 +20,29 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.ContainerRegistry/registries"
+                            "equals": "Microsoft.Devices/IotHubs"
                         },
                         {
-                            "field": "Microsoft.ContainerRegistry/registries/publicNetworkAccess",
-                            "notEquals": "Disabled"
+                            "count": {
+                                "field": "Microsoft.Devices/IotHubs/privateEndpointConnections[*]",
+                                "where": {
+                                    "field": "Microsoft.Devices/IotHubs/privateEndpointConnections[*].privateEndpoint.id",
+                                    "notContains": "[subscription().id]"
+                                }
+                            },
+                            "greaterOrEquals": 1
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "Audit"
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Container Registry",
+                "category": "Internet of Things",
                 "preview": false,
                 "deprecated": false
             }
