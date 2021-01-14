@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-Databricks-PublicIp"
+        },
+        "policyDescription": {
+            "value": "Enforces no public on Databricks workspaces."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Databricks/workspaces"
+                        },
+                        {
+                            "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
+                            "notEquals": true
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
+                            "value": true
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Databricks",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

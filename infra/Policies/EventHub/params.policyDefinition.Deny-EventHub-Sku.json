@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-EventHub-Sku"
+        },
+        "policyDescription": {
+            "value": "Denies certain Skus for event hubs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.EventHub/namespaces"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/sku.name",
+                                    "notEquals": "Standard"
+                                },
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/sku.tier",
+                                    "notEquals": "Standard"
+                                },
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/sku.capacity",
+                                    "greater": 20
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Event Hub",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

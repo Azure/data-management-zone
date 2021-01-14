@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-LogicApps-IntegrationServiceEnvironment"
+        },
+        "policyDescription": {
+            "value": "Enforce integration service environment for logic app workflows."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Logic/workflows"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Logic/workflows/integrationServiceEnvironment.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Logic/workflows/integrationServiceEnvironment.id'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Logic Apps",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

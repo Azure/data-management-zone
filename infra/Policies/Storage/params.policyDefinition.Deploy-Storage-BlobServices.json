@@ -1,0 +1,103 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-Storage-BlobServices"
+        },
+        "policyDescription": {
+            "value": "Deploy blob services default settings for storage account."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Storage/storageAccounts/blobServices",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.enabled",
+                                    "equals": "true"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.days",
+                                    "greaterOrEquals": 7
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Storage/storageAccounts/blobServices/default.cors.corsRules[*]"
+                                    },
+                                    "equals": 0
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "storageAccountName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Storage/storageAccounts/blobServices",
+                                            "apiVersion": "2020-08-01-preview",
+                                            "name": "[concat(parameters('storageAccountName'), '/default')]",
+                                            "properties": {
+                                                "containerDeleteRetentionPolicy": {
+                                                    "enabled": true,
+                                                    "days": 7
+                                                },
+                                                "cors": {
+                                                    "corsRules": []
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "storageAccountName": {
+                                        "value": "[field('name')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Search-PublicNetworkAccess"
+        },
+        "policyDescription": {
+            "value": "Denies public network access for search."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Search/searchServices"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Search/searchServices/publicNetworkAccess",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Search/searchServices/publicNetworkAccess",
+                                    "notEquals": "disabled"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Search",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,109 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-SynapseSql-AuditingSettings"
+        },
+        "policyDescription": {
+            "value": "Send auditing logs for Synapse SQL pools to log analytics."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/state",
+                                    "equals": "enabled"
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/isAzureMonitorTargetEnabled",
+                                    "equals": "true"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "synapseWorkspaceName": {
+                                            "type": "string"
+                                        },
+                                        "synapseSqlPoolName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
+                                            "apiVersion": "2019-06-01-preview",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
+                                            "properties": {
+                                                "auditActionsAndGroups": [
+                                                    "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+                                                    "FAILED_DATABASE_AUTHENTICATION_GROUP",
+                                                    "BATCH_COMPLETED_GROUP"
+                                                ],
+                                                "isAzureMonitorTargetEnabled": true,
+                                                "state": "Enabled"
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "synapseWorkspaceName": {
+                                        "value": "[first(split(field('fullname'),'/'))]"
+                                    },
+                                    "synapseSqlPoolName": {
+                                        "value": "[field('name')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

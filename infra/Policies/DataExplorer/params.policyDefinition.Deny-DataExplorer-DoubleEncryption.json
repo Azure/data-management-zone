@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataExplorer-DoubleEncryption" 
+        },
+        "policyDescription": {
+            "value": "Enforces use of double encryption for data explorer."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Kusto/clusters"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDoubleEncryption",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDoubleEncryption",
+                                    "notEquals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Data Explorer",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-MachineLearningAks"
+        },
+        "policyDescription": {
+            "value": "Deny AKS creation (not attaching) in machine learning."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.MachineLearningServices/workspaces/computes"
+                        },
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
+                            "equals": "AKS"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/computes/resourceId",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.MachineLearningServices/workspaces/computes/resourceId'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Machine Learning",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

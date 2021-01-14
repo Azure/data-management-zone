@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-SqlManagedInstance-AzureAdOnlyAuthentications"
+        },
+        "policyDescription": {
+            "value": "Enforces azure ad only authentication for SQL Managed Instance."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/managedInstances"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Sql/managedInstances/azureADOnlyAuthentications",
+                        "name": "default",
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "sqlManagedInstanceName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Sql/managedInstances/azureADOnlyAuthentications",
+                                            "apiVersion": "2020-02-02-preview",
+                                            "name": "[concat(parameters('sqlManagedInstanceName'), '/default')]",
+                                            "properties": {
+                                              "azureADOnlyAuthentication": true
+                                            }
+                                          }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "sqlManagedInstanceName": {
+                                        "value": "[field('name')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

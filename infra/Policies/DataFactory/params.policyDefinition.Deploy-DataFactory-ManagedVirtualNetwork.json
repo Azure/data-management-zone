@@ -1,0 +1,114 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-DataFactory-ManagedVirtualNetwork"
+        },
+        "policyDescription": {
+            "value": "Deploy managed virtualnetwork for data factory."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DataFactory/factories"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]",
+                    "details": {
+                        "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+                        "name": "default",
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "dataFactoryName": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+                                            "apiVersion": "2018-06-01",
+                                            "name": "[concat(parameters('dataFactoryName'), '/default')]",
+                                            "properties": {}
+                                        },
+                                        {
+                                            "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+                                            "apiVersion": "2018-06-01",
+                                            "name": "[concat(parameters('dataFactoryName'), '/AutoResolveIntegrationRuntime')]",
+                                            "dependsOn": [
+                                                "[resourceId('Microsoft.DataFactory/factories/managedVirtualNetworks', parameters('dataFactoryName'), 'default')]"
+                                            ],
+                                            "properties": {
+                                                "type": "Managed",
+                                                "managedVirtualNetwork": {
+                                                    "type": "ManagedVirtualNetworkReference",
+                                                    "referenceName": "default"
+                                                },
+                                                "typeProperties": {
+                                                    "computeProperties": {
+                                                        "location": "AutoResolve"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "parameters": {
+                                    "dataFactoryName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Data Factory",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

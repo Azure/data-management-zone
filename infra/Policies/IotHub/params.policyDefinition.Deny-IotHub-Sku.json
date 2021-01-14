@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-IotHub-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces iot hub SKUs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Devices/IotHubs"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/sku.name",
+                                    "notIn": [
+                                        "S1",
+                                        "S2",
+                                        "S3"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/sku.capacity",
+                                    "greater": 40
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Internet of Things",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

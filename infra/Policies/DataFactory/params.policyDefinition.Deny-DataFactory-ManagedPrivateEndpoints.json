@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataFactory-ManagedPrivateEndpoints"
+        },
+        "policyDescription": {
+            "value": "Denies external private endpoints for linked services."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "allowedSubscriptions": {
+                    "type": "array",
+                    "metadata": {
+                        "displayName": "Allowed subscriptions",
+                        "description": "A list of subscriptions IDs that are allowed."
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints"
+                        },
+                        {
+                            "value": "[split(field('Microsoft.DataFactory/factories/managedVirtualNetworks.managedPrivateEndpoints.privateLinkResourceId'), '/')[2]]",
+                            "notIn": "[parameters('allowedSubscriptions')]"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Data Factory",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
