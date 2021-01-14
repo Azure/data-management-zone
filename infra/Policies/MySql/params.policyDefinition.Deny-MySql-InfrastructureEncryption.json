@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-MySQL-InfrastructureEncryption"
+            "value": "Deny-MySQL-InfrastructureEncryption"
         },
         "policyDescription": {
             "value": "Enforces infrastructure encryption for my sql servers."
@@ -29,13 +29,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.DBforMySQL/servers/infrastructureEncryption",
-                            "value": "Enabled"
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },
