@@ -23,10 +23,18 @@
                             "equals": "Microsoft.CognitiveServices/accounts"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.CognitiveServices/accounts/userOwnedStorage[*]"
-                            },
-                            "lessOrEquals": 0
+                            "anyOf": [
+                                {
+                                    "type": "Microsoft.CognitiveServices/accounts/userOwnedStorage",
+                                    "exists": false
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.CognitiveServices/accounts/userOwnedStorage[*]"
+                                    },
+                                    "lessOrEquals": 0
+                                }
+                            ]
                         }
                     ]
                 },

@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-CognitiveServices-Encryption"
+            "value": "Deny-CognitiveServices-Encryption"
         },
         "policyDescription": {
             "value": "Enforces use of encryption for cognitive services."
@@ -24,18 +24,12 @@
                         },
                         {
                             "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
-                            "exists": "false"
+                            "exists": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
-                            "value": "Microsoft.CognitiveServices"
-                        }
-                    ]
+                    "effect": "Deny"
                 }
             }
         },
