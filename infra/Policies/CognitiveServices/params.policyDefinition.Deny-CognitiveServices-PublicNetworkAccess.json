@@ -23,25 +23,6 @@
                             "equals": "Microsoft.CognitiveServices/accounts"
                         },
                         {
-                            "field": "kind",
-                            "in": [
-                                "AnomalyDetector",
-                                "ComputerVision",
-                                "ContentModerator",
-                                "CustomVision.Training",
-                                "CustomVision.Prediction",
-                                "Face",
-                                "FormRecognizer",
-                                "ImmersiveReader",
-                                "LUIS",
-                                "Personalizer",
-                                "SpeechServices",
-                                "TextAnalytics",
-                                "QnAMaker",
-                                "TranslatorText"
-                            ]
-                        },
-                        {
                             "field": "Microsoft.CognitiveServices/accounts/publicNetworkAccess",
                             "notEquals": "Disabled"
                         }
