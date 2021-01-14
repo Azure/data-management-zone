@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Redis-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces certain Skus for redis cache."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Cache/Redis"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Cache/Redis/sku.name",
+                                    "notIn": [
+                                        "Basic",
+                                        "Standard",
+                                        "Premium"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Cache/Redis/sku.family",
+                                    "notIn": [
+                                        "C",
+                                        "P"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Cache/Redis/sku.capacity",
+                                    "notIn": [
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5,
+                                        6
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cache",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
