@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Audit-Cosmos-PrivateEndpointId"
+        },
+        "policyDescription": {
+            "value": "Audit public endpoints that are created in other subscriptions for cosmos db."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DocumentDB/databaseAccounts"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.DocumentDB/databaseAccounts/privateEndpointConnections[*]",
+                                "where": {
+                                    "field": "Microsoft.DocumentDB/databaseAccounts/privateEndpointConnections[*].privateEndpoint.id",
+                                    "notContains": "[subscription().id]"
+                                }
+                            },
+                            "greaterOrEquals": 1
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Audit"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cosmos DB",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

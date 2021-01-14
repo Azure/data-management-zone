@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Synapse-ManagedVirtualNetwork"
+        },
+        "policyDescription": {
+            "value": "When a Synapse Workspace is created without managed virtual network then this will add it."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces"
+                        },
+                        {
+                            "field": "Microsoft.Synapse/workspaces/managedVirtualNetwork",
+                            "notEquals": "default"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

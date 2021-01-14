@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-SynapseSpark-DefaultSparkLogFolder"
+        },
+        "policyDescription": {
+            "value": "When a Synapse Spark Pool is created without logging then this will add it."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/bigDataPools"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder",
+                            "value": "logs/"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

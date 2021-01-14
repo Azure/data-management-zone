@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-MachineLearning-PublicAccessWhenBehindVnet"
+        },
+        "policyDescription": {
+            "value": "Deny public access behind vnet for machine learning workspaces."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.MachineLearningServices/workspaces"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                                    "notEquals": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/allowPublicAccessWhenBehindVnet",
+                            "value": false
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Machine Learning",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

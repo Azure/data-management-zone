@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-SqlManagedInstance-SubnetId"
+        },
+        "policyDescription": {
+            "value": "Enforces deployments to subnets of sql managed instances."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/managedInstances"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Sql/managedInstances/subnetId",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Sql/managedInstances/subnetId'))]",
+                                    "equals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

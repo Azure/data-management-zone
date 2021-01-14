@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-MachineLearningComputeCluster-RemoteLoginPortPublicAccess"
+        },
+        "policyDescription": {
+            "value": "Deny public access of clusters via SSH."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.MachineLearningServices/workspaces/computes"
+                        },
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
+                            "equals": "AmlCompute"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/computes/remoteLoginPortPublicAccess",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.MachineLearningServices/workspaces/computes/remoteLoginPortPublicAccess",
+                                    "notEquals": "Disabled"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Machine Learning",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

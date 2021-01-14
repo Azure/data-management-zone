@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-Sql-AzureAdOnlyAuthentications"
+        },
+        "policyDescription": {
+            "value": "Enforces azure ad only authentication for SQL server."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/servers"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Sql/servers/azureADOnlyAuthentications",
+                        "name": "default",
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "sqlServerName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Sql/servers/azureADOnlyAuthentications",
+                                            "apiVersion": "2020-02-02-preview",
+                                            "name": "[concat(parameters('sqlServerName'), '/default')]",
+                                            "properties": {
+                                              "azureADOnlyAuthentication": true
+                                            }
+                                          }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "sqlServerName": {
+                                        "value": "[field('name')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

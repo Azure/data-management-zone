@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-SqlInstancePools-Sku"
+        },
+        "policyDescription": {
+            "value": "Enfoces certain skus for sql instance pools."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/instancePools"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Sql/instancePools/vCores",
+                                    "notIn": [
+                                        4,
+                                        8,
+                                        16,
+                                        24,
+                                        32,
+                                        40,
+                                        64,
+                                        80
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Sql/instancePools/sku.name",
+                                    "notIn": [
+                                        "GP_Gen4",
+                                        "GP_Gen5",
+                                        "BC_Gen4",
+                                        "BC_Gen5"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Sql/instancePools/sku.tier",
+                                    "notIn": [
+                                        "GeneralPurpose",
+                                        "BusinessCritical"
+                                    ]
+                                },
+                                {
+                                    "field": "Microsoft.Sql/instancePools/licenseType",
+                                    "notIn": [
+                                        "LicenseIncluded",
+                                        "BasePrice"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

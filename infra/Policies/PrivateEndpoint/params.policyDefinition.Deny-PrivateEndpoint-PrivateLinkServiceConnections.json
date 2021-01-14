@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-PrivateEndpoint-PrivateLinkServiceConnections"
+        },
+        "policyDescription": {
+            "value": "Deny private endpoints to resources outside of the aad tenant and subscription."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Network/privateEndpoints"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Network/privateEndpoints/manualprivateLinkServiceConnections[*]",
+                                        "where": {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.Network/privateEndpoints/manualprivateLinkServiceConnections[*].privateLinkServiceId",
+                                                    "notEquals": ""
+                                                },
+                                                {
+                                                    "value": "[split(concat(first(field('Microsoft.Network/privateEndpoints/manualprivateLinkServiceConnections[*].privateLinkServiceId')), '//'), '/')[2]]",
+                                                    "notEquals": "[subscription().subscriptionId]"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "greaterOrEquals": 1
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*]",
+                                        "where": {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                                                    "notEquals": ""
+                                                },
+                                                {
+                                                    "value": "[split(concat(first(field('Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId')), '//'), '/')[2]]",
+                                                    "notEquals": "[subscription().subscriptionId]"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "greaterOrEquals": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Network",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

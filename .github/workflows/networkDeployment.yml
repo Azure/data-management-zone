@@ -269,6 +269,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSqlServer.json
         deploymentMode: Validate
     
+    # Deploy Private DNS Zone for MySQL Server - validation
+    - name: Deploy Private DNS Zone for MySQL Server - validation
+      id: private_dns_mysql_server_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsMySqlServer.json
+        deploymentMode: Validate
+    
     # Deploy Private DNS Zone for Event Hub - validation
     - name: Deploy Private DNS Zone for Event Hub - validation
       id: private_dns_event_hub_validation
@@ -645,6 +658,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
         parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsSqlServer.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zone for MySQL Server
+    - name: Deploy Private DNS Zone for MySQL Server
+      id: private_dns_mysql_server_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDnsMySqlServer.json
         deploymentMode: Incremental
     
     # Deploy Private DNS Zone for Event Hub

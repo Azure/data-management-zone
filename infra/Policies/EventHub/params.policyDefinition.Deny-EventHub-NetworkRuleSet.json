@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-EventHub-NetworkRuleSet"
+        },
+        "policyDescription": {
+            "value": "Enforces default virtual network rules for event hub."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.EventHub/namespaces/networkRuleSets"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/networkRuleSets/defaultAction",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/networkRuleSets/defaultAction",
+                                    "notEquals": "Deny"
+                                },
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/networkRuleSets/trustedServiceAccessEnabled",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.EventHub/namespaces/networkRuleSets/trustedServiceAccessEnabled",
+                                    "notEquals": false
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.EventHub/namespaces/networkRuleSets/ipRules[*]"
+                                    },
+                                    "greater": 0
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.EventHub/namespaces/networkRuleSets/virtualNetworkRules[*]"
+                                    },
+                                    "greater": 0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Event Hub",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

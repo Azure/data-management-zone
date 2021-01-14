@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Audit-KeyVault-PrivateEndpointId"
+        },
+        "policyDescription": {
+            "value": "Audit public endpoints that are created in other subscriptions for key vault."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.KeyVault/vaults"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.KeyVault/vaults/privateEndpointConnections[*]",
+                                "where": {
+                                    "field": "Microsoft.KeyVault/vaults/privateEndpointConnections[*].privateEndpoint.id",
+                                    "notContains": "[subscription().subscriptionId]"
+                                }
+                            },
+                            "greaterOrEquals": 1
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Audit"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Key Vault",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

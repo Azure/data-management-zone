@@ -1,0 +1,41 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Audit-NonMicrosoft"
+        },
+        "policyDescription": {
+            "value": "Audit non-Microsoft services."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "notContains": "Microsoft."
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Audit"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "General",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

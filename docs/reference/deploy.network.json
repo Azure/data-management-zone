@@ -46,12 +46,14 @@
             "privatelink.pbidedicated.windows.net",
             "privatelink.tip1.powerquery.microsoft.com",
             "privatelink.database.windows.net",
+            "privatelink.mysql.database.azure.com",
             "privatelink.azurewebsites.net",
             "privatelink.azuresynapse.net",
             "privatelink.sql.azuresynapse.net",
             "privatelink.dev.azuresynapse.net",
             "privatelink.cognitiveservices.azure.com",
-            "privatelink.search.windows.net"
+            "privatelink.search.windows.net",
+            "privatelink.westeurope.batch.azure.com"
         ]
     },
     "resources": [

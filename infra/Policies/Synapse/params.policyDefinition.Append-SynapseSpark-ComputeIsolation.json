@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-SynapseSpark-ComputeIsolation"
+        },
+        "policyDescription": {
+            "value": "When a Synapse Spark Pool is created without compute isolation then this will add it."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/bigDataPools"
+                        },
+                        {
+                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
+                            "notEquals": true
+                        },
+                        {
+                            "field": "location",
+                            "in": [
+                                "eastus"
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
+                            "value": true
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

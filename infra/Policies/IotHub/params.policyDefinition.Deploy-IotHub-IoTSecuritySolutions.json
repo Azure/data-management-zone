@@ -1,0 +1,202 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-IotHub-IoTSecuritySolutions"
+        },
+        "policyDescription": {
+            "value": "Deploy Azure defender for IoT for IoT Hubs."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "logAnalytics": {
+                    "type": "string",
+                    "metadata": {
+                        "displayName": "Log Analytics workspace",
+                        "description": "Select the Log Analytics workspace from the dropdown list",
+                        "strongType": "omsWorkspace"
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Devices/IotHubs"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Security/IoTSecuritySolutions",
+                        "name": "default",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Security/iotSecuritySolutions/status",
+                                    "equals": "enabled"
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Security/iotSecuritySolutions/iotHubs[*]",
+                                        "where": {
+                                            "field": "Microsoft.Security/iotSecuritySolutions/iotHubs[*]",
+                                            "equals": "[field('id')]"
+                                        }
+                                    },
+                                    "greaterOrEquals": 1
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "logAnalytics": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "iotHubName": {
+                                            "type": "string"
+                                        },
+                                        "iotHubId": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Security/IoTSecuritySolutions",
+                                            "apiVersion": "2019-08-01",
+                                            "name": "[parameters('iotHubName')]",
+                                            "location": "[parameters('location')]",
+                                            "properties": {
+                                                "displayName": "[parameters('iotHubName')]",
+                                                "workspace": "[parameters('logAnalytics')]",
+                                                "status": "Enabled",
+                                                "export": [
+                                                    "RawEvents"
+                                                ],
+                                                "disabledDataSources": [],
+                                                "iotHubs": [
+                                                    "[parameters('iotHubId')]"
+                                                ],
+                                                "userDefinedResources": {},
+                                                "recommendationsConfiguration": [
+                                                    {
+                                                        "recommendationType": "IoT_ACRAuthentication",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_AgentSendsUnutilizedMessages",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_Baseline",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_EdgeHubMemOptimize",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_EdgeLoggingOptions",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_InconsistentModuleSettings",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_InstallAgent",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_IPFilter_DenyAll",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_IPFilter_PermissiveRule",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_OpenPorts",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_PermissiveFirewallPolicy",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_PermissiveInputFirewallRules",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_PermissiveOutputFirewallRules",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_PrivilegedDockerOptions",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_SharedCredentials",
+                                                        "status": "Enabled"
+                                                    },
+                                                    {
+                                                        "recommendationType": "IoT_VulnerableTLSCipherSuite",
+                                                        "status": "Enabled"
+                                                    }
+                                                ],
+                                                "unmaskedIpLoggingStatus": "Enabled"
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "logAnalytics": {
+                                        "value": "[parameters('logAnalytics')]"
+                                    },
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "iotHubName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "iotHubId": {
+                                        "value": "[field('id')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Internet of Things",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

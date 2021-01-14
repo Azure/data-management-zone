@@ -293,6 +293,24 @@ stages:
             csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
             deploymentMode: 'Validation'
         
+        # Deploy private DNS zone for my sql server - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: mysql_server_validation
+          displayName: Deploy private DNS zone for my sql server - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsMySqlServer.json'
+            deploymentMode: 'Validation'
+        
         # Deploy private DNS zone for event hub - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: event_hub_validation
@@ -816,6 +834,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: 'infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: 'infra/PrivateDns/params.privateDnsSqlServer.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy private DNS zone for my sql server
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: mysql_server_deployment
+          displayName: Deploy private DNS zone for my sql server
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: 'infra/PrivateDns/params.privateDnsMySqlServer.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zone for event hub

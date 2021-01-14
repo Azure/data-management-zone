@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataExplorer-DiskEncryption" 
+        },
+        "policyDescription": {
+            "value": "Enforces use of disk encryption for data explorer."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Kusto/clusters"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                                    "notEquals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Kusto/clusters/enableDiskEncryption",
+                            "value": true
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Azure Data Explorer",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-IotHub-MinimalTlsVersion"
+        },
+        "policyDescription": {
+            "value": "Enforces minimal tls version for iot hub."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Devices/IotHubs"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                                    "notEquals": "1.2"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Devices/IotHubs/minTlsVersion",
+                            "value": "1.2"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Internet of Things",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

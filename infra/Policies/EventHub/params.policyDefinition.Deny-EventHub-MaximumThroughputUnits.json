@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-EventHub-MaximumThroughputUnits"
+        },
+        "policyDescription": {
+            "value": "Denies public network access for my sql servers."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.EventHub/namespaces"
+                        },
+                        {
+                            "field": "Microsoft.EventHub/namespaces/isAutoInflateEnabled",
+                            "equals": true
+                        },
+                        {
+                            "field": "Microsoft.EventHub/namespaces/maximumThroughputUnits",
+                            "exists": true
+                        },
+                        {
+                            "field": "Microsoft.EventHub/namespaces/maximumThroughputUnits",
+                            "greater": 20
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Event Hub",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-Cosmos-PublicNetworkAccess"
+        },
+        "policyDescription": {
+            "value": "Enforces no public network access for cosmos db accounts."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DocumentDB/databaseAccounts"
+                        },
+                        {
+                            "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                            "notEquals": "Disabled"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                            "value": "Disabled"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cosmos DB",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

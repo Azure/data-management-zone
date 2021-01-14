@@ -1,0 +1,143 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-HdInsight-Sku"
+        },
+        "policyDescription": {
+            "value": "Enforces certain sku's for hd insight clusters."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "anyOf": [
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.HDInsight/clusters"
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].hardwareProfile.vmSize",
+                                            "notIn": [
+                                                "Standard_A1_v2",
+                                                "Standard_A2_v2",
+                                                "Standard_A4_v2",
+                                                "Standard_A8_v2",
+                                                "Standard_D1_v2",
+                                                "Standard_D2_v2",
+                                                "Standard_D3_v2",
+                                                "Standard_D4_v2",
+                                                "Standard_D5_v2",
+                                                "Standard_D12_v2",
+                                                "Standard_D13_v2",
+                                                "Standard_D14_v2",
+                                                "Standard_DS2_V2",
+                                                "Standard_DS3_V2",
+                                                "Standard_E4_v3",
+                                                "Standard_E8_v3"
+                                            ]
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].targetInstanceCount",
+                                            "greater": 100
+                                        },
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale.capacity",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/computeProfile.roles[*].autoscale.capacity.maxInstanceCount",
+                                                    "greater": 100
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "type",
+                                    "equals": "Microsoft.HDInsight/clusters/applications"
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].hardwareProfile.vmSize",
+                                            "notIn": [
+                                                "Standard_A1_v2",
+                                                "Standard_A2_v2",
+                                                "Standard_A4_v2",
+                                                "Standard_A8_v2",
+                                                "Standard_D1_v2",
+                                                "Standard_D2_v2",
+                                                "Standard_D3_v2",
+                                                "Standard_D4_v2",
+                                                "Standard_D5_v2",
+                                                "Standard_D12_v2",
+                                                "Standard_D13_v2",
+                                                "Standard_D14_v2",
+                                                "Standard_DS2_V2",
+                                                "Standard_DS3_V2",
+                                                "Standard_E4_v3",
+                                                "Standard_E8_v3"
+                                            ]
+                                        },
+                                        {
+                                            "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].targetInstanceCount",
+                                            "greater": 100
+                                        },
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale.capacity",
+                                                    "exists": true
+                                                },
+                                                {
+                                                    "field": "Microsoft.HDInsight/clusters/applications/computeProfile.roles[*].autoscale.capacity.maxInstanceCount",
+                                                    "greater": 100
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "HD Insight",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
