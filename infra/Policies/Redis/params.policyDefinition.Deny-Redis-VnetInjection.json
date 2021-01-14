@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Redis-VnetInjection"
+        },
+        "policyDescription": {
+            "value": "Enforces use of private endpoints and denies vnet injection for redis cache."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Cache/Redis"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Cache/Redis/subnetId",
+                                    "exists": true
+                                },
+                                {
+                                    "field": "Microsoft.Cache/Redis/staticIP",
+                                    "exists": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cache",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
