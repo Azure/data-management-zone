@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-CognitiveServices-NetworkAclsVirtualNetworkRules"
+            "value": "Deny-CognitiveServices-Encryption"
         },
         "policyDescription": {
-            "value": "Denies virtual network rules for cognitive services."
+            "value": "Enforces use of encryption for cognitive services."
         },
         "policyMode": {
             "value": "All"
@@ -23,10 +23,8 @@
                             "equals": "Microsoft.CognitiveServices/accounts"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.CognitiveServices/accounts/networkAcls.virtualNetworkRules[*]"
-                            },
-                            "greater": 0
+                            "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
+                            "exists": false
                         }
                     ]
                 },
