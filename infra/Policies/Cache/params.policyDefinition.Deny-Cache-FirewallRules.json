@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Redis-MinimumTlsVersion"
+            "value": "Deny-Cache-FirewallRules"
         },
         "policyDescription": {
-            "value": "Enforces minimum tls version for redis cache."
+            "value": "Denies firewall rules for redis cache."
         },
         "policyMode": {
             "value": "All"
@@ -20,19 +20,7 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Cache/Redis"
-                        },
-                        {
-                            "anyOf": [
-                                {
-                                    "field": "Microsoft.Cache/Redis/minimumTlsVersion",
-                                    "exists": false
-                                },
-                                {
-                                    "field": "Microsoft.Cache/Redis/minimumTlsVersion",
-                                    "notEquals": "1.2"
-                                }
-                            ]
+                            "equals": "Microsoft.Cache/Redis/firewallRules"
                         }
                     ]
                 },

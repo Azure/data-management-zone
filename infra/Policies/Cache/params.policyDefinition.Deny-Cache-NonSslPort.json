@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Redis-Sku"
+            "value": "Deny-Cache-NonSslPort"
         },
         "policyDescription": {
-            "value": "Enforces certain Skus for redis cache."
+            "value": "Enforces turning off the non-ssl port for redis cache."
         },
         "policyMode": {
             "value": "All"
@@ -25,30 +25,12 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "Microsoft.Cache/Redis/sku.name",
-                                    "notIn": [
-                                        "Basic",
-                                        "Standard",
-                                        "Premium"
-                                    ]
+                                    "field": "Microsoft.Cache/Redis/enableNonSslPort",
+                                    "exists": false
                                 },
                                 {
-                                    "field": "Microsoft.Cache/Redis/sku.family",
-                                    "notIn": [
-                                        "C",
-                                        "P"
-                                    ]
-                                },
-                                {
-                                    "field": "Microsoft.Cache/Redis/sku.capacity",
-                                    "notIn": [
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5,
-                                        6
-                                    ]
+                                    "field": "Microsoft.Cache/Redis/enableNonSslPort",
+                                    "notEquals": false
                                 }
                             ]
                         }

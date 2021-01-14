@@ -1,0 +1,131 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-DNSZoneGroup-CacheEnterprise-PrivateEndpoint"
+        },
+        "policyDescription": {
+            "value": "Deploys the configurations of a Private DNS Zone Group by a parameter for Redis Cache Enterprise Private Endpoint. Used to enforce the configuration to a single Private DNS Zone."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "privateDnsZoneIdWestEurope": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "privateDnsZoneIdWestEurope",
+                        "strongType": "Microsoft.Network/privateDnsZones"
+                    }
+                },
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Network/privateEndpoints"
+                        },
+                        {
+                            "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].privateLinkServiceId",
+                            "contains": "Microsoft.Cache/redisEnterprise"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
+                                "where": {
+                                    "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
+                                    "equals": "cacheEnterprise"
+                                }
+                            },
+                            "greaterOrEquals": 1
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]",
+                    "details": {
+                        "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "privateDnsZoneIdWestEurope": {
+                                            "type": "string"
+                                        },
+                                        "privateEndpointName": {
+                                            "type": "string"
+                                        },
+                                        "location": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "resources": [
+                                        {
+                                            "condition": "[equals(parameters('location'), 'westeurope')]",
+                                            "name": "[concat(parameters('privateEndpointName'), '/deployedByPolicy')]",
+                                            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+                                            "apiVersion": "2020-03-01",
+                                            "location": "[parameters('location')]",
+                                            "properties": {
+                                                "privateDnsZoneConfigs": [
+                                                    {
+                                                        "name": "[concat(parameters('privateEndpointName'), '-aRecord')]",
+                                                        "properties": {
+                                                            "privateDnsZoneId": "[parameters('privateDnsZoneIdWestEurope')]"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "parameters": {
+                                    "privateDnsZoneIdWestEurope": {
+                                        "value": "[parameters('privateDnsZoneIdWestEurope')]"
+                                    },
+                                    "privateEndpointName": {
+                                        "value": "[field('name')]"
+                                    },
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Cache",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
