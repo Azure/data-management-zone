@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Redis-FirewallRules"
+            "value": "Deny-Cache-VnetInjection"
         },
         "policyDescription": {
-            "value": "Denies firewall rules for redis cache."
+            "value": "Enforces use of private endpoints and denies vnet injection for redis cache."
         },
         "policyMode": {
             "value": "All"
@@ -20,7 +20,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Cache/Redis/firewallRules"
+                            "equals": "Microsoft.Cache/Redis"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Cache/Redis/subnetId",
+                                    "exists": true
+                                },
+                                {
+                                    "field": "Microsoft.Cache/Redis/staticIP",
+                                    "exists": true
+                                }
+                            ]
                         }
                     ]
                 },

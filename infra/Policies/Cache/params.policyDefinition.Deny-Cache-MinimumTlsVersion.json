@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Redis-VnetInjection"
+            "value": "Deny-Cache-MinimumTlsVersion"
         },
         "policyDescription": {
-            "value": "Enforces use of private endpoints and denies vnet injection for redis cache."
+            "value": "Enforces minimum tls version for redis cache."
         },
         "policyMode": {
             "value": "All"
@@ -25,12 +25,12 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "Microsoft.Cache/Redis/subnetId",
-                                    "exists": true
+                                    "field": "Microsoft.Cache/Redis/minimumTlsVersion",
+                                    "exists": false
                                 },
                                 {
-                                    "field": "Microsoft.Cache/Redis/staticIP",
-                                    "exists": true
+                                    "field": "Microsoft.Cache/Redis/minimumTlsVersion",
+                                    "notEquals": "1.2"
                                 }
                             ]
                         }
