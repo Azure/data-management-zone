@@ -1,0 +1,133 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "DiagnosticSettings-ActivityLog-LogAnalytics"
+        },
+        "policyDescription": {
+            "value": "Send diagnostic settings for azure activity logs to log analytics workspace."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "logAnalytics": {
+                    "type": "string",
+                    "metadata": {
+                        "displayName": "Log Analytics workspace",
+                        "description": "Select the Log Analytics workspace from the dropdown list",
+                        "strongType": "omsWorkspace"
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "field": "type",
+                    "equals": "Microsoft.Resources/subscriptions"
+                },
+                "then": {
+                    "effect": "deployIfNotExists",
+                    "details": {
+                        "type": "Microsoft.Insights/diagnosticSettings",
+                        "deploymentScope": "Subscription",
+                        "existenceScope": "Subscription",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+                                    "equals": "true"
+                                },
+                                {
+                                    "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+                                    "equals": "[parameters('logAnalytics')]"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635"
+                        ],
+                        "deployment": {
+                            "location": "northeurope",
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "logAnalytics": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "name": "subscriptionLogsToLogAnalytics",
+                                            "type": "Microsoft.Insights/diagnosticSettings",
+                                            "apiVersion": "2017-05-01-preview",
+                                            "location": "Global",
+                                            "properties": {
+                                                "workspaceId": "[parameters('logAnalytics')]",
+                                                "logs": [
+                                                    {
+                                                        "category": "Administrative",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "Security",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "ServiceHealth",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "Alert",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "Recommendation",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "Policy",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "Autoscale",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "ResourceHealth",
+                                                        "enabled": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "logAnalytics": {
+                                        "value": "[parameters('logAnalytics')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Monitoring",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
