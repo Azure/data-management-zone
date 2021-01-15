@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "privateDnsZoneName": {
-            "type": "string",
+        "privateDnsZoneNames": {
+            "type": "array",
             "metadata": {
-                "description": "Specifies the name of the private DNS Zone."
+                "description": "Specifies the names of the private DNS Zones."
             }
         },
         "virtualNetworkId": {
@@ -18,31 +18,39 @@
     },
     "functions": [],
     "variables": {
-        "privateDnsZoneName": "[parameters('privateDnsZoneName')]",
-        "virtualNetworkId": "[parameters('virtualNetworkId')]"
+        "privateDnsZoneNames": "[parameters('privateDnsZoneNames')]",
+        "virtualNetworkId": "[parameters('virtualNetworkId')]",
+        "virtualNetworkName": "[last(split(variables('virtualNetworkId'), '/'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/privateDnsZones",
             "apiVersion": "2018-09-01",
-            "name": "[variables('privateDnsZoneName')]",
+            "name": "[variables('privateDnsZoneNames')[copyIndex()]]",
             "location": "global",
             "properties": {
-            }
-        },
-        {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('privateDnsZoneName'), '/', last(split(variables('virtualNetworkId'), '/')))]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneName'))]"
-            ],
-            "properties": {
-                "registrationEnabled": false,
-                "virtualNetwork": {
-                    "id": "[variables('virtualNetworkId')]"
+            },
+            "resources": [
+                {
+                    "type": "virtualNetworkLinks",
+                    "apiVersion": "2018-09-01",
+                    "name": "[variables('virtualNetworkName')]",
+                    "location": "global",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneNames')[copyIndex()])]"
+                    ],
+                    "properties": {
+                        "registrationEnabled": false,
+                        "virtualNetwork": {
+                            "id": "[variables('virtualNetworkId')]"
+                        }
+                    }
                 }
+            ],
+            "copy": {
+                "name": "dnsZoneCopy",
+                "mode": "Parallel",
+                "count": "[length(variables('privateDnsZoneNames'))]"
             }
         }
     ],
