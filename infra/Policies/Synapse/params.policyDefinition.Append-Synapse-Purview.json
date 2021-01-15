@@ -1,0 +1,67 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-Synapse-Purview"
+        },
+        "policyDescription": {
+            "value": "Enforce connection between central purview instance and Synapse Workspace."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "purviewResourceId": {
+                    "type": "String",
+                    "metadata": {
+                        "description": "The resource Id of the central Azure Purview instance",
+                        "displayName": "Purview Resoruce ID"
+                    }
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/purviewConfiguration.purviewResourceId",
+                                    "exists": true
+                                },
+                                {
+                                    "value": "[empty(field('Microsoft.Synapse/workspaces/purviewConfiguration.purviewResourceId'))]",
+                                    "notEquals": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Append",
+                    "details": [
+                        {
+                            "field": "Microsoft.Synapse/workspaces/purviewConfiguration.purviewResourceId",
+                            "value": "[parameters('purviewResourceId')]"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
