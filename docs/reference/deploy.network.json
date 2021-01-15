@@ -54,7 +54,8 @@
             "privatelink.cognitiveservices.azure.com",
             "privatelink.search.windows.net",
             "privatelink.redis.cache.windows.net",
-            "privatelink.westeurope.batch.azure.com"
+            "privatelink.westeurope.batch.azure.com",
+            "westeurope.privatelink.redisenterprise.cache.azure.net"
         ]
     },
     "resources": [
