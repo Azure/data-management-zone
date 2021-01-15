@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Automation-ChildResources"
+        },
+        "policyDescription": {
+            "value": "Deny child resources for automation accounts."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "in": [
+                                "Microsoft.Automation/automationAccounts/runbooks",
+                                "Microsoft.Automation/automationAccounts/variables",
+                                "Microsoft.Automation/automationAccounts/modules",
+                                "Microsoft.Automation/automationAccounts/credentials",
+                                "Microsoft.Automation/automationAccounts/connections",
+                                "Microsoft.Automation/automationAccount/certificates"
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Automation",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
