@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "privateDnsZoneNames": {
+            "type": "array",
+            "metadata": {
+                "description": "Specifies the names of the private DNS Zones."
+            }
+        },
+        "virtualNetworkId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the resource Id of the virtual network to which the DNS zone is linked."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "privateDnsZoneNames": "[parameters('privateDnsZoneNames')]",
+        "virtualNetworkId": "[parameters('virtualNetworkId')]",
+        "virtualNetworkName": "[last(split(variables('virtualNetworkId'), '/'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('privateDnsZoneNames')[copyIndex()]]",
+            "location": "global",
+            "properties": {
+            },
+            "resources": [
+                {
+                    "type": "virtualNetworkLinks",
+                    "apiVersion": "2018-09-01",
+                    "name": "[variables('virtualNetworkName')]",
+                    "location": "global",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/privateDnsZones', variables('privateDnsZoneNames')[copyIndex()])]"
+                    ],
+                    "properties": {
+                        "registrationEnabled": false,
+                        "virtualNetwork": {
+                            "id": "[variables('virtualNetworkId')]"
+                        }
+                    }
+                }
+            ],
+            "copy": {
+                "name": "dnsZoneCopy",
+                "mode": "Parallel",
+                "count": "[length(variables('privateDnsZoneNames'))]"
+            }
+        }
+    ],
+    "outputs": {}
+}
