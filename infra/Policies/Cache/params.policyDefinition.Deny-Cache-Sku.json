@@ -30,13 +30,6 @@
                                         "Basic",
                                         "Standard",
                                         "Premium"
-                                        // "EnterpriseFlash_F300",
-                                        // "EnterpriseFlash_F700",
-                                        // "EnterpriseFlash_F1500",
-                                        // "Enterprise_E10",
-                                        // "Enterprise_E20",
-                                        // "Enterprise_E50",
-                                        // "Enterprise_E100"
                                     ]
                                 },
                                 {
@@ -44,12 +37,12 @@
                                     "notIn": [
                                         "C",
                                         "P"
-                                        // ""
                                     ]
                                 },
                                 {
                                     "field": "Microsoft.Cache/Redis/sku.capacity",
                                     "notIn": [
+                                        0,
                                         1,
                                         2,
                                         3,
