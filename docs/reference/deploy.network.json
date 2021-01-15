@@ -32,29 +32,46 @@
         "privateDnsZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateDns/deploy.privateDns.json?token=AIHRGTSYVNDFX3NXSA3DZZS7ZTX6Q",
         "firewallTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Firewall/deploy.firewall.json?token=AIHRGTSM5KVH4A3EBPQBA627ZTX46",
         "privateDnsZoneNames": [
-            "privatelink.azure.com",
-            "privatelink.blob.core.windows.net",
-            "privatelink.dfs.core.windows.net",
-            "privatelink.file.core.windows.net",
-            "privatelink.azurecr.io",
-            "privatelink.documents.azure.com",
-            "privatelink.datafactory.azure.net",
-            "privatelink.servicebus.windows.net",
-            "privatelink.vaultcore.azure.net",
-            "privatelink.api.azureml.ms",
+            "privatelink.afs.azure.net",
             "privatelink.analysis.windows.net",
-            "privatelink.pbidedicated.windows.net",
-            "privatelink.tip1.powerquery.microsoft.com",
-            "privatelink.database.windows.net",
-            "privatelink.mysql.database.azure.com",
-            "privatelink.azurewebsites.net",
+            "privatelink.api.azureml.ms",
+            "privatelink.azure-devices.net",
+            "privatelink.azure.com",
+            "privatelink.azurecr.io",
             "privatelink.azuresynapse.net",
-            "privatelink.sql.azuresynapse.net",
-            "privatelink.dev.azuresynapse.net",
+            "privatelink.azurewebsites.net",
+            "privatelink.blob.core.windows.net",
+            "privatelink.cassandra.cosmos.azure.com",
             "privatelink.cognitiveservices.azure.com",
-            "privatelink.search.windows.net",
+            "privatelink.database.windows.net",
+            "privatelink.datafactory.azure.net",
+            "privatelink.dev.azuresynapse.net",
+            "privatelink.dfs.core.windows.net",
+            "privatelink.documents.azure.com",
+            "privatelink.eventgrid.azure.net",
+            "privatelink.file.core.windows.net",
+            "privatelink.gremlin.cosmos.azure.com",
+            "privatelink.mariadb.database.azure.com",
+            "privatelink.mongo.cosmos.azure.com",
+            "privatelink.mysql.database.azure.com",
+            "privatelink.pbidedicated.windows.net",
+            "privatelink.postgres.database.azure.com",
+            "privatelink.queue.core.windows.net",
             "privatelink.redis.cache.windows.net",
+            "privatelink.search.windows.net",
+            "privatelink.service.signalr.net",
+            "privatelink.servicebus.windows.net",
+            "privatelink.sql.azuresynapse.net",
+            "privatelink.table.core.windows.net",
+            "privatelink.table.cosmos.azure.com",
+            "privatelink.tip1.powerquery.microsoft.com",
+            "privatelink.vaultcore.azure.net",
+            "privatelink.web.core.windows.net",
+            "privatelink.northeurope.azmk8s.io",
+            "privatelink.westeurope.azmk8s.io",
+            "privatelink.northeurope.batch.azure.com",
             "privatelink.westeurope.batch.azure.com",
+            "northeurope.privatelink.redisenterprise.cache.azure.net",
             "westeurope.privatelink.redisenterprise.cache.azure.net"
         ]
     },
@@ -100,7 +117,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "name": "[take(concat('privateDnsZoneDeployment-', variables('privateDnsZoneNames')[copyIndex()]), 64)]",
+            "name": "privateDnsZoneDeployment",
             "dependsOn": [
                 "vnetDeployment",
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]"
@@ -112,20 +129,15 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "privateDnsZoneName": {
-                        "value": "[variables('privateDnsZoneNames')[copyIndex()]]"
+                    "privateDnsZoneNames": {
+                        "value": "[variables('privateDnsZoneNames')]"
                     },
                     "virtualNetworkId": {
                         "value": "[reference('vnetDeployment').outputs.vnetId.value]"
                     }
                 }
             },
-            "resourceGroup": "[variables('privateDnsZoneResourceGroupName')]",
-            "copy": {
-                "name": "privateDnsZoneCopy",
-                "count": "[length(variables('privateDnsZoneNames'))]",
-                "mode": "Parallel"
-            }
+            "resourceGroup": "[variables('privateDnsZoneResourceGroupName')]"
         },
         {
             "condition": "[variables('enableAzureFirewall')]",
