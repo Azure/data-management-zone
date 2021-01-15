@@ -35,6 +35,10 @@
                                 {
                                     "field": "Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.minNodeCount",
                                     "greater": 0
+                                },
+                                {
+                                    "value": "[int(last(split(replace(replace(replace(replace(replace(replace(replace(field('Microsoft.MachineLearningServices/workspaces/computes/scaleSettings.nodeIdleTimeBeforeScaleDown'), 'P', '/'), 'Y', '/'), 'M', '/'), 'D', '/'), 'T', '/'), 'H', '/'), 'S', ''), '/')))]",
+                                    "greater": 900
                                 }
                             ]
                         }
