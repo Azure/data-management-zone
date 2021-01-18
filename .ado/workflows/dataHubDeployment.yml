@@ -63,8 +63,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
         
         # Deploy Key Vault 002 - validation
@@ -81,8 +81,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Validation'
         
         # Deploy Key Vault 003 - validation
@@ -99,8 +99,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
             deploymentMode: 'Validation'
         
         # Deploy Purview 001 - validation
@@ -117,8 +117,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Purview/deploy.purview.json'
-            csmParametersFile: 'infra/Purview/params.purview001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
             deploymentMode: 'Validation'
         
         # Deploy Log Analytics Workspace 001 - validation
@@ -135,8 +135,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json'
             deploymentMode: 'Validation'
         
         # Deploy Storage Account 001 - validation
@@ -153,8 +153,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Validation'
         
         # Deploy data factory 001 - validation
@@ -171,8 +171,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Validation'
         
         # Deploy Container Registry 001 - validation
@@ -189,8 +189,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONTAINER)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ContainerRegistry/deploy.containerRegistry.json'
-            csmParametersFile: 'infra/ContainerRegistry/params.containerRegistry001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/deploy.containerRegistry.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/params.containerRegistry001.json'
             deploymentMode: 'Validation'
         
         # Deploy Synapse Private Link Hub 001 - validation
@@ -207,8 +207,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
-            csmParametersFile: 'infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
             deploymentMode: 'Validation'
         
         # Generate Password
@@ -239,8 +239,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.shir001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
             deploymentMode: 'Validation'
             overrideParameters: >
               -vmssAdminPassword "$(password)"
@@ -259,8 +259,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Function/deploy.function.json'
-            csmParametersFile: 'infra/Function/params.function001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Function/deploy.function.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Function/params.function001.json'
             deploymentMode: 'Validation'
         
         # Deploy Power BI Private Link 001 - validation
@@ -277,8 +277,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/PowerBi/deploy.powerBi.json'
-            csmParametersFile: 'infra/PowerBi/params.powerBi001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/PowerBi/deploy.powerBi.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PowerBi/params.powerBi001.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -317,8 +317,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Key Vault 002
@@ -335,8 +335,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault002.json'
             deploymentMode: 'Incremental'
         
         # Deploy Key Vault 003
@@ -353,8 +353,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/KeyVault/deploy.keyVault.json'
-            csmParametersFile: 'infra/KeyVault/params.keyVault003.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
             deploymentMode: 'Incremental'
         
         # Deploy Purview 001
@@ -371,8 +371,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GOVERNANCE)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Purview/deploy.purview.json'
-            csmParametersFile: 'infra/Purview/params.purview001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Log Analytics Workspace 001
@@ -389,8 +389,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/LogAnalytics/deploy.logAnalytics.json'
-            csmParametersFile: 'infra/LogAnalytics/params.logAnalytics001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/deploy.logAnalytics.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogAnalytics/params.logAnalytics001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Storage Account 001
@@ -407,8 +407,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'storageDetails'
         
@@ -438,7 +438,7 @@ stages:
           enabled: true
           continueOnError: false
           inputs:
-            sourcePath: 'infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
+            sourcePath: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/gatewayInstall.ps1'
             additionalArgumentsForBlobCopy: |
               '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -460,8 +460,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DataFactory/deploy.dataFactory.json'
-            csmParametersFile: 'infra/DataFactory/params.dataFactory001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/deploy.dataFactory.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DataFactory/params.dataFactory001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Container Registry 001
@@ -478,8 +478,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONTAINER)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ContainerRegistry/deploy.containerRegistry.json'
-            csmParametersFile: 'infra/ContainerRegistry/params.containerRegistry001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/deploy.containerRegistry.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/params.containerRegistry001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Synapse Private Link Hub 001
@@ -496,8 +496,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
-            csmParametersFile: 'infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json'
             deploymentMode: 'Incremental'
         
         # Generate Password
@@ -528,8 +528,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/SelfHostedIntegrationRuntime/deploy.shir.json'
-            csmParametersFile: 'infra/SelfHostedIntegrationRuntime/params.shir001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/deploy.shir.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SelfHostedIntegrationRuntime/params.shir001.json'
             deploymentMode: 'Incremental'
             overrideParameters: >
               -vmssAdminPassword "$(password)"
@@ -548,8 +548,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Function/deploy.function.json'
-            csmParametersFile: 'infra/Function/params.function001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Function/deploy.function.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Function/params.function001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Power BI Private Link 001
@@ -566,6 +566,6 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_CONSUMPTION)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/PowerBi/deploy.powerBi.json'
-            csmParametersFile: 'infra/PowerBi/params.powerBi001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/PowerBi/deploy.powerBi.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PowerBi/params.powerBi001.json'
             deploymentMode: 'Validation'

@@ -55,8 +55,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Validation'
         
         # Deploy storage account 001 - validation
@@ -73,8 +73,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Validation'
         
         # Deploy firewall - validation
@@ -91,8 +91,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Firewall/deploy.firewall.json'
-            csmParametersFile: 'infra/Firewall/params.firewall.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall.json'
             deploymentMode: 'Validation'
         
         # Deploy dns forwarder - validation
@@ -109,8 +109,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DnsForwarder/deploy.dnsForwarder.json'
-            csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/deploy.dnsForwarder.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/params.dnsForwarder001.json'
             deploymentMode: 'Validation'
         
         # Deploy private DNS zones - validation
@@ -127,8 +127,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
-            csmParametersFile: 'infra/PrivateDns/params.privateDns001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/params.privateDns001.json'
             deploymentMode: 'Validation'
         
         # Deploy vnet peering 001 - validation
@@ -145,8 +145,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering001.json'
             deploymentMode: 'Validation'
         
         # Deploy vnet peering 002 - validation
@@ -163,8 +163,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering002.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -203,8 +203,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnet.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
             deploymentMode: 'Incremental'
         
         # Deploy storage account 001
@@ -221,8 +221,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_MANAGEMENT)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Storage/deploy.storage.json'
-            csmParametersFile: 'infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'storageDetails'
         
@@ -252,7 +252,7 @@ stages:
           enabled: true
           continueOnError: false
           inputs:
-            sourcePath: 'infra/DnsForwarder/forwarderSetup.sh'
+            sourcePath: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/forwarderSetup.sh'
             additionalArgumentsForBlobCopy: |
               '/Y'
             azureSubscription: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -274,8 +274,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/Firewall/deploy.firewall.json'
-            csmParametersFile: 'infra/Firewall/params.firewall.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall.json'
             deploymentMode: 'Incremental'
         
         # Deploy dns forwarder
@@ -292,8 +292,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/DnsForwarder/deploy.dnsForwarder.json'
-            csmParametersFile: 'infra/DnsForwarder/params.dnsForwarder001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/deploy.dnsForwarder.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/params.dnsForwarder001.json'
             deploymentMode: 'Incremental'
         
         # Deploy private DNS zones
@@ -310,8 +310,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/PrivateDns/deploy.privateDns.json'
-            csmParametersFile: 'infra/PrivateDns/params.privateDns001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/deploy.privateDns.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/params.privateDns001.json'
             deploymentMode: 'Incremental'
         
         # Deploy vnet peering 001
@@ -328,8 +328,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering001.json'
             deploymentMode: 'Incremental'
         
         # Deploy vnet peering 002
@@ -346,6 +346,6 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: 'infra/VirtualNetwork/params.vnetPeering002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering002.json'
             deploymentMode: 'Incremental'

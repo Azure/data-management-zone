@@ -48,8 +48,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
-            csmParametersFile: 'infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
             deploymentMode: 'Validation'
           env:
             AZURE_RESOURCE_GROUP: dn001-processing
@@ -69,8 +69,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
-            csmParametersFile: 'infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json'
             deploymentMode: 'Validation'
           env:
             AZURE_RESOURCE_GROUP: dn002-processing
@@ -112,8 +112,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
-            csmParametersFile: 'infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime001.json'
             deploymentMode: 'Incremental'
           env:
             AZURE_RESOURCE_GROUP: dn001-processing
@@ -133,8 +133,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: 'infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
-            csmParametersFile: 'infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/deploy.shareSelfHostedIntegrationRuntime.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ShareSelfHostedIntegrationRuntime/params.shareSelfHostedIntegrationRuntime002.json'
             deploymentMode: 'Incremental'
           env:
             AZURE_RESOURCE_GROUP: dn002-processing
