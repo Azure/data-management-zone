@@ -7,6 +7,8 @@ trigger:
   paths:
     include:
       - infra/VirtualNetwork/*
+      - infra/Firewall/*
+      - infra/FirewallPolicy/*
       - infra/VirtualNetworkPeering/*
       - infra/PrivateDns/*
       - infra/DnsForwarder/*
@@ -77,10 +79,28 @@ stages:
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
             deploymentMode: 'Validation'
         
-        # Deploy firewall - validation
+        # Deploy Firewall Policy 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: firewall_policy_validation
+          displayName: Deploy Firewall Policy 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/deploy.firewallPolicy.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/params.firewallPolicy001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Firewall 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: firewall_validation
-          displayName: Deploy firewall - validation
+          displayName: Deploy Firewall 001 - validation
           enabled: true
           continueOnError: false
           inputs:
@@ -92,7 +112,7 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall001.json'
             deploymentMode: 'Validation'
         
         # Deploy dns forwarder - validation
@@ -260,10 +280,28 @@ stages:
             storage: $(storageAccountName)
             containerName: $(storageAccountContainerName)
         
-        # Deploy firewall
+        # Deploy Firewall Policy 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: firewall_policy_deployment
+          displayName: Deploy Firewall Policy 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/deploy.firewallPolicy.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/params.firewallPolicy001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Firewall 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: firewall_deployment
-          displayName: Deploy firewall
+          displayName: Deploy Firewall 001
           enabled: true
           continueOnError: false
           inputs:
@@ -275,7 +313,7 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall001.json'
             deploymentMode: 'Incremental'
         
         # Deploy dns forwarder
