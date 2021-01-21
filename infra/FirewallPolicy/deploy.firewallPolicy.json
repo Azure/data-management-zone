@@ -1,0 +1,265 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "firewallPolicyName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the firewall policy."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "firewallPolicyName": "[parameters('firewallPolicyName')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/firewallPolicies",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('firewallPolicyName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "basePolicy": {
+                    "id": ""
+                },
+                "dnsSettings": {
+                    "enableProxy": true,
+                    "servers": []
+                },
+                // "intrusionSystemMode": "Enabled",
+                "threatIntelMode": "Deny",
+                "threatIntelWhitelist": {
+                    "fqdns": [],
+                    "ipAddresses": []
+                }
+            }
+        },
+        // {
+        //     "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+        //     "apiVersion": "2020-05-01",
+        //     "name": "[concat(variables('firewallPolicyName'), '/', 'hdinsight-application-rulecollection')]",
+        //     "location": "[variables('location')]",
+        //     "dependsOn": [
+        //         "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]"
+        //     ],
+        //     "properties": {
+        //         "priority": 1000,
+        //         "ruleCollections": [
+                    
+        //         ]
+        //     }
+        // },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('firewallPolicyName'), '/', 'hdinsight-rulecollection')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]"
+            ],
+            "properties": {
+                "priority": 2000,
+                "ruleCollections": [
+                    {
+                        "name": "HDInsight-NetworkRules",
+                        "priority": 2100,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "HDInsight-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "Sql"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                    "1433"
+                                ],
+                                "description": "Allow default SQL servers provided by HDInsight"
+                            },
+                            {
+                                "name": "HDInsight-NetworkRule-002",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "AzureMonitor"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                    "*"
+                                ],
+                                "description": "Allows scale feature of HDInsight"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "HDInsight-ApplicationRules",
+                        "priority": 2200,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "HDInsight-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [
+                                    "HDInsight",
+                                    "WindowsUpdate"
+                                ],
+                                "targetFqdns": [],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "HDInsight Service Tag Rule"
+                            },
+                            {
+                                "name": "HDInsight-ApplicationRule-002",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [
+                                ],
+                                "targetFqdns": [
+                                    "login.microsoftonline.com",
+                                    "login.windows.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows Windows login activity"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('firewallPolicyName'), '/', 'datafactory-rulecollection')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]",
+                "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', variables('firewallPolicyName'), 'hdinsight-rulecollection')]"
+            ],
+            "properties": {
+                "priority": 3000,
+                "ruleCollections": [
+                    {
+                        "name": "DataFactory-ApplicationRules",
+                        "priority": 3100,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "DataFactory-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [
+                                ],
+                                "targetFqdns": [
+                                    "go.microsoft.com",
+                                    "download.microsoft.com",
+                                    "browser.events.data.msn.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows download of Self-hosted Integration Runtime installer and updates"
+                            },
+                            {
+                                "name": "DataFactory-ApplicationRule-002",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [
+                                ],
+                                "targetFqdns": [
+                                    "*.servicebus.windows.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}
