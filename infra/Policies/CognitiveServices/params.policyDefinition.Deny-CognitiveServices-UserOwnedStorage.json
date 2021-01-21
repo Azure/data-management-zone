@@ -25,7 +25,7 @@
                         {
                             "anyOf": [
                                 {
-                                    "type": "Microsoft.CognitiveServices/accounts/userOwnedStorage",
+                                    "field": "Microsoft.CognitiveServices/accounts/userOwnedStorage",
                                     "exists": false
                                 },
                                 {
