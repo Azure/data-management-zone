@@ -6,6 +6,7 @@ on:
     paths:
       - 'infra/VirtualNetwork/**'
       - 'infra/Firewall/**'
+      - 'infra/FirewallPolicy/**'
       - 'infra/VirtualNetworkPeering/**'
       - 'infra/PrivateDns/**'
       - 'infra/DnsForwarder/**'
@@ -113,6 +114,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
         deploymentMode: Validate
     
+    # Deploy Firewall Policy 001 - validation
+    - name: Deploy Firewall Policy 001 - validation
+      id: firewall_policy_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
+        parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
+        deploymentMode: Validate
+    
     # Deploy Firewall 001 - validation
     - name: Deploy Firewall 001 - validation
       id: firewall_001_validation
@@ -123,7 +137,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
         deploymentMode: Validate
     
     # Deploy DNS Forwarder 001 - validation
@@ -244,6 +258,19 @@ jobs:
           $ctx = $storageAccount.Context
           Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
     
+    # Deploy Firewall Policy 001
+    - name: Deploy Firewall Policy 001
+      id: firewall_policy_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
+        parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
+        deploymentMode: Incremental
+    
     # Deploy Firewall 001
     - name: Deploy Firewall 001
       id: firewall_001_deployment
@@ -254,7 +281,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
         deploymentMode: Incremental
     
     # # Deploy DNS Forwarder 001
