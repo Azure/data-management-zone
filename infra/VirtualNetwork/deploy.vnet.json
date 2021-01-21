@@ -56,7 +56,7 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "AllowRDP",
+                        "name": "AllowRdpInbound",
                         "properties": {
                             "access": "Allow",
                             "direction": "Inbound",
@@ -65,11 +65,12 @@
                             "sourceAddressPrefix": "*",
                             "sourcePortRange": "*",
                             "destinationAddressPrefix": "*",
-                            "destinationPortRange": "3389"
+                            "destinationPortRange": "3389",
+                            "description": "Allow RDP Inbound"
                         }
                     },
                     {
-                        "name": "AllowSSH",
+                        "name": "AllowSshInbound",
                         "properties": {
                             "access": "Allow",
                             "direction": "Inbound",
@@ -78,7 +79,8 @@
                             "sourceAddressPrefix": "*",
                             "sourcePortRange": "*",
                             "destinationAddressPrefix": "*",
-                            "destinationPortRange": "22"                            
+                            "destinationPortRange": "22",
+                            "description": "Allow SSH Inbound"
                         }
                     }
                     // {
@@ -147,6 +149,9 @@
                             "addressPrefix": "10.0.2.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                            },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
                             }
@@ -166,6 +171,9 @@
                                     }
                                 }
                             ],
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                            },
                             "routeTable": {
                                 "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
                             }
