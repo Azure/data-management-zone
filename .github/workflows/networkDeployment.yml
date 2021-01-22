@@ -137,7 +137,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
         deploymentMode: Validate
     
     # Deploy DNS Forwarder 001 - validation
@@ -281,7 +281,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall.json
         deploymentMode: Incremental
     
     # # Deploy DNS Forwarder 001
