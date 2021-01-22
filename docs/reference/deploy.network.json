@@ -26,10 +26,11 @@
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "location": "[parameters('location')]",
         "enableAzureFirewall": "[parameters('enableAzureFirewall')]",
-        "vnetResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-network')]",
+        "networkResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-network')]",
         "privateDnsZoneResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-global-dns')]",
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/VirtualNetwork/deploy.vnet.json?token=AIHRGTS53DUNM5BNR422CQS7ZTYAC",
         "privateDnsZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PrivateDns/deploy.privateDns.json?token=AIHRGTSYVNDFX3NXSA3DZZS7ZTX6Q",
+        "firewallPolicyTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/FirewallPolicy/deploy.firewallPolicy.json?token=AIHRGTQUS5KEOZ6MMAQCY6LACPO54",
         "firewallTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Firewall/deploy.firewall.json?token=AIHRGTSM5KVH4A3EBPQBA627ZTX46",
         "privateDnsZoneNames": [
             "privatelink.afs.azure.net",
@@ -79,7 +80,7 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "name": "[variables('vnetResourceGroupName')]",
+            "name": "[variables('networkResourceGroupName')]",
             "location": "[variables('location')]",
             "properties": {}
         },
@@ -95,7 +96,7 @@
             "apiVersion": "2020-06-01",
             "name": "vnetDeployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -112,7 +113,7 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('vnetResourceGroupName')]"
+            "resourceGroup": "[variables('networkResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
@@ -120,7 +121,7 @@
             "name": "privateDnsZoneDeployment",
             "dependsOn": [
                 "vnetDeployment",
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -143,10 +144,36 @@
             "condition": "[variables('enableAzureFirewall')]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
+            "name": "firewallPolicyDeployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('firewallPolicyTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "firewallPolicyName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewallpolicy')]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('networkResourceGroupName')]"
+        },
+        {
+            "condition": "[variables('enableAzureFirewall')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
             "name": "firewallDeployment",
             "dependsOn": [
                 "vnetDeployment",
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('vnetResourceGroupName'))]"
+                "firewallPolicyDeployment",
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -161,12 +188,15 @@
                     "firewallName": {
                         "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewall')]"
                     },
+                    "firewallPolicyId": {
+                        "value": "[reference('firewallPolicyDeployment').outputs.firewallPolicyId.value]"
+                    },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.firewallSubnetId.value]"
                     }
                 }
             },
-            "resourceGroup": "[variables('vnetResourceGroupName')]"
+            "resourceGroup": "[variables('networkResourceGroupName')]"
         }
     ],
     "outputs": {
