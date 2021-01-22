@@ -15,6 +15,12 @@
                 "description": "Specifies the name of the firewall."
             }
         },
+        "firewallPolicyId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the firewall policy which should be associated with the firewall."
+            }
+        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -26,22 +32,50 @@
     "variables": {
         "location": "[parameters('location')]",
         "firewallName": "[parameters('firewallName')]",
-        "publicIpName": "[concat(variables('firewallName'), '-publicip')]",
+        "publicIpPrefixName": "[concat(variables('firewallName'), '-publicipprefix')]",
+        "publicIpName": "[concat(variables('firewallName'), '-publicip001')]",
+        "firewallPolicyId": "[parameters('firewallPolicyId')]",
         "subnetId": "[parameters('subnetId')]"
     },
     "resources": [
         {
+            "type": "Microsoft.Network/publicIPPrefixes",
+            "apiVersion": "2020-05-01",
+            "name": "[variables('publicIpPrefixName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            // "zones": [
+            //     "1",
+            //     "2",
+            //     "3"
+            // ],
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "prefixLength": 28
+            }
+        },
+        {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-05-01",
             "name": "[variables('publicIpName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPPrefixes', variables('publicIpPrefixName'))]"
+            ],
             "location": "[variables('location')]",
             "sku": {
                 "name": "Standard"
             },
             "properties": {
                 "publicIPAllocationMethod": "Static",
+                "publicIPAddressVersion": "IPv4",
                 "dnsSettings": {
-                    "domainNameLabel": "[variables('firewallName')]"
+                    "domainNameLabel": "[variables('publicIpName')]"
+                },
+                "publicIPPrefix": {
+                    "id": "[resourceId('Microsoft.Network/publicIPPrefixes', variables('publicIpPrefixName'))]"
                 }
             }
         },
@@ -50,6 +84,7 @@
             "apiVersion": "2020-05-01",
             "name": "[variables('firewallName')]",
             "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPPrefixes', variables('publicIpPrefixName'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpName'))]"
             ],
             "location": "[variables('location')]",
@@ -61,18 +96,11 @@
             "properties": {
                 "sku": {
                     "name": "AZFW_VNet",
-                    "tier": "Standard"
+                    "tier": "Premium"
                 },
-                "threatIntelMode": "Alert",
-                "additionalProperties": {
-                    "Network.DNS.EnableProxy": "true"
-                },
-                "applicationRuleCollections": [],
-                "natRuleCollections": [],
-                "networkRuleCollections": [],
                 "ipConfigurations": [
                     {
-                        "name": "ipConfigName",
+                        "name": "ipConfiguration001",
                         "properties": {
                             "subnet": {
                                 "id": "[variables('subnetId')]"
@@ -82,7 +110,10 @@
                             }
                         }
                     }
-                ]
+                ],
+                "firewallPolicy": {
+                    "id": "[variables('firewallPolicyId')]"
+                }
             }
         }
     ],
