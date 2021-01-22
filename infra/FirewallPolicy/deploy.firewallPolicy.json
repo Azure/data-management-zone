@@ -43,21 +43,6 @@
                 }
             }
         },
-        // {
-        //     "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-        //     "apiVersion": "2020-05-01",
-        //     "name": "[concat(variables('firewallPolicyName'), '/', 'hdinsight-application-rulecollection')]",
-        //     "location": "[variables('location')]",
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]"
-        //     ],
-        //     "properties": {
-        //         "priority": 1000,
-        //         "ruleCollections": [
-                    
-        //         ]
-        //     }
-        // },
         {
             "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
             "apiVersion": "2020-05-01",
@@ -261,5 +246,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "firewallPolicyId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]"
+        }
+    }
 }
