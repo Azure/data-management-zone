@@ -11,7 +11,7 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "northeurope",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
