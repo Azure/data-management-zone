@@ -131,7 +131,7 @@
                         "value": "[variables('location')]"
                     },
                     "containerRegistryName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
@@ -161,7 +161,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
@@ -191,7 +191,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault002')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
@@ -221,7 +221,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault003')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault003', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
@@ -251,7 +251,7 @@
                         "value": "[if(contains(variables('purviewRegions'), variables('location')), variables('location'), 'westeurope')]"
                     },
                     "purviewName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001'), 63)]"
                     }
                 }
             },
@@ -276,7 +276,7 @@
                         "value": "[variables('location')]"
                     },
                     "logAnalyticsWorkspaceName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-la001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-la001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
                     },
                     "keyVaultId": {
                         "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
@@ -303,7 +303,7 @@
                         "value": "[variables('location')]"
                     },
                     "storageAccountName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'datahubstorage001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'datahubstorage001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "storageAccountType": {
                         "value": "Standard_LRS"
@@ -330,7 +330,7 @@
                         "value": "[variables('location')]"
                     },
                     "dataFactoryName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-datafactory001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-datafactory001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
@@ -365,7 +365,7 @@
                         "value": "[variables('location')]"
                     },
                     "vmssName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhSHIR001')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhSHIR001'), 64)]"
                     },
                     "vmssSkuTier": {
                         "value": "Standard"
@@ -410,7 +410,7 @@
                         "value": "[variables('location')]"
                     },
                     "synapsePrivateLinkHubName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhsynapseprivatelinkhub')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhsynapseprivatelinkhub'), 45)]"
                     },
                     "subnetId": {
                         "value": "[variables('privateLinkSubnetId')]"
