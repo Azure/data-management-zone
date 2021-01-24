@@ -11,27 +11,28 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "northeurope",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
         },
         "subnetId": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Network/virtualNetworks/<your-vnet-name>/subnets/<your-subnet-name>",
             "metadata": {
                 "description": "Specifies the id of the subnet that should be used for non private link private endpoints."
             }
         },
         "privateLinkSubnetId": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Network/virtualNetworks/<your-vnet-name>/subnets/<your-subnet-name>",
             "metadata": {
                 "description": "Specifies the id of the subnet that should be used for private endpoints."
             }
         },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
+            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>",
             "metadata": {
                 "description": "Specifies the ID of the resource group of the private dns zones."
             }
