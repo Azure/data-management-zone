@@ -109,7 +109,7 @@
                         "value": "northeurope"
                     },
                     "vnetName": {
-                        "value": "dh-vnet"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-vnet'), 64)]"
                     }
                 }
             },
@@ -159,7 +159,7 @@
                         "value": "[variables('location')]"
                     },
                     "firewallPolicyName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewallpolicy')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewallpolicy'), 80)]"
                     }
                 }
             },
@@ -186,7 +186,7 @@
                         "value": "[variables('location')]"
                     },
                     "firewallName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewall')]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewall'), 80)]"
                     },
                     "firewallPolicyId": {
                         "value": "[reference('firewallPolicyDeployment').outputs.firewallPolicyId.value]"
