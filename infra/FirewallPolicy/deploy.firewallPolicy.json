@@ -46,17 +46,54 @@
         {
             "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
             "apiVersion": "2020-05-01",
-            "name": "[concat(variables('firewallPolicyName'), '/', 'hdinsight-rulecollection')]",
+            "name": "[concat(variables('firewallPolicyName'), '/', 'networkrules-rulecollection')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]"
             ],
             "properties": {
-                "priority": 2000,
+                "priority": 10000,
                 "ruleCollections": [
                     {
+                        "name": "MachineLearning-NetworkRules",
+                        "priority": 10100,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "MachineLearning-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "AzureActiveDirectory",
+                                    "AzureMachineLearning",
+                                    "AzureResourceManager",
+                                    "Storage",
+                                    "AzureKeyVault",
+                                    "AzureContainerRegistry",
+                                    "MicrosoftContainerRegistry",
+                                    "AzureFrontDoor.FirstParty"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                    "*"
+                                ],
+                                "description": "Allow outbound access to required services"
+                            }
+                        ]
+                    },
+                    {
                         "name": "HDInsight-NetworkRules",
-                        "priority": 2100,
+                        "priority": 10200,
                         "action": {
                             "type": "Allow"
                         },
@@ -103,10 +140,69 @@
                                 "description": "Allows scale feature of HDInsight"
                             }
                         ]
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2020-05-01",
+            "name": "[concat(variables('firewallPolicyName'), '/', 'applicationrules-rulecollection')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]",
+                "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', variables('firewallPolicyName'), 'networkrules-rulecollection')]"
+            ],
+            "properties": {
+                "priority": 20000,
+                "ruleCollections": [
+                    {
+                        "name": "MachineLearning-ApplicationRules",
+                        "priority": 20100,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "MachineLearning-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                    "anaconda.com",
+                                    "*.anaconda.com",
+                                    "*.anaconda.org",
+                                    "pypi.org",
+                                    "cloud.r-project.org",
+                                    "*pytorch.org",
+                                    "*.tensorflow.org",
+                                    "*.instances.azureml.net",
+                                    "*.instances.azureml.ms"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "MachineLearning allow common FQDNs"
+                            }
+                        ]
                     },
                     {
                         "name": "HDInsight-ApplicationRules",
-                        "priority": 2200,
+                        "priority": 20200,
                         "action": {
                             "type": "Allow"
                         },
@@ -148,8 +244,7 @@
                                         "port": 443
                                     }
                                 ],
-                                "fqdnTags": [
-                                ],
+                                "fqdnTags": [],
                                 "targetFqdns": [
                                     "login.microsoftonline.com",
                                     "login.windows.net"
@@ -164,25 +259,10 @@
                                 "description": "Allows Windows login activity"
                             }
                         ]
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-            "apiVersion": "2020-05-01",
-            "name": "[concat(variables('firewallPolicyName'), '/', 'datafactory-rulecollection')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/firewallPolicies', variables('firewallPolicyName'))]",
-                "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', variables('firewallPolicyName'), 'hdinsight-rulecollection')]"
-            ],
-            "properties": {
-                "priority": 3000,
-                "ruleCollections": [
+                    },
                     {
                         "name": "DataFactory-ApplicationRules",
-                        "priority": 3100,
+                        "priority": 20300,
                         "action": {
                             "type": "Allow"
                         },
@@ -226,8 +306,7 @@
                                         "port": 443
                                     }
                                 ],
-                                "fqdnTags": [
-                                ],
+                                "fqdnTags": [],
                                 "targetFqdns": [
                                     "*.servicebus.windows.net"
                                 ],
