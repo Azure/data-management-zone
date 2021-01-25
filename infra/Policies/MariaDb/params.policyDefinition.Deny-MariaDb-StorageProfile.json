@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-MariaDb-StorageProfile"
+        },
+        "policyDescription": {
+            "value": "Enforces geo-redundant database backup with minimum retention time in days."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DBforMariaDB/servers"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DBforMariaDB/servers/storageProfile.geoRedundantBackup",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DBforMariaDB/servers/storageProfile.geoRedundantBackup",
+                                    "notEquals": "Enabled"
+                                },
+                                {
+                                    "field": "Microsoft.DBforMariaDB/servers/storageProfile.backupRetentionDays",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DBforMariaDB/servers/storageProfile.backupRetentionDays",
+                                    "less": 7
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

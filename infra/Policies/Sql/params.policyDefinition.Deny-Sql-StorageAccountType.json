@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Sql-StorageAccountType"
+        },
+        "policyDescription": {
+            "value": "Enforces geo-redundant database backup."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Sql/servers"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Sql/servers/databases/storageAccountType",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.Sql/servers/databases/storageAccountType",
+                                    "notEquals": "GRS"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "SQL",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
