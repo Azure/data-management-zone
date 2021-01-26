@@ -7,19 +7,22 @@ trigger:
   paths:
     include:
       - code/GeneratePassword.ps1
+      - infra/ContainerRegistry/*
+      - infra/DataFactory/*
+      - infra/IntegrationServiceEnvironment/*
       - infra/KeyVault/*
       - infra/LogAnalytics/*
-      - infra/ContainerRegistry/*
-      - infra/SelfHostedIntegrationRuntime/*
-      - infra/DataFactory/*
-      - infra/Storage/*
+      - infra/LogicApp/*
       - infra/PowerBi/*
       - infra/Purview/*
+      - infra/SelfHostedIntegrationRuntime/*
+      - infra/Storage/*
       - .ado/workflows/dataHubDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription'
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
+  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: dh-automation
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
   AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS: dh-logging
@@ -101,6 +104,42 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Integration Service Environment 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: integration_service_environment_001_validation
+          displayName: Deploy Integration Service Environment 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json'
+            deploymentMode: 'Validation'
+        
+        # Deploy Logic App 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: logic_app_001_validation
+          displayName: Deploy Logic App 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/deploy.logicApp.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/params.logicApp001.json'
             deploymentMode: 'Validation'
         
         # Deploy Purview 001 - validation
@@ -355,6 +394,42 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault003.json'
+            deploymentMode: 'Incremental'
+        
+        # # Deploy Integration Service Environment 001
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   name: integration_service_environment_001_deployment
+        #   displayName: Deploy Integration Service Environment 001
+        #   enabled: true
+        #   continueOnError: false
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+        #     subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+        #     action: 'Create Or Update Resource Group'
+        #     resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+        #     location: '$(AZURE_LOCATION)'
+        #     templateLocation: 'Linked artifact'
+        #     csmFile: '$(System.DefaultWorkingDirectory)/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json'
+        #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json'
+        #     deploymentMode: 'Incremental'
+        
+        # Deploy Logic App 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: logic_app_001_deployment
+          displayName: Deploy Logic App 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/deploy.logicApp.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/params.logicApp001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Purview 001
