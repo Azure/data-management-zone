@@ -7,7 +7,6 @@
                 "privatelink.afs.azure.net",
                 "privatelink.analysis.windows.net",
                 "privatelink.api.azureml.ms",
-                "privatelink.azure-automation.net",
                 "privatelink.azure-devices.net",
                 "privatelink.azure.com",
                 "privatelink.azurecr.io",
