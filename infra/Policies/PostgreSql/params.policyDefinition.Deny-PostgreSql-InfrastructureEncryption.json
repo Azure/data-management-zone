@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-PostgreSQL-InfrastructureEncryption"
+            "value": "Deny-PostgreSQL-InfrastructureEncryption"
         },
         "policyDescription": {
             "value": "Enforces infrastructure encryption for postgre sql servers."
