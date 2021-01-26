@@ -5,18 +5,21 @@ on:
     branches: [ main ]
     paths:
       - 'code/GeneratePassword.ps1'
+      - 'infra/ContainerRegistry/**'
+      - 'infra/DataFactory/**'
+      - 'infra/IntegrationServiceEnvironment/**'
       - 'infra/KeyVault/**'
       - 'infra/LogAnalytics/**'
-      - 'infra/ContainerRegistry/**'
-      - 'infra/SelfHostedIntegrationRuntime/**'
-      - 'infra/DataFactory/**'
-      - 'infra/Storage/**'
+      - 'infra/LogicApp/**'
       - 'infra/PowerBi/**'
       - 'infra/Purview/**'
+      - 'infra/SelfHostedIntegrationRuntime/**'
+      - 'infra/Storage/**'
       - '.github/workflows/dataHubDeployment.yml'
 
 env:
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
+  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: dh-automation
   AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
   AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
   AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS: dh-logging
@@ -36,6 +39,16 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_automation
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
     
     # Create resource group
     - name: Create resource group
@@ -161,6 +174,32 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
+        deploymentMode: Validate
+    
+    # Deploy Integration Service Environment 001 - validation
+    - name: Deploy Integration Service Environment 001 - validation
+      id: integration_service_environment_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json
+        parameters: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json
+        deploymentMode: Validate
+    
+    # Deploy Logic App 001 - validation
+    - name: Deploy Logic App 001 - validation
+      id: logic_app_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/LogicApp/deploy.logicApp.json
+        parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
         deploymentMode: Validate
     
     # Deploy Purview 001 - validation
@@ -353,6 +392,32 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
+        deploymentMode: Incremental
+    
+    # # Deploy Integration Service Environment 001
+    # - name: Deploy Integration Service Environment 001
+    #   id: integration_service_environment_001_deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json
+    #     parameters: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json
+    #     deploymentMode: Incremental
+    
+    # Deploy Logic App 001
+    - name: Deploy Logic App 001
+      id: logic_app_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/LogicApp/deploy.logicApp.json
+        parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
         deploymentMode: Incremental
     
     # Deploy Purview 001
