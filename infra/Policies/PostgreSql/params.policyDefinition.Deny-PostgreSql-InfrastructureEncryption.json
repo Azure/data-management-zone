@@ -29,7 +29,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
+                    "effect": "Deny",
                     "details": [
                         {
                             "field": "Microsoft.DBforPostgreSQL/servers/infrastructureEncryption",
