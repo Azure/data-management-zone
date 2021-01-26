@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "logicAppName": {
+            "value": "dh-logicapp001"
+        },
+        "integrationServiceEnvironmentId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-automation/providers/Microsoft.Logic/integrationServiceEnvironments/dh-keyvault002"
+        }
+    }
+}
