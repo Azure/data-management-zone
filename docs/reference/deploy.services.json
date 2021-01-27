@@ -60,16 +60,16 @@
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
         "loggingResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-logging')]",
         "purviewRegions": ["brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope"],
-        "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json?token=AIHRGTSRM73QRE6H3LWUOW27ZUINA",
-        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTSAQYWCWNIO6EPJINK7ZUIOM",
-        "logAnalyticsTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/LogAnalytics/deploy.logAnalytics.json?token=AIHRGTTSPGFGLNRI62P5BY27ZUIP4",
-        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Storage/deploy.storage.json?token=AIHRGTVK2RBW7RJIHYSXQT27ZUIRC",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTSCAD4KPOJKEPOOIDS7ZUISS",
-        "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTRMQ5DVXAR6UIRVAC27ZUIT2",
-        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTSQ4ZYVDJ6ORVVALXS7ZUIYG",
-        "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json?token=AIHRGTVR4TFRRSZA6AK4LDS72MYQC",
-        "synapsePrivateLinkHubTemplateLink": "",
-        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTU4DB7ARUZBQJWISK27ZUIWQ"
+        "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json?token=AIHRGTVMJI7A6QKV2OJV37LADMRK2",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTW3LXSAVG5ZU52IAH3ADMRMU",
+        "logAnalyticsTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/LogAnalytics/deploy.logAnalytics.json?token=AIHRGTXTLJZN6E33IE2L3ULADMROK",
+        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Storage/deploy.storage.json?token=AIHRGTSUXZHQF6ZN5H4ZA5DADMRQA",
+        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTVALL24L3BDJ5YSNITADMRRS",
+        "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTTCDEL3BROAOELDETLADMRTG",
+        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTTYMQ46AUFB2OTZPDLADMRZS",
+        "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json?token=AIHRGTSD4TBDYDGHWCKDWETADMRUU",
+        "synapsePrivateLinkHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json?token=AIHRGTTZCCF2X2QUQEQRNODADMRWG",
+        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTXFTRZAVAKYRQA2BY3ADMRX6"
     },
     "resources": [
         {

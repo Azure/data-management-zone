@@ -42,8 +42,8 @@
         "location": "[parameters('location')]",
         "vmAdminPassword": "[parameters('vmAdminPassword')]",
         "enableAzureFirewall": "[parameters('enableAzureFirewall')]",
-        "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTWUPJHNBFC34RWSGK27ZUX72",
-        "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTSKR52YEJ4WWSWOFW27ZUYBI"
+        "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTXMDVLQNB4R5JDMYP3ADMR3U",
+        "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTUGHS4HVTWQKMQOEH3ADMR5A"
     },
     "resources": [
         {
