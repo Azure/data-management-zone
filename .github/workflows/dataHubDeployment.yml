@@ -202,6 +202,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
         deploymentMode: Validate
     
+    # Deploy Automation Account 001 - validation
+    - name: Deploy Automation Account 001 - validation
+      id: automation_account_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/AutomationAccount/deploy.automationAccount.json
+        parameters: ${{ github.workspace }}/infra/AutomationAccount/params.automationAccount001.json
+        deploymentMode: Validate
+    
     # Deploy Purview 001 - validation
     - name: Deploy Purview 001 - validation
       id: purview_001_validation
@@ -418,6 +431,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/LogicApp/deploy.logicApp.json
         parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
+        deploymentMode: Incremental
+    
+    # Deploy Automation Account 001
+    - name: Deploy Automation Account 001
+      id: automation_account_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/AutomationAccount/deploy.automationAccount.json
+        parameters: ${{ github.workspace }}/infra/AutomationAccount/params.automationAccount001.json
         deploymentMode: Incremental
     
     # Deploy Purview 001
