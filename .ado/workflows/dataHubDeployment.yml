@@ -7,6 +7,7 @@ trigger:
   paths:
     include:
       - code/GeneratePassword.ps1
+      - infra/AutomationAccount/*
       - infra/ContainerRegistry/*
       - infra/DataFactory/*
       - infra/IntegrationServiceEnvironment/*
