@@ -48,50 +48,52 @@
                 }
             },
             "resources": [
-                {
-                    "type": "modules",
-                    "apiVersion": "2015-10-31",
-                    "name": "Az.Accounts",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
-                    ],
-                    "properties": {
-                        "contentLink": {}
-                    }
-                },
-                {
-                    "type": "modules",
-                    "apiVersion": "2015-10-31",
-                    "name": "Az.Resources",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
-                    ],
-                    "properties": {
-                        "contentLink": {}
-                    }
-                },
-                {
-                    "type": "modules",
-                    "apiVersion": "2015-10-31",
-                    "name": "AzureAD",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
-                    ],
-                    "properties": {
-                        "contentLink": {}
-                    }
-                },
-                {
-                    "type": "modules",
-                    "apiVersion": "2015-10-31",
-                    "name": "DatabricksPS",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
-                    ],
-                    "properties": {
-                        "contentLink": {}
-                    }
-                }
+                // {
+                //     "type": "modules",
+                //     "apiVersion": "2015-10-31",
+                //     "name": "Az.Accounts",
+                //     "dependsOn": [
+                //         "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                //     ],
+                //     "properties": {
+                //         "contentLink": {}
+                //     }
+                // },
+                // {
+                //     "type": "modules",
+                //     "apiVersion": "2015-10-31",
+                //     "name": "Az.Resources",
+                //     "dependsOn": [
+                //         "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                //     ],
+                //     "properties": {
+                //         "contentLink": {}
+                //     }
+                // },
+                // {
+                //     "type": "modules",
+                //     "apiVersion": "2015-10-31",
+                //     "name": "AzureAD",
+                //     "dependsOn": [
+                //         "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                //     ],
+                //     "properties": {
+                //         "contentLink": {}
+                //     }
+                // },
+                // {
+                //     "type": "modules",
+                //     "apiVersion": "2015-10-31",
+                //     "name": "DatabricksPS",
+                //     "dependsOn": [
+                //         "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                //     ],
+                //     "properties": {
+                //         "contentLink": {
+                //             "uri": ""
+                //         }
+                //     }
+                // }
             ]
         },
         {
