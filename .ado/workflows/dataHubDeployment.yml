@@ -142,6 +142,24 @@ stages:
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/params.logicApp001.json'
             deploymentMode: 'Validation'
         
+        # Deploy Automation Account 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: automation_account_001_validation
+          displayName: Deploy Automation Account 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/AutomationAccount/deploy.automationAccount.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/AutomationAccount/params.automationAccount001.json'
+            deploymentMode: 'Validation'
+        
         # Deploy Purview 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: purview_001_validation
@@ -430,6 +448,24 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/deploy.logicApp.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/LogicApp/params.logicApp001.json'
+            deploymentMode: 'Incremental'
+        
+        # Deploy Automation Account 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: automation_account_001_deployment
+          displayName: Deploy Automation Account 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
+            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_AUTOMATION)'
+            location: '$(AZURE_LOCATION)'
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/AutomationAccount/deploy.automationAccount.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/AutomationAccount/params.automationAccount001.json'
             deploymentMode: 'Incremental'
         
         # Deploy Purview 001
