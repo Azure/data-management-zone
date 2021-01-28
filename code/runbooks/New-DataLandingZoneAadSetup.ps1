@@ -26,7 +26,7 @@ Param(
     
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]
+    [string[]]
     $DataLandingZoneSubnetIds,
     
     [Parameter(Mandatory)]
@@ -73,18 +73,18 @@ $servicePrincipal = New-AzureADServicePrincipal `
     -AppId $application.AppId `
     -AppRoleAssignmentRequired $true `
     -DisplayName $application.DisplayName `
-    -Tags {WindowsAzureActiveDirectoryIntegratedApp}
+    -Tags { WindowsAzureActiveDirectoryIntegratedApp }
 
 # Create Service Principla Password Credential
 Write-Host "Creating Service Principla Password Credential"
-$password = ([System.Web.Security.Membership]::GeneratePassword(16,5))
+$password = ([System.Web.Security.Membership]::GeneratePassword(16, 5))
 $startDate = [DateTime]::UtcNow
 $endDate = [DateTime]::UtcNow.AddYears(100)
 $servicePrincipalPasswordCredential = New-AzureADServicePrincipalPasswordCredential `
     -ObjectId $servicePrincipal.ObjectId `
     -Value $password `
     -StartDate $startDate
-    #-EndDate [DateTime]::UtcNow.AddYears(100)
+#-EndDate [DateTime]::UtcNow.AddYears(100)
 
 # Add Service Principle as Security Group Member
 Write-Host "Adding Service Principle as Member to Security Group"
@@ -128,7 +128,7 @@ $dataLandingZoneResourceGroupName = "${DataLandingZoneName}-rg"
 New-AzResourceGroup `
     -Name $dataLandingZoneResourceGroupName `
     -Location $DataLandingZoneLocation `
-    -Tag @{CostCode="${DataLandingZoneCostCode}"; Owner="${DataLandingZoneOwnerObjectId}"}
+    -Tag @{CostCode = "${DataLandingZoneCostCode}"; Owner = "${DataLandingZoneOwnerObjectId}" }
 
 # Create Role Assignment to Resource Group
 New-AzRoleAssignment `
@@ -156,6 +156,7 @@ foreach ($dataLandingZoneSubnetId in $DataLandingZoneSubnetIds) {
 # Create Output
 Write-Host "Creating Output"
 $output = @{
+    "SecurityGroupObjectId"    = $securityGroup.ObjectId
     "ServicePrincipalObjectId" = $servicePrincipal.ObjectId
     "Password"                 = $password
 }
