@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "automationAccountName": {
+            "value": "dh-automationaccount001"
+        },
+        "subnetId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
+        },
+        "privateDnsZoneId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azure-automation.net"
+        }
+    }
+}
