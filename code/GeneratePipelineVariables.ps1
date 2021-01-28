@@ -2,11 +2,13 @@
 param (
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string]$ArmOutputString,
+    [string]
+    $ArmOutputString,
 
     [Parameter()]
     [ValidateNotNullOrEmpty()]
-    [switch]$MakeOutput
+    [switch]
+    $MakeOutput
 )
 
 Write-Output "Retrieved input: $ArmOutputString"
