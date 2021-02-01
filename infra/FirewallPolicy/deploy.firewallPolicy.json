@@ -140,6 +140,37 @@
                                 "description": "Allows scale feature of HDInsight"
                             }
                         ]
+                    },
+                    {
+                        "name": "Databricks-NetworkRules",
+                        "priority": 10300,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "Databricks-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                    "TCP"
+                                ],
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                    "AzureActiveDirectory",
+                                    "AzureFrontDoor.Frontend"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                    "443"
+                                ],
+                                "description": "Allow OAuth flow for the User to the Workspace Private Endpoint and features like Mount Points, Credential Passthrough, etc."
+                            }
+                        ]
                     }
                 ]
             }
