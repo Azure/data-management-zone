@@ -57,6 +57,7 @@
             "privatelink.mariadb.database.azure.com",
             "privatelink.mongo.cosmos.azure.com",
             "privatelink.mysql.database.azure.com",
+            "privatelink.notebooks.azure.net",
             "privatelink.pbidedicated.windows.net",
             "privatelink.postgres.database.azure.com",
             "privatelink.queue.core.windows.net",
