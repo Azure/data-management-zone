@@ -165,8 +165,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
             deploymentMode: 'Validation'
         
         # Deploy vnet peering 002 - validation
@@ -183,8 +183,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
             deploymentMode: 'Validation'
 
   - stage: Deployment
@@ -366,8 +366,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
             deploymentMode: 'Incremental'
         
         # Deploy vnet peering 002
@@ -384,6 +384,6 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnetPeering002.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
             deploymentMode: 'Incremental'
