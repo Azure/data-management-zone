@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "vmssName": {
-            "value": "dhDevOpsScaleSetAgentPool"
+            "value": "dhGitHubAgentPool"
         },
         "vmssSkuTier": {
             "value": "Standard"
@@ -14,16 +14,25 @@
         "vmssSkuName": {
             "value": "Standard_DS2_v2"
         },
-        "vmssSkuCapacity": {
-            "value": 1
-        },
         "vmssAdminUsername": {
             "value": "VmssMainUser"
         },
         "vmssAdminKey": {
             "value": "<your-secure-key>"
         },
+        "storageAccountContainerId": {
+            "value": ""
+        },
+        "storageAccountKey": {
+            "value": ""
+        },
         "subnetId": {
+            "value": ""
+        },
+        "githubRepositoryUrl": {
+            "value": ""
+        },
+        "githubPatToken": {
             "value": ""
         }
     }

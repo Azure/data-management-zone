@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "vmssName": {
+            "value": "dhDevOpsAgentstest"
+        },
+        "vmssSkuTier": {
+            "value": "Standard"
+        },
+        "vmssSkuName": {
+            "value": "Standard_DS2_v2"
+        },
+        "vmssAdminUsername": {
+            "value": "VmssMainUser"
+        },
+        "vmssAdminPassword": {
+            "value": "<your-secure-password>"
+        },
+        "subnetId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-subnet"
+        },
+        "devOpsOrgName": {
+            "value": ""
+        },
+        "devOpsProjectName": {
+            "value": ""
+        },
+        "devOpsDeploymentGroupName": {
+            "value": "testgroup"
+        },
+        "devOpsAgentName": {
+            "value": "dhDevOpsAgent"
+        },
+        "devOpsAgentTags": {
+            "value": ""
+        },
+        "devOpsPatToken": {
+            "value": ""
+        }
+    }
+}

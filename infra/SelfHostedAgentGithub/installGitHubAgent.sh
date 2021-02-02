@@ -23,16 +23,17 @@
 # SOFTWARE.
 
 # Parse Token from shell
-GITHUB_TOKEN=$1
+REPOSITORY_URL=$1
+GITHUB_TOKEN=$2
 
 # Create a folder
 mkdir actions-runner && cd actions-runner
 # Download the latest runner package
-curl -O -L https://github.com/actions/runner/releases/download/v2.273.5/actions-runner-linux-x64-2.273.5.tar.gz
+curl -O -L https://github.com/actions/runner/releases/download/v2.276.1/actions-runner-linux-x64-2.276.1.tar.gz
 # Extract the installer
-tar xzf ./actions-runner-linux-x64-2.273.5.tar.gz
+tar xzf ./actions-runner-linux-x64-2.276.1.tar.gz
 
 # Create the runner and start the configuration experience
-./config.sh --url https://github.com/Azure/data-hub --token $GITHUB_TOKEN
+./config.sh --url $REPOSITORY_URL --token $GITHUB_TOKEN
 # Start self hosted agent
 ./run.sh

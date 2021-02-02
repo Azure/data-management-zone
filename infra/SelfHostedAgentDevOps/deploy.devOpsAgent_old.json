@@ -32,30 +32,58 @@
                 "description": "Specifies the SKU name of the virtual machine scale set."
             }
         },
-        "vmssSkuCapacity": {
-            "type": "int",
-            "minValue": 0,
-            "defaultValue": 1,
-            "metadata": {
-                "description": "Specifies the SKU capacity of the virtual machine scale set."
-            }
-        },
         "vmssAdminUsername": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the admin username of the virtual machine scale set."
             }
         },
-        "vmssAdminKey": {
+        "vmssAdminPassword": {
             "type": "securestring",
             "metadata": {
-                "description": "Specifies the admin ssh key of the virtual machine scale set."
+                "description": "Specifies the admin password of the virtual machine scale set."
             }
         },
         "subnetId": {
             "type": "string",
             "metadata": {
                 "description": "Specifies the resource Id of the subnet to which the virtual machine should connect."
+            }
+        },
+        "devOpsOrgName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure DevOps organization."
+            }
+        },
+        "devOpsProjectName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure DevOps project."
+            }
+        },
+        "devOpsDeploymentGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure DevOps deployment group."
+            }
+        },
+        "devOpsAgentName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the name of the Azure DevOps agent."
+            }
+        },
+        "devOpsAgentTags": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the tags that should be applied to the agent in Azure DevOps."
+            }
+        },
+        "devOpsPatToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Specifies the PAT token for connecting to Azure DevOps."
             }
         }
     },
@@ -64,10 +92,15 @@
         "vmssName": "[parameters('vmssName')]",
         "vmssSkuTier": "[parameters('vmssSkuTier')]",
         "vmssSkuName": "[parameters('vmssSkuName')]",
-        "vmssSkuCapacity": "[parameters('vmssSkuCapacity')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
-        "vmssAdminKey": "[parameters('vmssAdminKey')]",
-        "subnetId": "[parameters('subnetId')]"
+        "vmssAdminPassword": "[parameters('vmssAdminPassword')]",
+        "subnetId": "[parameters('subnetId')]",
+        "devOpsOrgName": "[parameters('devOpsOrgName')]",
+        "devOpsProjectName": "[parameters('devOpsProjectName')]",
+        "devOpsDeploymentGroupName": "[parameters('devOpsDeploymentGroupName')]",
+        "devOpsAgentName": "[parameters('devOpsAgentName')]",
+        "devOpsAgentTags": "[parameters('devOpsAgentTags')]",
+        "devOpsPatToken": "[parameters('devOpsPatToken')]"
     },
     "resources": [
         {
@@ -131,7 +164,7 @@
                             "protocol": "Tcp",
                             "frontendPortRangeStart": 50000,
                             "frontendPortRangeEnd": 50099,
-                            "backendPort": 22,
+                            "backendPort": 3389,
                             "idleTimeoutInMinutes": 4
                         }
                     }
@@ -146,9 +179,9 @@
                             "backendAddressPool": {
                                 "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', concat(variables('vmssName'), '-lb'), concat(variables('vmssName'), '-backendPool'))]"
                             },
-                            "protocol": "Udp",
-                            "frontendPort": 53,
-                            "backendPort": 53,
+                            "protocol": "Tcp",
+                            "frontendPort": 80,
+                            "backendPort": 80,
                             "enableFloatingIP": false,
                             "idleTimeoutInMinutes": 5,
                             "probe": {
@@ -161,8 +194,9 @@
                     {
                         "name": "[concat(variables('vmssName'), '-probe')]",
                         "properties": {
-                            "protocol": "Tcp",
-                            "port": 22,
+                            "protocol": "Http",
+                            "port": 80,
+                            "requestPath": "/",
                             "intervalInSeconds": 5,
                             "numberOfProbes": 2
                         }
@@ -184,7 +218,7 @@
             "sku": {
                 "name": "[variables('vmssSkuName')]",
                 "tier": "[variables('vmssSkuTier')]",
-                "capacity": "[variables('vmssSkuCapacity')]"
+                "capacity": 2
             },
             "zones": [
                 "1",
@@ -193,7 +227,7 @@
             "properties": {
                 "additionalCapabilities": {},
                 "automaticRepairsPolicy": {},
-                "doNotRunExtensionsOnOverprovisionedVMs": false,
+                "doNotRunExtensionsOnOverprovisionedVMs": true,
                 "overprovision": false,
                 "platformFaultDomainCount": 1,
                 "zoneBalance": true,
@@ -204,27 +238,18 @@
                 },
                 "singlePlacementGroup": false,
                 "upgradePolicy": {
-                    "mode": "Manual"
+                    "mode": "Automatic"
+                    // "automaticOSUpgradePolicy": {
+                    //     "disableAutomaticRollback": false,
+                    //     "enableAutomaticOSUpgrade": true
+                    // }
                 },
                 "virtualMachineProfile": {
                     "priority": "Regular",
                     "osProfile": {
-                        "computerNamePrefix": "[take(variables('vmssName'), 9)]",
                         "adminUsername": "[variables('vmssAdminUsername')]",
-                        "linuxConfiguration": {
-                            "disablePasswordAuthentication": true,
-                            "ssh": {
-                                "publicKeys": [
-                                    {
-                                        "path": "[concat('/home/', variables('vmssAdminUsername'), '/.ssh/authorized_keys')]",
-                                        "keyData": "[variables('vmssAdminKey')]"
-                                    }
-                                ]
-                            },
-                            "provisionVMAgent": true
-                        },
-                        "secrets": [],
-                        "allowExtensionOperations": true
+                        "adminPassword": "[variables('vmssAdminPassword')]",
+                        "computerNamePrefix": "[take(variables('vmssName'), 9)]"
                     },
                     "networkProfile": {
                         "networkInterfaceConfigurations": [
@@ -233,11 +258,8 @@
                                 "properties": {
                                     "primary": true,
                                     "enableAcceleratedNetworking": false,
-                                    // "networkSecurityGroup": {
-                                    //     "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('vmssName'), '-nsg'))]"
-                                    // },
                                     "dnsSettings": {},
-                                    "enableIPForwarding": true,
+                                    "enableIPForwarding": false,
                                     "ipConfigurations": [
                                         {
                                             "name": "[concat(variables('vmssName'), '-ipConfig')]",
@@ -266,52 +288,38 @@
                     },
                     "storageProfile": {
                         "osDisk": {
-                            "osType": "Linux",
-                            "diffDiskSettings": {
-                                "option": "Local"
-                            },
                             "createOption": "FromImage",
-                            "caching": "ReadOnly",
-                            "managedDisk": {
-                                "storageAccountType": "Standard_LRS"
-                            },
-                            "diskSizeGB": 30
+                            "caching": "ReadWrite"
                         },
                         "imageReference": {
-                            "publisher": "Canonical",
-                            "offer": "UbuntuServer",
-                            "sku": "18.04-LTS",
+                            "publisher": "MicrosoftWindowsServer",
+                            "offer": "WindowsServer",
+                            "sku": "2019-Datacenter",
                             "version": "latest"
                         }
                     },
                     "extensionProfile": {
                         "extensions": [
-                            // {
-                            //     "type": "Microsoft.Compute/virtualMachines/extensions",
-                            //     "name": "[concat(variables('vmssName'),'-AdoExtension')]",
-                            //     "properties": {
-                            //         "publisher": "Microsoft.VisualStudio.Services",
-                            //         "type": "TeamServicesAgentLinux",
-                            //         "typeHandlerVersion": "1.21",
-                            //         "autoUpgradeMinorVersion": true,
-                            //         "settings": {
-                            //             "isPipelinesAgent": true,
-                            //             "agentFolder": "/agent",
-                            //             "agentDownloadUrl": "https://vstsagentpackage.azureedge.net/agent/2.181.1/vsts-agent-linux-x64-2.181.1.tar.gz",
-                            //             "enableScriptDownloadUrl": "https://vstsagenttools.blob.core.windows.net/tools/ElasticPools/Linux/6/enableagent.sh",
-                            //             "token": "",
-                            //             ""
-                            //             "VSTSAccountName": "[variables('devOpsOrgName')]",
-                            //             "TeamProject": "[variables('devOpsProjectName')]",
-                            //             "DeploymentGroup": "[variables('devOpsDeploymentGroupName')]",
-                            //             "AgentName": "[variables('devOpsAgentName')]",
-                            //             "Tags": "[variables('devOpsAgentTags')]"
-                            //         },
-                            //         "protectedSettings": {
-                            //             "PATToken": "[variables('devOpsPatToken')]"
-                            //         }
-                            //     }
-                            // }
+                            {
+                                "type": "Microsoft.Compute/virtualMachines/extensions",
+                                "name": "[concat(parameters('vmssName'),'-LinuxCustomScriptExtension')]",
+                                "properties": {
+                                    "publisher": "Microsoft.VisualStudio.Services",
+                                    "type": "TeamServicesAgent",
+                                    "typeHandlerVersion": "1.0",
+                                    "autoUpgradeMinorVersion": true,
+                                    "settings": {
+                                        "VSTSAccountName": "[variables('devOpsOrgName')]",
+                                        "TeamProject": "[variables('devOpsProjectName')]",
+                                        "DeploymentGroup": "[variables('devOpsDeploymentGroupName')]",
+                                        "AgentName": "[variables('devOpsAgentName')]",
+                                        "Tags": "[variables('devOpsAgentTags')]"
+                                    },
+                                    "protectedSettings": {
+                                        "PATToken": "[variables('devOpsPatToken')]"
+                                    }
+                                }
+                            }
                         ]
                     }
                 }
