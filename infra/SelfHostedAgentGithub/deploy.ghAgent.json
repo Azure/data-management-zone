@@ -61,6 +61,18 @@
             "metadata": {
                 "description": "Specifies the resource Id of the subnet to which the virtual machine should connect."
             }
+        },
+        "githubRepositoryUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the URI of the GitHub repository (e.g. https://github.com/Azure/my-repository)."
+            }
+        },
+        "githubPatToken": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the PAT token from GitHub."
+            }
         }
     },
     "functions": [],
@@ -75,7 +87,9 @@
         "storageAccountName": "[split(variables('storageAccountContainerId'), '/')[8]]",
         "storageAccountContainerName": "[last(split(variables('storageAccountContainerId'), '/'))]",
         "storageAccountKey": "[parameters('storageAccountKey')]",
-        "subnetId": "[parameters('subnetId')]"
+        "subnetId": "[parameters('subnetId')]",
+        "githubRepositoryUrl": "[parameters('githubRepositoryUrl')]",
+        "githubPatToken": "[parameters('githubPatToken')]"
     },
     "resources": [
         {
@@ -235,7 +249,7 @@
                 "additionalCapabilities": {},
                 "automaticRepairsPolicy": {},
                 "doNotRunExtensionsOnOverprovisionedVMs": true,
-                "overprovision": true,
+                "overprovision": false,
                 "platformFaultDomainCount": 1,
                 "zoneBalance": true,
                 "scaleInPolicy": {
@@ -330,7 +344,7 @@
                                         ]
                                     },
                                     "protectedSettings": {
-                                        "commandToExecute": "sh forwarderSetup_new.sh",
+                                        "commandToExecute": "[concat('sh forwarderSetup_new.sh ', variables('githubRepositoryUrl'), ' ', variables('githubPatToken'))]",
                                         "storageAccountName": "[variables('storageAccountName')]",
                                         "storageAccountKey": "[variables('storageAccountKey')]"
                                     }
