@@ -43,7 +43,7 @@
                         "type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
                         "name": "default",
                         "roleDefinitionIds": [
-                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                            "/providers/Microsoft.Authorization/roleDefinitions/673868aa-7521-48a0-acc6-0f60742d39f5"
                         ],
                         "deployment": {
                             "properties": {
