@@ -265,6 +265,7 @@ function Add-Pipeline {
                 "id" = $DestinationRepositoryId
                 "name" = $DestinationRepositoryName
                 "type" = "azureReposGit"
+                "branch" = "main"
             }
             "type" = "yaml"
             "triggers" = $triggers
