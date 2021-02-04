@@ -23,24 +23,11 @@
                 "description": "Specifies the id of the subnet that should be used for non private link private endpoints."
             }
         },
-        "privateLinkSubnetId": {
-            "type": "string",
-            "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>/providers/Microsoft.Network/virtualNetworks/<your-vnet-name>/subnets/<your-subnet-name>",
-            "metadata": {
-                "description": "Specifies the id of the subnet that should be used for private endpoints."
-            }
-        },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
             "defaultValue": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/<your-rg-name>",
             "metadata": {
                 "description": "Specifies the ID of the resource group of the private dns zones."
-            }
-        },
-        "vmAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Specifies the admin password of the virtual machines."
             }
         }
     },
@@ -49,27 +36,17 @@
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "location": "[parameters('location')]",
         "subnetId": "[parameters('subnetId')]",
-        "privateLinkSubnetId": "[parameters('privateLinkSubnetId')]",
-        "vmAdminPassword": "[parameters('vmAdminPassword')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "privateDnsZoneResourceGroupName": "[last(split(variables('privateDnsZoneResourceGroupId'), '/'))]",
         "governanceResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-governance')]",
         "containerResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-container')]",
         "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-mgmt')]",
-        "integrationResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-integration')]",
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
-        "loggingResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-logging')]",
         "purviewRegions": ["brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope"],
-        "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json?token=AIHRGTVMJI7A6QKV2OJV37LADMRK2",
-        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json?token=AIHRGTW3LXSAVG5ZU52IAH3ADMRMU",
-        "logAnalyticsTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/LogAnalytics/deploy.logAnalytics.json?token=AIHRGTXTLJZN6E33IE2L3ULADMROK",
-        "storageTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Storage/deploy.storage.json?token=AIHRGTSUXZHQF6ZN5H4ZA5DADMRQA",
-        "dataFactoryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/DataFactory/deploy.dataFactory.json?token=AIHRGTVALL24L3BDJ5YSNITADMRRS",
-        "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/PowerBi/deploy.powerBi.json?token=AIHRGTTCDEL3BROAOELDETLADMRTG",
-        "shirTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.shir.json?token=AIHRGTTYMQ46AUFB2OTZPDLADMRZS",
-        "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json?token=AIHRGTSD4TBDYDGHWCKDWETADMRUU",
-        "synapsePrivateLinkHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json?token=AIHRGTTZCCF2X2QUQEQRNODADMRWG",
-        "shirScriptLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1?token=AIHRGTXFTRZAVAKYRQA2BY3ADMRX6"
+        "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json",
+        "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json",
+        "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json",
+        "synapsePrivateLinkHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json"
     },
     "resources": [
         {
@@ -96,60 +73,16 @@
         {
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "2020-06-01",
-            "name": "[variables('integrationResourceGroupName')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-06-01",
             "name": "[variables('consumptionResourceGroupName')]",
             "location": "[variables('location')]",
             "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-06-01",
-            "name": "[variables('loggingResourceGroupName')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "containerRegistry001Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('containerResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('containerRegistryTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "containerRegistryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io')]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('containerResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "name": "keyVault001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('managementResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -165,67 +98,7 @@
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
                     },
                     "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('managementResourceGroupName')]"
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "keyVault002Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('loggingResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('keyVaultTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault002', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
-                    },
-                    "privateDnsZoneId": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('loggingResourceGroupName')]"
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "keyVault003Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('keyVaultTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault003', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
+                        "value": "[variables('subnetId')]"
                     },
                     "privateDnsZoneId": {
                         "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net')]"
@@ -237,7 +110,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "name": "purview003Deployment",
+            "name": "purview001Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
             ],
@@ -261,142 +134,37 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "name": "logAnalytics001Deployment",
+            "name": "containerRegistry001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('loggingResourceGroupName'))]",
-                "keyVault002Deployment"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('containerResourceGroupName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('logAnalyticsTemplateLink')]",
+                    "uri": "[variables('containerRegistryTemplateLink')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "location": {
                         "value": "[variables('location')]"
                     },
-                    "logAnalyticsWorkspaceName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-la001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
-                    },
-                    "keyVaultId": {
-                        "value": "[reference('keyVault002Deployment').outputs.keyVaultId.value]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('loggingResourceGroupName')]"
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "storage001Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('storageTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "storageAccountName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'datahubstorage001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
-                    },
-                    "storageAccountType": {
-                        "value": "Standard_LRS"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('integrationResourceGroupName')]"
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "dataFactory001Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('dataFactoryTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "dataFactoryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-datafactory001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 63)]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
-                    },
-                    "privateDnsZoneIdDataFactory": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net')]"
-                    },
-                    "privateDnsZoneIdPortal": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azure.com')]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('integrationResourceGroupName')]"
-        },
-        {
-            "condition": true,
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "shir001Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('integrationResourceGroupName'))]",
-                "dataFactory001Deployment"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('shirTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "vmssName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhSHIR001'), 64)]"
-                    },
-                    "vmssSkuTier": {
-                        "value": "Standard"
-                    },
-                    "vmssSkuName": {
-                        "value": "Standard_A1_v2"
-                    },
-                    "vmssAdminUsername": {
-                        "value": "VmssMainUser"
-                    },
-                    "vmssAdminPassword": {
-                        "value": "[variables('vmAdminPassword')]"
-                    },
-                    "dataFactoryId": {
-                        "value": "[reference('dataFactory001Deployment').outputs.dataFactoryId.value]"
+                    "containerRegistryName": {
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
                     },
                     "subnetId": {
                         "value": "[variables('subnetId')]"
                     },
-                    "fileUri": {
-                        "value": "[variables('shirScriptLink')]"
+                    "privateDnsZoneId": {
+                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io')]"
                     }
                 }
             },
-            "resourceGroup": "[variables('integrationResourceGroupName')]"
+            "resourceGroup": "[variables('containerResourceGroupName')]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
-            "name": "synapsePrivateLinkHubDeployment",
+            "name": "synapsePrivateLinkHub001Deployment",
             "dependsOn": [
                 "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]"
             ],
@@ -414,50 +182,10 @@
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhsynapseprivatelinkhub'), 45)]"
                     },
                     "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
+                        "value": "[variables('subnetId')]"
                     },
                     "privateDnsZoneId": {
                         "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net')]"
-                    }
-                }
-            },
-            "resourceGroup": "[variables('integrationResourceGroupName')]"
-        },
-        {
-            "condition": false,
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2020-06-01",
-            "name": "powerBi001Deployment",
-            "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]"
-            ],
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('powerBiTemplateLink')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "location": {
-                        "value": "[variables('location')]"
-                    },
-                    "powerBiName": {
-                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-powerbi001')]"
-                    },
-                    "tenantId": {
-                        "value": "[subscription().tenantId]"
-                    },
-                    "subnetId": {
-                        "value": "[variables('privateLinkSubnetId')]"
-                    },
-                    "privateDnsZoneIdAnalysis": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net')]"
-                    },
-                    "privateDnsZoneIdPbiDedicated": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net')]"
-                    },
-                    "privateDnsZoneIdPowerQuery": {
-                        "value": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.tip1.powerquery.microsoft.com')]"
                     }
                 }
             },
