@@ -17,9 +17,8 @@ trigger:
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'Marvins Azure Subscription'
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
-  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dh-network'
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: 'dh-global-dns'
   AZURE_LOCATION: 'North Europe'
 
 stages:
@@ -72,7 +71,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
@@ -168,24 +167,6 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
             deploymentMode: 'Validation'
-        
-        # Deploy vnet peering 002 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_002_validation
-          displayName: Deploy vnet peering 002 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
-            deploymentMode: 'Validation'
 
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -238,7 +219,7 @@ stages:
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
             subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_INTEGRATION)'
+            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
@@ -357,7 +338,7 @@ stages:
           name: vnet_peering_001_deployment
           displayName: Deploy vnet peering 001
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
@@ -368,22 +349,4 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering001.json'
-            deploymentMode: 'Incremental'
-        
-        # Deploy vnet peering 002
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: vnet_peering_002_deployment
-          displayName: Deploy vnet peering 002
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: '$(AZURE_RESOURCE_MANAGER_CONNECTION_NAME)'
-            subscriptionId: '$(AZURE_SUBSCRIPTION_ID)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
-            location: '$(AZURE_LOCATION)'
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/deploy.vnetPeering.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetworkPeering/params.vnetPeering002.json'
             deploymentMode: 'Incremental'
