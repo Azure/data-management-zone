@@ -1,3 +1,6 @@
+$Global:accessToken = $null
+$Global:accessTokenExpiry = $null
+
 
 function Get-AadToken {
     <#
@@ -37,15 +40,14 @@ function Get-AadToken {
     )
     # Set Authority Host URL
     Write-Verbose "Setting Authority Host URL"
-    $authorityHostUrl = "https://login.microsoftonline.com/${TenantId}/oauth2/v2.0/token"
+    $authorityHostUrl = "https://login.microsoftonline.com/${TenantId}/oauth2/token"
 
     # Set body for REST call
     Write-Verbose "Setting Body for REST API call"
     $body = @{
-        'tenantId'      = $TenantId
         'client_id'     = $ClientId
         'client_secret' = $ClientSecret
-        'scope'         = 'https://graph.microsoft.com/.default'
+        'resource'      = '73c2949e-da2d-457a-9607-fcc665198967'
         'grant_type'    = 'client_credentials'
     }
 
@@ -120,7 +122,23 @@ function Assert-Authentication {
 }
 
 
-function New-PurviewSubscriptionSource {
+function New-PurviewKeyVaultConnection {
+    <#
+    .SYNOPSIS
+        Gets an AAD token for a registered AAD application.
+    .DESCRIPTION
+        Gets an AAD token for a registered AAD application. The application requires the following API permissions:
+            * ...
+    .PARAMETER PurviewName
+        Specifies the Name of the Purview Account.
+    .PARAMETER KeyVaultId
+        Specifies the Resource ID of the KeyVault that should be connected to the Purview Account.
+    .EXAMPLE
+        New-PurviewKeyVaultConnection -PurviewName '<your-purview-account-name>' -KeyVaultId '<your-keyvault-resource-id>'
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
@@ -131,7 +149,93 @@ function New-PurviewSubscriptionSource {
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [String]
-        $DataSourceName,
+        $KeyVaultId,
+
+        [Parameter(DontShow)]
+        [String]
+        $ApiVersion = "2018-12-01-preview"
+    )
+    # Validate authentication
+    Write-Verbose "Validating authentication"
+    Assert-Authentication
+
+    # Parse Variables
+    Write-Verbose "Parsing Variables"
+    $KeyVaultName = ($KeyVaultId -split "/")[-1]
+
+    # Set Purview API URI
+    Write-Verbose "Setting Graph API URI"
+    $purviewApiUri = "https://${PurviewName}.scan.purview.azure.com/azureKeyVaults/${KeyVaultName}?api-version=${ApiVersion}"
+    Write-Verbose $purviewApiUri
+
+    # Set header for REST call
+    Write-Verbose "Setting header for REST call"
+    $headers = @{
+        'Content-Type'  = 'application/json'
+        'Authorization' = "Bearer ${Global:accessToken}"
+    }
+    Write-Verbose $headers.values
+
+    # Set body for REST call
+    Write-Verbose "Setting body for REST call"
+    $body = @{
+        'name'       = "${KeyVaultName}"
+        'properties' = @{
+            'baseUrl'     = "https://${KeyVaultName}.vault.azure.net/"
+            'description' = $KeyVaultName
+        }
+    } | ConvertTo-Json
+
+    # Define parameters for REST method
+    Write-Verbose "Defining parameters for pscore method"
+    $parameters = @{
+        'Uri'         = $purviewApiUri
+        'Method'      = 'Put'
+        'Headers'     = $headers
+        'Body'        = $body
+        'ContentType' = 'application/json'
+    }
+
+    # Invoke REST API
+    Write-Verbose "Invoking REST API"
+    try {
+        $response = Invoke-RestMethod @parameters
+        Write-Verbose "Response: ${response}"
+    }
+    catch {
+        Write-Host -ForegroundColor:Red $_
+        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
+        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
+        Write-Host -ForegroundColor:Red $_.Exception.Message
+        throw "REST API call failed"
+    }
+    return $response
+}
+
+
+function New-PurviewSubscriptionSource {
+    <#
+    .SYNOPSIS
+        Registers a Subscription as a Data Source in the Purview Account.
+    .DESCRIPTION
+        Registers a Seubscription as a Data Source in your Purview Account. This allows then to scan all sources in this
+        Azure Subscription. 
+    .PARAMETER PurviewName
+        Specifies the Name of the Purview Account.
+    .PARAMETER SubscriptionId
+        Specifies the Subscription ID of which all supported Data Sources should be registered in the Purview Account.
+    .EXAMPLE
+        New-PurviewSubscriptionSource -PurviewName '<your-purview-account-name>' -SubscriptionId '<your-subscription-id>'
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $PurviewName,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -148,7 +252,7 @@ function New-PurviewSubscriptionSource {
 
     # Set Purview API URI
     Write-Verbose "Setting Graph API URI"
-    $purviewApiUri = "https://${PurviewName}.scan.purview.azure.com/datasources/${DataSourceName}?api-version=${ApiVersion}"
+    $purviewApiUri = "https://${PurviewName}.scan.purview.azure.com/datasources/${SubscriptionId}?api-version=${ApiVersion}"
     Write-Verbose $purviewApiUri
 
     # Set header for REST call
@@ -163,7 +267,7 @@ function New-PurviewSubscriptionSource {
     Write-Verbose "Setting body for REST call"
     $body = @{
         'kind'       = 'AzureSubscription'
-        'name'       = "${DataSourceName}"
+        'name'       = "${SubscriptionId}"
         'properties' = @{
             'subscriptionId' = "${SubscriptionId}"
         }
@@ -195,3 +299,124 @@ function New-PurviewSubscriptionSource {
     return $response
 }
 
+
+function New-PurviewBlobSource {
+    <#
+    .SYNOPSIS
+        Registers a Blob Storage Account as a Data Source in the Purview Account.
+    .DESCRIPTION
+        Registers a Blob Storage Account as a Data Source in your Purview Account. This allows then to scan the
+        Resource in the respective subscription. 
+    .PARAMETER PurviewName
+        Specifies the Name of the Purview Account.
+    .PARAMETER BlobStorageResourceId
+        Specifies the Resource ID of the Blob Storage Account which should be registered in the Purview Account.
+    .EXAMPLE
+        New-PurviewBlobSource -PurviewName '<your-purview-account-name>' -BlobStorageResourceId '<your-blob-storage-resource-id>' -BlobStorageLocation '<your-blob-storage-location (e.g. 'westeurope')>'
+    .NOTES
+        Author:  Marvin Buss
+        GitHub:  @marvinbuss
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $PurviewName,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $BlobStorageResourceId,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [String]
+        $BlobStorageLocation,
+
+        [Parameter(DontShow)]
+        [String]
+        $ApiVersion = "2018-12-01-preview"
+    )
+    # Validate authentication
+    Write-Verbose "Validating authentication"
+    Assert-Authentication
+
+    # Parse Variables
+    Write-Verbose "Parsing Variables"
+    $BlobStorageSubscriptionId = ($BlobStorageResourceId -split "/")[2]
+    $BlobStorageResourceGroupName = ($BlobStorageResourceId -split "/")[4]
+    $BlobStorageName = ($BlobStorageResourceId -split "/")[-1]
+
+    # Set Purview API URI
+    Write-Verbose "Setting Graph API URI"
+    $purviewApiUri = "https://${PurviewName}.scan.purview.azure.com/datasources/${BlobStorageName}?api-version=${ApiVersion}"
+    Write-Verbose $purviewApiUri
+
+    # Set header for REST call
+    Write-Verbose "Setting header for REST call"
+    $headers = @{
+        'Content-Type'  = 'application/json'
+        'Authorization' = "Bearer ${Global:accessToken}"
+    }
+    Write-Verbose $headers.values
+
+    # Set body for REST call
+    Write-Verbose "Setting body for REST call"
+    $body = @{
+        'kind'       = 'AzureStorage'
+        'name'       = "${BlobStorageName}"
+        'properties' = @{
+            'endpoint'       = "https://${BlobStorageName}.blob.core.windows.net/"
+            'location'       = "${BlobStorageLocation}"
+            'resourceGroup'  = "${BlobStorageResourceGroupName}"
+            'resourceName'   = "${BlobStorageName}"
+            'subscriptionId' = "${BlobStorageSubscriptionId}"
+        }
+    } | ConvertTo-Json
+
+    # Define parameters for REST method
+    Write-Verbose "Defining parameters for pscore method"
+    $parameters = @{
+        'Uri'         = $purviewApiUri
+        'Method'      = 'Put'
+        'Headers'     = $headers
+        'Body'        = $body
+        'ContentType' = 'application/json'
+    }
+
+    # Invoke REST API
+    Write-Verbose "Invoking REST API"
+    try {
+        $response = Invoke-RestMethod @parameters
+        Write-Verbose "Response: ${response}"
+    }
+    catch {
+        Write-Host -ForegroundColor:Red $_
+        Write-Host -ForegroundColor:Red "StatusCode:" $_.Exception.Response.StatusCode.value__
+        Write-Host -ForegroundColor:Red "StatusDescription:" $_.Exception.Response.StatusDescription
+        Write-Host -ForegroundColor:Red $_.Exception.Message
+        throw "REST API call failed"
+    }
+    return $response
+}
+
+# Authentication and get AAD Token
+Write-Host "Logging in and getting AAD Token"
+Get-AadToken `
+    -TenantId $TenantId `
+    -ClientId $ClientId `
+    -ClientSecret $ClientSecret
+
+# Add Key Vault Connection
+Write-Host "Adding Key Vault Connection"
+New-PurviewKeyVaultConnection `
+    -PurviewName $PurviewName `
+    -KeyVaultId $KeyVaultId
+
+# Register Subscription Source
+Write-Host "Registering Subscription Source"
+New-PurviewSubscriptionSource `
+    -PurviewName $PurviewName `
+    -DataSourceName $DataSourceName `
+    -SubscriptionId $SubscriptionId
