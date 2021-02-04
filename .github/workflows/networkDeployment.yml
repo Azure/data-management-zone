@@ -4,20 +4,28 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'infra/VirtualNetwork/**'
+      - 'infra/DnsForwarder/**'
       - 'infra/Firewall/**'
       - 'infra/FirewallPolicy/**'
-      - 'infra/VirtualNetworkPeering/**'
       - 'infra/PrivateDns/**'
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
+      - '.github/workflows/networkDeployment.yml'
+  pull_request:
+    paths:
       - 'infra/DnsForwarder/**'
+      - 'infra/Firewall/**'
+      - 'infra/FirewallPolicy/**'
+      - 'infra/PrivateDns/**'
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/networkDeployment.yml'
 
 env:
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: dh-network
-  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: dh-global-dns
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
-  AZURE_LOCATION: northeurope
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dh-network'
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: 'dh-global-dns'
+  AZURE_LOCATION: 'northeurope'
 
 jobs:
   create-resource-group:
@@ -59,8 +67,8 @@ jobs:
       with:
         azcliversion: latest
         inlineScript: |
-          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}\""
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
     
     # Log out from Azure
     - name: Log out from Azure
@@ -108,7 +116,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
         parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
@@ -179,19 +187,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
         deploymentMode: Validate
     
-    # Deploy Vnet Peering 002 - validation
-    - name: Deploy Vnet Peering 002 - validation
-      id: vnet_peering_002_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
-        deploymentMode: Validate
-    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -240,7 +235,7 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
         parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
@@ -254,7 +249,7 @@ jobs:
         azPSVersion: latest
         inlineScript: |
           "Uploading file to Storage Account 001"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
           $ctx = $storageAccount.Context
           Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
     
@@ -322,19 +317,7 @@ jobs:
         template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
         parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
         deploymentMode: Incremental
-    
-    # Deploy Vnet Peering 002
-    - name: Deploy Vnet Peering 002
-      id: vnet_peering_002_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering002.json
-        deploymentMode: Incremental
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
