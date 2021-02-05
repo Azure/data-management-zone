@@ -14,12 +14,22 @@
             "metadata": {
                 "description": "Specifies the name of the purview account."
             }
+        },
+        "keyVaultId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the resource id of the keyvault that should be linked to the data factory."
+            }
         }
     },
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "purviewName": "[parameters('purviewName')]"
+        "purviewName": "[parameters('purviewName')]",
+        "keyVaultId": "[parameters('keyVaultId')]",
+        "keyVaultName": "[if(empty(variables('keyVaultId')), 'keyVaultNotSet', last(split(variables('keyVaultId'), '/')))]",
+        "keyVaultSubscriptionId": "[if(empty(variables('keyVaultId')), subscription().subscriptionId, split(variables('keyVaultId'), '/')[2])]",
+        "keyVaultResourceGroupName": "[if(empty(variables('keyVaultId')), resourceGroup().name, split(variables('keyVaultId'), '/')[4])]"
     },
     "resources": [
         {
@@ -41,6 +51,51 @@
                     "defaultAction": "Allow"
                 }
             }
+        },
+        {
+            "condition": "[not(empty(variables('keyVaultId')))]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "AccessPolicyDeployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
+            ],
+            "properties": {
+                "expressionEvaluationOptions": {
+                    "scope": "outer"
+                },
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                            "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/add')]",
+                            "properties": {
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[reference(resourceId('Microsoft.Purview/accounts', variables('purviewName')), '2020-12-01-preview', 'Full').identity.tenantId]",
+                                        "objectId": "[reference(resourceId('Microsoft.Purview/accounts', variables('purviewName')), '2020-12-01-preview', 'Full').identity.principalId]",
+                                        "permissions": {
+                                            "secrets": [
+                                                "list",
+                                                "get"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            },
+            "subscriptionId": "[variables('keyVaultSubscriptionId')]",
+            "resourceGroup": "[variables('keyVaultResourceGroupName')]"
         }
     ],
     "outputs": {}

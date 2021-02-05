@@ -42,7 +42,7 @@
         "containerResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-container')]",
         "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-mgmt')]",
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
-        "purviewRegions": ["brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope"],
+        "purviewRegions": [ "brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope" ],
         "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/ContainerRegistry/deploy.containerRegistry.json",
         "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/KeyVault/deploy.keyVault.json",
         "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/infra/Purview/deploy.purview.json",
@@ -112,7 +112,8 @@
             "apiVersion": "2020-06-01",
             "name": "purview001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]"
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]",
+                "keyVault001Deployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -126,6 +127,9 @@
                     },
                     "purviewName": {
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001'), 63)]"
+                    },
+                    "keyVaultId": {
+                        "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
                     }
                 }
             },
