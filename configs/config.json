@@ -1,0 +1,126 @@
+[
+    {
+        "filePath": "infra/ArtifactStorage/params.storage001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.storageAccountName.value": "${DataLandingZoneName}artifactstorage001"
+        }
+    },
+    {
+        "filePath": "infra/ContainerRegistry/params.containerRegistry001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.containerRegistryName.value": "${DataLandingZoneName}containerregistry001",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
+            "parameters.privateDnsZoneId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io"
+        }
+    },
+    {
+        "filePath": "infra/DnsForwarder/params.dnsForwarder001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.vmssName.value": "${DataLandingZoneName}dnsproxy001",
+            "parameters.storageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}artifactstorage001",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-subnet"
+        }
+    },
+    {
+        "filePath": "infra/Firewall/params.firewall001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.firewallName.value": "${DataLandingZoneName}-firewall",
+            "parameters.firewallPolicyId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/firewallPolicies/${DataLandingZoneName}-firewallpolicy",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/AzureFirewallSubnet"
+        }
+    },
+    {
+        "filePath": "infra/FirewallPolicy/params.firewallPolicy001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.firewallPolicyName.value": "${DataLandingZoneName}-firewallpolicy"
+        }
+    },
+    {
+        "filePath": "infra/KeyVault/params.keyVault001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.keyVaultName.value": "${DataLandingZoneName}-keyvault001",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
+            "parameters.privateDnsZoneId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+        }
+    },
+    {
+        "filePath": "infra/PrivateDns/params.privateDns001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.virtualNetworkId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet"
+        }
+    },
+    {
+        "filePath": "infra/Purview/params.purview001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.keyVaultName.value": "${DataLandingZoneName}-purview001"
+        }
+    },
+    {
+        "filePath": "infra/Purview/params.purview001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.synapsePrivateLinkHubName.value": "${DataLandingZoneName}synapseprivatelinkhub001",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
+            "parameters.privateDnsZoneId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net"
+        }
+    },
+    {
+        "filePath": "infra/VirtualNetwork/params.vnet.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.vnetName.value": "${DataLandingZoneName}-vnet",
+            "parameters.dataHubName.value": "${DataLandingZoneName}"
+        }
+    },
+    {
+        "filePath": "infra/VirtualNetworkPeering/params.vnetPeering001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.sourceVnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet",
+            "parameters.destinationVnetId.value": "${NodeVnetId}"
+        }
+    },
+    {
+        "filePath": ".ado/workflows/dataHubDeployment.yml",
+        "fileType": "yaml",
+        "parameters": {
+            "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME": "${AzureResourceManagerConnectionName}",
+            "variables.AZURE_SUBSCRIPTION_ID": "${DataLandingZoneSubscriptionId}",
+            "variables.AZURE_RESOURCE_GROUP_NAME_AUTOMATION": "${DataLandingZoneName}-automation",
+            "variables.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT": "${DataLandingZoneName}-mgmt",
+            "variables.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION": "${DataLandingZoneName}-consumption",
+            "variables.AZURE_RESOURCE_GROUP_NAME_CONTAINER": "${DataLandingZoneName}-container",
+            "variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE": "${DataLandingZoneName}-governance",
+            "variables.AZURE_LOCATION": "${Location}"
+        }
+    },
+    {
+        "filePath": ".ado/workflows/networkDeployment.yml",
+        "fileType": "yaml",
+        "parameters": {
+            "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME": "${AzureResourceManagerConnectionName}",
+            "variables.AZURE_SUBSCRIPTION_ID": "${DataLandingZoneSubscriptionId}",
+            "variables.AZURE_RESOURCE_GROUP_NAME_NETWORK": "${DataLandingZoneName}-network",
+            "variables.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS": "${DataLandingZoneName}-global-dns",
+            "variables.AZURE_LOCATION": "${Location}"
+        }
+    }
+]
