@@ -8,16 +8,6 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $ManagementSubscriptionId,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $GlobalDnsRgName,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
     $DataLandingZoneSubscriptionId,
 
     [Parameter(Mandatory)]
@@ -33,12 +23,7 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SynapseStorageAccountName,
-
-    [Parameter(Mandatory)]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $SynapseStorageAccountFileSystemName,
+    $NodeVnetId,
 
     [Parameter(Mandatory=$false)]
     [Switch]
