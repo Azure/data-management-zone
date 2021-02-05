@@ -67,7 +67,7 @@
         "fileType": "json",
         "parameters": {
             "parameters.location.value": "${Location}",
-            "parameters.keyVaultName.value": "${DataLandingZoneName}-purview001"
+            "parameters.purviewName.value": "${DataLandingZoneName}-purview001"
         }
     },
     {
