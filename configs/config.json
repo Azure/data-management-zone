@@ -71,7 +71,7 @@
         }
     },
     {
-        "filePath": "infra/Purview/params.purview001.json",
+        "filePath": "infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json",
         "fileType": "json",
         "parameters": {
             "parameters.location.value": "${Location}",
@@ -81,7 +81,7 @@
         }
     },
     {
-        "filePath": "infra/VirtualNetwork/params.vnet.json",
+        "filePath": "infra/VirtualNetwork/params.vnet001.json",
         "fileType": "json",
         "parameters": {
             "parameters.location.value": "${Location}",
