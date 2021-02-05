@@ -8,15 +8,11 @@ on:
       - '.github/workflows/updateParameters.yml'
 
 env:
-  MANAGEMENT_SUBSCRIPTION_ID: '<my-management-subscription-id>'
-  GLOBAL_DNS_RG_NAME: '<my-global-dns-resource-group-name>'
   DATA_HUB_SUBSCRIPTION_ID: '<my-data-hub-subscription-id>'
   DATA_HUB_NAME: '<my-data-hub-name>'
   LOCATION: '<my-region>'
-  SYNAPSE_STORAGE_ACCOUNT_NAME: '<my-synapse-storage-account-name>'
-  SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME: '<my-synapse-storage-account-file-system-name>'
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '<my-resource-manager-connection-name>'
-  NODE_VNET_ID: '<my-hub-vnet-id>'
+  NODE_VNET_ID: '<my-node-vnet-id>'
 
 jobs:
   renaming:
@@ -35,7 +31,7 @@ jobs:
           echo "Install Modules"
           pwsh -Command "Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted"
           pwsh -Command "Install-Module -Name powershell-yaml"
-
+      
       # Update Parameters
       - name: Update Parameters
         id: update_parameters
@@ -43,13 +39,11 @@ jobs:
           echo "Updating Parameters"
           pwsh $GITHUB_WORKSPACE/configs/UpdateParameters.ps1 \
             -ConfigurationFilePath 'configs/config.json' \
-            -ManagementSubscriptionId '${{ env.MANAGEMENT_SUBSCRIPTION_ID }}' \
-            -GlobalDnsRgName '${{ env.GLOBAL_DNS_RG_NAME }}' \
-            -DataLandingZoneSubscriptionId '${{ env.DATA_LANDING_ZONE_SUBSCRIPTION_ID }}' \
-            -DataLandingZoneName '${{ env.DATA_LANDING_ZONE_NAME }}' \
+            -DataLandingZoneSubscriptionId '${{ env.DATA_HUB_SUBSCRIPTION_ID }}' \
+            -DataLandingZoneName '${{ env.DATA_HUB_NAME }}' \
             -Location '${{ env.LOCATION }}' \
-            -SynapseStorageAccountName '${{ env.SYNAPSE_STORAGE_ACCOUNT_NAME }}' \
-            -SynapseStorageAccountFileSystemName '${{ env.SYNAPSE_STORAGE_ACCOUNT_FILE_SYSTEM_NAME }}'
+            -NodeVnetId '${{ env.NODE_VNET_ID }}' \
+            -AzureResourceManagerConnectionName '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
       
       # Create Pull Request
       - name: Create Pull Request
@@ -59,4 +53,4 @@ jobs:
           commit-message: 'Updated Parameters'
           branch: 'parameter_update_${{ github.run_id }}'
           title: 'Updated Parameters with GitHub Workflow Run ID ${{ github.run_id }}'
-          body: 'One last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataNodeDeployment.yml">`/.github/workflows/dataNodeDeployment.yml`</a> (AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP_NAME, AZURE_LOCATION, etc.) as described [here]().'
+          body: 'One last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataHubDeployment.yml">`/.github/workflows/dataHubDeployment.yml`</a> (AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP_NAME, AZURE_LOCATION, etc.) as described [here]().'
