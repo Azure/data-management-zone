@@ -104,22 +104,13 @@
         "parameters": {
             "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME": "${AzureResourceManagerConnectionName}",
             "variables.AZURE_SUBSCRIPTION_ID": "${DataLandingZoneSubscriptionId}",
+            "variables.AZURE_RESOURCE_GROUP_NAME_NETWORK": "${DataLandingZoneName}-network",
+            "variables.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS": "${DataLandingZoneName}-global-dns",
             "variables.AZURE_RESOURCE_GROUP_NAME_AUTOMATION": "${DataLandingZoneName}-automation",
             "variables.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT": "${DataLandingZoneName}-mgmt",
             "variables.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION": "${DataLandingZoneName}-consumption",
             "variables.AZURE_RESOURCE_GROUP_NAME_CONTAINER": "${DataLandingZoneName}-container",
             "variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE": "${DataLandingZoneName}-governance",
-            "variables.AZURE_LOCATION": "${Location}"
-        }
-    },
-    {
-        "filePath": ".ado/workflows/networkDeployment.yml",
-        "fileType": "yaml",
-        "parameters": {
-            "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME": "${AzureResourceManagerConnectionName}",
-            "variables.AZURE_SUBSCRIPTION_ID": "${DataLandingZoneSubscriptionId}",
-            "variables.AZURE_RESOURCE_GROUP_NAME_NETWORK": "${DataLandingZoneName}-network",
-            "variables.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS": "${DataLandingZoneName}-global-dns",
             "variables.AZURE_LOCATION": "${Location}"
         }
     }
