@@ -25,7 +25,7 @@ Param(
     [string]
     $NodeVnetId,
 
-    [Parameter(Mandatory=$false)]
+    [Parameter()]
     [Switch]
     $AzureResourceManagerConnectionName
 )
