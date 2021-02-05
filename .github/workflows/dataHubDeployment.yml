@@ -4,30 +4,30 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'code/GeneratePassword.ps1'
-      - 'infra/AutomationAccount/**'
+      - 'infra/ArtifactStorage/**'
       - 'infra/ContainerRegistry/**'
-      - 'infra/DataFactory/**'
-      - 'infra/IntegrationServiceEnvironment/**'
+      - 'infra/DnsForwarder/**'
+      - 'infra/Firewall/**'
+      - 'infra/FirewallPolicy/**'
       - 'infra/KeyVault/**'
-      - 'infra/LogAnalytics/**'
-      - 'infra/LogicApp/**'
-      - 'infra/PowerBi/**'
+      - 'infra/PrivateDns/**'
       - 'infra/Purview/**'
-      - 'infra/SelfHostedIntegrationRuntime/**'
-      - 'infra/Storage/**'
+      - 'infra/SynapsePrivateLinkHub/**'
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/dataHubDeployment.yml'
+      - 'code/GeneratePassword.ps1'
 
 env:
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'
-  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: dh-automation
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: dh-mgmt
-  AZURE_RESOURCE_GROUP_NAME_INTEGRATION: dh-integration
-  AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS: dh-logging
-  AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: dh-consumption
-  AZURE_RESOURCE_GROUP_NAME_CONTAINER: dh-container
-  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: dh-governance
-  AZURE_LOCATION: northeurope
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dh-network'
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: 'dh-global-dns'
+  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: 'dh-automation'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dh-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: 'dh-consumption'
+  AZURE_RESOURCE_GROUP_NAME_CONTAINER: 'dh-container'
+  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: 'dh-governance'
+  AZURE_LOCATION: 'northeurope'
 
 jobs:
   create-resource-group:
@@ -43,6 +43,26 @@ jobs:
     
     # Create resource group
     - name: Create resource group
+      id: resource_group_network
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+    
+    # Create resource group
+    - name: Create resource group
+      id: resource_group_gloabl_dns
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}\""
+          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+    
+    # Create resource group
+    - name: Create resource group
       id: resource_group_automation
       uses: azure/cli@v1
       with:
@@ -53,16 +73,6 @@ jobs:
     
     # Create resource group
     - name: Create resource group
-      id: resource_group_integration
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}\""
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-    
-    # Create resource group
-    - name: Create resource group
       id: resource_group_management
       uses: azure/cli@v1
       with:
@@ -70,16 +80,6 @@ jobs:
         inlineScript: |
           echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}\""
           az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-    
-    # Create resource group
-    - name: Create resource group
-      id: resource_group_loganalytics
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}\""
-          az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
     
     # Create resource group
     - name: Create resource group
@@ -138,6 +138,98 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
+    # Deploy Vnet - validation
+    - name: Deploy Vnet - validation
+      id: vnet_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
+        deploymentMode: Validate
+    
+    # Deploy Artifact  Storage Account 001 - validation
+    - name: Deploy Artifact Storage Account 001 - validation
+      id: artifact_storage_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
+        deploymentMode: Validate
+    
+    # Deploy Firewall Policy 001 - validation
+    - name: Deploy Firewall Policy 001 - validation
+      id: firewall_policy_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
+        parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
+        deploymentMode: Validate
+    
+    # Deploy Firewall 001 - validation
+    - name: Deploy Firewall 001 - validation
+      id: firewall_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
+        deploymentMode: Validate
+    
+    # Deploy DNS Forwarder 001 - validation
+    - name: Deploy DNS Forwarder 001 - validation
+      id: dns_forwarder_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
+        parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
+        deploymentMode: Validate
+    
+    # Deploy Private DNS Zones - validation
+    - name: Deploy Private DNS Zones - validation
+      id: private_dns_zones_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDns001.json
+        deploymentMode: Validate
+    
+    # Deploy Vnet Peering 001 - validation
+    - name: Deploy Vnet Peering 001 - validation
+      id: vnet_peering_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Validate
+      continue-on-error: true
+    
     # Deploy Key Vault 001 - validation
     - name: Deploy Key Vault 001 - validation
       id: key_vault_001_validation
@@ -145,75 +237,10 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
-        deploymentMode: Validate
-    
-    # Deploy Key Vault 002 - validation
-    - name: Deploy Key Vault 002 - validation
-      id: key_vault_002_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
-        deploymentMode: Validate
-    
-    # Deploy Key Vault 003 - validation
-    - name: Deploy Key Vault 003 - validation
-      id: key_vault_003_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
-        deploymentMode: Validate
-    
-    # Deploy Integration Service Environment 001 - validation
-    - name: Deploy Integration Service Environment 001 - validation
-      id: integration_service_environment_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json
-        parameters: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json
-        deploymentMode: Validate
-    
-    # Deploy Logic App 001 - validation
-    - name: Deploy Logic App 001 - validation
-      id: logic_app_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/LogicApp/deploy.logicApp.json
-        parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
-        deploymentMode: Validate
-    
-    # Deploy Automation Account 001 - validation
-    - name: Deploy Automation Account 001 - validation
-      id: automation_account_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/AutomationAccount/deploy.automationAccount.json
-        parameters: ${{ github.workspace }}/infra/AutomationAccount/params.automationAccount001.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
         deploymentMode: Validate
     
     # Deploy Purview 001 - validation
@@ -227,45 +254,6 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
         parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-        deploymentMode: Validate
-    
-    # Deploy Log Analytics Workspace 001 - validation
-    - name: Deploy Log Analytics Workspace 001 - validation
-      id: log_analytics_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
-        region: ${{ env.AZURE_LOCATION }}
-        template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
-        parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
-        deploymentMode: Validate
-    
-    # Deploy Storage Account 001 - validation
-    - name: Deploy Storage Account 001 - validation
-      id: storage_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
-        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
-        deploymentMode: Validate
-    
-    # Deploy Data Factory 001 - validation
-    - name: Deploy Data Factory 001 - validation
-      id: data_factory_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/DataFactory/deploy.dataFactory.json
-        parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
         deploymentMode: Validate
     
     # Deploy Container Registry 001 - validation
@@ -291,54 +279,8 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
-        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json
+        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
         deploymentMode: Validate
-    
-    # Generate Password
-    - name: Generate Password
-      id: generate_password_001
-      run: |
-        echo "Generating Password"
-        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
-    
-    # Deploy SHIR 001 - validation
-    - name: Deploy SHIR 001 - validation
-      id: shir_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password_001.outputs.password }}"
-        deploymentMode: Validate
-    
-    # # Deploy Function 001 - validation
-    # - name: Deploy Function 001 - validation
-    #   id: function_001_validation
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     scope: resourcegroup
-    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-    #     region: ${{ env.AZURE_LOCATION }}
-    #     template: ${{ github.workspace }}/infra/Function/deploy.function.json
-    #     parameters: ${{ github.workspace }}/infra/Function/params.function001.json
-    #     deploymentMode: Validate
-    
-    # # Deploy Power BI Private Link 001 - validation
-    # - name: Deploy Power BI Private Link 001 - validation
-    #   id: power_bi_pl_001_validation
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     scope: resourcegroup
-    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
-    #     region: ${{ env.AZURE_LOCATION }}
-    #     template: ${{ github.workspace }}/infra/PowerBi/deploy.powerBi.json
-    #     parameters: ${{ github.workspace }}/infra/PowerBi/params.powerBi001.json
-    #     deploymentMode: Validate
     
     # Log out from Azure
     - name: Log out from Azure
@@ -353,8 +295,7 @@ jobs:
     needs: [ create-resource-group, validation ]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Check Out Repository
@@ -369,6 +310,110 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true
     
+    # Deploy Vnet
+    - name: Deploy Vnet
+      id: vnet_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
+        deploymentMode: Incremental
+    
+    # # Deploy Artifact Storage Account 001
+    # - name: Deploy Artifact Storage Account 001
+    #   id: artifact_storage_001_deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
+    #     parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
+    #     deploymentMode: Incremental
+    
+    # # Upload file to Storage Account 001
+    # - name: Upload file to Storage Account 001
+    #   id: upload_file_001
+    #   uses: azure/powershell@v1
+    #   with:
+    #     azPSVersion: latest
+    #     inlineScript: |
+    #       "Uploading file to Storage Account 001"
+    #       $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" -Name "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}"
+    #       $ctx = $storageAccount.Context
+    #       Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
+    
+    # # Deploy DNS Forwarder 001
+    # - name: Deploy DNS Forwarder 001
+    #   id: dns_forwarder_001_deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
+    #     parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
+    #     deploymentMode: Incrementals
+
+    # Deploy Firewall Policy 001
+    - name: Deploy Firewall Policy 001
+      id: firewall_policy_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
+        parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
+        deploymentMode: Incremental
+    
+    # Deploy Firewall 001
+    - name: Deploy Firewall 001
+      id: firewall_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
+        parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
+        deploymentMode: Incremental
+    
+    # Deploy Private DNS Zones
+    - name: Deploy Private DNS Zones
+      id: private_dns_zones_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
+        parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDns001.json
+        deploymentMode: Incremental
+    
+    # Deploy Vnet Peering 001
+    - name: Deploy Vnet Peering 001
+      id: vnet_peering_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
+        deploymentMode: Incremental
+      continue-on-error: true
+    
     # Deploy Key Vault 001
     - name: Deploy Key Vault 001
       id: key_vault_001_deployment
@@ -376,75 +421,10 @@ jobs:
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
-        deploymentMode: Incremental
-    
-    # Deploy Key Vault 002
-    - name: Deploy Key Vault 002
-      id: key_vault_002_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault002.json
-        deploymentMode: Incremental
-    
-    # Deploy Key Vault 003
-    - name: Deploy Key Vault 003
-      id: key_vault_003_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault003.json
-        deploymentMode: Incremental
-    
-    # # Deploy Integration Service Environment 001
-    # - name: Deploy Integration Service Environment 001
-    #   id: integration_service_environment_001_deployment
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     scope: resourcegroup
-    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-    #     region: ${{ env.AZURE_LOCATION }}
-    #     template: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/deploy.integrationServiceEnvironment.json
-    #     parameters: ${{ github.workspace }}/infra/IntegrationServiceEnvironment/params.integrationServiceEnvironment001.json
-    #     deploymentMode: Incremental
-    
-    # Deploy Logic App 001
-    - name: Deploy Logic App 001
-      id: logic_app_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/LogicApp/deploy.logicApp.json
-        parameters: ${{ github.workspace }}/infra/LogicApp/params.logicApp001.json
-        deploymentMode: Incremental
-    
-    # Deploy Automation Account 001
-    - name: Deploy Automation Account 001
-      id: automation_account_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/AutomationAccount/deploy.automationAccount.json
-        parameters: ${{ github.workspace }}/infra/AutomationAccount/params.automationAccount001.json
+        parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
         deploymentMode: Incremental
     
     # Deploy Purview 001
@@ -458,57 +438,6 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
         parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-        deploymentMode: Incremental
-    
-    # Deploy Log Analytics Workspace 001
-    - name: Deploy Log Analytics Workspace 001
-      id: log_analytics_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_LOGANALYTICS }}
-        region: ${{ env.AZURE_LOCATION }}
-        template:  ${{ github.workspace }}/infra/LogAnalytics/deploy.logAnalytics.json
-        parameters: ${{ github.workspace }}/infra/LogAnalytics/params.logAnalytics001.json
-        deploymentMode: Incremental
-    
-    # Deploy Storage Account
-    - name: Deploy Storage Account 001
-      id: storage_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
-        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
-        deploymentMode: Incremental
-    
-    # Upload file to Storage Account 001
-    - name: Upload file to Storage Account 001
-      id: upload_file_001
-      uses: azure/powershell@v1
-      with:
-        azPSVersion: latest
-        inlineScript: |
-          "Uploading file to Storage Account 001"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
-          $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/SelfHostedIntegrationRuntime/installSHIRGateway.ps1" -Blob "installSHIRGateway.ps1" -Force
-    
-    # Deploy Data Factory 001
-    - name: Deploy Data Factory 001
-      id: data_factory_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/DataFactory/deploy.dataFactory.json
-        parameters: ${{ github.workspace }}/infra/DataFactory/params.dataFactory001.json
         deploymentMode: Incremental
     
     # Deploy Container Registry 001
@@ -534,54 +463,8 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
-        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub.json
+        parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
         deploymentMode: Incremental
-    
-    # Generate Password
-    - name: Generate Password
-      id: generate_password_001
-      run: |
-        echo "Generating Password"
-        pwsh $GITHUB_WORKSPACE/code/GeneratePassword.ps1 -GitHub
-    
-    # Deploy SHIR 001
-    - name: Deploy SHIR 001
-      id: shir_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_INTEGRATION }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/deploy.shir.json
-        parameters: ${{ github.workspace }}/infra/SelfHostedIntegrationRuntime/params.shir001.json vmssAdminPassword="${{ steps.generate_password_001.outputs.password }}"
-        deploymentMode: Incremental
-    
-    # # Deploy Function 001
-    # - name: Deploy Function 001
-    #   id: function_001_deployment
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     scope: resourcegroup
-    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-    #     region: ${{ env.AZURE_LOCATION }}
-    #     template: ${{ github.workspace }}/infra/Function/deploy.function.json
-    #     parameters: ${{ github.workspace }}/infra/Function/params.function001.json
-    #     deploymentMode: Incremental
-    
-    # # Deploy Power BI Private Link 001
-    # - name: Deploy Power BI Private Link 001
-    #   id: power_bi_pl_001_deployment
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     scope: resourcegroup
-    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
-    #     region: ${{ env.AZURE_LOCATION }}
-    #     template: ${{ github.workspace }}/infra/PowerBi/deploy.powerBi.json
-    #     parameters: ${{ github.workspace }}/infra/PowerBi/params.powerBi001.json
-    #     deploymentMode: Incremental
     
     # Log out from Azure
     - name: Log out from Azure

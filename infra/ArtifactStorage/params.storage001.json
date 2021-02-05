@@ -5,8 +5,11 @@
         "location": {
             "value": "northeurope"
         },
-        "apiConnectionName": {
-            "value": "arm"
+        "storageAccountName": {
+            "value": "dhartifactstorage001"
+        },
+        "storageAccountType": {
+            "value": "Standard_LRS"
         }
     }
 }

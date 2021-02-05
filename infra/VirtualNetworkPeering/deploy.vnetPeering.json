@@ -9,10 +9,10 @@
                 "description": "Specifies the location for all resources."
             }
         },
-        "originVnetId": {
+        "sourceVnetId": {
             "type": "string",
             "metadata": {
-                "description": "Specifies the ID of the origin vnet."
+                "description": "Specifies the ID of the source vnet."
             }
         },
         "destinationVnetId": {
@@ -25,8 +25,8 @@
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "originVnetId": "[parameters('originVnetId')]",
-        "originVnetName": "[last(split(variables('originVnetId'), '/'))]",
+        "sourceVnetId": "[parameters('sourceVnetId')]",
+        "sourceVnetName": "[last(split(variables('sourceVnetId'), '/'))]",
         "destinationVnetId": "[parameters('destinationVnetId')]",
         "destinationVnetName": "[last(split(variables('destinationVnetId'), '/'))]"
     },
@@ -34,7 +34,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2020-05-01",
-            "name": "[concat(variables('originVnetName'), '/', variables('destinationVnetName'))]",
+            "name": "[concat(variables('sourceVnetName'), '/', variables('destinationVnetName'))]",
             "location": "[variables('location')]",
             "properties": {
                 "allowForwardedTraffic": true,

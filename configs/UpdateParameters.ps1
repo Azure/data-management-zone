@@ -1,13 +1,24 @@
+[CmdletBinding()]
 Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $Location,
+    $ConfigurationFilePath,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SubscriptionId,
+    $ManagementSubscriptionId,
+
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $GlobalDnsRgName,
+
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $DataLandingZoneSubscriptionId,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
@@ -17,43 +28,22 @@ Param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $SubnetId,
+    $Location,
 
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $StorageAccountName,
+    $SynapseStorageAccountName,
 
-    [Parameter(Mandatory=$false)]
-    [Switch]
-    $StorageAccountFileSystemName,
+    [Parameter(Mandatory)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $SynapseStorageAccountFileSystemName,
 
     [Parameter(Mandatory=$false)]
     [Switch]
     $AzureResourceManagerConnectionName
 )
-
-function Clone-DevOpsRepostory {
-    [CmdletBinding()]
-    param (
-        
-    )
-    # Clone Repository
-    Write-Host "Cloning Repository"
-    git clone ""
-}
-
-
-
-$configs = Get-Content -Path "config.json" -Raw | Out-String | ConvertFrom-Json
-$Location = "WestEurope"
-$SubscriptionId = "xxxxxx.xxxxxxxxxxxxxxxxx.xxxxxxxxxxx"
-$DataLandingZoneName = "MyLandingZone"
-$SubnetId = ""
-$StorageAccountName = ""
-$StorageAccountFileSystemName = ""
-$AzureResourceManagerConnectionName = ""
-
 
 function SetValue($Object, $Key, $Value) {
     $p1, $p2 = $Key.Split(".")
@@ -65,17 +55,9 @@ function SetValue($Object, $Key, $Value) {
     }
 }
 
-
-Write-Host "Loading YAML Deployment File"
-$parameterFile = Get-Content -Path ".ado/workflows/dataDomainDeployment.yml" -Raw | Out-String | ConvertFrom-Yaml -Ordered
-Write-Host $parameterFile.variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-
-$key = "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME"
-$value = "testtest"
-SetValue -Object $parameterFile -Key $key -Value $value
-
-Write-Host $parameterFile.variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME
-
+# Loading Configuration File for Parameter Updates
+Write-Host "Loading Configuration File for Parameter Updates"
+$configs = Get-Content -Path $ConfigurationFilePath -Raw | Out-String | ConvertFrom-Json
 
 foreach ($config in $configs) {
     # Get Replacement Key-Value Pairs

@@ -15,6 +15,19 @@
                 "description": "Specifies the name of the vnet that gets created."
             }
         },
+        "dataHubName": {
+            "type": "string",
+            "defaultValue": "dh",
+            "metadata": {
+                "description": "Specifies the name of the data hub."
+            }
+        },
+        "dnsServerAdresses": {
+            "type": "array",
+            "metadata": {
+                "description": "Specifies the addresses of DNS forwarders in the hub."
+            }
+        },
         "firewallPrivateIp": {
             "type": "string",
             "metadata": {
@@ -26,13 +39,15 @@
     "variables": {
         "location": "[parameters('location')]",
         "vnetName": "[parameters('vnetName')]",
+        "dataHubName": "[parameters('dataHubName')]",
+        "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/routeTables",
             "apiVersion": "2020-05-01",
-            "name": "dh-routetable",
+            "name": "[concat(variables('dataHubName'), '-routetable')]",
             "location": "[variables('location')]",
             "properties": {
                 "routes": [
@@ -51,7 +66,7 @@
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-11-01",
-            "name": "dh-nsg",
+            "name": "[concat(variables('dataHubName'), '-nsg')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -119,6 +134,9 @@
                         "10.0.0.0/16"
                     ]
                 },
+                "dhcpOptions": {
+                    "dnsServers": "[if(empty(variables('dnsServerAdresses')), '[]', variables('dnsServerAdresses'))]"
+                },
                 "subnets": [
                     {
                         "name": "AzureFirewallSubnet",
@@ -130,7 +148,7 @@
                         }
                     },
                     {
-                        "name": "dh-subnet",
+                        "name": "[concat(variables('dataHubName'), '-subnet')]",
                         "properties": {
                             "addressPrefix": "10.0.1.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -144,7 +162,7 @@
                         }
                     },
                     {
-                        "name": "dh-privatelink-subnet",
+                        "name": "[concat(variables('dataHubName'), '-privatelink-subnet')]",
                         "properties": {
                             "addressPrefix": "10.0.2.0/24",
                             "privateEndpointNetworkPolicies": "Disabled",
@@ -158,7 +176,7 @@
                         }
                     },
                     {
-                        "name": "dh-function001-subnet",
+                        "name": "[concat(variables('dataHubName'), '-function001-subnet')]",
                         "properties": {
                             "addressPrefix": "10.0.3.0/24",
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -194,11 +212,11 @@
         },
         "subnetId": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dh-subnet')]"
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), concat(variables('dataHubName'), '-subnet'))]"
         },
         "privateLinkSubnetId": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'dh-privatelink-subnet')]"
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), concat(variables('dataHubName'), '-privatelink-subnet'))]"
         }
     }
 }
