@@ -18,7 +18,7 @@
             "value": "VmssMainUser"
         },
         "storageAccountId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-integration/providers/Microsoft.Storage/storageAccounts/datahubstorage001"
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Storage/storageAccounts/dhartifactstorage001"
         },
         "storageAccountContainerName": {
             "value": "scripts"
