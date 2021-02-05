@@ -5,16 +5,19 @@
         "location": {
             "value": "northeurope"
         },
-        "integrationServiceEnvironmentName": {
-            "value": "dh-integrationserviceenvironment001"
+        "vnetName": {
+            "value": "dh-vnet"
         },
-        "subnetIds": {
+        "dataHubName": {
+            "value": "dh"
+        },
+        "dnsServerAdresses": {
             "value": [
-                "",
-                "",
-                "",
-                ""
+                "10.0.0.4"
             ]
+        },
+        "firewallPrivateIp": {
+            "value": "10.0.0.4"
         }
     }
 }

@@ -30,9 +30,35 @@
                 "description": "Specifies the admin password of the virtual machines."
             }
         },
-        "enableAzureFirewall": {
+        "enableDnsAndFirewall": {
             "type": "bool",
-            "defaultValue": true
+            "defaultValue": true,
+            "metadata": {
+                "description": "Specifies whether Private DNS zones and Azure Firewall should be deployed."
+            }
+        },
+        "dnsServerAdresses": {
+            "type": "array",
+            "defaultValue": [
+                "10.0.0.4"
+            ],
+            "metadata": {
+                "description": "Specifies a list of internal IP adresses of your DNS forwarders or internal IP address of your Azure Firewall if you have enabled DNS forwarding."
+            }
+        },
+        "firewallPrivateIp": {
+            "type": "string",
+            "defaultValue": "10.0.0.4",
+            "metadata": {
+                "description": "Specifies the private IP of your (Azure) Firewall."
+            }
+        },
+        "privateDnsZoneResourceGroupId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Specifies the ID of the resource group of the private dns zones, if you already have one that should be used."
+            }
         }
     },
     "functions": [],
@@ -40,10 +66,12 @@
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
         "dataHubSubscriptionId": "[parameters('dataHubSubscriptionId')]",
         "location": "[parameters('location')]",
-        "vmAdminPassword": "[parameters('vmAdminPassword')]",
-        "enableAzureFirewall": "[parameters('enableAzureFirewall')]",
-        "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json?token=AIHRGTXMDVLQNB4R5JDMYP3ADMR3U",
-        "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json?token=AIHRGTUGHS4HVTWQKMQOEH3ADMR5A"
+        "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
+        "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
+        "enableDnsAndFirewall": "[parameters('enableDnsAndFirewall')]",
+        "networkTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.network.json",
+        "servicesTemplateLink": "https://raw.githubusercontent.com/Azure/data-hub/main/docs/reference/deploy.services.json"
     },
     "resources": [
         {
@@ -64,8 +92,14 @@
                     "enterpriseScaleAnalyticsCompanyPrefix": {
                         "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
                     },
-                    "enableAzureFirewall": {
-                        "value": "[variables('enableAzureFirewall')]"
+                    "enableDnsAndFirewall": {
+                        "value": "[variables('enableDnsAndFirewall')]"
+                    },
+                    "dnsServerAdresses": {
+                        "value": "[variables('dnsServerAdresses')]"
+                    },
+                    "firewallPrivateIp": {
+                        "value": "[variables('firewallPrivateIp')]"
                     }
                 }
             },
@@ -93,16 +127,10 @@
                         "value": "[variables('enterpriseScaleAnalyticsCompanyPrefix')]"
                     },
                     "subnetId": {
-                        "value": "[reference('networkDeployment').outputs.subnetId.value]"
-                    },
-                    "privateLinkSubnetId": {
                         "value": "[reference('networkDeployment').outputs.privateLinkSubnetId.value]"
                     },
                     "privateDnsZoneResourceGroupId": {
-                        "value": "[reference('networkDeployment').outputs.privateDnsZoneResourceGroupId.value]"
-                    },
-                    "vmAdminPassword": {
-                        "value": "[variables('vmAdminPassword')]"
+                        "value": "[if(variables('enableDnsAndFirewall'), reference('networkDeployment').outputs.privateDnsZoneResourceGroupId.value, variables('privateDnsZoneResourceGroupId'))]"
                     }
                 }
             },
@@ -112,7 +140,7 @@
     "outputs": {
         "firewallPrivateIp": {
             "type": "string",
-            "value": "[reference('networkDeployment').outputs.firewallName.value]"
+            "value": "[reference('networkDeployment').outputs.firewallPrivateIp.value]"
         },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
