@@ -7,6 +7,9 @@
         },
         "purviewName": {
             "value": "dh-purview001"
+        },
+        "keyVaultId": {
+            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.KeyVault/vaults/dh-keyvault001"
         }
     }
 }
