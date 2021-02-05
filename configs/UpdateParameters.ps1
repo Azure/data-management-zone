@@ -69,7 +69,7 @@ foreach ($config in $configs) {
 
         # Set Content of Parameter File
         Write-Host "Setting Content of Parameter File"
-        $parameterFile | ConvertTo-Json | Set-Content -Path $config.filePath
+        $parameterFile | ConvertTo-Json -Depth 100 | Set-Content -Path $config.filePath
     }
     elseif (($config.fileType.ToLower() -eq "yaml") -or ($config.fileType.ToLower() -eq "yml")) {
         # Load YAML Deployment File
@@ -96,6 +96,4 @@ foreach ($config in $configs) {
         Write-Error "File Type not Supported"
         throw "File Type not Supported"
     }
-
-    
 }
