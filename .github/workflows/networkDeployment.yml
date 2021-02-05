@@ -4,15 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'infra/DnsForwarder/**'
-      - 'infra/Firewall/**'
-      - 'infra/FirewallPolicy/**'
-      - 'infra/PrivateDns/**'
-      - 'infra/VirtualNetwork/**'
-      - 'infra/VirtualNetworkPeering/**'
-      - '.github/workflows/networkDeployment.yml'
-  pull_request:
-    paths:
+      - 'infra/ArtifactStorage/**'
       - 'infra/DnsForwarder/**'
       - 'infra/Firewall/**'
       - 'infra/FirewallPolicy/**'
@@ -106,20 +98,20 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
         deploymentMode: Validate
     
-    # Deploy Storage Account - validation
-    - name: Deploy Storage Account 001 - validation
-      id: storage_001_validation
+    # Deploy Artifact  Storage Account 001 - validation
+    - name: Deploy Artifact Storage Account 001 - validation
+      id: artifact_storage_001_validation
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
-        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
         deploymentMode: Validate
     
     # Deploy Firewall Policy 001 - validation
@@ -225,20 +217,20 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
-        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet.json
+        parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
         deploymentMode: Incremental
     
-    # Deploy Storage Account
-    - name: Deploy Storage Account 001
-      id: storage_001_deployment
+    # Deploy Artifact Storage Account 001
+    - name: Deploy Artifact Storage Account 001
+      id: artifact_storage_001_deployment
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
         region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Storage/deploy.storage.json
-        parameters: ${{ github.workspace }}/infra/Storage/params.storage001.json
+        template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
+        parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
         deploymentMode: Incremental
     
     # Upload file to Storage Account 001
@@ -249,9 +241,9 @@ jobs:
         azPSVersion: latest
         inlineScript: |
           "Uploading file to Storage Account 001"
-          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" -Name "${{ steps.storage_001_deployment.outputs.storageAccountName }}"
+          $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" -Name "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}"
           $ctx = $storageAccount.Context
-          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
+          Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
     
     # Deploy Firewall Policy 001
     - name: Deploy Firewall Policy 001

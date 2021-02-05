@@ -6,6 +6,7 @@ trigger:
       - main
   paths:
     include:
+      - infra/ArtifactStorage/*
       - infra/VirtualNetwork/*
       - infra/Firewall/*
       - infra/FirewallPolicy/*
@@ -32,20 +33,20 @@ stages:
           vmImage: 'ubuntu-latest'
         
         steps:
-        # Checkout code
+        # Checkout Repository
         - checkout: self
           name: checkout_repository
-          displayName: 'Checkout repository'
+          displayName: Checkout Repository
           submodules: true
           lfs: false
           clean: true
           continueOnError: false
           enabled: true
         
-        # Deploy vnet - validation
+        # Deploy Vnet - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: vnet_validation
-          displayName: Deploy vnet - validation
+          displayName: Deploy Vnet - validation
           enabled: true
           continueOnError: false
           inputs:
@@ -57,13 +58,13 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
             deploymentMode: 'Validation'
         
-        # Deploy storage account 001 - validation
+        # Deploy Artifact Storage Account 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_001_validation
-          displayName: Deploy storage account 001 - validation
+          name: artifact_storage_001_validation
+          displayName: Deploy Artifact Storage Account 001 - validation
           enabled: true
           continueOnError: false
           inputs:
@@ -74,8 +75,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
             deploymentMode: 'Validation'
         
         # Deploy Firewall Policy 001 - validation
@@ -180,20 +181,20 @@ stages:
           vmImage: 'vs2017-win2016'
         
         steps:
-        # Checkout repository
+        # Checkout Repository
         - checkout: self
           name: checkout_repository
-          displayName: 'Checkout repository'
+          displayName: Checkout Repository
           submodules: true
           lfs: false
           clean: true
           continueOnError: false
           enabled: true
         
-        # Deploy vnet
+        # Deploy Vnet
         - task: AzureResourceManagerTemplateDeployment@3
           name: vnet_deployment
-          displayName: Deploy vnet
+          displayName: Deploy Vnet
           enabled: true
           continueOnError: false
           inputs:
@@ -205,13 +206,13 @@ stages:
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
             deploymentMode: 'Incremental'
         
-        # Deploy storage account 001
+        # Deploy Artifact Storage Account 001
         - task: AzureResourceManagerTemplateDeployment@3
-          name: storage_account_001_deployment
-          displayName: Deploy storage account 001
+          name: artifact_storage_001_deployment
+          displayName: Deploy Artifact Storage Account 001
           enabled: true
           continueOnError: false
           inputs:
@@ -222,8 +223,8 @@ stages:
             resourceGroupName: '$(AZURE_RESOURCE_GROUP_NAME_NETWORK)'
             location: '$(AZURE_LOCATION)'
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/Storage/deploy.storage.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Storage/params.storage001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
             deploymentMode: 'Incremental'
             deploymentOutputs: 'storageDetails'
         
