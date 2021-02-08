@@ -53,4 +53,4 @@ jobs:
           commit-message: 'Updated Parameters'
           branch: 'parameter_update_${{ github.run_id }}'
           title: 'Updated Parameters with GitHub Workflow Run ID ${{ github.run_id }}'
-          body: 'One last step to complete. Please Update the GitHub Workflow environment variables in <a href="/.github/workflows/dataHubDeployment.yml">`/.github/workflows/dataHubDeployment.yml`</a> (AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP_NAME, AZURE_LOCATION, etc.) as described [here]().'
+          body: 'One last step to complete. Please Update the GitHub Workflow or ADO workflow environment variables in <a href="/.github/workflows/dataHubDeployment.yml">`/.github/workflows/dataHubDeployment.yml`</a> to the following \n * AZURE_SUBSCRIPTION_ID to `${{ steps.update_parameters.outputs.DataLandingZoneSubscriptionId }}`, \n* AZURE_RESOURCE_GROUP_NAME, AZURE_LOCATION, etc.) as described [here]().'

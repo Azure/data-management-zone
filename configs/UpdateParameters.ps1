@@ -40,6 +40,18 @@ function SetValue($Object, $Key, $Value) {
     }
 }
 
+
+function Remove-SpecialCharsAndWhitespaces($InputString) {
+    $SpecialChars = '[#?!`"#$%&*+,-./:;<=>?@^_``|~\{\[\(\)\]\}]'
+    $Replacement  = ''
+    return ($InputString -replace $SpecialChars,$Replacement) -replace "\s", ""
+}
+
+
+# Replace Special Characters
+Write-Host "Replacing Special Characters"
+$DataLandingZoneName = Remove-SpecialChars -InputString $DataLandingZoneName
+
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
 $configs = Get-Content -Path $ConfigurationFilePath -Raw | Out-String | ConvertFrom-Json
@@ -97,3 +109,8 @@ foreach ($config in $configs) {
         throw "File Type not Supported"
     }
 }
+
+# Set output
+Write-Output "Setting output"
+Write-Output "::set-output name=landingZoneName::${DataLandingZoneName}"
+Write-Output "::set-output name=landingZoneSubscriptionId::${DataLandingZoneSubscriptionId}"
