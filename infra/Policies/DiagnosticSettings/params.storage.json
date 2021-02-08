@@ -76,21 +76,12 @@
                                         {
                                             "type": "Microsoft.Storage/storageAccounts/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
-                                            "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                                            "name": "[concat(parameters('resourceName'), '/Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
-                                                    {
-                                                        "category": "Capacity",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
                                                     {
                                                         "category": "Transaction",
                                                         "enabled": true,
@@ -105,23 +96,14 @@
                                             }
                                         },
                                         {
-                                            "type": "Microsoft.Storage/storageAccounts/blobServices/default/providers/diagnosticSettings",
+                                            "type": "Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
-                                            "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                                            "name": "[concat(parameters('resourceName'), '/default/Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
-                                                    {
-                                                        "category": "Capacity",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
                                                     {
                                                         "category": "Transaction",
                                                         "enabled": true,
@@ -149,23 +131,14 @@
                                             }
                                         },
                                         {
-                                            "type": "Microsoft.Storage/storageAccounts/fileServices/default/providers/diagnosticSettings",
+                                            "type": "Microsoft.Storage/storageAccounts/fileServices/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
-                                            "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                                            "name": "[concat(parameters('resourceName'), '/default/Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
-                                                    {
-                                                        "category": "Capacity",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
                                                     {
                                                         "category": "Transaction",
                                                         "enabled": true,
@@ -193,23 +166,14 @@
                                             }
                                         },
                                         {
-                                            "type": "Microsoft.Storage/storageAccounts/queueServices/default/providers/diagnosticSettings",
+                                            "type": "Microsoft.Storage/storageAccounts/queueServices/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
-                                            "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                                            "name": "[concat(parameters('resourceName'), '/default/Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
-                                                    {
-                                                        "category": "Capacity",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
                                                     {
                                                         "category": "Transaction",
                                                         "enabled": true,
@@ -237,23 +201,14 @@
                                             }
                                         },
                                         {
-                                            "type": "Microsoft.Storage/storageAccounts/tableServices/default/providers/diagnosticSettings",
+                                            "type": "Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
-                                            "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
+                                            "name": "[concat(parameters('resourceName'), '/default/Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
-                                                    {
-                                                        "category": "Capacity",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
                                                     {
                                                         "category": "Transaction",
                                                         "enabled": true,
