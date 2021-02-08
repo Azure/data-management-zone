@@ -1,18 +1,18 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "firewallName": {
-            "value": "dh-firewall"
-        },
-        "firewallPolicyId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/firewallPolicies/dh-firewallpolicy"
-        },
-        "subnetId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/AzureFirewallSubnet"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "<my-region>"
+    },
+    "firewallName": {
+      "value": "mydatahubname-firewall"
+    },
+    "firewallPolicyId": {
+      "value": "/subscriptions/<my-data-hub-subscription-id>/resourceGroups/mydatahubname-network/providers/Microsoft.Network/firewallPolicies/mydatahubname-firewallpolicy"
+    },
+    "subnetId": {
+      "value": "/subscriptions/<my-data-hub-subscription-id>/resourceGroups/mydatahubname-network/providers/Microsoft.Network/virtualNetworks/mydatahubname-vnet/subnets/AzureFirewallSubnet"
     }
+  }
 }
