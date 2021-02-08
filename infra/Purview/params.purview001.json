@@ -1,15 +1,15 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "westeurope"
-        },
-        "purviewName": {
-            "value": "dh-purview001"
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.KeyVault/vaults/dh-keyvault001"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "westeurope"
+    },
+    "purviewName": {
+      "value": "<my-data-hub-name>-purview001"
+    },
+    "keyVaultId": {
+      "value": "/subscriptions/<my-data-hub-subscription-id>/resourceGroups/<my-data-hub-name>-governance/providers/Microsoft.KeyVault/vaults/<my-data-hub-name>-keyvault001"
     }
+  }
 }
