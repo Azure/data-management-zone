@@ -50,7 +50,7 @@ function Remove-SpecialCharsAndWhitespaces($InputString) {
 
 # Replace Special Characters
 Write-Host "Replacing Special Characters"
-$DataLandingZoneName = Remove-SpecialChars -InputString $DataLandingZoneName
+$DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
 
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
