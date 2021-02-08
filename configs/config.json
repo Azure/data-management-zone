@@ -66,7 +66,6 @@
         "filePath": "infra/Purview/params.purview001.json",
         "fileType": "json",
         "parameters": {
-            "parameters.location.value": "${Location}",
             "parameters.purviewName.value": "${DataLandingZoneName}-purview001",
             "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-governance/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001"
         }
