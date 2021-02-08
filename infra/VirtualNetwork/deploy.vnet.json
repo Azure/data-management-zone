@@ -125,8 +125,8 @@
             "name": "[variables('vnetName')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]",
-                "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataHubName'), '-nsg'))]",
+                "[resourceId('Microsoft.Network/routeTables', concat(variables('dataHubName'), '-routetable'))]"
             ],
             "properties": {
                 "addressSpace": {
@@ -154,10 +154,10 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataHubName'), '-nsg'))]"
                             },
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataHubName'), '-routetable'))]"
                             }
                         }
                     },
@@ -168,10 +168,10 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Disabled",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataHubName'), '-nsg'))]"
                             },
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataHubName'), '-routetable'))]"
                             }
                         }
                     },
@@ -190,10 +190,10 @@
                                 }
                             ],
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'dh-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataHubName'), '-nsg'))]"
                             },
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', 'dh-routetable')]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat(variables('dataHubName'), '-routetable'))]"
                             }
                         }
                     }
