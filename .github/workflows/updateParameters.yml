@@ -8,10 +8,10 @@ on:
       - '.github/workflows/updateParameters.yml'
 
 env:
-  DATA_HUB_SUBSCRIPTION_ID: '<my-data-hub-subscription-id>'
-  DATA_HUB_NAME: '<my-data-hub-name>'
-  LOCATION: '<my-region>'
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '<my-resource-manager-connection-name>'
+  DATA_HUB_SUBSCRIPTION_ID: '17588eb2-2943-461a-ab3f-00a3ceac3112'
+  DATA_HUB_NAME: 'dh-jp'
+  LOCATION: 'eastus'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'esa-1'
   NODE_VNET_ID: '<my-node-vnet-id>'
 
 jobs:
