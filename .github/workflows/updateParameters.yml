@@ -12,7 +12,7 @@ env:
   DATA_HUB_NAME: 'dh-jp'
   LOCATION: 'eastus'
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'esa-1'
-  NODE_VNET_ID: '<my-node-vnet-id>'
+  NODE_VNET_ID: '<my-node-vnet-id2>'
 
 jobs:
   renaming:
