@@ -71,7 +71,7 @@ jobs:
           Go to \`/.ado/workflows/dataHubDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
           
           \`\`\`YAML
-          env:
+          variables:
             AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
             AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
             AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ steps.update_parameters.outputs.landingZoneName }}-network'
