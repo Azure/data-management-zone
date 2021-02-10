@@ -56,13 +56,13 @@ jobs:
           \`\`\`YAML
           env:
             AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
-            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_HUB_NAME }}-network'
-            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ env.DATA_HUB_NAME }}-global-dns'
-            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ env.DATA_HUB_NAME }}-automation'
-            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_HUB_NAME }}-mgmt'
-            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ env.DATA_HUB_NAME }}-consumption'
-            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ env.DATA_HUB_NAME }}-container'
-            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ env.DATA_HUB_NAME }}-governance'
+            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ steps.update_parameters.outputs.landingZoneName }}-network'
+            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ steps.update_parameters.outputs.landingZoneName }}-global-dns'
+            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ steps.update_parameters.outputs.landingZoneName }}-automation'
+            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ steps.update_parameters.outputs.landingZoneName }}-mgmt'
+            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ steps.update_parameters.outputs.landingZoneName }}-consumption'
+            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ steps.update_parameters.outputs.landingZoneName }}-container'
+            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`
           
@@ -74,13 +74,13 @@ jobs:
           env:
             AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
             AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
-            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_HUB_NAME }}-network'
-            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ env.DATA_HUB_NAME }}-global-dns'
-            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ env.DATA_HUB_NAME }}-automation'
-            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_HUB_NAME }}-mgmt'
-            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ env.DATA_HUB_NAME }}-consumption'
-            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ env.DATA_HUB_NAME }}-container'
-            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ env.DATA_HUB_NAME }}-governance'
+            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ steps.update_parameters.outputs.landingZoneName }}-network'
+            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ steps.update_parameters.outputs.landingZoneName }}-global-dns'
+            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ steps.update_parameters.outputs.landingZoneName }}-automation'
+            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ steps.update_parameters.outputs.landingZoneName }}-mgmt'
+            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ steps.update_parameters.outputs.landingZoneName }}-consumption'
+            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ steps.update_parameters.outputs.landingZoneName }}-container'
+            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`"
           body="${body//'%'/'%25'}"
