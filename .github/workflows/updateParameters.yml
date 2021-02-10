@@ -8,11 +8,10 @@ on:
       - '.github/workflows/updateParameters.yml'
 
 env:
-  DATA_HUB_SUBSCRIPTION_ID: '<my-data-hub-subscription-id>'
-  DATA_HUB_NAME: '<my-data-hub-name>'
-  LOCATION: '<my-region>'
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '<my-resource-manager-connection-name>'
-  NODE_VNET_ID: '<my-node-vnet-id>'
+  DATA_HUB_SUBSCRIPTION_ID: '{dataHubSubscriptionId}'
+  DATA_HUB_NAME: '{dataHubName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
+  LOCATION: '{regionName}'       # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
 
 jobs:
   renaming:
@@ -42,9 +41,53 @@ jobs:
             -DataLandingZoneSubscriptionId '${{ env.DATA_HUB_SUBSCRIPTION_ID }}' \
             -DataLandingZoneName '${{ env.DATA_HUB_NAME }}' \
             -Location '${{ env.LOCATION }}' \
-            -NodeVnetId '${{ env.NODE_VNET_ID }}' \
             -AzureResourceManagerConnectionName '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
       
+      # Define Pull Request Body
+      - name: Define Pull Request Body
+        id: define_pull_request_body
+        run: |
+          body="**Great work!** Just one more step to start the deployment into your environment.
+          
+          **For GitHub Actions**
+          
+          Go to \`/.github/workflows/dataNodeDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
+          
+          \`\`\`YAML
+          env:
+            AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
+            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_HUB_NAME }}-network'
+            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ env.DATA_HUB_NAME }}-global-dns'
+            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ env.DATA_HUB_NAME }}-automation'
+            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_HUB_NAME }}-mgmt'
+            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ env.DATA_HUB_NAME }}-consumption'
+            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ env.DATA_HUB_NAME }}-container'
+            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ env.DATA_HUB_NAME }}-governance'
+            AZURE_LOCATION: '${{ env.LOCATION }}'
+          \`\`\`
+          
+          **For Azure DevOps**
+          
+          Go to \`/.ado/workflows/dataNodeDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
+          
+          \`\`\`YAML
+          env:
+            AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
+            AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
+            AZURE_RESOURCE_GROUP_NAME_NETWORK: '${{ env.DATA_HUB_NAME }}-network'
+            AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: '${{ env.DATA_HUB_NAME }}-global-dns'
+            AZURE_RESOURCE_GROUP_NAME_AUTOMATION: '${{ env.DATA_HUB_NAME }}-automation'
+            AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: '${{ env.DATA_HUB_NAME }}-mgmt'
+            AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: '${{ env.DATA_HUB_NAME }}-consumption'
+            AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ env.DATA_HUB_NAME }}-container'
+            AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ env.DATA_HUB_NAME }}-governance'
+            AZURE_LOCATION: '${{ env.LOCATION }}'
+          \`\`\`"
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "::set-output name=body::$body"
+
       # Create Pull Request
       - name: Create Pull Request
         id: create_pull_request
@@ -53,4 +96,4 @@ jobs:
           commit-message: 'Updated Parameters'
           branch: 'parameter_update_${{ github.run_id }}'
           title: 'Updated Parameters with GitHub Workflow Run ID ${{ github.run_id }}'
-          body: 'One last step to complete. Please Update the GitHub Workflow or ADO workflow environment variables in <a href="/.github/workflows/dataHubDeployment.yml">`/.github/workflows/dataHubDeployment.yml`</a> to the following \n * AZURE_SUBSCRIPTION_ID to `${{ steps.update_parameters.outputs.DataLandingZoneSubscriptionId }}`, \n* AZURE_RESOURCE_GROUP_NAME, AZURE_LOCATION, etc.) as described [here]().'
+          body: ${{ steps.define_pull_request_body.outputs.body }}
