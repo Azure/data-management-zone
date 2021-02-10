@@ -4,7 +4,7 @@
         "fileType": "json",
         "parameters": {
             "parameters.location.value": "${Location}",
-            "parameters.storageAccountName.value": "${DataLandingZoneName}artifactstorage001"
+            "parameters.storageAccountName.value": "${DataLandingZoneName}artifactsa001"
         }
     },
     {
@@ -23,7 +23,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.vmssName.value": "${DataLandingZoneName}dnsproxy001",
-            "parameters.storageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}artifactstorage001",
+            "parameters.storageAccountId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Storage/storageAccounts/${DataLandingZoneName}artifactsa001",
             "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-subnet"
         }
     },
@@ -95,23 +95,7 @@
         "parameters": {
             "parameters.location.value": "${Location}",
             "parameters.sourceVnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet",
-            "parameters.destinationVnetId.value": "${NodeVnetId}"
-        }
-    },
-    {
-        "filePath": ".ado/workflows/dataHubDeployment.yml",
-        "fileType": "yaml",
-        "parameters": {
-            "variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME": "${AzureResourceManagerConnectionName}",
-            "variables.AZURE_SUBSCRIPTION_ID": "${DataLandingZoneSubscriptionId}",
-            "variables.AZURE_RESOURCE_GROUP_NAME_NETWORK": "${DataLandingZoneName}-network",
-            "variables.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS": "${DataLandingZoneName}-global-dns",
-            "variables.AZURE_RESOURCE_GROUP_NAME_AUTOMATION": "${DataLandingZoneName}-automation",
-            "variables.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT": "${DataLandingZoneName}-mgmt",
-            "variables.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION": "${DataLandingZoneName}-consumption",
-            "variables.AZURE_RESOURCE_GROUP_NAME_CONTAINER": "${DataLandingZoneName}-container",
-            "variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE": "${DataLandingZoneName}-governance",
-            "variables.AZURE_LOCATION": "${Location}"
+            "parameters.destinationVnetId.value": "NodeVnetId"
         }
     }
 ]
