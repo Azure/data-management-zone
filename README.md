@@ -3,13 +3,13 @@
 > **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue, if you come across any issues that you would like us to fix.
 
 # Description 
-A Data Landing Zone has several layers to enable agility to service the Data Domains and Data Products under the data landing zone. A new Data Landing Zone is always deployed with a standard set of services to enable the entity to start ingesting and analysing data.
+The Data Management template is, as the name suggessts, classified as a management function and is at the heart of the Enterprise Scale Analytics platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, 3rd Party Clouds and On-Premises data sources.
 
 ## What will be deployed?
 
 By default, all the services which comes under Data Landing Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
 <p align="center">
-  <img src="./docs/media/DataNode.png" alt="Data Landing Zone" width="500"/> 
+  <img src="./docs/media/DataHub.png" alt="Data Management Zone" width="500"/> 
 </p>
 
  - [Virtual Network](https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview)
