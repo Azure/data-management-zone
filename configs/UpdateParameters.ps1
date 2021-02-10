@@ -112,4 +112,3 @@ foreach ($config in $configs) {
 # Set output
 Write-Output "Setting output"
 Write-Output "::set-output name=landingZoneName::${DataLandingZoneName}"
-Write-Output "::set-output name=landingZoneSubscriptionId::${DataLandingZoneSubscriptionId}"
