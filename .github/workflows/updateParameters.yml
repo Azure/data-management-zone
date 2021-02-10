@@ -51,7 +51,7 @@ jobs:
           
           **For GitHub Actions**
           
-          Go to \`/.github/workflows/dataNodeDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
+          Go to \`/.github/workflows/dataHubDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
           
           \`\`\`YAML
           env:
@@ -68,7 +68,7 @@ jobs:
           
           **For Azure DevOps**
           
-          Go to \`/.ado/workflows/dataNodeDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
+          Go to \`/.ado/workflows/dataHubDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
           
           \`\`\`YAML
           env:
