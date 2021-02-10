@@ -28,6 +28,9 @@ By default, all the services which comes under Data Management Zone are enabled 
  - [Policies](https://docs.microsoft.com/en-us/azure/governance/policy/overview) 
 
 
+For more details regarding the services which will be deployed, please check [Data Management](https://github.com/Azure/Enterprise-Scale-Analytics/blob/main/docs/02-datamanagement/01-overview.md).
+
+
 You have two options for deploying this reference architecture:
 1. Use the `Deploy to Azure` Button or
 2. Use GitHub Actions or Azure DevOps Pipelines
