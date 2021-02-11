@@ -73,7 +73,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 
 ## 2. Setting up the required Service Principal and access
 
-A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the `Azure Portal` to find the id of your subscription. Then start CLI or PowerShell, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
+A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the `Azure Portal` to find the id of your subscription. Then start (Cloud) CLI, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
 **Azure CLI**
 ```Shell
@@ -86,15 +86,6 @@ az ad sp create-for-rbac \
   --sdk-auth
 ```
 
-**Azure Powershell**
-```PowerShell
-# Replace {service-principal-name} and {subscription-id}  with your 
-# Azure subscription id and any name for your service principal.
-New-AzADServicePrincipal `
-  -DisplayName "{service-principal-name}" `
-  -Role "Contributor" `
-  -Scope "/subscriptions/{subscription-id}"
-```
 This will generate the following JSON output:
 
 ```JSON
