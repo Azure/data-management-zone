@@ -19,8 +19,8 @@ By default, all the services which comes under Data Management Zone are enabled 
  - [Azure Firewall](https://docs.microsoft.com/en-us/azure/firewall/overview)
  - [Firewall Policy](https://docs.microsoft.com/en-us/azure/firewall-manager/policy-overview#:~:text=Firewall%20Policy%20is%20an%20Azure,work%20across%20regions%20and%20subscriptions.)
  - [Private DNS Zones](https://docs.microsoft.com/en-us/azure/dns/private-dns-privatednszone#:~:text=By%20using%20private%20DNS%20zones,that%20are%20linked%20to%20it.)
- - [Azure Container Registry](https://docs.microsoft.com/en-us/azure/container-registry/)
- - [Azure Purview](https://docs.microsoft.com/en-us/azure/purview/)
+ - [Container Registry](https://docs.microsoft.com/en-us/azure/container-registry/)
+ - [Purview](https://docs.microsoft.com/en-us/azure/purview/)
  - [Key Vault](https://docs.microsoft.com/en-us/azure/key-vault/general)
  - [Storage Account](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
  - [Synapse PL Hub](https://docs.microsoft.com/en-us/azure/synapse-analytics/security/synapse-private-link-hubs)
@@ -76,7 +76,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the `Azure Portal` to find the id of your subscription. Then start CLI or PowerShell, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
 **Azure CLI**
-```sh
+```Shell
 # Replace {service-principal-name} and {subscription-id}  with your 
 # Azure subscription id and any name for your service principal.
 az ad sp create-for-rbac \
@@ -108,58 +108,6 @@ This will generate the following JSON output:
 ```
 
 **Take note of the output. It will be required for the next steps.**
-
-<!-- For automation purposes of this repo, few more role assignments are required for this service principal. 
-
-> NOTE: The number of role assignments can be further reduced in a production scenario. The **Network Contributor** role assignment is just required in this repository to automatically setup the vnet peering between the data management environment and the data landing zone. Without this, DNS resolution will not work and in- and outbound traffic will be dropped, because there is no line of sight to the Azure Firewall. The **Private DNS Zone Contributor** is also not required, if the deployment of DNS A-records of the Private Endpoints is automated through Azure Policies with `deployIfNotExists` effect. Same is true for the **User Access Administrator**, because the deployment can be automated using `deployIfNotExists` Policies.
-
-Required role assignments include:
-
-| Role Name | Description | Scope |
-|:----------|:------------|:------|
-| [Private DNS Zone Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#private-dns-zone-contributor) | We expect you to deploy all Private DNS zones for all data services into a single subscription and resource group. The service principal needs to be Private DNS Zone Contributor on that resource group. This is required to deploy A-records for the respective private endpoints.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | (Resource Group Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}` |
-| [User Access Administrator](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator) | In order to share the self-hosted integration runtime that gets deployed into the `integration-rg` resource group with other Data Factories, like the one in the `processing-domain-rg` resource group, the service principle needs User Access Administrator rights on the Data Factory that gets deployed into the `integration-rg` resource group. | (Resource Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName} /providers/Microsoft.DataFactory/factories/{dataFactoryName}` |
-| [Network Contributor](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#network-contributor) | In order to setup vnet peering between the Data Landing Zone vnet and the Data Management Landing Zone vnet, the service principal needs Network Contributor access rights on the resource group of the remote vnet. | (Resource Group Scope) `/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}` |
-
-To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands:
-
-**Azure CLI**
-```Sh
-# Get Service Principle Object ID
-az ad sp list --display-name "{servicePrincipalName}" --query "[].{objectId:objectId}" --output tsv
-
-# Add role assignment
-# 1. Resource Scope
-az role assignment create \
-  --assignee "{servicePrincipalObjectId}" \
-  --role "{roleName}" \
-  --scopes "{scope}"
-
-# 2. Resource group scope
-az role assignment create \
-  --assignee "{servicePrincipalObjectId}" \
-  --role "{roleName}" \
-  --resource-group "{resourceGroupName}"
-```
-
-**Azure Powershell**
-```PowerShell
-# Get Service Principle Object ID
-$spObjectId = (Get-AzADServicePrincipal -DisplayName "{servicePrincipalName}").id
-
-# Add role assignment
-# 1. Resource Scope
-New-AzRoleAssignment `
-  -ObjectId $spObjectId `
-  -RoleDefinitionName "{roleName}" `
-  -Scope "{scope}"
-
-# 2. Resource group scope
-New-AzRoleAssignment `
-  -ObjectId $spObjectId `
-  -RoleDefinitionName "{roleName}" `
-  -ResourceGroupName "{resourceGroupName}"
-``` -->
 
 Now you can choose, whether you would like to use GitHub Actions or Azure DevOps for your deployment.
 
@@ -226,13 +174,13 @@ The parameters have the following meaning:
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
 | **DATA_HUB_SUBSCRIPTION_ID**             | Specifies the subscription ID of the Data Management Zone where all the resources will be deployed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
-| **DATA_HUB_NAME**        | Specifies the name of your Data Management Zone. The value should consist of alphanumeric characters (A-Z, a-z, 0-9) and should not contain any special characters like -, _, ., etc. Special characters will be removed in the renaming process. | `myhub01` |
+| **DATA_HUB_NAME**        | Specifies the name of your Data Management Zone. The value should consist of alphanumeric characters (A-Z, a-z, 0-9) and should not contain any special characters like `-`, `_`, `.`, etc. Special characters will be removed in the renaming process. | `myhub01` |
 | **LOCATION**                                 | Specifies the region where you want the resources to be deployed. | `northeurope` |
 | **AZURE_RESOURCE_MANAGER _CONNECTION_NAME**   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value, if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-After updating the values, please commit the updated version to the `main` branch. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a certain naming convention. Once the process has finished, it will open a Pull Request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the Pull Request to complete the parameter update process. We are not renaming the environment variables in the workflow files, because this can have undesired outcomes of kicking of an infinite number of workflows. 
+After updating the values, please commit the updated version to the `main` branch. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a pre-defined naming convention. Once the process has finished, it will open a Pull Request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the Pull Request to complete the parameter update process. We are not renaming the environment variables in the workflow files, because this can have the undesired outcome of triggering an infinite number of workflows.
 
 After following the instructions in the Pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
 
