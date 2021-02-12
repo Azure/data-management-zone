@@ -9,6 +9,8 @@ The Data Management template is, as the name suggessts, classified as a manageme
 
 By default, all the services which comes under Data Management Zone are enabled and you must explicitly disable them if you don't want it to be deployed. 
 
+> Note: Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types).
+
 <p align="center">
   <img src="./docs/media/DataHub.png" alt="Data Management Zone" width="500"/> 
 </p>
@@ -149,7 +151,7 @@ More information can be found [here](https://docs.microsoft.com/en-us/azure/devo
 
 ## 4. Parameter Update Process
 
-In order to deploy the ARM templates in this repository to the desired Azure subscription, you'll need to modify some parameters in the forked repository. As updating each parameter file manually is a time consuming process, which could lead as well to undesired user errors, we have simplified the process with a  GitHub Action workflow. After successfully executing the previous steps, please open the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"` YAML file</a>. In this file you need to update the environment variables. Once you commit the file with the updated values, a GitHub Action workflow will be triggered that replaces all parameters accordingly. Just click on <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml"`</a> and edit the following section: 
+In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. After successfully executing the previous steps, please open the <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml` YAML file</a>. In this file you need to update the environment variables. Just click on <a href="/.github/workflows/updateParameters.yml">`/.github/workflows/updateParameters.yml`</a> and edit the following section:
 
 
 ```YAML
@@ -242,6 +244,29 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 - [Implementation - Data Domain - Streaming](https://github.com/Azure/data-domain-streaming)
 - [Implementation - Data Product - Reporting](https://github.com/Azure/data-product-reporting)
 - [Implementation - Data Product - Analytics & Data Science](https://github.com/Azure/data-product-analytics)
+
+## Known issues
+
+### Error: MissingSubscriptionRegistration
+
+**Error Message:**
+
+```sh
+ERROR: Deployment failed. Correlation ID: ***
+  "error": ***
+    "code": "MissingSubscriptionRegistration",
+    "message": "The subscription is not registered to use namespace 'Microsoft.DocumentDB'. See https://aka.ms/rps-not-found for how to register subscriptions.",
+    "details": [
+      ***
+        "code": "MissingSubscriptionRegistration",
+        "target": "Microsoft.DocumentDB",
+        "message": "The subscription is not registered to use namespace 'Microsoft.DocumentDB'. See https://aka.ms/rps-not-found for how to register subscriptions."
+ 
+```
+**Solution:**
+
+This error message appears, in case during the deployment it tries to create a type of resource which has never been deployed before inside the subscription. We recommend to check prior the deployment whether the required resource providers are registered for your subscription and if needed, register them through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types).
+
 
 # Contributing
 
