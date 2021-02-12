@@ -401,7 +401,7 @@
     "outputs": {
         "firewallPrivateIp": {
             "type": "string",
-            "value": "[reference('networkDeployment').outputs.firewallPrivateIp.value]"
+            "value": "[if(variables('enableDnsAndFirewall'), reference('firewall001Deployment').outputs.firewallPrivateIp.value, null())]"
         },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
