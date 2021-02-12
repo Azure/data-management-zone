@@ -291,7 +291,7 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 24)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, variables('governanceResourceGroupName'))), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
@@ -353,7 +353,7 @@
                         "value": "[variables('location')]"
                     },
                     "containerRegistryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, resourceGroup().id)), 50)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, variables('containerResourceGroupName'))), 50)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
