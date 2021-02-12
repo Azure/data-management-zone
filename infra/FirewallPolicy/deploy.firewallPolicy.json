@@ -349,6 +349,32 @@
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
                                 "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                            },
+                            {
+                                "name": "DataFactory-ApplicationRule-003",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                    "*.githubusercontent.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows download of SHIR install script from GitHub"
                             }
                         ]
                     }
