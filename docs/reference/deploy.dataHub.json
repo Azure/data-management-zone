@@ -169,7 +169,7 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "northeurope"
+                        "value": "[variables('location')]"
                     },
                     "vnetName": {
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-vnet'), 64)]"
