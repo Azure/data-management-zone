@@ -47,7 +47,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 
 | Data Management Zone |
 |:---------------------|
-[&nbsp;&nbsp;![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-hub%2Fmain%2Fdocs%2Freference%2Fdeploy.dataHub.json)
+[&nbsp;&nbsp;![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fdeploy.dataHub.json)
 
 # Option 2: GitHub Actions or Azure DevOps Pipelines
 
