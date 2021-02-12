@@ -324,7 +324,7 @@
                         "value": "[if(contains(variables('purviewRegions'), variables('location')), variables('location'), 'westeurope')]"
                     },
                     "purviewName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001'), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001', uniqueString(subscription().subscriptionId, variables('governanceResourceGroupName'))), 63)]"
                     },
                     "keyVaultId": {
                         "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
