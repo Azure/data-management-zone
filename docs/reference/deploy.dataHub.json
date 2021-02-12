@@ -262,7 +262,7 @@
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-firewall'), 80)]"
                     },
                     "firewallPolicyId": {
-                        "value": "[reference('firewallPolicyDeployment').outputs.firewallPolicyId.value]"
+                        "value": "[reference('firewallPolicy001Deployment').outputs.firewallPolicyId.value]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.firewallSubnetId.value]"
