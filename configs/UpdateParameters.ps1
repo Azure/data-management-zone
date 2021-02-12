@@ -8,12 +8,12 @@ Param(
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $DataLandingZoneSubscriptionId,
+    $DataManagementZoneSubscriptionId,
 
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $DataLandingZoneName,
+    $DataManagementZoneName,
 
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -45,11 +45,11 @@ function Remove-SpecialCharsAndWhitespaces($InputString) {
 
 # Replace Special Characters
 Write-Host "Replacing Special Characters"
-$DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandingZoneName
+$DataManagementZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataManagementZoneName
 
-# Reduce Length of DataLandingZoneName
-Write-Host "Reduce Length of DataLandingZoneName to Max 11 Characters"
-$DataLandingZoneName = -join $DataLandingZoneName[0..11]
+# Reduce Length of DataManagementZoneName
+Write-Host "Reduce Length of DataManagementZoneName to Max 11 Characters"
+$DataManagementZoneName = -join $DataManagementZoneName[0..11]
 
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
@@ -111,4 +111,4 @@ foreach ($config in $configs) {
 
 # Set output
 Write-Output "Setting output"
-Write-Output "::set-output name=landingZoneName::${DataLandingZoneName}"
+Write-Output "::set-output name=managementZoneName::${DataManagementZoneName}"
