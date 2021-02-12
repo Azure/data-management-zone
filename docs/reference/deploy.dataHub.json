@@ -9,13 +9,6 @@
                 "description": "Provide the prefix (max 5 characters) for all services that will be created"
             }
         },
-        "location": {
-            "type": "string",
-            "defaultValue": "northeurope",
-            "metadata": {
-                "description": "Specifies the location for all resources."
-            }
-        },
         "enableDnsAndFirewall": {
             "type": "bool",
             "defaultValue": true,
@@ -50,7 +43,7 @@
     "functions": [],
     "variables": {
         "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
-        "location": "[parameters('location')]",
+        "location": "[deployment().location]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
