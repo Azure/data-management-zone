@@ -1,6 +1,6 @@
 # Enterprise Scale Analytics - Data Management
 
-> **General disclaimer** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
+> **General disclaimer:** Please be aware that this template is in public preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
 
 # Description
 The Data Management template is, as the name suggessts, classified as a management function and is at the heart of the Enterprise Scale Analytics platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
