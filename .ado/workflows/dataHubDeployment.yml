@@ -330,10 +330,10 @@ stages:
         #     failOnStandardError: false
         #     azurePowerShellVersion: 'latestVersion'
         
-        # # Deploy DNS Forwarder
+        # # Deploy DNS Forwarder 001
         # - task: AzureResourceManagerTemplateDeployment@3
-        #   name: dns_forwarder_deployment
-        #   displayName: Deploy DNS Forwarder
+        #   name: dns_forwarder_001_deployment
+        #   displayName: Deploy DNS Forwarder 001
         #   enabled: true
         #   continueOnError: false
         #   inputs:
