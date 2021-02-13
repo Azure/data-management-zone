@@ -318,7 +318,7 @@ stages:
         #   continueOnError: false
         #   inputs:
         #     azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-        #     scriptType: 'filePath' # Optional. Options: filePath, inlineScript
+        #     scriptType: 'filePath'
         #     scriptPath: '$(System.DefaultWorkingDirectory)/code/UploadBlob.ps1'
         #     scriptArguments:
         #       -ResourceGroupName ${{ variables.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
