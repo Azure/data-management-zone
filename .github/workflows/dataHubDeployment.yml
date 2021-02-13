@@ -16,7 +16,7 @@ on:
       - 'infra/VirtualNetwork/**'
       - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/dataHubDeployment.yml'
-      - 'code/GeneratePassword.ps1'
+      - 'code/**'
 
 env:
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2' # Update to '{dataHubSubscriptionId}'
@@ -343,10 +343,12 @@ jobs:
     #   with:
     #     azPSVersion: latest
     #     inlineScript: |
-    #       "Uploading file to Storage Account 001"
-    #       $storageAccount = Get-AzStorageAccount -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" -Name "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}"
-    #       $ctx = $storageAccount.Context
-    #       Set-AzStorageBlobContent -Context $ctx -Container "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" -File "infra/DnsForwarder/forwarderSetup.sh" -Blob "forwarderSetup.sh" -Force
+    #       & "${{ github.workspace }}/code/UploadBlob.ps1" `
+    #         -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" `
+    #         -StorageAccountName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}" `
+    #         -StorageAccountContainerName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" `
+    #         -File "${{ github.workspace }}/infra/DnsForwarder/forwarderSetup.sh" `
+    #         -Blob "forwarderSetup.sh"
     
     # # Deploy DNS Forwarder 001
     # - name: Deploy DNS Forwarder 001
