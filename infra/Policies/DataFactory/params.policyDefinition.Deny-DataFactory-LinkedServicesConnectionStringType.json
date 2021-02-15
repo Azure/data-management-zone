@@ -23,6 +23,10 @@
                             "equals": "Microsoft.DataFactory/factories/linkedservices"
                         },
                         {
+                            "field": "Microsoft.DataFactory/factories/linkedservices/type",
+                            "notEquals": "AzureKeyVault"
+                        },
+                        {
                             "field": "Microsoft.DataFactory/factories/linkedservices/typeProperties.connectionString.type",
                             "notEquals": "AzureKeyVaultSecret"
                         }
