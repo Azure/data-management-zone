@@ -19,9 +19,28 @@ trigger:
       - infra/VirtualNetworkPeering/*
       - .ado/workflows/dataHubDeployment.yml
       - code/*
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/ArtifactStorage/*
+      - infra/ContainerRegistry/*
+      - infra/DnsForwarder/*
+      - infra/Firewall/*
+      - infra/FirewallPolicy/*
+      - infra/KeyVault/*
+      - infra/PrivateDns/*
+      - infra/Purview/*
+      - infra/SynapsePrivateLinkHub/*
+      - infra/VirtualNetwork/*
+      - infra/VirtualNetworkPeering/*
+      - .ado/workflows/dataHubDeployment.yml
+      - code/*
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'My Azure Subscription' # Update to '{resourceManagerConnectionName}'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'data-hub'              # Update to '{resourceManagerConnectionName}'
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'   # Update to '{dataHubSubscriptionId}'
   AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dh-network'                 # Update to '{dataHubName}-network'
   AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: 'dh-global-dns'           # Update to '{dataHubName}-global-dns'
