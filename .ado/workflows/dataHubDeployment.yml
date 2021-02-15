@@ -254,7 +254,7 @@ stages:
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
     dependsOn: Validation
-    condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    # condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
     jobs:
       - job: Deployment
         displayName: 'Deployment of ARM templates'
