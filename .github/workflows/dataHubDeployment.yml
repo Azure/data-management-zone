@@ -17,6 +17,22 @@ on:
       - 'infra/VirtualNetworkPeering/**'
       - '.github/workflows/dataHubDeployment.yml'
       - 'code/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'infra/ArtifactStorage/**'
+      - 'infra/ContainerRegistry/**'
+      - 'infra/DnsForwarder/**'
+      - 'infra/Firewall/**'
+      - 'infra/FirewallPolicy/**'
+      - 'infra/KeyVault/**'
+      - 'infra/PrivateDns/**'
+      - 'infra/Purview/**'
+      - 'infra/SynapsePrivateLinkHub/**'
+      - 'infra/VirtualNetwork/**'
+      - 'infra/VirtualNetworkPeering/**'
+      - '.github/workflows/dataHubDeployment.yml'
+      - 'code/**'
 
 env:
   AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2' # Update to '{dataHubSubscriptionId}'
