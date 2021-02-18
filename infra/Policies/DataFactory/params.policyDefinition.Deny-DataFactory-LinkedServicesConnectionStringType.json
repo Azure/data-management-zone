@@ -24,7 +24,13 @@
                         },
                         {
                             "field": "Microsoft.DataFactory/factories/linkedservices/type",
-                            "notEquals": "AzureKeyVault"
+                            "notIn": [
+                                "AzureDatabricks",
+                                "AzureBlobFS",
+                                "HttpServer",
+                                "AzureSqlDatabase",
+                                "AzureKeyVault"
+                            ]
                         },
                         {
                             "field": "Microsoft.DataFactory/factories/linkedservices/typeProperties.connectionString.type",
