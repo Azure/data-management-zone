@@ -93,7 +93,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
   <img src="docs/images/CreateRepoGH.png" alt="Create Repository from Template" width="600"/>
 </p>
 
-1. Type a name for your repository and an optional description.
+4. Type a name for your repository and an optional description.
 1. Choose a repository visibility. For more information, see "[About repository visibility](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility)."
 1. Optionally, to include the directory structure and files from all branches in the template and not just the default branch, select **Include all branches**.
 1. Click **Create repository from template**.
