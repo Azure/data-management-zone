@@ -147,7 +147,7 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 10. Optionally, enter a **Description**.
 11. Click on **Verify and save**.
     
-        <p align="center">
+      <p align="center">
       <img src="docs/images/ConnectionDevOps.png" alt="Connection DevOps" width="300"/>
         </p>
 
