@@ -9,7 +9,7 @@
                 "privatelink.api.azureml.ms",
                 "privatelink.azure-automation.net",
                 "privatelink.azure-devices.net",
-                "privatelink.azure.com",
+                "privatelink.adf.azure.com",
                 "privatelink.azurecr.io",
                 "privatelink.azuredatabricks.net",
                 "privatelink.azuresynapse.net",
