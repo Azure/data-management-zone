@@ -6,7 +6,7 @@
 
 ## Description
 
-The Data Management template is, as the name suggests, classified as a management function and is at the heart of the [**Enterprise Scale Analytics an AI**](https://github.com/Azure/Enterprise-Scale-Analytics) platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
+The Data Management template is, as the name suggests, classified as a management function and is at the heart of the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
 
 ## What will be deployed?
 
@@ -14,7 +14,7 @@ By default, all the services which come under Data Management Zone are enabled, 
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
-    <p align="center">
+  <p align="center">
       <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/> 
     </p>
     
