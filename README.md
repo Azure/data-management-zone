@@ -106,7 +106,7 @@ This will generate the following JSON output:
 
 >**Note:** Take note of the output. It will be required for the next steps.
 
-## 3. Resource Deployment
+### 3. Resource Deployment
 
 Now that you have set up the Service Principal, you need to choose how would you like to deploy the resources.
 Deployment options:
