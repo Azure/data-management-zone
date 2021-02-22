@@ -111,8 +111,8 @@ This will generate the following JSON output:
 Now that you have set up the Service Principal, you need to choose how would you like to deploy the resources.
 Deployment options:
 
-1. [GitHub Actions](####github-actions)
-1. [Azure DevOps](####azure-devops)
+1. [GitHub Actions](#github-actions)
+1. [Azure DevOps](#azure-devops)
 
 #### GitHub Actions
 
