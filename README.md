@@ -209,7 +209,7 @@ First you need to add and install the Azure Pipelines GitHub App to your GitHub 
 1. You may be prompted to confirm your GitHub password to continue.
 1. You may be prompted to log in to your Microsoft account. Make sure you log in with the one that is associated with your Azure DevOps account.
 
-### Configuring the Azure Pipelines project
+#### Configuring the Azure Pipelines project
 
 As a last step, you need to create an Azure DevOps pipeline in your project based on the pipeline definition YAML file that is stored in your GitHub repository. To do so, execute the following steps:
 
