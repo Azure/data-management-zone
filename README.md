@@ -4,9 +4,11 @@
 
 > **General disclaimer:** Please be aware that this template is in private preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
 
+**DO NOT COPY - UNDER DEVELOPMENT - MS INTERNAL ONLY - Please be aware that this template is in private preview without any SLA.**
+
 ## Description
 
-The Data Management template is, as the name suggests, classified as a management function and is at the heart of the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) platform. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
+The Data Management template is, as the name suggests, classified as a management function and is at the heart of the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) solution pattern. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
 
 ## What will be deployed?
 
@@ -104,6 +106,8 @@ This will generate the following JSON output:
 
 >**Note:** Take note of the output. It will be required for the next steps.
 
+## 3. Resource Deployment
+
 Now that you have set up the Service Principal, you need to choose how would you like to deploy the resources.
 Deployment options:
 
@@ -153,7 +157,7 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
-## 3. Parameter Update Process
+## 4. Parameter Update Process
 
 In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. After successfully executing the previous steps, please open the  [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
 
@@ -182,7 +186,7 @@ After updating the values, please commit the updated version to the `main` branc
 
 After following the instructions in the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
 
-## 4. Reference pipeline from GitHub repository in Azure DevOps Pipelines
+## 5. Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
 >**Note:** **This is not applicable for GH Actions**.
 
@@ -229,7 +233,7 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 7. Click on **Continue** and then on **Run**.
 
-## 5. Follow the workflow deployment
+## 6. Follow the workflow deployment
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
 
