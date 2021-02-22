@@ -190,7 +190,7 @@ After following the instructions in the pull request, you can merge the pull req
 
 >**Note:** **This is not applicable for GH Actions**.
 
-### Install Azure DevOps Pipelines GitHub Application
+#### Install Azure DevOps Pipelines GitHub Application
 
 First you need to add and install the Azure Pipelines GitHub App to your GitHub account. To do so, execute the following steps:
 
