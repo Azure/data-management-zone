@@ -80,7 +80,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 
 A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the ID of your subscription. Then start the Cloud Shell or Azure CLI, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
-### Azure CLI
+#### Azure CLI
 
 ```Sh
 # Replace {service-principal-name} and {subscription-id} with your 
@@ -114,7 +114,7 @@ Deployment options:
 1. [GitHub Actions](##github-actions)
 1. [Azure DevOps](##azure-devops)
 
-## GitHub Actions
+#### GitHub Actions
 
 If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
         <p align="center">
@@ -131,7 +131,7 @@ To do so, execute the following steps:
 6. Enter the JSON output from above as value for your secret.
 7. Click **Add secret**.
 
-## Azure DevOps
+#### Azure DevOps
 
 If you want to use Azure DevOps Pipelines for deploying the resources, you need to create an Azure Resource Manager service connection. To do so, execute the following steps:
 
@@ -157,7 +157,7 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
-## 4. Parameter Update Process
+### 4. Parameter Update Process
 
 In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. After successfully executing the previous steps, please open the  [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
 
@@ -186,7 +186,7 @@ After updating the values, please commit the updated version to the `main` branc
 
 After following the instructions in the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
 
-## 5. Reference pipeline from GitHub repository in Azure DevOps Pipelines
+### 5. Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
 >**Note:** **This is not applicable for GH Actions**.
 
@@ -233,7 +233,7 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 7. Click on **Continue** and then on **Run**.
 
-## 6. Follow the workflow deployment
+### 6. Follow the workflow deployment
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
 
@@ -241,7 +241,7 @@ If you are using GitHub Actions, you can navigate to the **Actions** tab of the 
 
 If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 6 and monitor it as each service is deployed. If you run into any issues, please open an issue [here](https://github.com/Azure/data-management-zone/issues).
 
-## Documentation
+### Documentation
 
 ### Code Structure
 
