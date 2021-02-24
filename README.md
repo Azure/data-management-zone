@@ -16,9 +16,9 @@ By default, all the services which come under Data Management Zone are enabled, 
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
-  <p align="center">
-      <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/> 
-    </p>
+<p align="center">
+  <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/> 
+</p>
     
 - [Virtual Network](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
 - [Network Security Groups](https://docs.microsoft.com/azure/virtual-network/network-security-groups-overview)
@@ -55,7 +55,7 @@ If you don’t have an Azure subscription, [create your Azure free account today
 | Data Management Zone |
 |:---------------------|
 <!-- [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fdeploy.dataHub.json) -->
-![Deploy to Azure](/docs/media/deploytoazuregrey.png)
+![Deploy to Azure](/docs/images/deploytoazuregrey.png)
 
 
 ## Option 2: GitHub Actions or Azure DevOps Pipelines
@@ -119,9 +119,9 @@ Deployment options:
 #### GitHub Actions
 
 If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
-        <p align="center">
-      <img src="docs/images/AzureCredentialsGH.png" alt="GitHub Secrets" width="600"/>
-        </p>
+<p align="center">
+  <img src="docs/images/AzureCredentialsGH.png" alt="GitHub Secrets" width="600"/>
+</p>
 
 To do so, execute the following steps:
 
@@ -141,9 +141,9 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 1. In Azure DevOps, open the **Project settings**.
 1. Now, select the **Service connections** page from the project settings page.
 1. Choose **New service connection** and select **Azure Resource Manager**.
-          <p align="center">
+    <p align="center">
       <img src="docs/images/ARMConnectionDevOps.png" alt="ARM Connection" width="600"/>
-         </p>
+    </p>
     
 5. On the next page select **Service principal (manual)**.
 6. Select the appropriate environment to which you would like to deploy the templates. Only the default option **Azure Cloud** is currently supported.
@@ -153,9 +153,9 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 10. Optionally, enter a **Description**.
 11. Click on **Verify and save**.
     
-      <p align="center">
+    <p align="center">
       <img src="docs/images/ConnectionDevOps.png" alt="Connection DevOps" width="300"/>
-        </p>
+    </p>
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
@@ -198,14 +198,14 @@ First you need to add and install the Azure Pipelines GitHub App to your GitHub 
 
 1. Click on **Marketplace** in the top navigation bar on GitHub.
 1. In the Marketplace, search for **Azure Pipelines**. The Azure Pipelines offering is free for anyone to use for public repositories and free for a single build queue if you’re using a private repository.
-        <p align="center">
+    <p align="center">
       <img src="docs/images/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="600"/>
-        </p>
+    </p>
         
 3. Select it and click on **Install it for free**.
-        <p align="center">
+    <p align="center">
       <img src="docs/images/InstallButtonGH.png" alt="GitHub Template repository" width="600"/>
-        </p>
+    </p>
     
 4. If you are part of multiple **GitHub** organizations, you may need to use the **Switch billing account** dropdown to select the one into which you forked this repository.
 1. You may be prompted to confirm your GitHub password to continue.
@@ -217,21 +217,21 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 1. Select the Azure DevOps project where you have setup your `Resource Manager Connection`.
 1. Select **Pipelines** and then **New Pipeline** in order to create a new pipeline.
-        <p align="center">
+    <p align="center">
       <img src="docs/images/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="600"/>
-        </p>
+    </p>
 
 3. Choose **GitHub YAML** and search for your repository (e.g. "`GitHubUserName/RepositoryName`").
-        <p align="center">
+    <p align="center">
       <img src="docs/images/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="600"/>
-        </p>
+    </p>
 
 4. Select your repository.
 1. Click on **Existing Azure Pipelines in YAML file**
 1. Select `main` as branch and `/.ado/workflows/dataNodeDeployment.yml` as path.
-        <p align="center">
+    <p align="center">
       <img src="docs/images/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
-        </p>
+    </p>
 
 7. Click on **Continue** and then on **Run**.
 
