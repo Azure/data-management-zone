@@ -26,6 +26,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone."
             }
+        },
+        "resourceExists": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Specifies whether this is the first deployment of this resource or whether the resource already exists."
+            }
         }
     },
     "functions": [],
@@ -34,6 +41,7 @@
         "keyVaultName": "[parameters('keyVaultName')]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
+        "resourceExists": "[parameters('resourceExists')]",
         "privateEndpointName": "[concat(variables('keyVaultName'), '-private-endpoint')]"
     },
     "resources": [
@@ -51,8 +59,7 @@
                 "enableRbacAuthorization": false,
                 "tenantId": "[subscription().tenantId]",
                 "createMode": "default",
-                "accessPolicies": [
-                ],
+                "accessPolicies": "[if(variables('resourceExists'), reference(resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName')), '2016-10-01').accessPolicies, '[]')]",
                 "sku": {
                     "name": "standard",
                     "family": "A"
