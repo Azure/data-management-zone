@@ -61,6 +61,7 @@
         "firewallTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/Firewall/deploy.firewall.json",
         "containerRegistryTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/ContainerRegistry/deploy.containerRegistry.json",
         "keyVaultTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/KeyVault/deploy.keyVault.json",
+        "powerBiTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/PowerBi/deploy.powerBi.json",
         "purviewTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/Purview/deploy.purview.json",
         "synapsePrivateLinkHubTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json",
         "privateDnsZoneNames": [
@@ -392,6 +393,43 @@
                     },
                     "privateDnsZoneId": {
                         "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'))]"
+                    }
+                }
+            },
+            "resourceGroup": "[variables('consumptionResourceGroupName')]"
+        },
+        {
+            "condition": false,
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "name": "powerBi001Deployment",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('powerBiTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "powerBiName": {
+                        "value": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-powerbi001')]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdAnalysis": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net'))]"
+                    },
+                    "privateDnsZoneIdPbiDedicated": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net'))]"
+                    },
+                    "privateDnsZoneIdPowerQuery": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.prod.powerquery.microsoft.com'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.prod.powerquery.microsoft.com'))]"
                     }
                 }
             },
