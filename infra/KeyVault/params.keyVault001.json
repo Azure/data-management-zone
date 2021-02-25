@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "keyVaultName": {
-            "value": "testkvesaaai001"
+            "value": "dh-keyvault001"
         },
         "subnetId": {
             "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
