@@ -10,6 +10,7 @@ on:
       - 'infra/Firewall/**'
       - 'infra/FirewallPolicy/**'
       - 'infra/KeyVault/**'
+      - 'infra/PowerBi/**'
       - 'infra/PrivateDns/**'
       - 'infra/Purview/**'
       - 'infra/SynapsePrivateLinkHub/**'
@@ -26,6 +27,7 @@ on:
       - 'infra/Firewall/**'
       - 'infra/FirewallPolicy/**'
       - 'infra/KeyVault/**'
+      - 'infra/PowerBi/**'
       - 'infra/PrivateDns/**'
       - 'infra/Purview/**'
       - 'infra/SynapsePrivateLinkHub/**'
@@ -298,6 +300,19 @@ jobs:
         parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
         deploymentMode: Validate
     
+    # # Deploy Power BI Private Link 001 - validation
+    # - name: Deploy Power BI Private Link 001 - validation
+    #   id: power_bi_pl_001_validation
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/PowerBi/deploy.powerBi.json
+    #     parameters: ${{ github.workspace }}/infra/PowerBi/params.powerBi001.json
+    #     deploymentMode: Validate
+    
     # Log out from Azure
     - name: Log out from Azure
       id: azure_logout
@@ -483,6 +498,19 @@ jobs:
         template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
         parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
         deploymentMode: Incremental
+    
+    # # Deploy Power BI Private Link 001
+    # - name: Deploy Power BI Private Link 001
+    #   id: power_bi_pl_001_deployment
+    #   uses: azure/arm-deploy@v1
+    #   with:
+    #     scope: resourcegroup
+    #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+    #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
+    #     region: ${{ env.AZURE_LOCATION }}
+    #     template: ${{ github.workspace }}/infra/PowerBi/deploy.powerBi.json
+    #     parameters: ${{ github.workspace }}/infra/PowerBi/params.powerBi001.json
+    #     deploymentMode: Incremental
     
     # Log out from Azure
     - name: Log out from Azure
