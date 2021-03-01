@@ -54,7 +54,6 @@
         "containerResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-container')]",
         "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-mgmt')]",
         "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
-        "purviewRegions": [ "brazilsouth", "eastus", "eastus2", "southeastasia", "westeurope" ],
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/VirtualNetwork/deploy.vnet.json",
         "privateDnsZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/PrivateDns/deploy.privateDns.json",
         "firewallPolicyTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/FirewallPolicy/deploy.firewallPolicy.json",
@@ -91,6 +90,7 @@
             "privatelink.notebooks.azure.net",
             "privatelink.pbidedicated.windows.net",
             "privatelink.postgres.database.azure.com",
+            "privatelink.purview.azure.com",
             "privatelink.queue.core.windows.net",
             "privatelink.redis.cache.windows.net",
             "privatelink.search.windows.net",
@@ -321,13 +321,28 @@
                 },
                 "parameters": {
                     "location": {
-                        "value": "[if(contains(variables('purviewRegions'), variables('location')), variables('location'), 'westeurope')]"
+                        "value": "[variables('location')]"
                     },
                     "purviewName": {
                         "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001', uniqueString(subscription().subscriptionId, variables('governanceResourceGroupName'))), 63)]"
                     },
                     "keyVaultId": {
                         "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
+                    },
+                    "subnetId": {
+                        "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
+                    },
+                    "privateDnsZoneIdPurview": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'))]"
+                    },
+                    "privateDnsZoneIdBlob": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'))]"
+                    },
+                    "privateDnsZoneIdQueue": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'))]"
+                    },
+                    "privateDnsZoneIdNamespace": {
+                        "value": "[if(variables('enableDnsAndFirewall'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'))]"
                     }
                 }
             },
