@@ -523,6 +523,43 @@
                                 "description": "Allows Databricks Setup Notebook to run successfully"
                             }
                         ]
+                    },
+                    {
+                        "name": "Azure-ApplicationRules",
+                        "priority": 20500,
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "rules": [
+                            {
+                                "name": "Azure-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                    "*microsoft.com",
+                                    "*azure.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows communication with azure and microsoft"
+                            }
+                        ]
                     }
                 ]
             }

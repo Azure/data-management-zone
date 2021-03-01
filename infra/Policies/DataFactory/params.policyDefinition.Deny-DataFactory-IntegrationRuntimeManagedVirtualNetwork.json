@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-DataFactory-IntegrationRuntimeManagedVirtualNetwork"
+        },
+        "policyDescription": {
+            "value": "Denies Integration Runtimes that are not connected to the Managed Virtual Network."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {}
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.DataFactory/factories/integrationruntimes"
+                        },
+                        {
+                            "field": "name",
+                            "notEquals": "AutoResolveIntegrationRuntime"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DataFactory/factories/integrationRuntimes/Managed.managedVirtualNetwork",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DataFactory/factories/integrationRuntimes/Managed.managedVirtualNetwork.referenceName",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DataFactory/factories/integrationRuntimes/Managed.managedVirtualNetwork.referenceName",
+                                    "notEquals": "default"
+                                },
+                                {
+                                    "field": "Microsoft.DataFactory/factories/integrationRuntimes/Managed.managedVirtualNetwork.type",
+                                    "exists": false
+                                },
+                                {
+                                    "field": "Microsoft.DataFactory/factories/integrationRuntimes/Managed.managedVirtualNetwork.type",
+                                    "notEquals": "ManagedVirtualNetworkReference"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "Deny"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Data Factory",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
