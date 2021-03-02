@@ -1,21 +1,21 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "keyVaultName": {
-            "value": "dh-keyvault001"
-        },
-        "subnetId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
-        },
-        "privateDnsZoneId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
-        },
-        "resourceExists": {
-            "value": false
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "keyVaultName": {
+      "value": "dataHubName-keyvault001"
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/dataHubName-network/providers/Microsoft.Network/virtualNetworks/dataHubName-vnet/subnets/dataHubName-privatelink-subnet"
+    },
+    "privateDnsZoneId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/dataHubName-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net"
+    },
+    "resourceExists": {
+      "value": false
     }
+  }
 }
