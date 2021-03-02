@@ -31,6 +31,7 @@
                 "privatelink.notebooks.azure.net",
                 "privatelink.pbidedicated.windows.net",
                 "privatelink.postgres.database.azure.com",
+                "privatelink.purview.azure.com",
                 "privatelink.queue.core.windows.net",
                 "privatelink.redis.cache.windows.net",
                 "privatelink.search.windows.net",

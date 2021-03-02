@@ -66,8 +66,14 @@
         "filePath": "infra/Purview/params.purview001.json",
         "fileType": "json",
         "parameters": {
+            "parameters.location.value": "${Location}",
             "parameters.purviewName.value": "${DataLandingZoneName}-purview001",
-            "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-governance/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001"
+            "parameters.keyVaultId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-governance/providers/Microsoft.KeyVault/vaults/${DataLandingZoneName}-keyvault001",
+            "parameters.subnetId.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-network/providers/Microsoft.Network/virtualNetworks/${DataLandingZoneName}-vnet/subnets/${DataLandingZoneName}-privatelink-subnet",
+            "parameters.privateDnsZoneIdPurview.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com",
+            "parameters.privateDnsZoneIdBlob.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net",
+            "parameters.privateDnsZoneIdQueue.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net",
+            "parameters.privateDnsZoneIdNamespace.value": "/subscriptions/${DataLandingZoneSubscriptionId}/resourceGroups/${DataLandingZoneName}-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
         }
     },
     {
