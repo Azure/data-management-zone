@@ -378,7 +378,8 @@
                                 "targetFqdns": [
                                     "go.microsoft.com",
                                     "download.microsoft.com",
-                                    "browser.events.data.msn.com"
+                                    "browser.events.data.msn.com",
+                                    "*.clouddatahub.net"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
