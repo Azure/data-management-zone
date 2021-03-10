@@ -13,14 +13,14 @@
         },
         "policyParameters": {
             "value": {
-                "datahubDataFactoryId": {
+                "datanodeDataFactoryId": {
                     "type": "string",
                     "metadata": {
                         "displayName": "Data Factory",
-                        "description": "Select the Data Factory deployed to the Data Hub from the dropdown list"
+                        "description": "Select the central Data Factory deployed to the Data Node from the dropdown list"
                     }
                 },
-                "datahubDataFactoryShirId": {
+                "datanodeDataFactoryShirId": {
                     "type": "string",
                     "metadata": {
                         "displayName": "Data Factory Self-Hosted Integration Runtime",
@@ -43,7 +43,7 @@
                     "effect": "deployIfNotExists",
                     "details": {
                         "type": "Microsoft.DataFactory/factories/integrationRuntimes",
-                        "name": "datahubSharedSelfHostedIntegrationRuntime",
+                        "name": "datanodeSharedSelfHostedIntegrationRuntime",
                         "existenceCondition": {
                             "allOf": [
                                 {
@@ -70,25 +70,25 @@
                                         "dataFactoryId": {
                                             "type": "string"
                                         },
-                                        "datahubDataFactoryId": {
+                                        "datanodeDataFactoryId": {
                                             "type": "string"
                                         },
-                                        "datahubDataFactoryShirId": {
+                                        "datanodeDataFactoryShirId": {
                                             "type": "string"
                                         }
                                     },
                                     "variables": {
                                         "dataFactoryId": "[parameters('dataFactoryId')]",
                                         "dataFactoryName": "[last(split(variables('dataFactoryId'), '/'))]",
-                                        "datahubDataFactoryId": "[parameters('datahubDataFactoryId')]",
-                                        "datahubDataFactoryName": "[last(split(variables('datahubDataFactoryId'), '/'))]",
-                                        "datahubDataFactoryShirId": "[parameters('datahubDataFactoryShirId')]"
+                                        "datanodeDataFactoryId": "[parameters('datanodeDataFactoryId')]",
+                                        "datanodeDataFactoryName": "[last(split(variables('datanodeDataFactoryId'), '/'))]",
+                                        "datanodeDataFactoryShirId": "[parameters('datanodeDataFactoryShirId')]"
                                     },
                                     "resources": [
                                         {
                                             "type": "Microsoft.Resources/deployments",
                                             "apiVersion": "2019-10-01",
-                                            "name": "AdfRoleAssignment",
+                                            "name": "[concat(variables('dataFactoryName'), '-Adf-RoleAssignment')]",
                                             "properties": {
                                                 "expressionEvaluationOptions": {
                                                     "scope": "outer"
@@ -101,7 +101,7 @@
                                                     "variables": {},
                                                     "resources": [
                                                         {
-                                                            "name": "[concat(variables('datahubDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(variables('dataFactoryName'))))]",
+                                                            "name": "[concat(variables('datanodeDataFactoryName'), '/Microsoft.Authorization/', guid(uniqueString(variables('dataFactoryName'))))]",
                                                             "type": "Microsoft.DataFactory/factories/providers/roleAssignments",
                                                             "apiVersion": "2018-09-01-preview",
                                                             "properties": {
@@ -113,22 +113,50 @@
                                                     "outputs": {}
                                                 }
                                             },
-                                            "subscriptionId": "[split(variables('datahubDataFactoryId'), '/')[2]]",
-                                            "resourceGroup": "[split(variables('datahubDataFactoryId'), '/')[4]]"
+                                            "subscriptionId": "[split(variables('datanodeDataFactoryId'), '/')[2]]",
+                                            "resourceGroup": "[split(variables('datanodeDataFactoryId'), '/')[4]]"
+                                        },
+                                        {
+                                            "type": "Microsoft.Resources/deployments",
+                                            "apiVersion": "2020-06-01",
+                                            "name": "[concat('delayFor', copyIndex())]",
+                                            "dependsOn": [
+                                                "[concat(variables('dataFactoryName'), '-Adf-RoleAssignment')]"
+                                            ],
+                                            "properties": {
+                                                "mode": "Incremental",
+                                                "template": {
+                                                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                                                    "contentVersion": "1.0.0.0",
+                                                    "parameters": {},
+                                                    "variables": {},
+                                                    "resources": [],
+                                                    "outputs": {}
+                                                }
+                                            },
+                                            "copy": {
+                                                "batchSize": 1,
+                                                "count": 10,
+                                                "mode": "Serial",
+                                                "name": "DeploymentDelay"
+                                            },
+                                            "subscriptionId": "[split(variables('datanodeDataFactoryId'), '/')[2]]",
+                                            "resourceGroup": "[split(variables('datanodeDataFactoryId'), '/')[4]]"
                                         },
                                         {
                                             "type": "Microsoft.DataFactory/factories/integrationRuntimes",
                                             "apiVersion": "2018-06-01",
-                                            "name": "[concat(variables('dataFactoryName'), '/datahubSharedSelfHostedIntegrationRuntime')]",
+                                            "name": "[concat(variables('dataFactoryName'), '/datanodeSharedSelfHostedIntegrationRuntime')]",
                                             "dependsOn": [
-                                                "AdfRoleAssignment"
+                                                "[concat(variables('dataFactoryName'), '-Adf-RoleAssignment')]",
+                                                "DeploymentDelay"
                                             ],
                                             "properties": {
                                                 "type": "SelfHosted",
-                                                "description": "Data Hub - Self Hosted Integration Runtime",
+                                                "description": "Data Node - Self Hosted Integration Runtime",
                                                 "typeProperties": {
                                                     "linkedInfo": {
-                                                        "resourceId": "[variables('datahubDataFactoryShirId')]",
+                                                        "resourceId": "[variables('datanodeDataFactoryShirId')]",
                                                         "authorizationType": "RBAC"
                                                     }
                                                 }
@@ -141,11 +169,11 @@
                                     "dataFactoryId": {
                                         "value": "[field('id')]"
                                     },
-                                    "datahubDataFactoryId": {
-                                        "value": "[parameters('datahubDataFactoryId')]"
+                                    "datanodeDataFactoryId": {
+                                        "value": "[parameters('datanodeDataFactoryId')]"
                                     },
-                                    "datahubDataFactoryShirId": {
-                                        "value": "[parameters('datahubDataFactoryShirId')]"
+                                    "datanodeDataFactoryShirId": {
+                                        "value": "[parameters('datanodeDataFactoryShirId')]"
                                     }
                                 }
                             }
