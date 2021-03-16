@@ -42,7 +42,7 @@
     },
     "functions": [],
     "variables": {
-        "enterpriseScaleAnalyticsCompanyPrefix": "[parameters('enterpriseScaleAnalyticsCompanyPrefix')]",
+        "enterpriseScaleAnalyticsCompanyPrefix": "[toLower(parameters('enterpriseScaleAnalyticsCompanyPrefix'))]",
         "location": "[deployment().location]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
         "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
