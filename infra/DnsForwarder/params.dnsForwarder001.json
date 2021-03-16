@@ -1,30 +1,30 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "vmssName": {
-            "value": "dhdnsproxy001"
-        },
-        "vmssSkuTier": {
-            "value": "Standard"
-        },
-        "vmssSkuName": {
-            "value": "Standard_A1_v2"
-        },
-        "vmssAdminUsername": {
-            "value": "VmssMainUser"
-        },
-        "storageAccountId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Storage/storageAccounts/dhartifactstorage001"
-        },
-        "storageAccountContainerName": {
-            "value": "scripts"
-        },
-        "subnetId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-subnet"
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "vmssName": {
+      "value": "datahubnamednsproxy001"
+    },
+    "vmssSkuTier": {
+      "value": "Standard"
+    },
+    "vmssSkuName": {
+      "value": "Standard_A1_v2"
+    },
+    "vmssAdminUsername": {
+      "value": "VmssMainUser"
+    },
+    "storageAccountId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-network/providers/Microsoft.Storage/storageAccounts/datahubnameartifactsa001"
+    },
+    "storageAccountContainerName": {
+      "value": "scripts"
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-network/providers/Microsoft.Network/virtualNetworks/datahubname-vnet/subnets/datahubname-subnet"
     }
+  }
 }
