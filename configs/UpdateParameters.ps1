@@ -51,6 +51,10 @@ $DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandi
 Write-Host "Reduce Length of DataLandingZoneName to Max 11 Characters"
 $DataLandingZoneName = -join $DataLandingZoneName[0..11]
 
+# Convert DataLandingZoneName to lowercase
+Write-Host "Converting DataLandingZoneName to lowercase"
+$DataLandingZoneName = $DataLandingZoneName.ToLower()
+
 # Loading Configuration File for Parameter Updates
 Write-Host "Loading Configuration File for Parameter Updates"
 $configs = Get-Content -Path $ConfigurationFilePath -Raw | Out-String | ConvertFrom-Json
