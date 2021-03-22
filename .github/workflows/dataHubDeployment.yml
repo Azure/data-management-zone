@@ -259,19 +259,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
         deploymentMode: Validate
     
-    # Deploy Purview 001 - validation
-    - name: Deploy Purview 001 - validation
-      id: purview_001_validation
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-        deploymentMode: Validate
-    
     # Deploy Container Registry 001 - validation
     - name: Deploy Container Registry  001 - validation
       id: container_registry_001_validation
@@ -296,6 +283,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
         parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
+        deploymentMode: Validate
+    
+    # Deploy Purview 001 - validation
+    - name: Deploy Purview 001 - validation
+      id: purview_001_validation
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
+        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
         deploymentMode: Validate
     
     # Log out from Azure
@@ -445,19 +445,6 @@ jobs:
         parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
         deploymentMode: Incremental
     
-    # Deploy Purview 001
-    - name: Deploy Purview 001
-      id: purview_001_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-        deploymentMode: Incremental
-    
     # Deploy Container Registry 001
     - name: Deploy Container Registry  001
       id: container_registry_001_deployment
@@ -482,6 +469,19 @@ jobs:
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
         parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
+        deploymentMode: Incremental
+    
+    # Deploy Purview 001
+    - name: Deploy Purview 001
+      id: purview_001_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
+        parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
         deploymentMode: Incremental
     
     # Log out from Azure
