@@ -216,24 +216,6 @@ stages:
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
         
-        # Deploy Purview 001 - validation
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: purview_001_validation
-          displayName: Deploy Purview 001 - validation
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-            location: ${{ variables.AZURE_LOCATION }}
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
-            deploymentMode: 'Validation'
-        
         # Deploy Container Registry 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
           name: container_registry_001_validation
@@ -270,6 +252,24 @@ stages:
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json'
             deploymentMode: 'Validation'
 
+        # Deploy Purview 001 - validation
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: purview_001_validation
+          displayName: Deploy Purview 001 - validation
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+            location: ${{ variables.AZURE_LOCATION }}
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
+            deploymentMode: 'Validation'
+  
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
     dependsOn: Validation
@@ -457,24 +457,6 @@ stages:
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Incremental'
         
-        # Deploy Purview 001
-        - task: AzureResourceManagerTemplateDeployment@3
-          name: purview_001_deployment
-          displayName: Deploy Purview 001
-          enabled: true
-          continueOnError: false
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
-            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-            location: ${{ variables.AZURE_LOCATION }}
-            templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
-            deploymentMode: 'Incremental'
-        
         # Deploy Container Registry 001
         - task: AzureResourceManagerTemplateDeployment@3
           name: container_registry_001_deployment
@@ -509,4 +491,22 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json'
+            deploymentMode: 'Incremental'
+
+        # Deploy Purview 001
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: purview_001_deployment
+          displayName: Deploy Purview 001
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Resource Group'
+            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: ${{ variables.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
+            location: ${{ variables.AZURE_LOCATION }}
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
             deploymentMode: 'Incremental'
