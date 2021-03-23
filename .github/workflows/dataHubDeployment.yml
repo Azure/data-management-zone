@@ -297,6 +297,7 @@ jobs:
         template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
         parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
         deploymentMode: Validate
+      continue-on-error: true
     
     # Log out from Azure
     - name: Log out from Azure
