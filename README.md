@@ -228,7 +228,7 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 4. Select your repository.
 1. Click on **Existing Azure Pipelines in YAML file**
-1. Select `main` as branch and `/.ado/workflows/dataNodeDeployment.yml` as path.
+1. Select `main` as branch and `/.ado/workflows/dataHubDeployment.yml` as path.
     <p align="center">
       <img src="docs/images/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
     </p>
