@@ -90,7 +90,7 @@ A service principal needs to be generated for authentication and authorization f
 az ad sp create-for-rbac \
   --name "{service-principal-name}" \
   --role "Contributor" \
-  --scopes "/subscriptions/{subscription-id}" \
+  --scope "/subscriptions/{subscription-id}" \
   --sdk-auth
 ```
 
