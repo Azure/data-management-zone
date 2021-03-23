@@ -54,7 +54,7 @@
             // ],
             "properties": {
                 "publicIPAddressVersion": "IPv4",
-                "prefixLength": 28
+                "prefixLength": 30
             }
         },
         {
