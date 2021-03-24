@@ -6,7 +6,7 @@
             "value": "Deny-Databricks-VirtualNetwork"
         },
         "policyDescription": {
-            "value": "Deny non -virtual network deployment for databricks."
+            "value": "Deny non-virtual network deployment for databricks."
         },
         "policyMode": {
             "value": "All"
