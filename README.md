@@ -90,7 +90,7 @@ A service principal with *Contributor* role needs to be generated for authentica
 az ad sp create-for-rbac \
   --name "{service-principal-name}" \
   --role "Contributor" \
-  --scope "/subscriptions/{subscription-id}" \
+  --scopes "/subscriptions/{subscription-id}" \
   --sdk-auth
 ```
 
