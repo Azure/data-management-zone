@@ -257,7 +257,7 @@ stages:
           name: purview_001_validation
           displayName: Deploy Purview 001 - validation
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
@@ -498,7 +498,7 @@ stages:
           name: purview_001_deployment
           displayName: Deploy Purview 001
           enabled: true
-          continueOnError: false
+          continueOnError: true
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}

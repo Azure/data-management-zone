@@ -6,7 +6,7 @@
             "value": "Deny-Storage-NetworkAclsDefaultAction"
         },
         "policyDescription": {
-            "value": "Enforces default  tls version 1.2 for storage account."
+            "value": "Enforces default network Deny rule for storage accounts."
         },
         "policyMode": {
             "value": "All"

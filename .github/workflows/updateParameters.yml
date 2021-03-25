@@ -82,7 +82,9 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ steps.update_parameters.outputs.landingZoneName }}-container'
             AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
-          \`\`\`"
+          \`\`\`
+          
+          Now, merge the pull request into your \`main\` branch."
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"

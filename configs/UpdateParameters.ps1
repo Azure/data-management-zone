@@ -49,7 +49,7 @@ $DataLandingZoneName = Remove-SpecialCharsAndWhitespaces -InputString $DataLandi
 
 # Reduce Length of DataLandingZoneName
 Write-Host "Reduce Length of DataLandingZoneName to Max 11 Characters"
-$DataLandingZoneName = -join $DataLandingZoneName[0..11]
+$DataLandingZoneName = -join $DataLandingZoneName[0..10]
 
 # Convert DataLandingZoneName to lowercase
 Write-Host "Converting DataLandingZoneName to lowercase"

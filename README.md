@@ -1,5 +1,3 @@
-
-
 # Enterprise Scale Analytics - Data Management
 
 > **General disclaimer:** Please be aware that this template is in private preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
@@ -19,7 +17,7 @@ By default, all the services which come under Data Management Zone are enabled, 
 <p align="center">
   <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/> 
 </p>
-    
+
 - [Virtual Network](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
 - [Network Security Groups](https://docs.microsoft.com/azure/virtual-network/network-security-groups-overview)
 - [Route Tables](https://docs.microsoft.com/azure/virtual-network/virtual-networks-udr-overview)
@@ -57,7 +55,6 @@ If you don’t have an Azure subscription, [create your Azure free account today
 <!-- [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fdeploy.dataHub.json) -->
 ![Deploy to Azure](/docs/images/deploytoazuregrey.png)
 
-
 ## Option 2: GitHub Actions or Azure DevOps Pipelines
 
 ### 1. Create repository from a template
@@ -67,20 +64,18 @@ If you don’t have an Azure subscription, [create your Azure free account today
     <p align="center">
       <img src="docs/images/UseThisTemplateGH.png" alt="GitHub Template repository" width="600"/>
     </p>
-
-3. Use the **Owner** drop-down menu and select the account you want to own the repository.
+1. Use the **Owner** drop-down menu and select the account you want to own the repository.
     <p align="center">
       <img src="docs/images/CreateRepoGH.png" alt="Create Repository from Template" width="600"/>
     </p>
-
-4. Type a name for your repository and an optional description.
+1. Type a name for your repository and an optional description.
 1. Choose a repository visibility. For more information, see "[About repository visibility](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-repository-visibility)."
 1. Optionally, to include the directory structure and files from all branches in the template and not just the default branch, select **Include all branches**.
 1. Click **Create repository from template**.
 
 ### 2. Setting up the required Service Principal and access
 
-A service principal needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the ID of your subscription. Then start the Cloud Shell or Azure CLI, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
+A service principal with *Contributor* role needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. Just go to the Azure Portal to find the ID of your subscription. Then start the Cloud Shell or Azure CLI, login to Azure, set the Azure context and execute the following commands to generate the required credentials:
 
 #### Azure CLI
 
@@ -144,15 +139,14 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
     <p align="center">
       <img src="docs/images/ARMConnectionDevOps.png" alt="ARM Connection" width="600"/>
     </p>
-    
-5. On the next page select **Service principal (manual)**.
-6. Select the appropriate environment to which you would like to deploy the templates. Only the default option **Azure Cloud** is currently supported.
-7. For the **Scope Level**, select **Subscription** and enter your `subscription Id` and `name`.
-8. Enter the details of the service principal that we have generated in step 3. (**Service Principal Id** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
-9. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name because this will be required in the parameter update process.
-10. Optionally, enter a **Description**.
-11. Click on **Verify and save**.
-    
+
+1. On the next page select **Service principal (manual)**.
+1. Select the appropriate environment to which you would like to deploy the templates. Only the default option **Azure Cloud** is currently supported.
+1. For the **Scope Level**, select **Subscription** and enter your `subscription Id` and `name`.
+1. Enter the details of the service principal that we have generated in step 3. (**Service Principal Id** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
+1. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name because this will be required in the parameter update process.
+1. Optionally, enter a **Description**.
+1. Click on **Verify and save**.
     <p align="center">
       <img src="docs/images/ConnectionDevOps.png" alt="Connection DevOps" width="300"/>
     </p>
@@ -161,7 +155,14 @@ More information can be found [here](https://docs.microsoft.com/azure/devops/pip
 
 ### 4. Parameter Update Process
 
-In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. After successfully executing the previous steps, please open the  [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
+In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow.  You can update your deployment parameters by completing three steps:
+  1. Configure the `updateParameters` workflow
+  1. Execute the `updateParameters` workflow
+  1. Configure the deployment pipeline
+  1. Merge these changes back to the `main` branch of your repo
+
+#### Configure the `updateParameters` workflow
+To begin, please open the  [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
 
 ```YAML
 env:
@@ -182,15 +183,20 @@ The following table explains each of the parameters:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-After updating the values, please commit the updated version to the `main` branch of your repository. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a pre-defined naming convention. Once the process has finished, it will open a new pull request in your repository, where you can review the changes made by the workflow. Please follow the instructions in the pull request to complete the parameter update process. It will guide you to change the environment variables in the deployment workflow file as well.
+#### Execute the `updateParameters` workflow
+After updating the values, please commit the updated version to the `main` branch of your repository. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a pre-defined naming convention.
+
+#### Configure the deployment pipeline
+The workflow above will make changes to all of the ARM config files.  These changes will be stored in a new branch. Once the process has finished, it will open a new pull request in your repository where you can review the changes made by the workflow.  The pull request will also provide the values you need to use to configure the deployment pipeline. Please follow the instructions in the pull request to complete the parameter update process.
+
+If you are using GitHub Actions for your deployment, you will need to modify the `.github/workflows/dataHubDeployment.yml` file.  If you are using Azure Pipelines, you only need to modify the `.ado/workflows/dataHubDeployment.yml` file.  **You only need to modify one of these files. You do not need to modify both of them.**
 
 >**Note:** We are not renaming the environment variables in the workflow files because this could lead to an infinite loop of workflow runs being started.
 
+#### Merge these changes back to the `main` branch of your repo
 After following the instructions in the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
 
-### 5. Reference pipeline from GitHub repository in Azure DevOps Pipelines
-
->**Note:** **This is not applicable for GH Actions**.
+### 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
 #### Install Azure DevOps Pipelines GitHub Application
 
@@ -201,13 +207,11 @@ First you need to add and install the Azure Pipelines GitHub App to your GitHub 
     <p align="center">
       <img src="docs/images/AzurePipelinesGH.png" alt="Install Azure Pipelines on GitHub" width="600"/>
     </p>
-        
-3. Select it and click on **Install it for free**.
+1. Select it and click on **Install it for free**.
     <p align="center">
       <img src="docs/images/InstallButtonGH.png" alt="GitHub Template repository" width="600"/>
     </p>
-    
-4. If you are part of multiple **GitHub** organizations, you may need to use the **Switch billing account** dropdown to select the one into which you forked this repository.
+1. If you are part of multiple **GitHub** organizations, you may need to use the **Switch billing account** dropdown to select the one into which you forked this repository.
 1. You may be prompted to confirm your GitHub password to continue.
 1. You may be prompted to log in to your Microsoft account. Make sure you log in with the one that is associated with your Azure DevOps account.
 
@@ -220,20 +224,17 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
     <p align="center">
       <img src="docs/images/CreatePipelineDevOps.png" alt="Create Pipeline in DevOps" width="600"/>
     </p>
-
-3. Choose **GitHub YAML** and search for your repository (e.g. "`GitHubUserName/RepositoryName`").
+1. Choose **GitHub YAML** and search for your repository (e.g. "`GitHubUserName/RepositoryName`").
     <p align="center">
       <img src="docs/images/CodeDevOps.png" alt="Choose code source in DevOps Pipeline" width="600"/>
     </p>
-
-4. Select your repository.
+1. Select your repository.
 1. Click on **Existing Azure Pipelines in YAML file**
-1. Select `main` as branch and `/.ado/workflows/dataNodeDeployment.yml` as path.
+1. Select `main` as branch and `/.ado/workflows/dataHubDeployment.yml` as path.
     <p align="center">
       <img src="docs/images/ConfigurePipelineDevOps.png" alt="Configure Pipeline in DevOps" width="600"/>
     </p>
-
-7. Click on **Continue** and then on **Run**.
+1. Click on **Continue** and then on **Run**.
 
 ### 6. Follow the workflow deployment
 
@@ -260,7 +261,7 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 | `README.md`                   | This README file.                          |
 | `SECURITY.md`                 | Microsoft Security README.                 |
 
-### Enterprise Scale Analytics Documentation and Implementation
+### Enterprise Scale Analytics and AI - Documentation and Implementation
 
 - [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
 - [Implementation - Data Management](https://github.com/Azure/data-management-zone)
@@ -276,7 +277,7 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 
 **Error Message:**
 
-```shell
+```sh
 ERROR: Deployment failed. Correlation ID: ***
   "error": ***
     "code": "MissingSubscriptionRegistration",
