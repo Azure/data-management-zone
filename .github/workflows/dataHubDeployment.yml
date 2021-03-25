@@ -418,6 +418,7 @@ jobs:
         template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
         parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDns001.json
         deploymentMode: Incremental
+      continue-on-error: true
     
     # # Deploy Vnet Peering 001 - Disabled because it will be handled from the Data Landing Zone for automation purposes
     # - name: Deploy Vnet Peering 001
