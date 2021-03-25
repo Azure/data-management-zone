@@ -6,7 +6,7 @@
             "value": "Deny-Storage-RoutingPreference"
         },
         "policyDescription": {
-            "value": "Enforce infrastructure (double) encryption for storage accounts."
+            "value": "Enforce Microsoft Routing for storage accounts."
         },
         "policyMode": {
             "value": "All"
