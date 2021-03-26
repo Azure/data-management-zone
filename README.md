@@ -155,13 +155,17 @@ More information can be found [here](https://docs.microsoft.com/azure/devops/pip
 
 ### 4. Parameter Update Process
 
-In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow.  You can update your deployment parameters by completing three steps:
+>**Note:** This section applies for both **Azure DevOps** and **GitHub** Deployment
+
+In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository, which will be used for updating the files which will be used during the deployment. Therefor, **this step should not be skipped for neither Azure DevOps/GitHub options**. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow.  You can update your deployment parameters by completing three steps:
   1. Configure the `updateParameters` workflow
   1. Execute the `updateParameters` workflow
   1. Configure the deployment pipeline
   1. Merge these changes back to the `main` branch of your repo
 
 #### Configure the `updateParameters` workflow
+>**Note:** There is only one 'updateParametes.yml', which can be found under the '.github' folder and this one will be used also for setting up the Azure DevOps Deployment
+
 To begin, please open the  [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
 
 ```YAML
