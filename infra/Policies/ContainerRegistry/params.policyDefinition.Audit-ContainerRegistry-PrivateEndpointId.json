@@ -6,7 +6,7 @@
             "value": "Audit-ContainerRegistry-PrivateEndpointId"
         },
         "policyDescription": {
-            "value": "Audit public endpoints that are created in other subscriptions for cognitive services."
+            "value": "Audit public endpoints that are created in other subscriptions for container registry."
         },
         "policyMode": {
             "value": "All"

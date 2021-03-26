@@ -6,7 +6,7 @@
             "value": "Deny-Batch-NetworkConfiguration"
         },
         "policyDescription": {
-            "value": "Denies public ip adresses for batch account vm pools."
+            "value": "Denies public ip addresses for batch account vm pools."
         },
         "policyMode": {
             "value": "All"
