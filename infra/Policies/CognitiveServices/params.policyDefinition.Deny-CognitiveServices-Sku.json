@@ -6,7 +6,7 @@
             "value": "Deny-CognitiveServices-Sku"
         },
         "policyDescription": {
-            "value": "Deny cognitive services free sku."
+            "value": "Deny cognitive services free SKU."
         },
         "policyMode": {
             "value": "All"
