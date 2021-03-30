@@ -70,34 +70,6 @@
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
-                    {
-                        "name": "AllowRdpInbound",
-                        "properties": {
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "priority": 1000,
-                            "protocol": "Tcp",
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "3389",
-                            "description": "Allow RDP Inbound"
-                        }
-                    },
-                    {
-                        "name": "AllowSshInbound",
-                        "properties": {
-                            "access": "Allow",
-                            "direction": "Inbound",
-                            "priority": 1010,
-                            "protocol": "Tcp",
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "22",
-                            "description": "Allow SSH Inbound"
-                        }
-                    }
                     // {
                     //     "name": "DenyInternetInbound",
                     //     "properties": {
