@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-Sql-AuditingSettings"
+            "value": "Deploy-SqlDw-AuditingSettings"
         },
         "policyDescription": {
-            "value": "Deploy SQL auditing settings."
+            "value": "Deploy SQL DW auditing settings."
         },
         "policyMode": {
             "value": "All"
