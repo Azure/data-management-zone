@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-SynapseSpark-SessionLevelPackages"
+            "value": "Deny-SynapseSpark-ComputeIsolation"
         },
         "policyDescription": {
-            "value": "When a Synapse Spark Pool is created without session level packages then this will add it."
+            "value": "Enforces compute isolation for Synapse Spark Pools."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -23,19 +37,13 @@
                             "equals": "Microsoft.Synapse/workspaces/bigDataPools"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/sessionLevelPackagesEnabled",
-                            "notEquals": false
+                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
+                            "notEquals": true
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/sessionLevelPackagesEnabled",
-                            "value": false
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

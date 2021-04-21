@@ -6,13 +6,26 @@
             "value": "Audit-MySql-PrivateEndpointId"
         },
         "policyDescription": {
-            "value": "Audit public endpoints that are created in other subscriptions for my sql."
+            "value": "Audit private endpoints that are created in other subscriptions for my sql."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -29,7 +42,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Audit"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

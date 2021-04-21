@@ -9,10 +9,44 @@
             "value": "Enforces iot hub SKUs."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedSkuNames": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Names",
+                        "description": "Specifies the allowed sku names"
+                    },
+                    "defaultValue": [
+                        "S1",
+                        "S2",
+                        "S3"
+                    ]
+                },
+                "maxSkuCapacity": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum SKU Capacity",
+                        "description": "Specifies the maximum sku capacity"
+                    },
+                    "defaultValue": 40
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,22 +60,18 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Devices/IotHubs/sku.name",
-                                    "notIn": [
-                                        "S1",
-                                        "S2",
-                                        "S3"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
                                     "field": "Microsoft.Devices/IotHubs/sku.capacity",
-                                    "greater": 40
+                                    "greater": "[parameters('maxSkuCapacity')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

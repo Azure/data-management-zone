@@ -12,7 +12,55 @@
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedSkuNames": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Names",
+                        "description": "Specifies the allowed sku names"
+                    },
+                    "defaultValue": [
+                        "Basic",
+                        "Standard",
+                        "Premium"
+                    ]
+                },
+                "allowedSkuFamilies": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Families",
+                        "description": "Specifies the allowed sku families"
+                    },
+                    "defaultValue": [
+                        "C",
+                        "P"
+                    ]
+                },
+                "allowedSkuCapacities": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Capacities",
+                        "description": "Specifies the allowed sku capacities"
+                    },
+                    "defaultValue": [
+                        "C",
+                        "P"
+                    ]
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,37 +74,22 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Cache/Redis/sku.name",
-                                    "notIn": [
-                                        "Basic",
-                                        "Standard",
-                                        "Premium"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
                                     "field": "Microsoft.Cache/Redis/sku.family",
-                                    "notIn": [
-                                        "C",
-                                        "P"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuFamilies')]"
                                 },
                                 {
                                     "field": "Microsoft.Cache/Redis/sku.capacity",
-                                    "notIn": [
-                                        0,
-                                        1,
-                                        2,
-                                        3,
-                                        4,
-                                        5,
-                                        6
-                                    ]
+                                    "notIn": "[parameters('allowedSkuCapacities')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

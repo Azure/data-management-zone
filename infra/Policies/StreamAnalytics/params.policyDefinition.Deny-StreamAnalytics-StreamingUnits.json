@@ -9,10 +9,32 @@
             "value": "Enforces number of stream analytics streaming units."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "maxStreamingUnits": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum Streaming Units",
+                        "description": "Specifies the maximum streaming units that should be allowed"
+                    },
+                    "defaultValue": 192
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -24,12 +46,12 @@
                         },
                         {
                             "field": "Microsoft.StreamAnalytics/streamingjobs/transformation.streamingUnits",
-                            "greater": 192
+                            "greater": "[parameters('maxStreamingUnits')]"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

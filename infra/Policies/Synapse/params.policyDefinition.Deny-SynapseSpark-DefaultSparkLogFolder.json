@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-SynapseSpark-DefaultSparkLogFolder"
+            "value": "Deny-SynapseSpark-DefaultSparkLogFolder"
         },
         "policyDescription": {
-            "value": "When a Synapse Spark Pool is created without logging then this will add it."
+            "value": "Enforces spark logging for Synapse Spark Pools."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -37,13 +51,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder",
-                            "value": "logs/"
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

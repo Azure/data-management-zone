@@ -12,7 +12,29 @@
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "minContainerDeleteRetentionInDays": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Minimum Container Delete Retention in Days",
+                        "description": "Specifies the minimum number of days for the container delete retention policy"
+                    },
+                    "defaultValue": 7
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -34,14 +56,14 @@
                                 },
                                 {
                                     "field": "Microsoft.Storage/storageAccounts/blobServices/containerDeleteRetentionPolicy.days",
-                                    "lessOrEquals": 6
+                                    "lessOrEquals": "[parameters('minContainerDeleteRetentionInDays')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

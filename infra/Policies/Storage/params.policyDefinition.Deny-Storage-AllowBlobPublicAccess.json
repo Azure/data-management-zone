@@ -9,10 +9,24 @@
             "value": "Enforces no public access to all blobs or containers in the storage account."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -23,21 +37,13 @@
                             "equals": "Microsoft.Storage/storageAccounts"
                         },
                         {
-                            "anyOf": [
-                                {
-                                    "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
-                                    "exists": false
-                                },
-                                {
-                                    "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
-                                    "notEquals": false
-                                }
-                            ]
+                            "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
+                            "notEquals": false
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

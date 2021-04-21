@@ -12,7 +12,21 @@
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -37,14 +51,14 @@
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Azure Batch",
+                "category": "Batch",
                 "preview": false,
                 "deprecated": false
             }

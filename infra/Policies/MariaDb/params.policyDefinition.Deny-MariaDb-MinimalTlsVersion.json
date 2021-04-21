@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-PostgreSQL-InfrastructureEncryption"
+            "value": "Deny-MariaDb-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Enforces infrastructure encryption for postgre sql servers."
+            "value": "Enforces minimal tls version for maria db servers."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -20,22 +34,16 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.DBforPostgreSQL/servers"
+                            "equals": "Microsoft.DBforMariaDB/servers"
                         },
                         {
-                            "field": "Microsoft.DBforPostgreSQL/servers/infrastructureEncryption",
+                            "field": "Microsoft.DBforMariaDB/servers/sslEnforcement",
                             "notEquals": "Enabled"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny",
-                    "details": [
-                        {
-                            "field": "Microsoft.DBforPostgreSQL/servers/infrastructureEncryption",
-                            "value": "Enabled"
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

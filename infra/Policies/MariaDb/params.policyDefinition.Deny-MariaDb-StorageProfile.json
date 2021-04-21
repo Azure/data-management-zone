@@ -9,10 +9,32 @@
             "value": "Enforces geo-redundant database backup with minimum retention time in days."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "minBackupRetentionDays": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Minimum Backup Retention in Days",
+                        "description": "Specifies the minimum backup retention in days"
+                    },
+                    "defaultValue": 7
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -38,14 +60,14 @@
                                 },
                                 {
                                     "field": "Microsoft.DBforMariaDB/servers/storageProfile.backupRetentionDays",
-                                    "less": 7
+                                    "less": "[parameters('minBackupRetentionDays')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },
