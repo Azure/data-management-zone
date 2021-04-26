@@ -46,5 +46,4 @@ EOF
 myip=$(hostname -i | awk '{print $1}')
 sed -i "s/x.x.x.x/$myip/" /etc/nginx/nginx.conf
 
-
 sudo nginx -t && sudo service nginx reload
