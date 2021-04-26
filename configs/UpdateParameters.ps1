@@ -27,10 +27,10 @@ Param(
 
 function SetValue($Object, $Key, $Value) {
     $p1, $p2 = $Key.Split(".")
-    if ($p2) { 
-        SetValue -object $Object.$p1 -key $p2 -Value $Value 
+    if ($p2) {
+        SetValue -object $Object.$p1 -key $p2 -Value $Value
     }
-    else { 
+    else {
         $Object.$p1 = $Value
     }
 }

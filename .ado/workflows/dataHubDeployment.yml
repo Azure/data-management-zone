@@ -40,16 +40,16 @@ pr:
       - code/*
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: 'data-hub-service-connection' # Update to '{resourceManagerConnectionName}'
-  AZURE_SUBSCRIPTION_ID: '4060c03e-0d2e-44b7-82a3-da9376fe50b2'         # Update to '{dataHubSubscriptionId}'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: 'dh-network'                       # Update to '{dataHubName}-network'
-  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: 'dh-global-dns'                 # Update to '{dataHubName}-global-dns'
-  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: 'dh-automation'                 # Update to '{dataHubName}-automation'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: 'dh-mgmt'                       # Update to '{dataHubName}-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: 'dh-consumption'               # Update to '{dataHubName}-consumption'
-  AZURE_RESOURCE_GROUP_NAME_CONTAINER: 'dh-container'                   # Update to '{dataHubName}-container'
-  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: 'dh-governance'                 # Update to '{dataHubName}-governance'
-  AZURE_LOCATION: 'North Europe'                                        # Update to '{regionName}'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-hub-service-connection" # Update to '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2"         # Update to '{dataHubSubscriptionId}'
+  AZURE_RESOURCE_GROUP_NAME_NETWORK: "dh-network"                       # Update to '{dataHubName}-network'
+  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: "dh-global-dns"                 # Update to '{dataHubName}-global-dns'
+  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: "dh-automation"                 # Update to '{dataHubName}-automation'
+  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: "dh-mgmt"                       # Update to '{dataHubName}-mgmt'
+  AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: "dh-consumption"               # Update to '{dataHubName}-consumption'
+  AZURE_RESOURCE_GROUP_NAME_CONTAINER: "dh-container"                   # Update to '{dataHubName}-container'
+  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: "dh-governance"                 # Update to '{dataHubName}-governance'
+  AZURE_LOCATION: "northeurope"                                         # Update to '{regionName}'
 
 stages:
   - stage: Validation

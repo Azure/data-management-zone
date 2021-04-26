@@ -15,7 +15,7 @@ By default, all the services which come under Data Management Zone are enabled, 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
 <p align="center">
-  <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/> 
+  <img src="./docs/images/DataHub.png" alt="Data Management Zone" width="500"/>
 </p>
 
 - [Virtual Network](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
@@ -47,18 +47,18 @@ The following prerequisites are required to make this repository work:
 - [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
 - For deployment, please choose one of the below **Supported Regions** list.
 
-#### **Supported Regions:** 
-  - Asia Southeast
-  - Europe North
-  - Europe West
-  - France Central
-  - Japan East
-  - South Africa North 
-  - UK South
-  - US Central
-  - US East
-  - US East 2
-  - US West 2
+#### **Supported Regions:**
+- Asia Southeast
+- Europe North
+- Europe West
+- France Central
+- Japan East
+- South Africa North
+- UK South
+- US Central
+- US East
+- US East 2
+- US West 2
 
 If you don’t have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/free/).
 

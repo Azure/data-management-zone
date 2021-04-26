@@ -11,8 +11,5 @@
        'PSUseShouldProcessForStateChangingFunctions',
        'PSReviewUnusedParameter'
     )
-    #IncludeRules = @(
-    #    'PSAvoidUsingWriteHost',
-    #    'MyCustomRuleName'
-    #)
+    #IncludeRules = @( )
 }
