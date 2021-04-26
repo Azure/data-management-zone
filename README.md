@@ -47,7 +47,7 @@ The following prerequisites are required to make this repository work:
 - [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
 - For deployment, please choose one of the below **Supported Regions** list.
 
-#### **Supported Regions:**
+**Supported Regions:**
 - Asia Southeast
 - Europe North
 - Europe West

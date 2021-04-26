@@ -10,7 +10,7 @@ on:
 env:
   DATA_HUB_SUBSCRIPTION_ID: "{dataHubSubscriptionId}"
   DATA_HUB_NAME: "{dataHubName}" # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
-  LOCATION: "{regionName}" # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
+  LOCATION: "{regionName}"       # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "{resourceManagerConnectionName}"
 
 jobs:
