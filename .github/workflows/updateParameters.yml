@@ -4,14 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'configs/**'
-      - '.github/workflows/updateParameters.yml'
+      - "configs/**"
+      - ".github/workflows/updateParameters.yml"
 
 env:
-  DATA_HUB_SUBSCRIPTION_ID: '{dataHubSubscriptionId}'
-  DATA_HUB_NAME: '{dataHubName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
-  LOCATION: '{regionName}'       # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
+  DATA_HUB_SUBSCRIPTION_ID: "{dataHubSubscriptionId}"
+  DATA_HUB_NAME: "{dataHubName}" # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
+  LOCATION: "{regionName}" # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "{resourceManagerConnectionName}"
 
 jobs:
   renaming:
@@ -22,7 +22,7 @@ jobs:
       - name: Check Out Repository
         id: checkout_repository
         uses: actions/checkout@v2
-      
+
       # Install Required Packages
       - name: Install Required Modules
         id: install_modules
@@ -30,7 +30,7 @@ jobs:
           echo "Install Modules"
           pwsh -Command "Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted"
           pwsh -Command "Install-Module -Name powershell-yaml"
-      
+
       # Update Parameters
       - name: Update Parameters
         id: update_parameters
@@ -42,17 +42,17 @@ jobs:
             -DataLandingZoneName '${{ env.DATA_HUB_NAME }}' \
             -Location '${{ env.LOCATION }}' \
             -AzureResourceManagerConnectionName '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
-      
+
       # Define Pull Request Body
       - name: Define Pull Request Body
         id: define_pull_request_body
         run: |
           body="**Great work!** Just one more step to start the deployment into your environment.
-          
+
           **For GitHub Actions**
-          
+
           Go to \`/.github/workflows/dataHubDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
-          
+
           \`\`\`YAML
           env:
             AZURE_SUBSCRIPTION_ID: '${{ env.DATA_HUB_SUBSCRIPTION_ID }}'
@@ -65,11 +65,11 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`
-          
+
           **For Azure DevOps**
-          
+
           Go to \`/.ado/workflows/dataHubDeployment.yml\` in the branch \`parameter_update_${{ github.run_id }}\` and update the environment variables to the following:
-          
+
           \`\`\`YAML
           variables:
             AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '${{ env.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}'
@@ -83,7 +83,7 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
           \`\`\`
-          
+
           Now, merge the pull request into your \`main\` branch."
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
@@ -95,7 +95,7 @@ jobs:
         id: create_pull_request
         uses: peter-evans/create-pull-request@v3
         with:
-          commit-message: 'Updated Parameters'
-          branch: 'parameter_update_${{ github.run_id }}'
-          title: 'Updated Parameters with GitHub Workflow Run ID ${{ github.run_id }}'
+          commit-message: "Updated Parameters"
+          branch: "parameter_update_${{ github.run_id }}"
+          title: "Updated Parameters with GitHub Workflow Run ID ${{ github.run_id }}"
           body: ${{ steps.define_pull_request_body.outputs.body }}

@@ -1,6 +1,6 @@
 # Define script arguments
 param (
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [Switch]
     $GitHub
 )
