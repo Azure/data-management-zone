@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -48,13 +47,6 @@
             "properties": {
                 "adminUserEnabled": true,
                 "dataEndpointEnabled": false,
-                // "encryption": {
-                //     "status": "disabled",
-                //     "keyVaultProperties": {
-                //         "identity": "",
-                //         "keyIdentifier": ""
-                //     }
-                // },
                 "networkRuleSet": {
                     "defaultAction": "Deny",
                     "ipRules": [],
@@ -96,8 +88,7 @@
                         }
                     }
                 ],
-                "manualPrivateLinkServiceConnections": [
-                ],
+                "manualPrivateLinkServiceConnections": [],
                 "subnet": {
                     "id": "[variables('subnetId')]"
                 }

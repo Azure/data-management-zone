@@ -27,14 +27,14 @@ param (
 )
 
 # Get Storage Account Context
-Write-Host "Getting Storage Account Context"
+Write-Output "Getting Storage Account Context"
 $storageAccount = Get-AzStorageAccount `
     -ResourceGroupName "${ResourceGroupName}" `
     -Name "${StorageAccountName}"
 $ctx = $storageAccount.Context
 
 # Upload File to Storage Account
-Write-Host "Uploading Data to Storage Account"
+Write-Output "Uploading Data to Storage Account"
 Set-AzStorageBlobContent `
     -Context $ctx `
     -Container "${StorageAccountContainerName}" `
@@ -43,4 +43,4 @@ Set-AzStorageBlobContent `
     -Force
 
 # Successfully Uploaded Blob
-Write-Host "Successfully Uploaded Blob"
+Write-Output "Successfully Uploaded Blob"

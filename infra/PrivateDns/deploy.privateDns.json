@@ -25,7 +25,7 @@
     "resources": [
         {
             "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2018-09-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('privateDnsZoneNames')[copyIndex()]]",
             "location": "global",
             "properties": {
@@ -33,7 +33,7 @@
             "resources": [
                 {
                     "type": "virtualNetworkLinks",
-                    "apiVersion": "2018-09-01",
+                    "apiVersion": "2020-06-01",
                     "name": "[variables('virtualNetworkName')]",
                     "location": "global",
                     "dependsOn": [

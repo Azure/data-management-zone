@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -28,9 +27,6 @@
             "name": "[variables('firewallPolicyName')]",
             "location": "[variables('location')]",
             "properties": {
-                "basePolicy": {
-                    "id": ""
-                },
                 "dnsSettings": {
                     "enableProxy": true,
                     "servers": []
