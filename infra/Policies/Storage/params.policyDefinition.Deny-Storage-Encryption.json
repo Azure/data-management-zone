@@ -69,6 +69,13 @@
                                 {
                                     "field": "Microsoft.Storage/storageAccounts/encryption.services.queue.keyType",
                                     "notEquals": "Service"
+                                },
+                                {
+                                    "field": "Microsoft.Storage/storageAccounts/encryption.keySource",
+                                    "notIn": [
+                                        "Microsoft.Storage",
+                                        "Microsoft.Keyvault"
+                                    ]
                                 }
                             ]
                         }
