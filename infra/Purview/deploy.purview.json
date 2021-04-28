@@ -86,7 +86,9 @@
                 "capacity": 4
             },
             "properties": {
-                "publicNetworkAccess": "Disabled"
+                "friendlyName": "[variables('purviewName')]",
+                "publicNetworkAccess": "Disabled",
+                "managedResourceGroupName": "[variables('purviewName')]"
             }
         },
         {
