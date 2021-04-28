@@ -21,6 +21,23 @@
                 "description": "Specifies the resource id of the keyvault that should be linked to the data factory."
             }
         },
+        "storageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_ZRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_RAGRS",
+                "Standard_ZRS",
+                "Premium_LRS",
+                "Premium_ZRS",
+                "Standard_GZRS",
+                "Standard_RAGZRS"
+            ],
+            "metadata": {
+                "description": "Specifies the SKU of the storage account."
+            }
+        },
         "subnetId": {
             "type": "string",
             "metadata": {
@@ -86,7 +103,9 @@
                 "capacity": 4
             },
             "properties": {
-                "publicNetworkAccess": "Disabled"
+                "friendlyName": "[variables('purviewName')]",
+                "publicNetworkAccess": "Disabled",
+                "managedResourceGroupName": "[variables('purviewName')]"
             }
         },
         {
