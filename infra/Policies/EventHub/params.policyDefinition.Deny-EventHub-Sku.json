@@ -71,10 +71,6 @@
                                     "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
-                                    "field": "Microsoft.EventHub/namespaces/sku.tier",
-                                    "notIn": "[parameters('allowedSkuTiers')]"
-                                },
-                                {
                                     "field": "Microsoft.EventHub/namespaces/sku.capacity",
                                     "greater": "[parameters('maxSkuCapacity')]"
                                 }
