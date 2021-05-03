@@ -16,6 +16,9 @@
         },
         "resourceExists": {
             "value": false
+        },
+        "tags": {
+            "value": {}
         }
     }
 }

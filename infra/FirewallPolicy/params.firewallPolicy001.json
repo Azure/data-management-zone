@@ -7,6 +7,9 @@
         },
         "firewallPolicyName": {
             "value": "dh-firewallpolicy"
+        },
+        "tags": {
+            "value": {}
         }
     }
 }

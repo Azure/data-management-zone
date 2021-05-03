@@ -26,6 +26,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags taht should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -34,6 +41,7 @@
         "containerRegistryName": "[parameters('containerRegistryName')]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointName": "[concat(variables('containerRegistryName'), '-private-endpoint')]"
     },
     "resources": [
@@ -41,6 +49,7 @@
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2019-12-01-preview",
             "name": "[variables('containerRegistryName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Premium"
@@ -80,6 +89,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ContainerRegistry/registries', variables('containerRegistryName'))]"
             ],

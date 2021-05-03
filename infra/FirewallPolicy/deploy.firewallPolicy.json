@@ -14,18 +14,27 @@
             "metadata": {
                 "description": "Specifies the name of the firewall policy."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags taht should be added to all resources."
+            }
         }
     },
     "functions": [],
     "variables": {
         "location": "[parameters('location')]",
-        "firewallPolicyName": "[parameters('firewallPolicyName')]"
+        "firewallPolicyName": "[parameters('firewallPolicyName')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/firewallPolicies",
             "apiVersion": "2020-05-01",
             "name": "[variables('firewallPolicyName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "basePolicy": {

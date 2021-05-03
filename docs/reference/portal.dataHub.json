@@ -149,6 +149,27 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "tags",
+                    "label": "Tags",
+                    "subLabel": {
+                        "preValidation": "Provide tags that will be used for all resources.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "Tags",
+                    "bladeSubtitle": "Tags",
+                    "elements": [
+                        {
+                            "name": "tagsByResource",
+                            "label": "Tags by Resource",
+                            "type": "Microsoft.Common.TagsByResource",
+                            "visible": true,
+                            "resources": [
+                                "EnterpriseScaleAnalytics"
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -160,9 +181,9 @@
                 "enableDnsAndFirewall": "[equals(steps('connectivitySettings').enableDnsAndFirewall, 'Yes')]",
                 "dnsServerAdresses": "[split(replace(steps('connectivitySettings').dnsServerAddresses, ' ', ''), ',')]",
                 "firewallPrivateIp": "[steps('connectivitySettings').firewallAddress]",
-                "privateDnsZoneResourceGroupId": "[steps('connectivitySettings').privateDnsZoneResourceGroup]"
+                "privateDnsZoneResourceGroupId": "[steps('connectivitySettings').privateDnsZoneResourceGroup]",
+                "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
             }
         }
-    
     }
 }

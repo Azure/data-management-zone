@@ -33,6 +33,13 @@
             "metadata": {
                 "description": "Specifies whether this is the first deployment of this resource or whether the resource already exists."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags taht should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -42,6 +49,7 @@
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
         "resourceExists": "[parameters('resourceExists')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointName": "[concat(variables('keyVaultName'), '-private-endpoint')]"
     },
     "resources": [
@@ -64,6 +72,7 @@
                             "type": "Microsoft.KeyVault/vaults",
                             "apiVersion": "2016-10-01",
                             "name": "[variables('keyVaultName')]",
+                            "tags": "[variables('tags')]",
                             "location": "[variables('location')]",
                             "properties": {
                                 "enabledForDeployment": false,
@@ -100,6 +109,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[concat(variables('keyVaultName'), 'Deployment')]"
             ],

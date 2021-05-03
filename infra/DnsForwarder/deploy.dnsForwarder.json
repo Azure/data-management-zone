@@ -61,6 +61,13 @@
             "metadata": {
                 "description": "Specifies the resource Id of the subnet to which the virtual machine should connect."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags taht should be added to all resources."
+            }
         }
     },
     "variables": {
@@ -73,7 +80,8 @@
         "storageAccountId": "[parameters('storageAccountId')]",
         "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
         "storageAccountContainerName": "[parameters('storageAccountContainerName')]",
-        "subnetId": "[parameters('subnetId')]"
+        "subnetId": "[parameters('subnetId')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         // {
@@ -86,9 +94,10 @@
         //     }
         // },
         {
-            "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('vmssName'), '-lb')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Basic"
@@ -158,9 +167,10 @@
             }
         },
         {
-            "name": "[variables('vmssName')]",
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "apiVersion": "2019-07-01",
+            "name": "[variables('vmssName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"
