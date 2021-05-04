@@ -44,7 +44,7 @@ env:
   AZURE_RESOURCE_GROUP_NAME_CONTAINER: 'dh-container'           # Update to '{dataHubName}-container'
   AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: 'dh-governance'         # Update to '{dataHubName}-governance'
   AZURE_LOCATION: 'northeurope'                                 # Update to '{regionName}'
-  AZURE_TAGS: "{{ 'CostCenter': 'ABCDE-12345', 'Owner': 'EnterpriseScaleAnalytics' }}"
+  AZURE_TAGS: "'CostCenter': 'ABCDE-12345', 'Owner': 'EnterpriseScaleAnalytics'"
 
 jobs:
   create-resource-groups:
@@ -72,7 +72,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/ResourceGroups/deploy.resourceGroups.json
-        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json tags='${{ env.AZURE_TAGS }}'
+        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json tags='${{ toJSON(env.AZURE_TAGS) }}'
     
     # Log out from Azure
     - name: Log out from Azure
