@@ -52,8 +52,45 @@ variables:
   AZURE_LOCATION: 'North Europe'                                        # Update to '{regionName}'
 
 stages:
+  - stage: CreateResourceGroups
+    displayName: 'Create Resource Groups'
+    jobs:
+      - job: CreateResourceGroups
+        displayName: 'Create Resource Groups'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+        # Checkout code
+        - checkout: self
+          name: checkout_repository
+          displayName: Checkout repository
+          submodules: true
+          lfs: false
+          clean: true
+          continueOnError: false
+          enabled: true
+        
+        # Deploy Resource Groups
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: resource_groups_deployment
+          displayName: Deploy Resource Groups
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Subscription'
+            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+            location: ${{ variables.AZURE_LOCATION }}
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
+            deploymentMode: 'Incremental'
+  
   - stage: Validation
     displayName: 'Validation of ARM templates'
+    dependsOn: CreateResourceGroups
     jobs:
       - job: Validation
         displayName: 'Validation of ARM templates'
