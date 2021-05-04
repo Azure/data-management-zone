@@ -72,7 +72,7 @@ jobs:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         region: ${{ env.AZURE_LOCATION }}
         template: ${{ github.workspace }}/infra/ResourceGroups/deploy.resourceGroups.json
-        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json tags="{ ${{ env.AZURE_TAGS }} }"
+        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json tags='{ ${{ env.AZURE_TAGS }} }'
     
     # Log out from Azure
     - name: Log out from Azure
