@@ -87,7 +87,6 @@ stages:
             templateLocation: 'Linked artifact'
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
-            deploymentMode: 'Incremental'
             overrideParameters: >
               -tags "${{ variables.AZURE_TAGS }}"
   
