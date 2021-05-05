@@ -9,7 +9,7 @@
             "value": "Enforce scale settings for machine learning compute clusters."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
@@ -27,7 +27,7 @@
                     "defaultValue": "Deny"
                 },
                 "maxNodeCount": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Node Count",
                         "description": "Specifies the maximum node count of AML Clusters"
@@ -35,7 +35,7 @@
                     "defaultValue": 10
                 },
                 "minNodeCount": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Minimum Node Count",
                         "description": "Specifies the minimum node count of AML Clusters"
@@ -43,7 +43,7 @@
                     "defaultValue": 0
                 },
                 "maxNodeIdleTimeInSecondsBeforeScaleDown": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Node Idle Time in Seconds Before Scaledown",
                         "description": "Specifies the maximum node idle time in seconds before scaledown"

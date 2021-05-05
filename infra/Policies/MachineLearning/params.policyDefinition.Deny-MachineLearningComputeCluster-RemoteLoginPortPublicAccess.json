@@ -9,7 +9,7 @@
             "value": "Deny public access of clusters via SSH."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {

@@ -9,7 +9,7 @@
             "value": "Deny public ip for machine learning compute clusters and instances."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {

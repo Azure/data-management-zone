@@ -9,7 +9,7 @@
             "value": "Deny AKS creation (not attaching) in machine learning."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
