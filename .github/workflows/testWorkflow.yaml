@@ -28,6 +28,10 @@ jobs:
         id: checkout_repository
         uses: actions/checkout@v2
       
+      - name: Test
+        run: |
+          echo ${{ env.AZURE_TAGS }}
+      
       # Login to Azure
       - name: Azure Login
         id: azure_login
@@ -36,7 +40,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: Test
-        run: echo ${{ env.AZURE_TAGS }}
+        run: |
+          echo ${{ env.AZURE_TAGS }}
       
       # Deploy Resource Groups
       - name: Deploy Resource Groups
