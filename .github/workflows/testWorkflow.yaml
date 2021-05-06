@@ -27,7 +27,17 @@ jobs:
       - name: Check Out Repository
         id: checkout_repository
         uses: actions/checkout@v2
-
+      
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Test
+        run: echo ${{ env.AZURE_TAGS }}
+      
       # Deploy Resource Groups
       - name: Deploy Resource Groups
         id: resource_groups_deployment
