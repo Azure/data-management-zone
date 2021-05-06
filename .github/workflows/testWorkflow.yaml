@@ -32,12 +32,12 @@ jobs:
         run: |
           echo ${{ env.AZURE_TAGS }}
       
-      # Login to Azure
-      - name: Azure Login
-        id: azure_login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # # Login to Azure
+      # - name: Azure Login
+      #   id: azure_login
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: Test
         run: |
