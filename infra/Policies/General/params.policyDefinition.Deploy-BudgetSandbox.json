@@ -6,7 +6,7 @@
             "value": "Audit-Budget-Sandbox"
         },
         "policyDescription": {
-            "value": "Depoloys a default budget on all subscriptions under the assigned scope."
+            "value": "Deploys a default budget on all subscriptions under the assigned scope."
         },
         "policyMode": {
             "value": "All"
