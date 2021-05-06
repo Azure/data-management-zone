@@ -85,8 +85,8 @@ stages:
             subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
             location: ${{ variables.AZURE_LOCATION }}
             templateLocation: 'Linked artifact'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
-            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ResourceGroups/deploy.resourceGroups.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ResourceGroups/params.resourceGroups001.json'
             overrideParameters: >
               -tags "${{ variables.AZURE_TAGS }}"
   
