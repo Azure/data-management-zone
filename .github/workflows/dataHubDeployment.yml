@@ -46,100 +46,44 @@ env:
   AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
 
 jobs:
-  create-resource-group:
-    name: Create Resource Groups
+  create-resource-groups:
     runs-on: ubuntu-latest
 
     steps:
-      # Login to Azure
-      - name: Azure Login
-        id: azure_login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_network
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_gloabl_dns
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_automation
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_AUTOMATION }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_management
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_MANAGEMENT }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_consumption
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_container
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
-
-      # Create resource group
-      - name: Create resource group
-        id: resource_group_governance
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            echo "Creating resource group \"${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}\""
-            az group create --location ${{ env.AZURE_LOCATION }} --name ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-
-      # Log out from Azure
-      - name: Log out from Azure
-        id: azure_logout
-        uses: azure/cli@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az logout
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Check Out Repository
+      id: checkout_repository
+      uses: actions/checkout@v2
+    
+    # Login to Azure
+    - name: Azure Login
+      id: azure_login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Deploy Resource Groups
+    - name: Deploy Resource Groups
+      id: resource_groups_deployment
+      uses: azure/arm-deploy@v1
+      with:
+        scope: subscription
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        region: ${{ env.AZURE_LOCATION }}
+        template: ${{ github.workspace }}/infra/ResourceGroups/deploy.resourceGroups.json
+        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json
+    
+    # Log out from Azure
+    - name: Log out from Azure
+      id: azure_logout
+      uses: azure/cli@v1
+      with:
+        azcliversion: latest
+        inlineScript: |
+          az logout
 
   validation:
-    name: Validation
-    needs: [create-resource-group]
+    needs: [ create-resource-groups ]
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -311,8 +255,7 @@ jobs:
             az logout
 
   deployment:
-    name: Deployment
-    needs: [create-resource-group, validation]
+    needs: [ create-resource-groups, validation ]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 

@@ -82,6 +82,7 @@ jobs:
             AZURE_RESOURCE_GROUP_NAME_CONTAINER: '${{ steps.update_parameters.outputs.landingZoneName }}-container'
             AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: '${{ steps.update_parameters.outputs.landingZoneName }}-governance'
             AZURE_LOCATION: '${{ env.LOCATION }}'
+            AZURE_TAGS: '{"CostCenter": "ABCDE-12345", "Owner": "EnterpriseScaleAnalytics"}'
           \`\`\`
 
           Now, merge the pull request into your \`main\` branch."

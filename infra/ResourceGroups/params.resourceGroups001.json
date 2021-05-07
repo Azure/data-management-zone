@@ -5,8 +5,11 @@
         "location": {
             "value": "northeurope"
         },
-        "firewallPolicyName": {
-            "value": "dh-firewallpolicy"
+        "dataHubName": {
+            "value": "dh"
+        },
+        "enableDnsAndFirewallDeployment": {
+            "value": true
         },
         "tags": {
             "value": {}
