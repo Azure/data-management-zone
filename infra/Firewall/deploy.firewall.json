@@ -55,11 +55,6 @@
                 "name": "Standard",
                 "tier": "Regional"
             },
-            "zones": [
-                "1",
-                "2",
-                "3"
-            ],
             "properties": {
                 "publicIPAddressVersion": "IPv4",
                 "prefixLength": 30
@@ -77,6 +72,11 @@
             "sku": {
                 "name": "Standard"
             },
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "publicIPAddressVersion": "IPv4",
