@@ -1,33 +1,33 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "location": {
-            "value": "northeurope"
-        },
-        "purviewName": {
-            "value": "dh-purview001"
-        },
-        "keyVaultId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-governance/providers/Microsoft.KeyVault/vaults/dh-keyvault001"
-        },
-        "subnetId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet/subnets/dh-privatelink-subnet"
-        },
-        "privateDnsZoneIdPurview": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
-        },
-        "privateDnsZoneIdBlob": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
-        },
-        "privateDnsZoneIdQueue": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"
-        },
-        "privateDnsZoneIdNamespace": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
-        },
-        "tags": {
-            "value": {}
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "{regionName}"
+    },
+    "purviewName": {
+      "value": "datahubname-purview001"
+    },
+    "keyVaultId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-governance/providers/Microsoft.KeyVault/vaults/datahubname-keyvault001"
+    },
+    "subnetId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-network/providers/Microsoft.Network/virtualNetworks/datahubname-vnet/subnets/datahubname-privatelink-subnet"
+    },
+    "privateDnsZoneIdPurview": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
+    },
+    "privateDnsZoneIdBlob": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+    },
+    "privateDnsZoneIdQueue": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"
+    },
+    "privateDnsZoneIdNamespace": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-global-dns/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
+    },
+    "tags": {
+      "value": {}
     }
+  }
 }
