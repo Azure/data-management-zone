@@ -31,7 +31,7 @@
                     "enableProxy": true,
                     "servers": []
                 },
-                // "intrusionSystemMode": "Enabled",
+                // "intrusionSystemMode": "Enabled",  // This feature can be enabled on premium Firewall SKU once it goes GA
                 "threatIntelMode": "Deny",
                 "threatIntelWhitelist": {
                     "fqdns": [],
