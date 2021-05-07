@@ -77,6 +77,14 @@
         }
     },
     {
+        "filePath": "infra/ResourceGroups/params.resourceGroups001.json",
+        "fileType": "json",
+        "parameters": {
+            "parameters.location.value": "${Location}",
+            "parameters.dataHubName.value": "${DataLandingZoneName}"
+        }
+    },
+    {
         "filePath": "infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json",
         "fileType": "json",
         "parameters": {

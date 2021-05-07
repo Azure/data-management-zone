@@ -53,22 +53,75 @@
                     "name": "connectivitySettings",
                     "label": "Connectivity",
                     "subLabel": {
-                        "preValidation": "",
-                        "postValidation": ""
+                        "preValidation": "Provide the connectivity settings that should be used for the Data Management Zone deployment.",
+                        "postValidation": "Done"
                     },
                     "bladeTitle": "Connectivity Settings",
                     "bladeSubtitle": "Connectivity Settings",
                     "elements": [
                         {
-                            "name": "addressSpace",
-                            "label": "Address space",
-                            "type": "Microsoft.Common.TextBox",
+                            "name": "vnet",
+                            "label": {
+                                "virtualNetwork": "Virtual network",
+                                "subnets": "Subnets"
+                            },
+                            "type": "Microsoft.Network.VirtualNetworkCombo",
                             "visible": true,
-                            "toolTip": "Provide address prefix in CIDR notation (e.g 10.200.0.0/16)",
-                            "defaultValue": "10.200.0.0/16",
+                            "toolTip": {
+                                "virtualNetwork": "Virtual Network for Data Management Landing Zone",
+                                "subnets": "Subnets used for Data Management Landing Zone"
+                            },
+                            "defaultValue": {
+                                "name": "",
+                                "addressPrefixSize": "/16"
+                            },
                             "constraints": {
-                                "required": true,
-                                "validationMessage": "The virtual hubs network's address space, specified as one address prefixes in CIDR notation (e.g. 10.200.0.0/16)."
+                                "minAddressPrefixSize": "/24"
+                            },
+                            "options": {
+                                "hideExisting": false
+                            },
+                            "subnets": {
+                                "subnet1": {
+                                    "label": "Azure Firewall Subnet",
+                                    "defaultValue": {
+                                        "name": "AzureFirewallSubnet",
+                                        "addressPrefixSize": "/24"
+                                    },
+                                    "constraints": {
+                                        "minAddressPrefixSize": "/28",
+                                        "minAddressCount": 12,
+                                        "requireContiguousAddresses": true
+                                    }
+                                },
+                                "subnet2": {
+                                    "label": "Subnet",
+                                    "defaultValue": {
+                                        "name": "dh-subnet",
+                                        "addressPrefixSize": "/24"
+                                    },
+                                    "constraints": {
+                                        "minAddressPrefixSize": "/28",
+                                        "minAddressCount": 12,
+                                        "requireContiguousAddresses": true
+                                    }
+                                },
+                                "subnet3": {
+                                    "label": "Private Link Subnet",
+                                    "defaultValue": {
+                                        "name": "dh-privatelink-subnet",
+                                        "addressPrefixSize": "/24"
+                                    },
+                                    "constraints": {
+                                        "minAddressPrefixSize": "/28",
+                                        "minAddressCount": 12,
+                                        "requireContiguousAddresses": true
+                                    }
+                                }
+                            },
+                            "scope": {
+                                "subscriptionId": "[steps('basics').resourceScope.subscription.subscriptionId]",
+                                "location": "[steps('basics').resourceScope.location.name]"
                             }
                         },
                         {
@@ -81,7 +134,7 @@
                             }
                         },
                         {
-                            "name": "enableDnsAndFirewall",
+                            "name": "enableDnsAndFirewallDeployment",
                             "label": "Deploy Firewall and Private DNS Zones",
                             "type": "Microsoft.Common.OptionsGroup",
                             "visible": true,
@@ -104,7 +157,7 @@
                             "name": "dnsServerAddresses",
                             "label": "DNS Server Private IP Addresses",
                             "type": "Microsoft.Common.TextBox",
-                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewall, 'No')]",
+                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewallDeployment, 'No')]",
                             "toolTip": "Provide the private IP addresses of your DNS forwarders (e.g '10.100.0.1,10.100.0.2').",
                             "defaultValue": "10.0.0.4",
                             "constraints": {
@@ -116,7 +169,7 @@
                             "name": "firewallAddress",
                             "label": "Firewall Private IP Address",
                             "type": "Microsoft.Common.TextBox",
-                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewall, 'No')]",
+                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewallDeployment, 'No')]",
                             "toolTip": "Provide the private IP address of your Firewall (e.g 10.100.0.1).",
                             "defaultValue": "10.0.0.4",
                             "constraints": {
@@ -136,7 +189,7 @@
                             "name": "privateDnsZoneResourceGroup",
                             "label": "Private DNS Zone resource group",
                             "type": "Microsoft.Common.DropDown",
-                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewall, 'No')]",
+                            "visible": "[equals(steps('connectivitySettings').enableDnsAndFirewallDeployment, 'No')]",
                             "toolTip": "Provide the resource group reference in which all private DNS zones are deployed.",
                             "multiselect": false,
                             "selectAll": true,
@@ -149,6 +202,27 @@
                             }
                         }
                     ]
+                },
+                {
+                    "name": "tags",
+                    "label": "Tags",
+                    "subLabel": {
+                        "preValidation": "Provide tags that will be used for all resources.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "Tags",
+                    "bladeSubtitle": "Tags",
+                    "elements": [
+                        {
+                            "name": "tagsByResource",
+                            "label": "Tags by Resource",
+                            "type": "Microsoft.Common.TagsByResource",
+                            "visible": true,
+                            "resources": [
+                                "EnterpriseScaleAnalytics"
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -157,12 +231,12 @@
             "location": "[steps('basics').resourceScope.location.name]",
             "parameters": {
                 "enterpriseScaleAnalyticsCompanyPrefix": "[steps('landingZoneSettings').enterpriseScaleAnalyticsCompanyPrefix]",
-                "enableDnsAndFirewall": "[equals(steps('connectivitySettings').enableDnsAndFirewall, 'Yes')]",
+                "enableDnsAndFirewall": "[equals(steps('connectivitySettings').enableDnsAndFirewallDeployment, 'Yes')]",
                 "dnsServerAdresses": "[split(replace(steps('connectivitySettings').dnsServerAddresses, ' ', ''), ',')]",
                 "firewallPrivateIp": "[steps('connectivitySettings').firewallAddress]",
-                "privateDnsZoneResourceGroupId": "[steps('connectivitySettings').privateDnsZoneResourceGroup]"
+                "privateDnsZoneResourceGroupId": "[steps('connectivitySettings').privateDnsZoneResourceGroup]",
+                "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
             }
         }
-    
     }
 }

@@ -50,10 +50,49 @@ variables:
   AZURE_RESOURCE_GROUP_NAME_CONTAINER: 'dh-container'                   # Update to '{dataHubName}-container'
   AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: 'dh-governance'                 # Update to '{dataHubName}-governance'
   AZURE_LOCATION: 'North Europe'                                        # Update to '{regionName}'
+  AZURE_TAGS: '{"CostCenter": "ABCDE-12345", "Owner": "EnterpriseScaleAnalytics"}'
 
 stages:
+  - stage: CreateResourceGroups
+    displayName: 'Create Resource Groups'
+    jobs:
+      - job: CreateResourceGroups
+        displayName: 'Create Resource Groups'
+        continueOnError: false
+        pool:
+          vmImage: 'ubuntu-latest'
+        
+        steps:
+        # Checkout code
+        - checkout: self
+          name: checkout_repository
+          displayName: Checkout repository
+          submodules: true
+          lfs: false
+          clean: true
+          continueOnError: false
+          enabled: true
+        
+        # Deploy Resource Groups
+        - task: AzureResourceManagerTemplateDeployment@3
+          name: resource_groups_deployment
+          displayName: Deploy Resource Groups
+          enabled: true
+          continueOnError: false
+          inputs:
+            deploymentScope: 'Subscription'
+            azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+            subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+            location: ${{ variables.AZURE_LOCATION }}
+            templateLocation: 'Linked artifact'
+            csmFile: '$(System.DefaultWorkingDirectory)/infra/ResourceGroups/deploy.resourceGroups.json'
+            csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ResourceGroups/params.resourceGroups001.json'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
+  
   - stage: Validation
     displayName: 'Validation of ARM templates'
+    dependsOn: CreateResourceGroups
     jobs:
       - job: Validation
         displayName: 'Validation of ARM templates'
@@ -89,6 +128,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Artifact Storage Account 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -107,6 +148,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/deploy.storage.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Firewall Policy 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -125,6 +168,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/deploy.firewallPolicy.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/params.firewallPolicy001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Firewall 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -143,6 +188,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy DNS Forwarder - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -161,6 +208,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/deploy.dnsForwarder.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/params.dnsForwarder001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Private DNS Zones - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -179,6 +228,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/params.privateDns001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # # Deploy Vnet Peering 001 - validation - Disabled because it will be handled from the Data Landing Zone for automation purposes
         # - task: AzureResourceManagerTemplateDeployment@3
@@ -215,6 +266,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Container Registry 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -233,6 +286,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/deploy.containerRegistry.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/params.containerRegistry001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Synapse Private Link Hub 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -251,6 +306,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
 
         # Deploy Purview 001 - validation
         - task: AzureResourceManagerTemplateDeployment@3
@@ -269,6 +326,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
             deploymentMode: 'Validation'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
   
   - stage: Deployment
     displayName: 'Deployment of ARM templates'
@@ -309,6 +368,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/deploy.vnet.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/VirtualNetwork/params.vnet001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # # Deploy Artifact Storage Account 001
         # - task: AzureResourceManagerTemplateDeployment@3
@@ -328,6 +389,8 @@ stages:
         #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ArtifactStorage/params.storage001.json'
         #     deploymentMode: 'Incremental'
         #     deploymentOutputs: 'storageDetails'
+        #     overrideParameters: >
+        #       -tags "${{ variables.AZURE_TAGS }}"
         
         # # Upload File to Storage Account 001
         # - task: AzurePowerShell@4
@@ -366,6 +429,8 @@ stages:
         #     csmFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/deploy.dnsForwarder.json'
         #     csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/DnsForwarder/params.dnsForwarder001.json'
         #     deploymentMode: 'Incremental'
+        #     overrideParameters: >
+        #       -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Firewall Policy 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -384,6 +449,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/deploy.firewallPolicy.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/FirewallPolicy/params.firewallPolicy001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Firewall 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -402,6 +469,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/deploy.firewall.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Firewall/params.firewall001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Private DNS Zones
         - task: AzureResourceManagerTemplateDeployment@3
@@ -420,6 +489,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/deploy.privateDns.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/PrivateDns/params.privateDns001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # # Deploy Vnet Peering 001 - Disabled because it will be handled from the Data Landing Zone for automation purposes
         # - task: AzureResourceManagerTemplateDeployment@3
@@ -456,6 +527,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/deploy.keyVault.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/KeyVault/params.keyVault001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Container Registry 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -474,6 +547,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/deploy.containerRegistry.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/ContainerRegistry/params.containerRegistry001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
         
         # Deploy Synapse Private Link Hub 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -492,6 +567,8 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"
 
         # Deploy Purview 001
         - task: AzureResourceManagerTemplateDeployment@3
@@ -510,3 +587,5 @@ stages:
             csmFile: '$(System.DefaultWorkingDirectory)/infra/Purview/deploy.purview.json'
             csmParametersFile: '$(System.DefaultWorkingDirectory)/infra/Purview/params.purview001.json'
             deploymentMode: 'Incremental'
+            overrideParameters: >
+              -tags "${{ variables.AZURE_TAGS }}"

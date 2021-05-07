@@ -50,6 +50,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone for eventhub namespaces."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -66,6 +73,7 @@
         "privateDnsZoneIdBlob": "[parameters('privateDnsZoneIdBlob')]",
         "privateDnsZoneIdQueue": "[parameters('privateDnsZoneIdQueue')]",
         "privateDnsZoneIdNamespace": "[parameters('privateDnsZoneIdNamespace')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointNamePortal": "[concat(variables('purviewName'), '-portal-private-endpoint')]",
         "privateEndpointNameAccount": "[concat(variables('purviewName'), '-account-private-endpoint')]",
         "privateEndpointNameBlob": "[concat(variables('purviewName'), '-blob-private-endpoint')]",
@@ -77,6 +85,7 @@
             "type": "Microsoft.Purview/accounts",
             "apiVersion": "2020-12-01-preview",
             "name": "[variables('purviewName')]",
+            "tags": "[variables('tags')]",
             "location": "[if(contains(variables('purviewRegions'), variables('location')), variables('location'), 'westeurope')]",
             "identity": {
                 "type": "SystemAssigned"
@@ -140,6 +149,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNamePortal')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
             ],
@@ -186,6 +196,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameAccount')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
             ],
@@ -232,6 +243,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameBlob')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
             ],
@@ -278,6 +290,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameQueue')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
             ],
@@ -324,6 +337,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointNameNamespace')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Purview/accounts', variables('purviewName'))]"
             ],

@@ -33,6 +33,13 @@
             "metadata": {
                 "description": "Specifies the private IP of the Firewall."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -41,13 +48,15 @@
         "vnetName": "[parameters('vnetName')]",
         "dataHubName": "[parameters('dataHubName')]",
         "dnsServerAdresses": "[parameters('dnsServerAdresses')]",
-        "firewallPrivateIp": "[parameters('firewallPrivateIp')]"
+        "firewallPrivateIp": "[parameters('firewallPrivateIp')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/routeTables",
             "apiVersion": "2020-05-01",
             "name": "[concat(variables('dataHubName'), '-routetable')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "routes": [
@@ -67,6 +76,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-11-01",
             "name": "[concat(variables('dataHubName'), '-nsg')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
@@ -95,6 +105,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-04-01",
             "name": "[variables('vnetName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('dataHubName'), '-nsg'))]",

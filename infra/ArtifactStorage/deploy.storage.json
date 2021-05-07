@@ -31,6 +31,13 @@
             "metadata": {
                 "description": "Specifies the SKU of the storage account."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -38,6 +45,7 @@
         "location": "[parameters('location')]",
         "storageAccountName": "[parameters('storageAccountName')]",
         "storageAccountType": "[parameters('storageAccountType')]",
+        "tags": "[parameters('tags')]",
         "containerName": "scripts"
     },
     "resources": [
@@ -45,11 +53,10 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2020-08-01-preview",
             "name": "[variables('storageAccountName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "identity": {
                 "type": "SystemAssigned"
-            },
-            "tags": {
             },
             "sku": {
                 "name": "[variables('storageAccountType')]"
