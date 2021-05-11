@@ -55,6 +55,11 @@
                 "name": "Standard",
                 "tier": "Regional"
             },
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
             "properties": {
                 "publicIPAddressVersion": "IPv4",
                 "prefixLength": 30
