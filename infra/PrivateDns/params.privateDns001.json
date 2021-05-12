@@ -1,61 +1,61 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "privateDnsZoneNames": {
-            "value": [
-                "privatelink.afs.azure.net",
-                "privatelink.analysis.windows.net",
-                "privatelink.api.azureml.ms",
-                "privatelink.azure-automation.net",
-                "privatelink.azure-devices.net",
-                "privatelink.adf.azure.com",
-                "privatelink.azurecr.io",
-                "privatelink.azuredatabricks.net",
-                "privatelink.azuresynapse.net",
-                "privatelink.azurewebsites.net",
-                "privatelink.blob.core.windows.net",
-                "privatelink.cassandra.cosmos.azure.com",
-                "privatelink.cognitiveservices.azure.com",
-                "privatelink.database.windows.net",
-                "privatelink.datafactory.azure.net",
-                "privatelink.dev.azuresynapse.net",
-                "privatelink.dfs.core.windows.net",
-                "privatelink.documents.azure.com",
-                "privatelink.eventgrid.azure.net",
-                "privatelink.file.core.windows.net",
-                "privatelink.gremlin.cosmos.azure.com",
-                "privatelink.mariadb.database.azure.com",
-                "privatelink.mongo.cosmos.azure.com",
-                "privatelink.mysql.database.azure.com",
-                "privatelink.notebooks.azure.net",
-                "privatelink.pbidedicated.windows.net",
-                "privatelink.postgres.database.azure.com",
-                "privatelink.purview.azure.com",
-                "privatelink.queue.core.windows.net",
-                "privatelink.redis.cache.windows.net",
-                "privatelink.search.windows.net",
-                "privatelink.service.signalr.net",
-                "privatelink.servicebus.windows.net",
-                "privatelink.sql.azuresynapse.net",
-                "privatelink.table.core.windows.net",
-                "privatelink.table.cosmos.azure.com",
-                "privatelink.tip1.powerquery.microsoft.com",
-                "privatelink.vaultcore.azure.net",
-                "privatelink.web.core.windows.net",
-                "privatelink.northeurope.azmk8s.io",
-                "privatelink.westeurope.azmk8s.io",
-                "privatelink.northeurope.batch.azure.com",
-                "privatelink.westeurope.batch.azure.com",
-                "northeurope.privatelink.redisenterprise.cache.azure.net",
-                "westeurope.privatelink.redisenterprise.cache.azure.net"
-            ]
-        },
-        "virtualNetworkId": {
-            "value": "/subscriptions/4060c03e-0d2e-44b7-82a3-da9376fe50b2/resourceGroups/dh-network/providers/Microsoft.Network/virtualNetworks/dh-vnet"
-        },
-        "tags": {
-            "value": {}
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "privateDnsZoneNames": {
+      "value": [
+        "privatelink.afs.azure.net",
+        "privatelink.analysis.windows.net",
+        "privatelink.api.azureml.ms",
+        "privatelink.azure-automation.net",
+        "privatelink.azure-devices.net",
+        "privatelink.adf.azure.com",
+        "privatelink.azurecr.io",
+        "privatelink.azuredatabricks.net",
+        "privatelink.azuresynapse.net",
+        "privatelink.azurewebsites.net",
+        "privatelink.blob.core.windows.net",
+        "privatelink.cassandra.cosmos.azure.com",
+        "privatelink.cognitiveservices.azure.com",
+        "privatelink.database.windows.net",
+        "privatelink.datafactory.azure.net",
+        "privatelink.dev.azuresynapse.net",
+        "privatelink.dfs.core.windows.net",
+        "privatelink.documents.azure.com",
+        "privatelink.eventgrid.azure.net",
+        "privatelink.file.core.windows.net",
+        "privatelink.gremlin.cosmos.azure.com",
+        "privatelink.mariadb.database.azure.com",
+        "privatelink.mongo.cosmos.azure.com",
+        "privatelink.mysql.database.azure.com",
+        "privatelink.notebooks.azure.net",
+        "privatelink.pbidedicated.windows.net",
+        "privatelink.postgres.database.azure.com",
+        "privatelink.purview.azure.com",
+        "privatelink.queue.core.windows.net",
+        "privatelink.redis.cache.windows.net",
+        "privatelink.search.windows.net",
+        "privatelink.service.signalr.net",
+        "privatelink.servicebus.windows.net",
+        "privatelink.sql.azuresynapse.net",
+        "privatelink.table.core.windows.net",
+        "privatelink.table.cosmos.azure.com",
+        "privatelink.tip1.powerquery.microsoft.com",
+        "privatelink.vaultcore.azure.net",
+        "privatelink.web.core.windows.net",
+        "privatelink.northeurope.azmk8s.io",
+        "privatelink.westeurope.azmk8s.io",
+        "privatelink.northeurope.batch.azure.com",
+        "privatelink.westeurope.batch.azure.com",
+        "northeurope.privatelink.redisenterprise.cache.azure.net",
+        "westeurope.privatelink.redisenterprise.cache.azure.net"
+      ]
+    },
+    "virtualNetworkId": {
+      "value": "/subscriptions/{dataHubSubscriptionId}/resourceGroups/datahubname-network/providers/Microsoft.Network/virtualNetworks/datahubname-vnet"
+    },
+    "tags": {
+      "value": {}
     }
+  }
 }
