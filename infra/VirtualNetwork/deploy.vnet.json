@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -80,7 +79,7 @@
             "location": "[variables('location')]",
             "properties": {
                 "securityRules": [
-                    // {
+                    // {  // Uncomment, if you want to block any direct outbound internet traffic on a subnet. This is generally not required, if the use of route tables is enforced through policies and if route tables are set up correctly.
                     //     "name": "DenyInternetInbound",
                     //     "properties": {
                     //         "description": "Deny Internet Inbound",

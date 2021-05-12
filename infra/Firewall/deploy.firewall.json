@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -56,11 +55,6 @@
                 "name": "Standard",
                 "tier": "Regional"
             },
-            // "zones": [
-            //     "1",
-            //     "2",
-            //     "3"
-            // ],
             "properties": {
                 "publicIPAddressVersion": "IPv4",
                 "prefixLength": 30
@@ -99,11 +93,11 @@
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpName'))]"
             ],
             "location": "[variables('location')]",
-            // "zones": [
-            //     "1",
-            //     "2",
-            //     "3"
-            // ],
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
             "properties": {
                 "sku": {
                     "name": "AZFW_VNet",
