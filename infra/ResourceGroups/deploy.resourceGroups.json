@@ -103,5 +103,34 @@
             "properties": {}
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "automationResourceGroupName": {
+            "type": "string",
+            "value": "[variables('automationResourceGroupName')]"
+        },
+        "consumptionResourceGroupName": {
+            "type": "string",
+            "value": "[variables('consumptionResourceGroupName')]"
+        },
+        "containerResourceGroupName": {
+            "type": "string",
+            "value": "[variables('containerResourceGroupName')]"
+        },
+        "governanceResourceGroupName": {
+            "type": "string",
+            "value": "[variables('governanceResourceGroupName')]"
+        },
+        "managementResourceGroupName": {
+            "type": "string",
+            "value": "[variables('managementResourceGroupName')]"
+        },
+        "networkResourceGroupName": {
+            "type": "string",
+            "value": "[variables('networkResourceGroupName')]"
+        },
+        "privateDnsZoneResourceGroupName": {
+            "type": "string",
+            "value": "[variables('privateDnsZoneResourceGroupName')]"
+        }
+    }
 }
