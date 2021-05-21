@@ -14,7 +14,7 @@ var synapsePrivateLinkHub001PrivateEndpointName = '${synapsePrivateLinkHub001.na
 
 // Resources
 resource synapsePrivateLinkHub001 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
-  name: '${prefix}synapseprivatelinkhub001'
+  name: replace('${prefix}-synapseplhub001', '-', '')
   location: location
   tags: tags
   properties: {}

@@ -30,7 +30,7 @@ resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
         properties: {
           addressPrefix: '0.0.0.0/0'
           nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+          nextHopIpAddress: firewallPrivateIp
         }
       }
     ]
@@ -60,44 +60,72 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
       dnsServers: dnsServerAdresses
     }
     enableDdosProtection: false
-    subnets: []
+    subnets: [
+      {
+        name: azureFirewallSubnetName
+        properties: {
+          addressPrefix: azureFirewallSubnetAddressPrefix
+          addressPrefixes: []
+          delegations: []
+          privateEndpointNetworkPolicies: 'Enabled'
+          privateLinkServiceNetworkPolicies: 'Enabled'
+          serviceEndpointPolicies: []
+          serviceEndpoints: []
+        }
+      }
+      {
+        name: servicesSubnetName
+        properties: {
+          addressPrefix: servicesSubnetAddressPrefix
+          addressPrefixes: []
+          networkSecurityGroup: {
+            id: nsg.id
+          }
+          routeTable: {
+            id: routeTable.id
+          }
+          delegations: []
+          privateEndpointNetworkPolicies: 'Disabled'
+          privateLinkServiceNetworkPolicies: 'Disabled'
+          serviceEndpointPolicies: []
+          serviceEndpoints: []
+        }
+      }
+    ]
   }
 }
 
-resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
-  name: '${vnet.name}/${azureFirewallSubnetName}'
-  properties: {
-    addressPrefix: azureFirewallSubnetAddressPrefix
-    addressPrefixes: []
-    networkSecurityGroup: {
-      id: nsg.id
-    }
-    delegations: []
-    privateEndpointNetworkPolicies: 'Enabled'
-    privateLinkServiceNetworkPolicies: 'Enabled'
-    serviceEndpointPolicies: []
-    serviceEndpoints: []
-  }
-}
+// resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
+//   name: '${vnet.name}/${azureFirewallSubnetName}'
+//   properties: {
+//     addressPrefix: azureFirewallSubnetAddressPrefix
+//     addressPrefixes: []
+//     delegations: []
+//     privateEndpointNetworkPolicies: 'Enabled'
+//     privateLinkServiceNetworkPolicies: 'Enabled'
+//     serviceEndpointPolicies: []
+//     serviceEndpoints: []
+//   }
+// }
 
-resource servicesSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
-  name: '${vnet.name}/${servicesSubnetName}'
-  properties: {
-    addressPrefix: servicesSubnetAddressPrefix
-    addressPrefixes: []
-    networkSecurityGroup: {
-      id: nsg.id
-    }
-    routeTable: {
-      id: routeTable.id
-    }
-    delegations: []
-    privateEndpointNetworkPolicies: 'Disabled'
-    privateLinkServiceNetworkPolicies: 'Disabled'
-    serviceEndpointPolicies: []
-    serviceEndpoints: []
-  }
-}
+// resource servicesSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
+//   name: '${vnet.name}/${servicesSubnetName}'
+//   properties: {
+//     addressPrefix: servicesSubnetAddressPrefix
+//     addressPrefixes: []
+//     networkSecurityGroup: {
+//       id: nsg.id
+//     }
+//     routeTable: {
+//       id: routeTable.id
+//     }
+//     delegations: []
+//     privateEndpointNetworkPolicies: 'Disabled'
+//     privateLinkServiceNetworkPolicies: 'Disabled'
+//     serviceEndpointPolicies: []
+//     serviceEndpoints: []
+//   }
+// }
 
 resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
   name: '${prefix}-publicipprefix'
@@ -156,7 +184,6 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
     dnsSettings: {
       enableProxy: true
       servers: []
-      requireProxyForNetworkRules: true
     }
   }
 }
@@ -192,7 +219,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
             id: publicIp.id
           }
           subnet: {
-            id: azureFirewallSubnet.id
+            id: vnet.properties.subnets[0].id
           }
         }
       }
@@ -205,4 +232,4 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
 
 // Outputs
 output vnetId string = vnet.id
-output serviceSubnet string = servicesSubnet.id
+output serviceSubnet string = vnet.properties.subnets[1].id

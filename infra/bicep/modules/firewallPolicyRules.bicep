@@ -199,6 +199,9 @@ resource networkRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2
 
 resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2020-11-01' = {
   name: '${firewallPolicyName}/applicationrules-rulecollection'
+  dependsOn: [
+    networkRules
+  ]
   properties: {
     priority: 20000
     ruleCollections: [

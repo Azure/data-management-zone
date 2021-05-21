@@ -23,6 +23,14 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 @description('Specifies the address space of the subnet that is use for Azure Firewall.')
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 
+@description('Specifies the private IP address of the central firewall.')
+param firewallPrivateIp string = '10.0.0.4'
+
+@description('Specifies the private IP addresses of the dns servers.')
+param dnsServerAdresses array = [
+  '10.0.0.4'
+]
+
 @description('Specifies the address space of the subnet that is used for the services.')
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 
@@ -54,9 +62,9 @@ module networkServices 'modules/network.bicep' = {
     vnetAddressPrefix: vnetAddressPrefix
     azureFirewallSubnetAddressPrefix: azureFirewallSubnetAddressPrefix
     servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
-    dnsServerAdresses: []
+    dnsServerAdresses: dnsServerAdresses
     enableDnsAndFirewallDeployment: true
-    firewallPrivateIp: ''
+    firewallPrivateIp: firewallPrivateIp
   }
 }
 

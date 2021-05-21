@@ -33,7 +33,7 @@ var keyVaultPrivateEndpointName = '${keyVault001.name}-private-endpoint'
 // Resources
 resource purview001 'Microsoft.Purview/accounts@2020-12-01-preview' = {
   name: '${prefix}-purview001'
-  location: location
+  location: contains(purviewRegions, location) ? location : 'westeurope'
   tags: tags
   identity: {
     type: 'SystemAssigned'
