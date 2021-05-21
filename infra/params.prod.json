@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "northeurope"
+        },
+        "environment": {
+            "value": "prod"
+        },
+        "prefix": {
+            "value": "dh"
+        },
+        "vnetAddressPrefix": {
+            "value": "10.0.0.0/16"
+        },
+        "azureFirewallSubnetAddressPrefix": {
+            "value": "10.0.0.0/24"
+        },
+        "firewallPrivateIp": {
+            "value": "10.0.0.4"
+        },
+        "dnsServerAdresses": {
+            "value": [
+              "10.0.0.4"
+            ]
+        },
+        "servicesSubnetAddressPrefix": {
+            "value": "10.0.1.0/24"
+        }
+    }
+}

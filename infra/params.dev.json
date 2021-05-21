@@ -9,13 +9,21 @@
             "value": "dev"
         },
         "prefix": {
-            "value": "marvdh"
+            "value": "dh"
         },
         "vnetAddressPrefix": {
             "value": "10.0.0.0/16"
         },
         "azureFirewallSubnetAddressPrefix": {
             "value": "10.0.0.0/24"
+        },
+        "firewallPrivateIp": {
+            "value": "10.0.0.4"
+        },
+        "dnsServerAdresses": {
+            "value": [
+              "10.0.0.4"
+            ]
         },
         "servicesSubnetAddressPrefix": {
             "value": "10.0.1.0/24"
