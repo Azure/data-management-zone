@@ -12,7 +12,7 @@ param location string
 @description('Specifies the environment of the deployment.')
 param environment string
 
-@minLength(3)
+@minLength(2)
 @maxLength(10)
 @description('Specifies the prefix for all resources created in this deployment.')
 param prefix string
