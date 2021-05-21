@@ -4,86 +4,23 @@ on:
   push:
     branches: [main]
     paths:
-      - "infra/ArtifactStorage/**"
-      - "infra/ContainerRegistry/**"
-      - "infra/DnsForwarder/**"
-      - "infra/Firewall/**"
-      - "infra/FirewallPolicy/**"
-      - "infra/KeyVault/**"
-      - "infra/PrivateDns/**"
-      - "infra/Purview/**"
-      - "infra/SynapsePrivateLinkHub/**"
-      - "infra/VirtualNetwork/**"
-      - "infra/VirtualNetworkPeering/**"
-      - ".github/workflows/dataHubDeployment.yml"
+      - "infra/**"
       - "code/**"
+      - ".github/workflows/dataHubDeployment.yml"
   pull_request:
     branches: [main]
     paths:
-      - "infra/ArtifactStorage/**"
-      - "infra/ContainerRegistry/**"
-      - "infra/DnsForwarder/**"
-      - "infra/Firewall/**"
-      - "infra/FirewallPolicy/**"
-      - "infra/KeyVault/**"
-      - "infra/PrivateDns/**"
-      - "infra/Purview/**"
-      - "infra/SynapsePrivateLinkHub/**"
-      - "infra/VirtualNetwork/**"
-      - "infra/VirtualNetworkPeering/**"
-      - ".github/workflows/dataHubDeployment.yml"
+      - "infra/**"
       - "code/**"
+      - ".github/workflows/dataHubDeployment.yml"
 
 env:
   AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2" # Update to '{dataHubSubscriptionId}'
-  AZURE_RESOURCE_GROUP_NAME_NETWORK: "dh-network"               # Update to '{dataHubName}-network'
-  AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS: "dh-global-dns"         # Update to '{dataHubName}-global-dns'
-  AZURE_RESOURCE_GROUP_NAME_AUTOMATION: "dh-automation"         # Update to '{dataHubName}-automation'
-  AZURE_RESOURCE_GROUP_NAME_MANAGEMENT: "dh-mgmt"               # Update to '{dataHubName}-mgmt'
-  AZURE_RESOURCE_GROUP_NAME_CONSUMPTION: "dh-consumption"       # Update to '{dataHubName}-consumption'
-  AZURE_RESOURCE_GROUP_NAME_CONTAINER: "dh-container"           # Update to '{dataHubName}-container'
-  AZURE_RESOURCE_GROUP_NAME_GOVERNANCE: "dh-governance"         # Update to '{dataHubName}-governance'
   AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+  DATA_MANAGEMENT_ZONE_PREFIX: "dh"                             # Update to '{yourDataManegementZonePrefix}'
 
 jobs:
-  create-resource-groups:
-    runs-on: ubuntu-latest
-
-    steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: Check Out Repository
-      id: checkout_repository
-      uses: actions/checkout@v2
-    
-    # Login to Azure
-    - name: Azure Login
-      id: azure_login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    # Deploy Resource Groups
-    - name: Deploy Resource Groups
-      id: resource_groups_deployment
-      uses: azure/arm-deploy@v1
-      with:
-        scope: subscription
-        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        region: ${{ env.AZURE_LOCATION }}
-        template: ${{ github.workspace }}/infra/ResourceGroups/deploy.resourceGroups.json
-        parameters: ${{ github.workspace }}/infra/ResourceGroups/params.resourceGroups001.json
-    
-    # Log out from Azure
-    - name: Log out from Azure
-      id: azure_logout
-      uses: azure/cli@v1
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az logout
-
   validation:
-    needs: [ create-resource-groups ]
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -100,150 +37,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Deploy Vnet - validation
-      - name: Deploy Vnet - validation
-        id: vnet_validation
+      # Deploy Data Management Zone - validation
+      - name: Deploy Data Management Zone - validation
+        id: data_management_zone_validation
         uses: azure/arm-deploy@v1
         with:
-          scope: resourcegroup
+          scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
           region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
-          parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json prefix="${{ env.DATA_MANAGEMENT_ZONE_PREFIX }}"
           deploymentMode: Validate
-
-      # Deploy Artifact  Storage Account 001 - validation
-      - name: Deploy Artifact Storage Account 001 - validation
-        id: artifact_storage_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
-          parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
-          deploymentMode: Validate
-
-      # Deploy Firewall Policy 001 - validation
-      - name: Deploy Firewall Policy 001 - validation
-        id: firewall_policy_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
-          parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
-          deploymentMode: Validate
-
-      # Deploy Firewall 001 - validation
-      - name: Deploy Firewall 001 - validation
-        id: firewall_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-          parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
-          deploymentMode: Validate
-
-      # Deploy DNS Forwarder 001 - validation
-      - name: Deploy DNS Forwarder 001 - validation
-        id: dns_forwarder_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
-          parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
-          deploymentMode: Validate
-
-      # Deploy Private DNS Zones - validation
-      - name: Deploy Private DNS Zones - validation
-        id: private_dns_zones_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
-          parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDns001.json
-          deploymentMode: Validate
-
-      # # Deploy Vnet Peering 001 - validation - Disabled because it will be handled from the Data Landing Zone for automation purposes
-      # - name: Deploy Vnet Peering 001 - validation
-      #   id: vnet_peering_001_validation
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: resourcegroup
-      #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-      #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-      #     region: ${{ env.AZURE_LOCATION }}
-      #     template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-      #     parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
-      #     deploymentMode: Validate
-      #   continue-on-error: true
-
-      # Deploy Key Vault 001 - validation
-      - name: Deploy Key Vault 001 - validation
-        id: key_vault_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-          parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
-          deploymentMode: Validate
-
-      # Deploy Container Registry 001 - validation
-      - name: Deploy Container Registry  001 - validation
-        id: container_registry_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
-          parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
-          deploymentMode: Validate
-
-      # Deploy Synapse Private Link Hub 001 - validation
-      - name: Deploy Synapse Private Link Hub 001 - validation
-        id: synapse_private_link_hub_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
-          parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
-          deploymentMode: Validate
-
-      # Deploy Purview 001 - validation
-      - name: Deploy Purview 001 - validation
-        id: purview_001_validation
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-          parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-          deploymentMode: Validate
-        continue-on-error: true
 
       # Log out from Azure
       - name: Log out from Azure
@@ -255,7 +59,7 @@ jobs:
             az logout
 
   deployment:
-    needs: [ create-resource-groups, validation ]
+    needs: [validation]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
@@ -273,164 +77,17 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      # Deploy Vnet
-      - name: Deploy Vnet
-        id: vnet_deployment
+      # Deploy Data Management Zone - validation
+      - name: Deploy Data Management Zone - validation
+        id: data_management_zone_validation
         uses: azure/arm-deploy@v1
         with:
-          scope: resourcegroup
+          scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
           region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/VirtualNetwork/deploy.vnet.json
-          parameters: ${{ github.workspace }}/infra/VirtualNetwork/params.vnet001.json
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json prefix="${{ env.DATA_MANAGEMENT_ZONE_PREFIX }}"
           deploymentMode: Incremental
-
-      # # Deploy Artifact Storage Account 001
-      # - name: Deploy Artifact Storage Account 001
-      #   id: artifact_storage_001_deployment
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: resourcegroup
-      #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-      #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-      #     region: ${{ env.AZURE_LOCATION }}
-      #     template: ${{ github.workspace }}/infra/ArtifactStorage/deploy.storage.json
-      #     parameters: ${{ github.workspace }}/infra/ArtifactStorage/params.storage001.json
-      #     deploymentMode: Incremental
-
-      # # Upload file to Storage Account 001
-      # - name: Upload file to Storage Account 001
-      #   id: upload_file_001
-      #   uses: azure/powershell@v1
-      #   with:
-      #     azPSVersion: latest
-      #     inlineScript: |
-      #       & "${{ github.workspace }}/code/UploadBlob.ps1" `
-      #         -ResourceGroupName "${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}" `
-      #         -StorageAccountName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountName }}" `
-      #         -StorageAccountContainerName "${{ steps.artifact_storage_001_deployment.outputs.storageAccountContainerName }}" `
-      #         -File "${{ github.workspace }}/infra/DnsForwarder/forwarderSetup.sh" `
-      #         -Blob "forwarderSetup.sh"
-
-      # # Deploy DNS Forwarder 001
-      # - name: Deploy DNS Forwarder 001
-      #   id: dns_forwarder_001_deployment
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: resourcegroup
-      #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-      #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-      #     region: ${{ env.AZURE_LOCATION }}
-      #     template: ${{ github.workspace }}/infra/DnsForwarder/deploy.dnsForwarder.json
-      #     parameters: ${{ github.workspace }}/infra/DnsForwarder/params.dnsForwarder001.json
-      #     deploymentMode: Incrementals
-
-      # Deploy Firewall Policy 001
-      - name: Deploy Firewall Policy 001
-        id: firewall_policy_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/FirewallPolicy/deploy.firewallPolicy.json
-          parameters: ${{ github.workspace }}/infra/FirewallPolicy/params.firewallPolicy001.json
-          deploymentMode: Incremental
-
-      # Deploy Firewall 001
-      - name: Deploy Firewall 001
-        id: firewall_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/Firewall/deploy.firewall.json
-          parameters: ${{ github.workspace }}/infra/Firewall/params.firewall001.json
-          deploymentMode: Incremental
-
-      # Deploy Private DNS Zones
-      - name: Deploy Private DNS Zones
-        id: private_dns_zones_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GLOBAL_DNS }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/PrivateDns/deploy.privateDns.json
-          parameters: ${{ github.workspace }}/infra/PrivateDns/params.privateDns001.json
-          deploymentMode: Incremental
-
-      # # Deploy Vnet Peering 001 - Disabled because it will be handled from the Data Landing Zone for automation purposes
-      # - name: Deploy Vnet Peering 001
-      #   id: vnet_peering_001_deployment
-      #   uses: azure/arm-deploy@v1
-      #   with:
-      #     scope: resourcegroup
-      #     subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-      #     resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_NETWORK }}
-      #     region: ${{ env.AZURE_LOCATION }}
-      #     template: ${{ github.workspace }}/infra/VirtualNetworkPeering/deploy.vnetPeering.json
-      #     parameters: ${{ github.workspace }}/infra/VirtualNetworkPeering/params.vnetPeering001.json
-      #     deploymentMode: Incremental
-      #   continue-on-error: true
-
-      # Deploy Key Vault 001
-      - name: Deploy Key Vault 001
-        id: key_vault_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/KeyVault/deploy.keyVault.json
-          parameters: ${{ github.workspace }}/infra/KeyVault/params.keyVault001.json
-          deploymentMode: Incremental
-
-      # Deploy Container Registry 001
-      - name: Deploy Container Registry  001
-        id: container_registry_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONTAINER }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/ContainerRegistry/deploy.containerRegistry.json
-          parameters: ${{ github.workspace }}/infra/ContainerRegistry/params.containerRegistry001.json
-          deploymentMode: Incremental
-
-      # Deploy Synapse Private Link Hub 001
-      - name: Deploy Synapse Private Link Hub 001
-        id: synapse_private_link_hub_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_CONSUMPTION }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/deploy.synapsePrivateLinkHub.json
-          parameters: ${{ github.workspace }}/infra/SynapsePrivateLinkHub/params.synapsePrivateLinkHub001.json
-          deploymentMode: Incremental
-
-      # Deploy Purview 001
-      - name: Deploy Purview 001
-        id: purview_001_deployment
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME_GOVERNANCE }}
-          region: ${{ env.AZURE_LOCATION }}
-          template: ${{ github.workspace }}/infra/Purview/deploy.purview.json
-          parameters: ${{ github.workspace }}/infra/Purview/params.purview001.json
-          deploymentMode: Incremental
-        continue-on-error: true
 
       # Log out from Azure
       - name: Log out from Azure
