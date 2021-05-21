@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MachineLearningAks"
+            "value": "Deny-MachineLearning-Aks"
         },
         "policyDescription": {
-            "value": "Deny AKS creation (not attaching) in machine learning."
+            "value": "Deny AKS cluster creation in machine learning and enforce connecting to existing clusters."
         },
         "policyMode": {
             "value": "Indexed"

@@ -6,7 +6,7 @@
             "value": "Deny-MachineLearningCompute-SubnetId"
         },
         "policyDescription": {
-            "value": "Deny public ip for machine learning compute clusters and instances."
+            "value": "Enforce subnet connectivity for machine learning compute clusters and instances."
         },
         "policyMode": {
             "value": "Indexed"
