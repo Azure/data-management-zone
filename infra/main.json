@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.539.46024",
-      "templateHash": "671306306192780558"
+      "templateHash": "15396082112910706125"
     }
   },
   "parameters": {
@@ -48,6 +48,13 @@
         "description": "Specifies the address space of the subnet that is use for Azure Firewall."
       }
     },
+    "servicesSubnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/24",
+      "metadata": {
+        "description": "Specifies the address space of the subnet that is used for the services."
+      }
+    },
     "firewallPrivateIp": {
       "type": "string",
       "defaultValue": "10.0.0.4",
@@ -62,13 +69,6 @@
       ],
       "metadata": {
         "description": "Specifies the private IP addresses of the dns servers."
-      }
-    },
-    "servicesSubnetAddressPrefix": {
-      "type": "string",
-      "defaultValue": "10.0.1.0/24",
-      "metadata": {
-        "description": "Specifies the address space of the subnet that is used for the services."
       }
     }
   },
@@ -186,7 +186,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.539.46024",
-              "templateHash": "17769681037373790319"
+              "templateHash": "7130096428236276462"
             }
           },
           "parameters": {
@@ -380,7 +380,7 @@
             {
               "type": "Microsoft.Network/azureFirewalls",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}-firewallpolicy', parameters('prefix'))]",
+              "name": "[format('{0}-firewall', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
               "zones": [

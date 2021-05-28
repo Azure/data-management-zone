@@ -4,7 +4,6 @@ targetScope = 'resourceGroup'
 
 // Parameters
 param firewallPolicyName string
-param location string
 
 // Variables
 

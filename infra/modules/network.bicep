@@ -37,6 +37,15 @@ resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
   }
 }
 
+// resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01' = {
+//   name: '${routeTable.name}/to-firewall-default'
+//   properties: {
+//     addressPrefix: '0.0.0.0/0'
+//     nextHopType: 'VirtualAppliance'
+//     nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+//   }
+// }
+
 resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   name: '${prefix}-nsg'
   location: location
@@ -94,38 +103,6 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
     ]
   }
 }
-
-// resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
-//   name: '${vnet.name}/${azureFirewallSubnetName}'
-//   properties: {
-//     addressPrefix: azureFirewallSubnetAddressPrefix
-//     addressPrefixes: []
-//     delegations: []
-//     privateEndpointNetworkPolicies: 'Enabled'
-//     privateLinkServiceNetworkPolicies: 'Enabled'
-//     serviceEndpointPolicies: []
-//     serviceEndpoints: []
-//   }
-// }
-
-// resource servicesSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = {
-//   name: '${vnet.name}/${servicesSubnetName}'
-//   properties: {
-//     addressPrefix: servicesSubnetAddressPrefix
-//     addressPrefixes: []
-//     networkSecurityGroup: {
-//       id: nsg.id
-//     }
-//     routeTable: {
-//       id: routeTable.id
-//     }
-//     delegations: []
-//     privateEndpointNetworkPolicies: 'Disabled'
-//     privateLinkServiceNetworkPolicies: 'Disabled'
-//     serviceEndpointPolicies: []
-//     serviceEndpoints: []
-//   }
-// }
 
 resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
   name: '${prefix}-publicipprefix'
@@ -190,15 +167,17 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
 
 module firewallPolicyRules 'firewallPolicyRules.bicep' = {
   name: '${prefix}-firewallpolicy-rules'
+  dependsOn: [
+    firewallPolicy
+  ]
   scope: resourceGroup()
   params: {
     firewallPolicyName: firewallPolicy.name
-    location: location
   }
 }
 
 resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
-  name: '${prefix}-firewallpolicy'
+  name: '${prefix}-firewall'
   location: location
   tags: tags
   zones: [
