@@ -24,27 +24,18 @@ resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
   tags: tags
   properties: {
     disableBgpRoutePropagation: false
-    routes: [
-      {
-        name: 'to-firewall-default'
-        properties: {
-          addressPrefix: '0.0.0.0/0'
-          nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: firewallPrivateIp
-        }
-      }
-    ]
+    routes: []
   }
 }
 
-// resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01' = {
-//   name: '${routeTable.name}/to-firewall-default'
-//   properties: {
-//     addressPrefix: '0.0.0.0/0'
-//     nextHopType: 'VirtualAppliance'
-//     nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
-//   }
-// }
+resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01' = {
+  name: '${routeTable.name}/to-firewall-default'
+  properties: {
+    addressPrefix: '0.0.0.0/0'
+    nextHopType: 'VirtualAppliance'
+    nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+  }
+}
 
 resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
   name: '${prefix}-nsg'

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.539.46024",
-      "templateHash": "15396082112910706125"
+      "templateHash": "14256680449711544453"
     }
   },
   "parameters": {
@@ -186,7 +186,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.539.46024",
-              "templateHash": "7130096428236276462"
+              "templateHash": "11793653676007147583"
             }
           },
           "parameters": {
@@ -234,17 +234,22 @@
               "tags": "[parameters('tags')]",
               "properties": {
                 "disableBgpRoutePropagation": false,
-                "routes": [
-                  {
-                    "name": "to-firewall-default",
-                    "properties": {
-                      "addressPrefix": "0.0.0.0/0",
-                      "nextHopType": "VirtualAppliance",
-                      "nextHopIpAddress": "[parameters('firewallPrivateIp')]"
-                    }
-                  }
-                ]
+                "routes": []
               }
+            },
+            {
+              "type": "Microsoft.Network/routeTables/routes",
+              "apiVersion": "2020-11-01",
+              "name": "[format('{0}/to-firewall-default', format('{0}-routetable', parameters('prefix')))]",
+              "properties": {
+                "addressPrefix": "0.0.0.0/0",
+                "nextHopType": "VirtualAppliance",
+                "nextHopIpAddress": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))]",
+                "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
+              ]
             },
             {
               "type": "Microsoft.Network/networkSecurityGroups",
@@ -428,9 +433,6 @@
                 "parameters": {
                   "firewallPolicyName": {
                     "value": "[format('{0}-firewallpolicy', parameters('prefix'))]"
-                  },
-                  "location": {
-                    "value": "[parameters('location')]"
                   }
                 },
                 "template": {
@@ -440,14 +442,11 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.3.539.46024",
-                      "templateHash": "5706274228320817406"
+                      "templateHash": "10727963191735774642"
                     }
                   },
                   "parameters": {
                     "firewallPolicyName": {
-                      "type": "string"
-                    },
-                    "location": {
                       "type": "string"
                     }
                   },
