@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.3.539.46024",
-      "templateHash": "10903786252868006397"
+      "version": "0.4.1.14562",
+      "templateHash": "16922860770891391121"
     }
   },
   "parameters": {
@@ -185,8 +185,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.3.539.46024",
-              "templateHash": "11793653676007147583"
+              "version": "0.4.1.14562",
+              "templateHash": "4292765231469053414"
             }
           },
           "parameters": {
@@ -217,7 +217,8 @@
               "type": "string"
             },
             "enableDnsAndFirewallDeployment": {
-              "type": "bool"
+              "type": "bool",
+              "defaultValue": true
             }
           },
           "functions": [],
@@ -441,8 +442,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.3.539.46024",
-                      "templateHash": "10727963191735774642"
+                      "version": "0.4.1.14562",
+                      "templateHash": "10799542614567088662"
                     }
                   },
                   "parameters": {
@@ -1015,8 +1016,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.3.539.46024",
-              "templateHash": "3588759585501536456"
+              "version": "0.4.1.14562",
+              "templateHash": "1213338902785510415"
             }
           },
           "parameters": {
@@ -1041,16 +1042,16 @@
               "privatelink.azuredatabricks.net",
               "privatelink.azuresynapse.net",
               "privatelink.azurewebsites.net",
-              "privatelink.blob.core.windows.net",
+              "[format('privatelink.blob.{0}', environment().suffixes.storage)]",
               "privatelink.cassandra.cosmos.azure.com",
               "privatelink.cognitiveservices.azure.com",
-              "privatelink.database.windows.net",
+              "[format('privatelink{0}', environment().suffixes.sqlServerHostname)]",
               "privatelink.datafactory.azure.net",
               "privatelink.dev.azuresynapse.net",
-              "privatelink.dfs.core.windows.net",
+              "[format('privatelink.dfs.{0}', environment().suffixes.storage)]",
               "privatelink.documents.azure.com",
               "privatelink.eventgrid.azure.net",
-              "privatelink.file.core.windows.net",
+              "[format('privatelink.file.{0}', environment().suffixes.storage)]",
               "privatelink.gremlin.cosmos.azure.com",
               "privatelink.mariadb.database.azure.com",
               "privatelink.mongo.cosmos.azure.com",
@@ -1059,17 +1060,17 @@
               "privatelink.pbidedicated.windows.net",
               "privatelink.postgres.database.azure.com",
               "privatelink.purview.azure.com",
-              "privatelink.queue.core.windows.net",
+              "[format('privatelink.queue.{0}', environment().suffixes.storage)]",
               "privatelink.redis.cache.windows.net",
               "privatelink.search.windows.net",
               "privatelink.service.signalr.net",
               "privatelink.servicebus.windows.net",
               "privatelink.sql.azuresynapse.net",
-              "privatelink.table.core.windows.net",
+              "[format('privatelink.table.{0}', environment().suffixes.storage)]",
               "privatelink.table.cosmos.azure.com",
               "privatelink.tip1.powerquery.microsoft.com",
               "privatelink.vaultcore.azure.net",
-              "privatelink.web.core.windows.net",
+              "[format('privatelink.web.{0}', environment().suffixes.storage)]",
               "privatelink.northeurope.azmk8s.io",
               "privatelink.westeurope.azmk8s.io",
               "privatelink.northeurope.batch.azure.com",
@@ -1118,11 +1119,11 @@
             },
             "privateDnsZoneIdBlob": {
               "type": "string",
-              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net', resourceGroup().id)]"
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.{1}', resourceGroup().id, environment().suffixes.storage)]"
             },
             "privateDnsZoneIdQueue": {
               "type": "string",
-              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net', resourceGroup().id)]"
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.{1}', resourceGroup().id, environment().suffixes.storage)]"
             },
             "privateDnsZoneIdNamespace": {
               "type": "string",
@@ -1193,8 +1194,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.3.539.46024",
-              "templateHash": "9306371842334558819"
+              "version": "0.4.1.14562",
+              "templateHash": "11311172644175047803"
             }
           },
           "parameters": {
@@ -1235,7 +1236,7 @@
             {
               "type": "Microsoft.Authorization/roleAssignments",
               "apiVersion": "2020-04-01-preview",
-              "name": "[guid(uniqueString(concat(resourceGroup().id, variables('purview001Name'), variables('keyvault001Name'))))]",
+              "name": "[guid(uniqueString(format('{0}{1}{2}', resourceGroup().id, variables('purview001Name'), variables('keyvault001Name'))))]",
               "properties": {
                 "principalId": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2019-10-01').outputs.purviewPrincipalId.value]",
                 "principalType": "MSI",
@@ -1286,8 +1287,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.3.539.46024",
-                      "templateHash": "11724760777905929222"
+                      "version": "0.4.1.14562",
+                      "templateHash": "4158002352763998048"
                     }
                   },
                   "parameters": {
@@ -1630,8 +1631,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.3.539.46024",
-                      "templateHash": "3500530586185514908"
+                      "version": "0.4.1.14562",
+                      "templateHash": "16437263462848099421"
                     }
                   },
                   "parameters": {
@@ -1783,8 +1784,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.3.539.46024",
-              "templateHash": "16714697774306190473"
+              "version": "0.4.1.14562",
+              "templateHash": "4524901354726358447"
             }
           },
           "parameters": {
@@ -1838,8 +1839,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.3.539.46024",
-                      "templateHash": "2861676654564741344"
+                      "version": "0.4.1.14562",
+                      "templateHash": "5811381876662012418"
                     }
                   },
                   "parameters": {
@@ -1993,8 +1994,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.3.539.46024",
-              "templateHash": "18203655149025963771"
+              "version": "0.4.1.14562",
+              "templateHash": "2053847908981044729"
             }
           },
           "parameters": {
@@ -2048,8 +2049,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.3.539.46024",
-                      "templateHash": "14700095259798340626"
+                      "version": "0.4.1.14562",
+                      "templateHash": "15173588087754523973"
                     }
                   },
                   "parameters": {

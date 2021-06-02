@@ -11,7 +11,7 @@ param dnsServerAdresses array = []
 param vnetAddressPrefix string
 param azureFirewallSubnetAddressPrefix string
 param servicesSubnetAddressPrefix string
-param enableDnsAndFirewallDeployment bool
+param enableDnsAndFirewallDeployment bool = true
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'

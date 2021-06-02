@@ -46,7 +46,7 @@ module keyVault001 'services/keyvault.bicep' = {
 }
 
 resource purviewKeyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: '${guid(uniqueString(concat(resourceGroup().id, purview001Name, keyvault001Name)))}'
+  name: '${guid(uniqueString('${resourceGroup().id}${purview001Name}${keyvault001Name}'))}'
   properties: {
     principalId: purview001.outputs.purviewPrincipalId
     principalType: 'MSI'
