@@ -11,7 +11,7 @@ param location string = 'northeurope'
 @description('Specifies the environment of the deployment.')
 param environment string = 'dev'
 @minLength(2)
-@maxLength(10)
+@maxLength(5)
 @description('Specifies the prefix for all resources created in this deployment.')
 param prefix string
 

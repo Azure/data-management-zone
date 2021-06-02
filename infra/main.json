@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "13424984208982572500"
+      "templateHash": "9964536772115023777"
     }
   },
   "parameters": {
@@ -33,7 +33,7 @@
       "metadata": {
         "description": "Specifies the prefix for all resources created in this deployment."
       },
-      "maxLength": 10,
+      "maxLength": 5,
       "minLength": 2
     },
     "vnetAddressPrefix": {
