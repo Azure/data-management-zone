@@ -156,7 +156,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
   }
 }
 
-module firewallPolicyRules 'firewallPolicyRules.bicep' = {
+module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
   name: '${prefix}-firewallpolicy-rules'
   dependsOn: [
     firewallPolicy

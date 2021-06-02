@@ -1,5 +1,4 @@
-// This template is used as a module from the main.bicep template. 
-// The module contains a template to create global dns resources.
+// This template is used to create Private DNS Zones.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -83,6 +82,6 @@ output privateDnsZoneIdPurview string = '${resourceGroup().id}/providers/Microso
 output privateDnsZoneIdBlob string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'
 output privateDnsZoneIdQueue string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'
 output privateDnsZoneIdNamespace string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'
-output privateDnsZoneIdVault string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'
+output privateDnsZoneIdKeyVault string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'
 output privateDnsZoneIdContainerRegistry string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'
 output privateDnsZoneIdSynapse string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'

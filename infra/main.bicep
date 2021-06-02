@@ -76,7 +76,7 @@ resource globalDnsResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' 
   properties: {}
 }
 
-module globalDnsZones 'modules/globalDns.bicep' = {
+module globalDnsZones 'modules/services/privatednszones.bicep' = {
   name: '${name}-global-dns'
   scope: globalDnsResourceGroup
   params: {
@@ -102,10 +102,10 @@ module governanceResources 'modules/governance.bicep' = {
     tags: tags
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdPurview: globalDnsZones.outputs.privateDnsZoneIdPurview
-    privateDnsZoneIdBlob: globalDnsZones.outputs.privateDnsZoneIdBlob
-    privateDnsZoneIdQueue: globalDnsZones.outputs.privateDnsZoneIdQueue
-    privateDnsZoneIdNamespace: globalDnsZones.outputs.privateDnsZoneIdNamespace
-    privateDnsZoneIdVault: globalDnsZones.outputs.privateDnsZoneIdVault
+    privateDnsZoneIdStorageBlob: globalDnsZones.outputs.privateDnsZoneIdBlob
+    privateDnsZoneIdStorageQueue: globalDnsZones.outputs.privateDnsZoneIdQueue
+    privateDnsZoneIdEventhubNamespace: globalDnsZones.outputs.privateDnsZoneIdNamespace
+    privateDnsZoneIdKeyVault: globalDnsZones.outputs.privateDnsZoneIdKeyVault
   }
 }
 
@@ -145,7 +145,7 @@ module consumptionResources 'modules/consumption.bicep' = {
     prefix: name
     tags: tags
     subnetId: networkServices.outputs.serviceSubnet
-    privateDnsZoneIdSynapse: globalDnsZones.outputs.privateDnsZoneIdSynapse
+    privateDnsZoneIdSynapseprivatelinkhub: globalDnsZones.outputs.privateDnsZoneIdSynapse
   }
 }
 
@@ -164,3 +164,5 @@ resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
   tags: tags
   properties: {}
 }
+
+// Outputs

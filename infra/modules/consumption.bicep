@@ -7,54 +7,20 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdSynapse string
+param privateDnsZoneIdSynapseprivatelinkhub string
 
 // Variables
-var synapsePrivateLinkHub001PrivateEndpointName = '${synapsePrivateLinkHub001.name}-private-endpoint'
 
 // Resources
-resource synapsePrivateLinkHub001 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
-  name: replace('${prefix}-synapseplhub001', '-', '')
-  location: location
-  tags: tags
-  properties: {}
-}
-
-resource synapsePrivateLinkHub001PrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: synapsePrivateLinkHub001PrivateEndpointName
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: synapsePrivateLinkHub001PrivateEndpointName
-        properties: {
-          groupIds: [
-            'web'
-          ]
-          privateLinkServiceId: synapsePrivateLinkHub001.id
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource synapsePrivateLinkHub001PrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
-  name: '${synapsePrivateLinkHub001PrivateEndpoint.name}/aRecord'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${synapsePrivateLinkHub001PrivateEndpoint.name}-arecord'
-        properties: {
-          privateDnsZoneId: privateDnsZoneIdSynapse
-        }
-      }
-    ]
+module synapsePrivateLinkHub001 'services/synapseprivatelinkhub.bicep' = {
+  name: 'synapsePrivateLinkHub001'
+  scope: resourceGroup()
+  params: {
+    location: location
+    tags: tags
+    subnetId: subnetId
+    synapsePrivatelinkHubName: '${prefix}-synapseplhub001'
+    privateDnsZoneIdSynapseprivatelinkhub: privateDnsZoneIdSynapseprivatelinkhub
   }
 }
 
