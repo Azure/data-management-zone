@@ -1,34 +1,29 @@
 targetScope = 'subscription'
 
-// Parameters
+// General parameters
 @description('Specifies the location for all resources.')
-param location string
-
+param location string = 'northeurope'
 @allowed([
   'dev'
   'test'
   'prod'
 ])
 @description('Specifies the environment of the deployment.')
-param environment string
-
+param environment string = 'dev'
 @minLength(2)
 @maxLength(10)
 @description('Specifies the prefix for all resources created in this deployment.')
 param prefix string
 
+// Network parameters
 @description('Specifies the address space of the vnet.')
 param vnetAddressPrefix string = '10.0.0.0/16'
-
 @description('Specifies the address space of the subnet that is use for Azure Firewall.')
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
-
 @description('Specifies the address space of the subnet that is used for the services.')
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
-
 @description('Specifies the private IP address of the central firewall.')
 param firewallPrivateIp string = '10.0.0.4'
-
 @description('Specifies the private IP addresses of the dns servers.')
 param dnsServerAdresses array = [
   '10.0.0.4'
@@ -53,7 +48,7 @@ resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = 
 }
 
 module networkServices 'modules/network.bicep' = {
-  name: '${name}-network'
+  name: 'networkServices'
   scope: networkResourceGroup
   params: {
     prefix: name
@@ -77,7 +72,7 @@ resource globalDnsResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' 
 }
 
 module globalDnsZones 'modules/services/privatednszones.bicep' = {
-  name: '${name}-global-dns'
+  name: 'globalDnsZones'
   scope: globalDnsResourceGroup
   params: {
     tags: tags
@@ -94,7 +89,7 @@ resource governanceResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 }
 
 module governanceResources 'modules/governance.bicep' = {
-  name: '${name}-governance'
+  name: 'governanceResources'
   scope: governanceResourceGroup
   params: {
     location: location
@@ -118,7 +113,7 @@ resource containerResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' 
 }
 
 module containerResources 'modules/container.bicep' = {
-  name: '${name}-container'
+  name: 'containerResources'
   scope: containerResourceGroup
   params: {
     location: location
@@ -138,7 +133,7 @@ resource consumptionResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01
 }
 
 module consumptionResources 'modules/consumption.bicep' = {
-  name: '${name}-consumption'
+  name: 'consumptionResources'
   scope: consumptionResourceGroup
   params: {
     location: location

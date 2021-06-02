@@ -45,12 +45,12 @@ module keyVault001 'services/keyvault.bicep' = {
   }
 }
 
-resource purviewKeyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: '${guid(uniqueString('${resourceGroup().id}${purview001Name}${keyvault001Name}'))}'
-  properties: {
-    principalId: purview001.outputs.purviewPrincipalId
-    principalType: 'MSI'
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
+module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignment.bicep' = {
+  name: 'purviewKeyVaultRoleAssignment'
+  scope: resourceGroup()
+  params: {
+    purviewId: purview001.outputs.purviewId
+    keyVaultId: keyVault001.outputs.keyvaultId
   }
 }
 

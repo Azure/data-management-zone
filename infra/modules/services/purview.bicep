@@ -245,4 +245,3 @@ resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoi
 
 // Outputs
 output purviewId string = purview.id
-output purviewPrincipalId string = purview.identity.principalId
