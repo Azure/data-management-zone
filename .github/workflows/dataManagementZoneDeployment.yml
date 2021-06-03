@@ -80,9 +80,9 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      # Deploy Data Management Zone - validation
-      - name: Deploy Data Management Zone - validation
-        id: data_management_zone_validation
+      # Deploy Data Management Zone
+      - name: Deploy Data Management Zone
+        id: data_management_zone_deployment
         uses: azure/arm-deploy@v1
         with:
           scope: subscription
