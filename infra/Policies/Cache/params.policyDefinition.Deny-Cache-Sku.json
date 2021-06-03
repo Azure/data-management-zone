@@ -6,7 +6,7 @@
             "value": "Deny-Cache-Sku"
         },
         "policyDescription": {
-            "value": "Enforces certain Skus for redis cache."
+            "value": "Enforces certain SKUs for redis cache."
         },
         "policyMode": {
             "value": "All"

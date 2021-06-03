@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -38,7 +37,7 @@
                 "description": "Specifies the admin username of the virtual machine scale set."
             }
         },
-        // "vmssAdminPublicKey": {
+        // "vmssAdminPublicKey": {  // Uncomment this section if you want to rely on an ssh public key for maintenance of the VMs
         //     "type": "string",
         //     "metadata": {
         //         "description": "Specifies the admin public ssh key of the virtual machine scale set."
@@ -61,6 +60,13 @@
             "metadata": {
                 "description": "Specifies the resource Id of the subnet to which the virtual machine should connect."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "variables": {
@@ -69,14 +75,15 @@
         "vmssSkuTier": "[parameters('vmssSkuTier')]",
         "vmssSkuName": "[parameters('vmssSkuName')]",
         "vmssAdminUsername": "[parameters('vmssAdminUsername')]",
-        // "vmssAdminPublicKey": "[parameters('vmssAdminPublicKey')]",
+        // "vmssAdminPublicKey": "[parameters('vmssAdminPublicKey')]",  // Uncomment this section if you want to rely on an ssh public key for maintenance of the VMs
         "storageAccountId": "[parameters('storageAccountId')]",
         "storageAccountName": "[last(split(variables('storageAccountId'), '/'))]",
         "storageAccountContainerName": "[parameters('storageAccountContainerName')]",
-        "subnetId": "[parameters('subnetId')]"
+        "subnetId": "[parameters('subnetId')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
-        // {
+        // {  // Uncomment this section if you want to rely on an ssh public key for maintenance of the VMs
         //     "type": "Microsoft.Compute/sshPublicKeys",
         //     "apiVersion": "2019-12-01",
         //     "name": "[concat(variables('vmssName'), '-sshKey')]",
@@ -86,9 +93,10 @@
         //     }
         // },
         {
-            "name": "[concat(variables('vmssName'), '-lb')]",
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2020-05-01",
+            "name": "[concat(variables('vmssName'), '-lb')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Basic"
@@ -158,9 +166,10 @@
             }
         },
         {
-            "name": "[variables('vmssName')]",
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "apiVersion": "2019-07-01",
+            "name": "[variables('vmssName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/loadBalancers', concat(variables('vmssName'), '-lb'))]"
@@ -195,7 +204,7 @@
                         "adminUsername": "[variables('vmssAdminUsername')]",
                         "linuxConfiguration": {
                             "disablePasswordAuthentication": true
-                            // "ssh": {
+                            // "ssh": {  // Uncomment this section if you want to rely on an ssh public key for maintenance of the VMs
                             //     "publicKeys": [
                             //         {
                             //             "path": "[concat('/home/', variables('vmssAdminUsername'), '/.ssh/authorized_keys')]",

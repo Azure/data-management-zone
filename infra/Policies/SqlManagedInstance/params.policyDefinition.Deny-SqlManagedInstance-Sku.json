@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SqlManagedInstance-PublicDataEndpoint"
+            "value": "Deny-SqlManagedInstance-Sku"
         },
         "policyDescription": {
-            "value": "Denies public data endpoint for sql managed instances."
+            "value": "Denies skus for sql managed instances."
         },
         "policyMode": {
             "value": "Indexed"

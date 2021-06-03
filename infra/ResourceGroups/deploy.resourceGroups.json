@@ -1,0 +1,136 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the location for all resources."
+            }
+        },
+        "dataHubName": {
+            "type": "string",
+            "defaultValue": "dh",
+            "metadata": {
+                "description": "Specifies the name of the data hub."
+            }
+        },
+        "enableDnsAndFirewallDeployment": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Specifies whether Private DNS zones and Azure Firewall should be deployed."
+            }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "location": "[parameters('location')]",
+        "dataHubName": "[parameters('dataHubName')]",
+        "enableDnsAndFirewallDeployment": "[parameters('enableDnsAndFirewallDeployment')]",
+        "tags": "[parameters('tags')]",
+        "automationResourceGroupName": "[concat(variables('dataHubName'), '-automation')]",
+        "networkResourceGroupName": "[concat(variables('dataHubName'), '-network')]",
+        "privateDnsZoneResourceGroupName": "[concat(variables('dataHubName'), '-global-dns')]",
+        "governanceResourceGroupName": "[concat(variables('dataHubName'), '-governance')]",
+        "containerResourceGroupName": "[concat(variables('dataHubName'), '-container')]",
+        "managementResourceGroupName": "[concat(variables('dataHubName'), '-mgmt')]",
+        "consumptionResourceGroupName": "[concat(variables('dataHubName'), '-consumption')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('automationResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('networkResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "condition": "[variables('enableDnsAndFirewallDeployment')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('privateDnsZoneResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('governanceResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('containerResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('managementResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('consumptionResourceGroupName')]",
+            "tags": "[variables('tags')]",
+            "location": "[variables('location')]",
+            "properties": {}
+        }
+    ],
+    "outputs": {
+        "automationResourceGroupName": {
+            "type": "string",
+            "value": "[variables('automationResourceGroupName')]"
+        },
+        "consumptionResourceGroupName": {
+            "type": "string",
+            "value": "[variables('consumptionResourceGroupName')]"
+        },
+        "containerResourceGroupName": {
+            "type": "string",
+            "value": "[variables('containerResourceGroupName')]"
+        },
+        "governanceResourceGroupName": {
+            "type": "string",
+            "value": "[variables('governanceResourceGroupName')]"
+        },
+        "managementResourceGroupName": {
+            "type": "string",
+            "value": "[variables('managementResourceGroupName')]"
+        },
+        "networkResourceGroupName": {
+            "type": "string",
+            "value": "[variables('networkResourceGroupName')]"
+        },
+        "privateDnsZoneResourceGroupName": {
+            "type": "string",
+            "value": "[variables('privateDnsZoneResourceGroupName')]"
+        }
+    }
+}

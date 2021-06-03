@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -26,6 +25,13 @@
             "metadata": {
                 "description": "Specifies the ID of the private dns zone."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -34,6 +40,7 @@
         "synapsePrivateLinkHubName": "[parameters('synapsePrivateLinkHubName')]",
         "subnetId": "[parameters('subnetId')]",
         "privateDnsZoneId": "[parameters('privateDnsZoneId')]",
+        "tags": "[parameters('tags')]",
         "privateEndpointName": "[concat(variables('synapsePrivateLinkHubName'), '-private-endpoint')]"
     },
     "resources": [
@@ -41,6 +48,7 @@
             "type": "Microsoft.Synapse/privateLinkHubs",
             "apiVersion": "2019-06-01-preview",
             "name": "[variables('synapsePrivateLinkHubName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "properties": {}
         },
@@ -48,6 +56,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2020-05-01",
             "name": "[variables('privateEndpointName')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/privateLinkHubs', variables('synapsePrivateLinkHubName'))]"
             ],

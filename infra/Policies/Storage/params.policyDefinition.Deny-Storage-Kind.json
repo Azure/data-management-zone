@@ -6,7 +6,7 @@
             "value": "Deny-Storage-Kind"
         },
         "policyDescription": {
-            "value": "Enforce kind StorageV2 for storage accounts."
+            "value": "Enforce storage V2 kind for storage accounts."
         },
         "policyMode": {
             "value": "Indexed"

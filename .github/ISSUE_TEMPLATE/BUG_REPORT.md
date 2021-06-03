@@ -4,7 +4,6 @@ about: Report errors or unexpected behaviour
 title: 'Bug Report'
 labels: bug
 assignees: 'marvinbuss'
-
 ---
 
 <!-- Please read our Rules of Conduct: https://opensource.microsoft.com/codeofconduct/ -->
@@ -15,8 +14,7 @@ assignees: 'marvinbuss'
 
 **Steps to reproduce**
 
-1. 
-2. 
+1.  
+2.  
 
 **Screenshots**
-

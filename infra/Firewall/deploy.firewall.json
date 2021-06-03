@@ -4,7 +4,6 @@
     "parameters": {
         "location": {
             "type": "string",
-            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specifies the location for all resources."
             }
@@ -26,6 +25,13 @@
             "metadata": {
                 "description": "Specifies the id of the subnet which the private endpoint uses."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
@@ -35,32 +41,30 @@
         "publicIpPrefixName": "[concat(variables('firewallName'), '-publicipprefix')]",
         "publicIpName": "[concat(variables('firewallName'), '-publicip001')]",
         "firewallPolicyId": "[parameters('firewallPolicyId')]",
-        "subnetId": "[parameters('subnetId')]"
+        "subnetId": "[parameters('subnetId')]",
+        "tags": "[parameters('tags')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/publicIPPrefixes",
             "apiVersion": "2020-05-01",
             "name": "[variables('publicIpPrefixName')]",
+            "tags": "[variables('tags')]",
             "location": "[variables('location')]",
             "sku": {
                 "name": "Standard",
                 "tier": "Regional"
             },
-            // "zones": [
-            //     "1",
-            //     "2",
-            //     "3"
-            // ],
             "properties": {
                 "publicIPAddressVersion": "IPv4",
-                "prefixLength": 28
+                "prefixLength": 30
             }
         },
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-05-01",
             "name": "[variables('publicIpName')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPPrefixes', variables('publicIpPrefixName'))]"
             ],
@@ -83,16 +87,17 @@
             "type": "Microsoft.Network/azureFirewalls",
             "apiVersion": "2020-05-01",
             "name": "[variables('firewallName')]",
+            "tags": "[variables('tags')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPPrefixes', variables('publicIpPrefixName'))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpName'))]"
             ],
             "location": "[variables('location')]",
-            // "zones": [
-            //     "1",
-            //     "2",
-            //     "3"
-            // ],
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
             "properties": {
                 "sku": {
                     "name": "AZFW_VNet",

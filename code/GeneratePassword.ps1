@@ -1,4 +1,5 @@
 # Define script arguments
+[CmdletBinding()]
 param (
     [Parameter(Mandatory=$false)]
     [Switch]
@@ -140,9 +141,9 @@ function New-Password {
             [char]'C' = [char[]]"BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz"
             [char]'z' = [char[]]"BCDFGHJKLMNPQRSTVWXYZ"
             [char]'p' = [char[]]",.;:"
-            [char]'b' = [char[]]"()[]{}<>"
-            [char]'s' = [char[]]"!`"#$%&'()*+,-./:;<=>?@[\]^_``{|}~"
-            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`"#$%&'()*+,-./:;<=>?@[\]^_``{|}~"
+            [char]'b' = [char[]]"()[]<>"
+            [char]'s' = [char[]]"!`#$%&()*+,-./:;<=>?@[\]^_``|~"
+            [char]'S' = [char[]]"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!`#$%&()*+,-./:;<=>?@[\]^_``|~"
         }.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
     
         $CustomCharacterSet.GetEnumerator().ForEach{ $CharacterSets.Add($_.Key, $_.Value) }
@@ -176,9 +177,9 @@ function New-Password {
                             $char
                         }
                     }
-                ))
+                )
+            )
         }
-    
         return $securePassword
     }
 }
@@ -200,5 +201,5 @@ if ($GitHub) {
 else {
     # Set output
     Write-Output "Setting output"
-    Write-Output "##vso[task.setvariable variable=password;issecret=true;isoutput=true;]$Password"
+    Write-Output "##vso[task.setvariable variable=password;issecret=true]$Password"
 }

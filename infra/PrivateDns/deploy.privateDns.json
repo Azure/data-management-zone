@@ -14,26 +14,35 @@
             "metadata": {
                 "description": "Specifies the resource Id of the virtual network to which the DNS zone is linked."
             }
+        },
+        "tags": {
+            "type": "object",
+            "defaultValue": {},
+            "metadata": {
+                "description": "Specifies tags which should be added to all resources."
+            }
         }
     },
     "functions": [],
     "variables": {
         "privateDnsZoneNames": "[parameters('privateDnsZoneNames')]",
         "virtualNetworkId": "[parameters('virtualNetworkId')]",
+        "tags": "[parameters('tags')]",
         "virtualNetworkName": "[last(split(variables('virtualNetworkId'), '/'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/privateDnsZones",
-            "apiVersion": "2018-09-01",
+            "apiVersion": "2020-06-01",
             "name": "[variables('privateDnsZoneNames')[copyIndex()]]",
+            "tags": "[variables('tags')]",
             "location": "global",
             "properties": {
             },
             "resources": [
                 {
                     "type": "virtualNetworkLinks",
-                    "apiVersion": "2018-09-01",
+                    "apiVersion": "2020-06-01",
                     "name": "[variables('virtualNetworkName')]",
                     "location": "global",
                     "dependsOn": [

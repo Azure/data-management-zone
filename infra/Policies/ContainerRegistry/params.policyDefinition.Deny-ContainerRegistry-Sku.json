@@ -6,7 +6,7 @@
             "value": "Deny-ContainerRegistry-Sku"
         },
         "policyDescription": {
-            "value": "Enforces premium Sku for container registry."
+            "value": "Enforces premium SKU for container registry."
         },
         "policyMode": {
             "value": "Indexed"

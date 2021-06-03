@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Audit-CognitiveServices-PrivateEndpointId"
+            "value": "Audit-Sql-PrivateEndpointId"
         },
         "policyDescription": {
-            "value": "Audit public endpoints that are created in other subscriptions for cognitive services."
+            "value": "Audit public endpoints that are created in other subscriptions for sql server."
         },
         "policyMode": {
             "value": "Indexed"
