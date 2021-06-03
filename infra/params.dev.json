@@ -9,7 +9,7 @@
             "value": "dev"
         },
         "prefix": {
-            "value": "dh"
+            "value": "dmz"
         },
         "vnetAddressPrefix": {
             "value": "10.0.0.0/16"

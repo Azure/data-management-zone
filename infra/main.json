@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1.14562",
-      "templateHash": "16804159356196802727"
+      "templateHash": "6857864354213322403"
     }
   },
   "parameters": {
@@ -187,7 +187,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1.14562",
-              "templateHash": "4292765231469053414"
+              "templateHash": "1183240752650503370"
             }
           },
           "parameters": {
@@ -419,6 +419,7 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/firewallPolicies', format('{0}-firewallpolicy', parameters('prefix')))]",
+                "[resourceId('Microsoft.Resources/deployments', format('{0}-firewallpolicy-rules', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-publicip001', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))]"
               ]

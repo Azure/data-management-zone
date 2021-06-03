@@ -158,10 +158,10 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
 
 module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
   name: '${prefix}-firewallpolicy-rules'
+  scope: resourceGroup()
   dependsOn: [
     firewallPolicy
   ]
-  scope: resourceGroup()
   params: {
     firewallPolicyName: firewallPolicy.name
   }
@@ -169,6 +169,9 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
 
 resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
   name: '${prefix}-firewall'
+  dependsOn: [
+    firewallPolicyRules
+  ]
   location: location
   tags: tags
   zones: [
