@@ -9,10 +9,32 @@
             "value": "Denies public network access for my sql servers."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "maxThroughputUnits": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum Throughput Units",
+                        "description": "Specifies the maximum throughput units"
+                    },
+                    "defaultValue": 20
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -32,12 +54,12 @@
                         },
                         {
                             "field": "Microsoft.EventHub/namespaces/maximumThroughputUnits",
-                            "greater": 20
+                            "greater": "[parameters('maxThroughputUnits')]"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

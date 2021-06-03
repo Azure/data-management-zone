@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-Synapse-PreventDataExfiltration"
+            "value": "Deny-Synapse-LinkedAccessCheckOnTargetResource"
         },
         "policyDescription": {
-            "value": "Enforced prevention of data exfiltration for Synapse managed virtual network."
+            "value": "Enforce LinkedAccessCheckOnTargetResource in managed vnet settings when Synapse Workspace is created."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -25,11 +39,11 @@
                         {
                             "anyOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
                                     "exists": false
                                 },
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.preventDataExfiltration",
+                                    "field": "Microsoft.Synapse/workspaces/managedVirtualNetworkSettings.linkedAccessCheckOnTargetResource",
                                     "notEquals": true
                                 }
                             ]
@@ -37,7 +51,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

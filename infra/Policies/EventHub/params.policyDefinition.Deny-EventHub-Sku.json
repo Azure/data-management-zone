@@ -9,10 +9,52 @@
             "value": "Denies certain Skus for event hubs."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedSkuNames": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Names",
+                        "description": "Specifies the allowed sku names"
+                    },
+                    "defaultValue": [
+                        "Standard"
+                    ]
+                },
+                "allowedSkuTiers": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Tiers",
+                        "description": "Specifies the allowed sku tiers"
+                    },
+                    "defaultValue": [
+                        "Standard"
+                    ]
+                },
+                "maxSkuCapacity": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum SKU Capacity",
+                        "description": "Specifies the maximum sku capacity"
+                    },
+                    "defaultValue": 20
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,22 +68,18 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.EventHub/namespaces/sku.name",
-                                    "notEquals": "Standard"
-                                },
-                                {
-                                    "field": "Microsoft.EventHub/namespaces/sku.tier",
-                                    "notEquals": "Standard"
+                                    "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
                                     "field": "Microsoft.EventHub/namespaces/sku.capacity",
-                                    "greater": 20
+                                    "greater": "[parameters('maxSkuCapacity')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

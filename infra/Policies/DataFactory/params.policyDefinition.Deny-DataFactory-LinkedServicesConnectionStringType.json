@@ -12,7 +12,21 @@
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -25,11 +39,15 @@
                         {
                             "field": "Microsoft.DataFactory/factories/linkedservices/type",
                             "notIn": [
-                                "AzureDatabricks",
-                                "AzureBlobFS",
-                                "HttpServer",
                                 "AzureSqlDatabase",
-                                "AzureKeyVault"
+                                "AzureSqlMI",
+                                "AzureSqlDW",
+                                "AzureBlobFS",
+                                "AdlsGen2CosmosStructuredStream",
+                                "AzureDataLakeStore",
+                                "AzureDataLakeStoreCosmosStructuredStream",
+                                "AzureBlobStorage",
+                                "AzureDatabricks"
                             ]
                         },
                         {
@@ -39,7 +57,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

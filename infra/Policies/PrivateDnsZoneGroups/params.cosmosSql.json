@@ -9,7 +9,7 @@
             "value": "Deploys the configurations of a Private DNS Zone Group by a parameter for Cosmos SQL Private Endpoint. Used to enforce the configuration to a single Private DNS Zone."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {

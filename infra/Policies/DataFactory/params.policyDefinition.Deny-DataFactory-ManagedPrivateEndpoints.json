@@ -13,8 +13,21 @@
         },
         "policyParameters": {
             "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
                 "allowedSubscriptions": {
-                    "type": "array",
+                    "type": "Array",
                     "metadata": {
                         "displayName": "Allowed subscriptions",
                         "description": "A list of subscriptions IDs that are allowed."
@@ -37,7 +50,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

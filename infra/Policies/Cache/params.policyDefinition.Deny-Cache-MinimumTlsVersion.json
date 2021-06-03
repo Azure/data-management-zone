@@ -6,13 +6,37 @@
             "value": "Deny-Cache-MinimumTlsVersion"
         },
         "policyDescription": {
-            "value": "Enforces minimum tls version for redis cache."
+            "value": "Enforces minimum tls versions for redis cache."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "tlsVersions": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "TLS Versions",
+                        "description": "Specifies the TLS versions that should be enforced"
+                    },
+                    "defaultValue": [
+                        "1.2"
+                    ]
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -30,14 +54,14 @@
                                 },
                                 {
                                     "field": "Microsoft.Cache/Redis/minimumTlsVersion",
-                                    "notEquals": "1.2"
+                                    "notIn": "[parameters('tlsVersions')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

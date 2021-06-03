@@ -9,7 +9,7 @@
             "value": "Deploy managed virtualnetwork for data factory."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {

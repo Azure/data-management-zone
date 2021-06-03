@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MariaDb-PublicNetworkAccess"
+            "value": "Deny-MariaDb-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Denies public network access for my maria db servers."
+            "value": "Enforces minimal tls version for maria db servers."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -23,13 +37,13 @@
                             "equals": "Microsoft.DBforMariaDB/servers"
                         },
                         {
-                            "field": "Microsoft.DBforMariaDB/servers/publicNetworkAccess",
-                            "notEquals": "Disabled"
+                            "field": "Microsoft.DBforMariaDB/servers/sslEnforcement",
+                            "notEquals": "Enabled"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },
