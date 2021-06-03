@@ -20,10 +20,9 @@ pr:
       - .ado/workflows/dataManagementZoneDeployment.yml
 
 variables:
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-hub-service-connection" # Update to '{yourResourceManagerConnectionName}'
-  AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2"         # Update to '{yourDataManagementZoneSubscriptionId}'
-  AZURE_LOCATION: "North Europe"                                        # Update to '{yourRegionName}'
-  DATA_MANAGEMENT_ZONE_PREFIX: "dh"                                     # Update to '{yourDataManegementZonePrefix}'
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-management-zone-service-connection" # Update to '{yourResourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2"                     # Update to '{yourDataManagementZoneSubscriptionId}'
+  AZURE_LOCATION: "North Europe"                                                    # Update to '{yourRegionName}'
 
 stages:
   - stage: Validation
@@ -61,8 +60,6 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
               deploymentMode: "Validation"
-              overrideParameters: >
-                -prefix "${{ variables.DATA_MANAGEMENT_ZONE_PREFIX }}"
 
   - stage: Deployment
     displayName: "Deployment of IaC templates"
@@ -101,5 +98,3 @@ stages:
               csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
               deploymentMode: "Incremental"
-              overrideParameters: >
-                -prefix "${{ variables.DATA_MANAGEMENT_ZONE_PREFIX }}"

@@ -17,7 +17,6 @@ on:
 env:
   AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2" # Update to '{dataHubSubscriptionId}'
   AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
-  DATA_MANAGEMENT_ZONE_PREFIX: "dh"                             # Update to '{yourDataManegementZonePrefix}'
 
 jobs:
   validation:
@@ -48,7 +47,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           region: ${{ env.AZURE_LOCATION }}
           template: ${{ github.workspace }}/infra/main.json
-          parameters: ${{ github.workspace }}/infra/params.dev.json prefix="${{ env.DATA_MANAGEMENT_ZONE_PREFIX }}"
+          parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Validate
 
       # Log out from Azure
@@ -90,7 +89,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           region: ${{ env.AZURE_LOCATION }}
           template: ${{ github.workspace }}/infra/main.json
-          parameters: ${{ github.workspace }}/infra/params.dev.json prefix="${{ env.DATA_MANAGEMENT_ZONE_PREFIX }}"
+          parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Incremental
 
       # Log out from Azure
