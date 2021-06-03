@@ -168,7 +168,7 @@ function New-Password {
                     else {
                         $cryptoRNG.GetBytes($b)
                         $char = $Template[$c]
-                        if ($Set -eq $CharacterSets[$char]) {
+                        if ($Set = $CharacterSets[$char]) {
                             $Index = [int]$b[0] % $Set.Length
                             $Set[$Index]
                         }
