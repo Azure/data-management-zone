@@ -1,4 +1,4 @@
-name: Data Hub Deployment
+name: Data Management Zone Deployment
 
 trigger:
   branches:
@@ -8,7 +8,7 @@ trigger:
     include:
       - infra/*
       - code/*
-      - .ado/workflows/dataHubDeployment.yml
+      - .ado/workflows/dataManagementZoneDeployment.yml
 pr:
   branches:
     include:
@@ -17,7 +17,7 @@ pr:
     include:
       - infra/*
       - code/*
-      - .ado/workflows/dataHubDeployment.yml
+      - .ado/workflows/dataManagementZoneDeployment.yml
 
 variables:
   AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-hub-service-connection" # Update to '{yourResourceManagerConnectionName}'

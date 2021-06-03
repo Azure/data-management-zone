@@ -1,4 +1,4 @@
-name: Data Hub Deployment
+name: Data Management Zone Deployment
 
 on:
   push:
@@ -6,13 +6,13 @@ on:
     paths:
       - "infra/**"
       - "code/**"
-      - ".github/workflows/dataHubDeployment.yml"
+      - ".github/workflows/dataManagementZoneDeployment.yml"
   pull_request:
     branches: [main]
     paths:
       - "infra/**"
       - "code/**"
-      - ".github/workflows/dataHubDeployment.yml"
+      - ".github/workflows/dataManagementZoneDeployment.yml"
 
 env:
   AZURE_SUBSCRIPTION_ID: "4060c03e-0d2e-44b7-82a3-da9376fe50b2" # Update to '{dataHubSubscriptionId}'
@@ -21,7 +21,9 @@ env:
 
 jobs:
   validation:
+    name: "Validation of IaC templates"
     runs-on: ubuntu-latest
+    continue-on-error: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -59,9 +61,11 @@ jobs:
             az logout
 
   deployment:
+    name: "Deployment of IaC templates"
     needs: [validation]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    continue-on-error: false
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
