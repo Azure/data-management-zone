@@ -9,10 +9,35 @@
             "value": "Enforces bypass network level rules for key vault."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedBypassOptions": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed Bypass Options",
+                        "description": "Specifies which options are allowed to bypass the vnet configuration"
+                    },
+                    "defaultValue": [
+                        "None",
+                        "AzureServices"
+                    ]
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -24,15 +49,12 @@
                         },
                         {
                             "field": "Microsoft.Keyvault/vaults/networkAcls.bypass",
-                            "notIn": [
-                                "None",
-                                "AzureServices"
-                            ]
+                            "notIn": "[parameters('allowedBypassOptions')]"
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

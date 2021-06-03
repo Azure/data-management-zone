@@ -9,10 +9,22 @@
             "value": "Deploy SQL Managed Instance security alert policies."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                },
                 "securityAlertPolicyEmail": {
                     "type": "String",
                     "metadata": {
@@ -33,7 +45,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "deployIfNotExists",
+                    "effect": "[parameters('effect')]",
                     "details": {
                         "type": "Microsoft.Sql/managedInstances/databases/securityAlertPolicies",
                         "name": "default",

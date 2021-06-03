@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Deny-PostgreSQL-MinimalTlsVersion"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Enforces minimal tls versions for postgre sql servers."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
@@ -26,29 +26,14 @@
                     ],
                     "defaultValue": "Deny"
                 },
-                "allowedSynapseSqlSkus": {
+                "tlsVersions": {
                     "type": "Array",
                     "metadata": {
-                        "displayName": "Allowed subscriptions",
-                        "description": "A list of subscriptions IDs"
+                        "displayName": "TLS Versions",
+                        "description": "Specifies the TLS versions that should be enforced"
                     },
                     "defaultValue": [
-                        "DW100c",
-                        "DW200c",
-                        "DW300c",
-                        "DW400c",
-                        "DW500c",
-                        "DW1000c",
-                        "DW1500c",
-                        "DW2000c",
-                        "DW2500c",
-                        "DW3000c",
-                        "DW5000c",
-                        "DW6000c",
-                        "DW7500C",
-                        "DW10000c",
-                        "DW15000c",
-                        "DW30000c"
+                        "TLS1_2"
                     ]
                 }
             }
@@ -59,11 +44,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.DBforPostgreSQL/servers"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notIn": "[parameters('allowedSynapseSqlSkus')]"
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DBforPostgreSQL/servers/minimalTlsVersion",
+                                    "notIn": "[parameters('tlsVersions')]"
+                                },
+                                {
+                                    "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement",
+                                    "notEquals": "Enabled"
+                                }
+                            ]
                         }
                     ]
                 },
@@ -75,7 +68,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Synapse",
+                "category": "SQL",
                 "preview": false,
                 "deprecated": false
             }

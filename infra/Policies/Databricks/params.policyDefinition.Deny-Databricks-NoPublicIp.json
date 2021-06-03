@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Databricks-PublicIp"
+            "value": "Deny-Databricks-NoPublicIp"
         },
         "policyDescription": {
             "value": "Enforces no public on Databricks workspaces."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -29,13 +43,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
-                            "value": true
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

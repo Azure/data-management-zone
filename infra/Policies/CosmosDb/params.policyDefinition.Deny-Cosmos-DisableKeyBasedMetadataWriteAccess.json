@@ -3,16 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-Cosmos-PublicNetworkAccess"
+            "value": "Deny-Cosmos-DenyCosmosKeyBasedMetadataWriteAccess"
         },
         "policyDescription": {
-            "value": "Enforces no public network access for cosmos db accounts."
+            "value": "Deny key based metadata write access for Cosmos DB accounts."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -23,19 +37,13 @@
                             "equals": "Microsoft.DocumentDB/databaseAccounts"
                         },
                         {
-                            "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
-                            "notEquals": "Disabled"
+                            "field": "Microsoft.DocumentDB/databaseAccounts/disableKeyBasedMetadataWriteAccess",
+                            "notEquals": true
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
-                            "value": "Disabled"
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

@@ -9,10 +9,22 @@
             "value": "Share self-hosted integration runtime hosted in the Data Hub with Data Factories in teh Data Nodes."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                },
                 "datanodeDataFactoryId": {
                     "type": "string",
                     "metadata": {
@@ -40,7 +52,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "deployIfNotExists",
+                    "effect": "[parameters('effect')]",
                     "details": {
                         "type": "Microsoft.DataFactory/factories/integrationRuntimes",
                         "name": "datanodeSharedSelfHostedIntegrationRuntime",

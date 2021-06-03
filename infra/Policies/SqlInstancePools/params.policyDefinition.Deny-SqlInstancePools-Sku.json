@@ -9,10 +9,76 @@
             "value": "Enfoces certain skus for sql instance pools."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedNumberOfVCores": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed Number of vCores",
+                        "description": "Specifies the number of vCores allowed for SQL Managed Instance"
+                    },
+                    "defaultValue": [
+                        4,
+                        8,
+                        16,
+                        24,
+                        32,
+                        40,
+                        64,
+                        80
+                    ]
+                },
+                "allowedSkuNames": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed Sku Names",
+                        "description": "Specifies the allowed SKU names for SQL Managed Instance"
+                    },
+                    "defaultValue": [
+                        "GP_Gen4",
+                        "GP_Gen5",
+                        "BC_Gen4",
+                        "BC_Gen5"
+                    ]
+                },
+                "allowedSkuTiers": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed Sku Tiers",
+                        "description": "Specifies the number of allowed Sku Tiers for SQL Managed Instance"
+                    },
+                    "defaultValue": [
+                        "GeneralPurpose",
+                        "BusinessCritical"
+                    ]
+                },
+                "allowedLicenseTypes": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed License Types",
+                        "description": "Specifies the allowed license types for SQL Managed Instance"
+                    },
+                    "defaultValue": [
+                        "LicenseIncluded",
+                        "BasePrice"
+                    ]
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,46 +92,26 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Sql/instancePools/vCores",
-                                    "notIn": [
-                                        4,
-                                        8,
-                                        16,
-                                        24,
-                                        32,
-                                        40,
-                                        64,
-                                        80
-                                    ]
+                                    "notIn": "[parameters('allowedNumberOfVCores')]"
                                 },
                                 {
                                     "field": "Microsoft.Sql/instancePools/sku.name",
-                                    "notIn": [
-                                        "GP_Gen4",
-                                        "GP_Gen5",
-                                        "BC_Gen4",
-                                        "BC_Gen5"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
                                     "field": "Microsoft.Sql/instancePools/sku.tier",
-                                    "notIn": [
-                                        "GeneralPurpose",
-                                        "BusinessCritical"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuTiers')]"
                                 },
                                 {
                                     "field": "Microsoft.Sql/instancePools/licenseType",
-                                    "notIn": [
-                                        "LicenseIncluded",
-                                        "BasePrice"
-                                    ]
+                                    "notIn": "[parameters('allowedLicenseTypes')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

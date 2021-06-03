@@ -9,10 +9,31 @@
             "value": "Deploy blob services default settings for storage account."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                },
+                "minContainerDeleteRetentionInDays": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Minimum Container Delete Retention in Days",
+                        "description": "Specifies the minimum number of days for the container delete retention policy"
+                    },
+                    "defaultValue": 7
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -25,7 +46,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "deployIfNotExists",
+                    "effect": "[parameters('effect')]",
                     "details": {
                         "type": "Microsoft.Storage/storageAccounts/blobServices",
                         "name": "default",
@@ -37,7 +58,7 @@
                                 },
                                 {
                                     "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.days",
-                                    "greaterOrEquals": 7
+                                    "greaterOrEquals": "[parameters('minContainerDeleteRetentionInDays')]"
                                 },
                                 {
                                     "count": {
@@ -59,6 +80,9 @@
                                     "parameters": {
                                         "storageAccountName": {
                                             "type": "string"
+                                        },
+                                        "minContainerDeleteRetentionInDays": {
+                                            "type": "int"
                                         }
                                     },
                                     "variables": {},
@@ -70,7 +94,7 @@
                                             "properties": {
                                                 "containerDeleteRetentionPolicy": {
                                                     "enabled": true,
-                                                    "days": 7
+                                                    "days": "[parameters('minContainerDeleteRetentionInDays')]"
                                                 },
                                                 "cors": {
                                                     "corsRules": []
@@ -83,6 +107,9 @@
                                 "parameters": {
                                     "storageAccountName": {
                                         "value": "[field('name')]"
+                                    },
+                                    "minContainerDeleteRetentionInDays": {
+                                        "value": "[parameters('minContainerDeleteRetentionInDays')]"
                                     }
                                 }
                             }

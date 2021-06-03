@@ -9,10 +9,43 @@
             "value": "Deny logic app integration service environment sku's."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedSkuNames": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed SKU Names",
+                        "description": "Specifies the allowed sku names"
+                    },
+                    "defaultValue": [
+                        "Developer",
+                        "Premium"
+                    ]
+                },
+                "maxSkuCapacity": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum SKU Capacity",
+                        "description": "Specifies the maximum sku capacity"
+                    },
+                    "defaultValue": 10
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,21 +59,18 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Logic/integrationServiceEnvironments/sku.name",
-                                    "notIn": [
-                                        "Developer",
-                                        "Premium"
-                                    ]
+                                    "notIn": "[parameters('allowedSkuNames')]"
                                 },
                                 {
                                     "field": "Microsoft.Logic/integrationServiceEnvironments/sku.capacity",
-                                    "greater": 10
+                                    "greater": "[parameters('maxSkuCapacity')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

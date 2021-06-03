@@ -12,7 +12,37 @@
             "value": "All"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "maxTargetDedicatedNodes": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum Target Dedicated Nodes",
+                        "description": "Specifies the maximum target for dedicated nodes"
+                    },
+                    "defaultValue": 10
+                },
+                "maxTargetLowPriorityNodes": {
+                    "type": "Int",
+                    "metadata": {
+                        "displayName": "Maximum Target Low Priority Nodes",
+                        "description": "Specifies the maximum target for low priority nodes"
+                    },
+                    "defaultValue": 15
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -26,25 +56,25 @@
                             "anyOf": [
                                 {
                                     "field": "Microsoft.Batch/batchAccounts/pools/scaleSettings.fixedScale.targetDedicatedNodes",
-                                    "greater": 10
+                                    "greater": "[parameters('maxTargetDedicatedNodes')]"
                                 },
                                 {
                                     "field": "Microsoft.Batch/batchAccounts/pools/scaleSettings.fixedScale.targetLowPriorityNodes",
-                                    "greater": 15
+                                    "greater": "[parameters('maxTargetLowPriorityNodes')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Azure Batch",
+                "category": "Batch",
                 "preview": false,
                 "deprecated": false
             }

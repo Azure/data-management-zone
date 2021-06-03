@@ -6,13 +6,45 @@
             "value": "Deny-Storage-NetworkAclsBypass"
         },
         "policyDescription": {
-            "value": "Enforces network bypass to none for storage account."
+            "value": "Enforces network bypass to selected options for storage account."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "allowedBypassOptions": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed Bypass Options",
+                        "description": "Specifies which options are allowed to bypass the vnet configuration"
+                    },
+                    "defaultValue": [
+                        "None",
+                        "Logging",
+                        "Metrics",
+                        "AzureServices",
+                        "Logging, Metrics",
+                        "Logging, AzureServices",
+                        "Metrics, AzureServices",
+                        "Logging, Metrics, AzureServices",
+                        "Logging, Metrics, AzureServices"
+                    ]
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -30,24 +62,14 @@
                                 },
                                 {
                                     "field": "Microsoft.Storage/storageAccounts/networkAcls.bypass",
-                                    "notIn": [
-                                        "None",
-                                        "Logging",
-                                        "Metrics",
-                                        "AzureServices",
-                                        "Logging, Metrics",
-                                        "Logging, AzureServices",
-                                        "Metrics, AzureServices",
-                                        "Logging, Metrics, AzureServices",
-                                        "Logging, Metrics, AzureServices"
-                                    ]
+                                    "notIn": "[parameters('allowedBypassOptions')]"
                                 }
                             ]
                         }
                     ]
                 },
                 "then": {
-                    "effect": "Deny"
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

@@ -9,10 +9,23 @@
             "value": "Deploy SQL DW auditing settings."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -29,7 +42,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "deployIfNotExists",
+                    "effect": "[parameters('effect')]",
                     "details": {
                         "type": "Microsoft.Sql/servers/databases/auditingSettings",
                         "name": "default",

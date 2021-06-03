@@ -3,16 +3,29 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Append-DataFactory-IdentityType"
+            "value": "Deny-DataFactory-IdentityType"
         },
         "policyDescription": {
             "value": "Enforces use of system assigned identity for data factory."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
-            "value": {}
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
         },
         "policyDefinition": {
             "value": {
@@ -29,13 +42,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
-                    "details": [
-                        {
-                            "field": "identity.type",
-                            "value": "SystemAssigned"
-                        }
-                    ]
+                    "effect": "[parameters('effect')]"
                 }
             }
         },

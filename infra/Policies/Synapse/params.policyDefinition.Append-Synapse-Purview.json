@@ -9,10 +9,22 @@
             "value": "Enforce connection between central purview instance and Synapse Workspace."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Append",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Append"
+                },
                 "purviewResourceId": {
                     "type": "String",
                     "metadata": {
@@ -45,7 +57,7 @@
                     ]
                 },
                 "then": {
-                    "effect": "Append",
+                    "effect": "[parameters('effect')]",
                     "details": [
                         {
                             "field": "Microsoft.Synapse/workspaces/purviewConfiguration.purviewResourceId",
