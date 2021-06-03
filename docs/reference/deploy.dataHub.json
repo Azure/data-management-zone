@@ -56,12 +56,7 @@
         "privateDnsZoneResourceGroupId": "[parameters('privateDnsZoneResourceGroupId')]",
         "enableDnsAndFirewallDeployment": "[parameters('enableDnsAndFirewallDeployment')]",
         "tags": "[parameters('tags')]",
-        "networkResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-network')]",
-        "privateDnsZoneResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-global-dns')]",
-        "governanceResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-governance')]",
-        "containerResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-container')]",
-        "managementResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-mgmt')]",
-        "consumptionResourceGroupName": "[concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-consumption')]",
+        "resourceGroupsTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/ResourceGroups/deploy.resourceGroups.json",
         "vnetTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/VirtualNetwork/deploy.vnet.json",
         "privateDnsZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/PrivateDns/deploy.privateDns.json",
         "firewallPolicyTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/FirewallPolicy/deploy.firewallPolicy.json",
@@ -120,60 +115,37 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
+            "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
-            "name": "[variables('networkResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "condition": "[variables('enableDnsAndFirewallDeployment')]",
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('privateDnsZoneResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('governanceResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('containerResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('managementResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2020-10-01",
-            "name": "[variables('consumptionResourceGroupName')]",
-            "tags": "[variables('tags')]",
-            "location": "[variables('location')]",
-            "properties": {}
+            "name": "resourceGroupDeployment",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('resourceGroupsTemplateLink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[variables('location')]"
+                    },
+                    "dataHubName": {
+                        "value": "dh"
+                    },
+                    "enableDnsAndFirewallDeployment": {
+                        "value": "[variables('enableDnsAndFirewallDeployment')]"
+                    },
+                    "tags": {
+                        "value": "[variables('tags')]"
+                    }
+                }
+            }
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "vnetDeployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
+                "resourceGroupDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -202,7 +174,7 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('networkResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.networkResourceGroupName.value]"
         },
         {
             "condition": "[variables('enableDnsAndFirewallDeployment')]",
@@ -211,7 +183,7 @@
             "name": "privateDnsZoneDeployment",
             "dependsOn": [
                 "vnetDeployment",
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('privateDnsZoneResourceGroupName'))]"
+                "resourceGroupDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -231,7 +203,7 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('privateDnsZoneResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value]"
         },
         {
             "condition": "[variables('enableDnsAndFirewallDeployment')]",
@@ -239,7 +211,7 @@
             "apiVersion": "2020-10-01",
             "name": "firewallPolicy001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
+                "resourceGroupDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -259,7 +231,7 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('networkResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.networkResourceGroupName.value]"
         },
         {
             "condition": "[variables('enableDnsAndFirewallDeployment')]",
@@ -269,7 +241,7 @@
             "dependsOn": [
                 "vnetDeployment",
                 "firewallPolicy001Deployment",
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('networkResourceGroupName'))]"
+                "resourceGroupDeployment"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -295,14 +267,14 @@
                     }
                 }
             },
-            "resourceGroup": "[variables('networkResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.networkResourceGroupName.value]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "keyVault001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]",
+                "resourceGroupDeployment",
                 "vnetDeployment",
                 "privateDnsZoneDeployment"
             ],
@@ -317,27 +289,27 @@
                         "value": "[variables('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, variables('governanceResourceGroupName'))), 24)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-keyvault001', uniqueString(subscription().subscriptionId, reference('resourceGroupDeployment').outputs.governanceResourceGroupName.value)), 24)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'))]"
                     },
                     "tags": {
                         "value": "[variables('tags')]"
                     }
                 }
             },
-            "resourceGroup": "[variables('governanceResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.governanceResourceGroupName.value]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "purview001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('governanceResourceGroupName'))]",
+                "resourceGroupDeployment",
                 "vnetDeployment",
                 "privateDnsZoneDeployment",
                 "keyVault001Deployment"
@@ -353,7 +325,7 @@
                         "value": "[variables('location')]"
                     },
                     "purviewName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001', uniqueString(subscription().subscriptionId, variables('governanceResourceGroupName'))), 63)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), '-dh-purview001', uniqueString(subscription().subscriptionId, reference('resourceGroupDeployment').outputs.governanceResourceGroupName.value)), 63)]"
                     },
                     "keyVaultId": {
                         "value": "[reference('keyVault001Deployment').outputs.keyVaultId.value]"
@@ -362,30 +334,30 @@
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
                     "privateDnsZoneIdPurview": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com'))]"
                     },
                     "privateDnsZoneIdBlob": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net'))]"
                     },
                     "privateDnsZoneIdQueue": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net'))]"
                     },
                     "privateDnsZoneIdNamespace": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net'))]"
                     },
                     "tags": {
                         "value": "[variables('tags')]"
                     }
                 }
             },
-            "resourceGroup": "[variables('governanceResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.governanceResourceGroupName.value]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "containerRegistry001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('containerResourceGroupName'))]",
+                "resourceGroupDeployment",
                 "vnetDeployment",
                 "privateDnsZoneDeployment"
             ],
@@ -400,27 +372,27 @@
                         "value": "[variables('location')]"
                     },
                     "containerRegistryName": {
-                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, variables('containerResourceGroupName'))), 50)]"
+                        "value": "[take(concat(variables('enterpriseScaleAnalyticsCompanyPrefix'), 'dhcontainerregistry001', uniqueString(subscription().subscriptionId, reference('resourceGroupDeployment').outputs.containerResourceGroupName.value)), 50)]"
                     },
                     "subnetId": {
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'))]"
                     },
                     "tags": {
                         "value": "[variables('tags')]"
                     }
                 }
             },
-            "resourceGroup": "[variables('containerResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.containerResourceGroupName.value]"
         },
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "synapsePrivateLinkHub001Deployment",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/resourceGroups', variables('consumptionResourceGroupName'))]",
+                "resourceGroupDeployment",
                 "vnetDeployment",
                 "privateDnsZoneDeployment"
             ],
@@ -441,14 +413,14 @@
                         "value": "[reference('vnetDeployment').outputs.privateLinkSubnetId.value]"
                     },
                     "privateDnsZoneId": {
-                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'))]"
+                        "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value, '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'), concat(variables('privateDnsZoneResourceGroupId'), '/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'))]"
                     },
                     "tags": {
                         "value": "[variables('tags')]"
                     }
                 }
             },
-            "resourceGroup": "[variables('consumptionResourceGroupName')]"
+            "resourceGroup": "[reference('resourceGroupDeployment').outputs.consumptionResourceGroupName.value]"
         }
     ],
     "outputs": {
@@ -458,7 +430,7 @@
         },
         "privateDnsZoneResourceGroupId": {
             "type": "string",
-            "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('privateDnsZoneResourceGroupName')), variables('privateDnsZoneResourceGroupId'))]"
+            "value": "[if(variables('enableDnsAndFirewallDeployment'), concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', reference('resourceGroupDeployment').outputs.privateDnsZoneResourceGroupName.value), variables('privateDnsZoneResourceGroupId'))]"
         }
     }
 }
