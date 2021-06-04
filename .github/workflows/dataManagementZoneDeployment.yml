@@ -1,0 +1,104 @@
+name: Data Management Zone Deployment
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - "code/**"
+      - ".github/workflows/dataManagementZoneDeployment.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - "code/**"
+      - ".github/workflows/dataManagementZoneDeployment.yml"
+
+env:
+  AZURE_SUBSCRIPTION_ID: "17588eb2-2943-461a-ab3f-00a3ceac3112" # Update to '{dataHubSubscriptionId}'
+  AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+
+jobs:
+  validation:
+    name: "Validation of IaC templates"
+    runs-on: ubuntu-latest
+    continue-on-error: false
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy Data Management Zone - validation
+      - name: Deploy Data Management Zone - validation
+        id: data_management_zone_validation
+        uses: azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json
+          deploymentMode: Validate
+        continue-on-error: true
+
+      # Log out from Azure
+      - name: Log out from Azure
+        id: azure_logout
+        uses: azure/cli@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az logout
+
+  deployment:
+    name: "Deployment of IaC templates"
+    needs: [validation]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    continue-on-error: false
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Check Out Repository
+        id: checkout_repository
+        uses: actions/checkout@v2
+
+      # Login to Azure
+      - name: Azure Login
+        id: azure_login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          enable-AzPSSession: true
+
+      # Deploy Data Management Zone
+      - name: Deploy Data Management Zone
+        id: data_management_zone_deployment
+        uses: azure/arm-deploy@v1
+        with:
+          scope: subscription
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          region: ${{ env.AZURE_LOCATION }}
+          template: ${{ github.workspace }}/infra/main.json
+          parameters: ${{ github.workspace }}/infra/params.dev.json
+          deploymentMode: Incremental
+        continue-on-error: true
+
+      # Log out from Azure
+      - name: Log out from Azure
+        id: azure_logout
+        uses: azure/cli@v1
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az logout

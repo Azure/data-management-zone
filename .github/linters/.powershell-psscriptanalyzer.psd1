@@ -10,6 +10,7 @@
     ExcludeRules = @(
        'PSUseShouldProcessForStateChangingFunctions',
        'PSReviewUnusedParameter'
+       'PSPossibleIncorrectUsageOfAssignmentOperator'
     )
     #IncludeRules = @( )
 }

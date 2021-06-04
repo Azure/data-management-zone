@@ -1,0 +1,90 @@
+// This template is used to create a Container Registry.
+targetScope = 'resourceGroup'
+
+// Parameters
+param location string
+param tags object
+param subnetId string
+param containerRegistryName string
+param privateDnsZoneIdContainerRegistry string
+
+// Variables
+var containerRegistryNameCleaned = replace(containerRegistryName, '-', '')
+var containerRegistryPrivateEndpointName = '${containerRegistry.name}-private-endpoint'
+
+// Resources
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = {
+  name: containerRegistryNameCleaned
+  location: location
+  tags: tags
+  sku: {
+    name: 'Premium'
+  }
+  properties: {
+    adminUserEnabled: false
+    anonymousPullEnabled: true
+    dataEndpointEnabled: false
+    networkRuleBypassOptions: 'None'
+    networkRuleSet: {
+      defaultAction: 'Deny'
+      ipRules: []
+      virtualNetworkRules: []
+    }
+    policies: {
+      quarantinePolicy: {
+        status: 'enabled'
+      }
+      retentionPolicy: {
+        status: 'enabled'
+        days: 7
+      }
+      trustPolicy: {
+        status: 'disabled'
+        type: 'Notary'
+      }
+    }
+    publicNetworkAccess: 'Disabled'
+    zoneRedundancy: 'Enabled'
+  }
+}
+
+resource containerRegistryPrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01' = {
+  name: containerRegistryPrivateEndpointName
+  location: location
+  tags: tags
+  properties: {
+    manualPrivateLinkServiceConnections: []
+    privateLinkServiceConnections: [
+      {
+        name: containerRegistryPrivateEndpointName
+        properties: {
+          groupIds: [
+            'registry'
+          ]
+          privateLinkServiceId: containerRegistry.id
+          requestMessage: ''
+        }
+      }
+    ]
+    subnet: {
+      id: subnetId
+    }
+  }
+}
+
+resource containerRegistryPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+  parent: containerRegistryPrivateEndpoint
+  name: 'aRecord'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: '${containerRegistryPrivateEndpoint.name}-arecord'
+        properties: {
+          privateDnsZoneId: privateDnsZoneIdContainerRegistry
+        }
+      }
+    ]
+  }
+}
+
+// Outputs

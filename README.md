@@ -117,6 +117,13 @@ This will generate the following JSON output:
 
 > **Note:** Take note of the output. It will be required for the next steps.
 
+For automation purposes, one more role assignments is required for this service principal.
+Additional required role assignments include:
+
+| Role Name | Description | Scope |
+|:----------|:------------|:------|
+| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}`</div> |
+
 ### 3. Resource Deployment
 
 Now that you have set up the Service Principal, you need to choose how would you like to deploy the resources. Deployment options:
@@ -163,57 +170,58 @@ If you want to use Azure DevOps Pipelines for deploying the resources, you need 
 
 More information can be found [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal).
 
-### 4. Parameter Update Process
+### 4. Parameter Updates
 
 > **Note:** This section applies for both **Azure DevOps** and **GitHub** Deployment
 
-In order to deploy the ARM templates in this repository to the desired Azure subscription, you will need to modify some parameters in the forked repository, which will be used for updating the files which will be used during the deployment. Therefor, **this step should not be skipped for neither Azure DevOps/GitHub options**. As updating each parameter file manually is a time-consuming and potentially error-prone process, we have simplified the task with a GitHub Action workflow. You can update your deployment parameters by completing three steps:
+In order to deploy the Infrastructure as Code (IaC) templates to the desired Azure subscription, you will need to modify some parameters in the forked repository. Therefore, **this step should not be skipped for neither Azure DevOps/GitHub options**. There are two files that require updates:
 
-  1. Configure the `updateParameters` workflow
-  1. Execute the `updateParameters` workflow
-  1. Configure the deployment pipeline
-  1. Merge these changes back to the `main` branch of your repo
+- `.github/workflows/dataManagementZoneDeployment.yml` for GitHub Actions,
+- `.ado/workflows/dataManagementZoneDeployment.yml` for Azure DevOps and
+- `infra/params.dev.json` and
 
-#### Configure the `updateParameters` workflow
+Update these files in a seperate branch and then merge via Pull Request to trigger the initial deployment.
 
-> **Note:** There is only one 'updateParameters.yml', which can be found under the '.github' folder and this one will be used also for setting up the Azure DevOps Deployment
+#### Configure `dataManagementZoneDeployment.yml`
 
-To begin, please open the [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml). In this file you need to update the environment variables. Just click on [.github/workflows/updateParameters.yml](/.github/workflows/updateParameters.yml) and edit the following section:
+##### For GitHub Actions
+
+To begin, please open the [.github/workflows/dataManagementZoneDeployment.yml](/.github/workflows/dataManagementZoneDeployment.yml). In this file you need to update the environment variables section. Just click on [.github/workflows/dataManagementZoneDeployment.yml](/.github/workflows/dataManagementZoneDeployment.yml) and edit the following section:
 
 ```yaml
 env:
-  DATA_HUB_SUBSCRIPTION_ID: '{dataHubSubscriptionId}'
-  DATA_HUB_NAME: '{dataHubName}' # Choose max. 11 characters. They will be used as a prefix for all services. If not unique, deployment can fail for some services.
-  LOCATION: '{regionName}'       # Specifies the region for all services (e.g. 'northeurope', 'eastus', etc.)
-  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: '{resourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "17588eb2-2943-461a-ab3f-00a3ceac3112" # Update to '{dataHubSubscriptionId}'
+  AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+```
+
+Further details about these parameters are provided in a table below.
+
+##### For Azure DevOps
+
+To begin, please open the [.ado/workflows/dataManagementZoneDeployment.yml](/.ado/workflows/dataManagementZoneDeployment.yml). In this file you need to update the variables section. Just click on [.ado/workflows/dataManagementZoneDeployment.yml](/.ado/workflows/dataManagementZoneDeployment.yml) and edit the following section:
+
+```yaml
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-management-zone-service-connection" # Update to '{yourResourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "17588eb2-2943-461a-ab3f-00a3ceac3112"                     # Update to '{yourDataManagementZoneSubscriptionId}'
+  AZURE_LOCATION: "North Europe"                                                    # Update to '{yourRegionName}'
 ```
 
 The following table explains each of the parameters:
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-| **DATA_HUB_SUBSCRIPTION_ID**             | Specifies the subscription ID of the Data Management Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
-| **DATA_HUB_NAME**        | Specifies the name of your Data Management Zone. The value should consist of alphanumeric characters (A-Z, a-z, 0-9) and should not contain any special characters like `-`, `_`, `.`, etc. Special characters will be removed in the renaming process. | `myhub01` |
-| **LOCATION**                                 | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](#supported-regions)  | `northeurope` |
+| **AZURE_SUBSCRIPTION_ID**             | Specifies the subscription ID of the Data Management Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
+| **AZURE_LOCATION**                                 | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](#supported-regions)  | `northeurope` |
 | **AZURE_RESOURCE_MANAGER _CONNECTION_NAME**   | Specifies the resource manager connection name in Azure DevOps. You can leave the default value if you want to use GitHub Actions for your deployment. More details on how to create the resource manager connection in Azure DevOps can be found in step 4. b) or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#### Configure `params.dev.json`
 
-#### Execute the `updateParameters` workflow
+To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In this file you need to update the variable values. Just click on [infra/params.dev.json](/infra/params.dev.json) and edit the values. An explanation of the values is given in the table below:
 
-After updating the values, please commit the updated version to the `main` branch of your repository. This will kick off a GitHub Action workflow, which will appear under the **Actions** tab of the main page of the repository. The `Update Parameter Files` workflow will update all parameters in your repository according to a pre-defined naming convention.
-
-#### Configure the deployment pipeline
-
-The workflow above will make changes to all of the ARM config files. These changes will be stored in a new branch. Once the process has finished, it will open a new pull request in your repository where you can review the changes made by the workflow. The pull request will also provide the values you need to use to configure the deployment pipeline. Please follow the instructions in the pull request to complete the parameter update process.
-
-If you are using GitHub Actions for your deployment, you will need to modify the `.github/workflows/dataHubDeployment.yml` file. If you are using Azure Pipelines, you only need to modify the `.ado/workflows/dataHubDeployment.yml` file.  **You only need to modify one of these files. You do not need to modify both of them.**
-
-> **Note:** We are not renaming the environment variables in the workflow files because this could lead to an infinite loop of workflow runs being started.
-
-#### Merge these changes back to the `main` branch of your repo
-
-After following the instructions in the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository.
+| Parameter                                | Description  | Sample value |
+|:-----------------------------------------|:-------------|:-------------|
+TBD
 
 ### 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
@@ -255,13 +263,17 @@ As a last step, you need to create an Azure DevOps pipeline in your project base
 
 1. Click on **Continue** and then on **Run**.
 
-### 6. Follow the workflow deployment
+### 6. Merge these changes back to the `main` branch of your repo
+
+After following the instructions and updating the parameters and variables in your repository in a separate branch and opening the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository. By doing this, you trigger the deployment workflow.
+
+### 7. Follow the workflow deployment
 
 **Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
 
-If you are using GitHub Actions, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Management Deployment` running. Click on it to see how it deploys one service after another. If you run into any issues, please open an issue [here](https://github.com/Azure/data-management-zone/issues).
+If you are using GitHub Actions, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Management Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please open an issue [here](https://github.com/Azure/data-management-zone/issues).
 
-If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 6 and monitor it as each service is deployed. If you run into any issues, please open an issue [here](https://github.com/Azure/data-management-zone/issues).
+If you are using Azure DevOps Pipelines, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please open an issue [here](https://github.com/Azure/data-management-zone/issues).
 
 ### Documentation
 
@@ -269,12 +281,11 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 
 | File/folder                   | Description                                |
 | ----------------------------- | ------------------------------------------ |
-| `.ado/workflows`              | Folder for ADO workflows. The `dataDomainDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
-| `.github/workflows`           | Folder for GitHub workflows. The `updateParameters.yml` workflow is used for the parameter update process, while the `dataDomainDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.ado/workflows`              | Folder for ADO workflows. The `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.github/workflows`           | Folder for GitHub workflows. The `updateParameters.yml` workflow is used for the parameter update process, while the `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
 | `code`                        | Sample password generation script that will be run in the deployment workflow for resources that require a password during the deployment. |
-| `configs`                     | Folder containing a script and configuration file that is used for the parameter update process. |
 | `docs`                        | Resources for this README.                 |
-| `infra`                       | Folder containing all the ARM templates for each of the resources that will be deployed (`deploy.{resource}.json`) together with their parameter files (`params.{resource}.json`). |
+| `infra`                       | Folder containing all the Bicep and ARM templates for each of the resources that will be deployed. |
 | `CODE_OF_CONDUCT.md`          | Microsoft Open Source Code of Conduct.     |
 | `LICENSE`                     | The license for the sample.                |
 | `README.md`                   | This README file.                          |

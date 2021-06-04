@@ -1,28 +1,27 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.169.0/containers/powershell
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.181.0/containers/azure-bicep
 {
-	"name": "PowerShell",
+	"name": "Azure Bicep (Community)",		
 	"dockerFile": "Dockerfile",
-
+	
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash"
 	},
-
+		
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-vscode.azure-account",
-		"ms-vscode.powershell",
 		"ms-vscode.azurecli",
+		"ms-vscode.powershell",
+		"ms-dotnettools.vscode-dotnet-runtime",
+		"ms-azuretools.vscode-bicep",
 		"msazurermtools.azurerm-vscode-tools"
 	],
-
+	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	// Uncomment the next line to run commands after the container is created. This gets run in bash which is why we call `pwsh`.
-	// "postCreateCommand": "pwsh -c '$PSVersionTable'",
-
-	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }

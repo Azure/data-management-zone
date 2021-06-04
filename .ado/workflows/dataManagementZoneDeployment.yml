@@ -1,0 +1,100 @@
+name: Data Management Zone Deployment
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/*
+      - code/*
+      - .ado/workflows/dataManagementZoneDeployment.yml
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/*
+      - code/*
+      - .ado/workflows/dataManagementZoneDeployment.yml
+
+variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "data-management-zone-service-connection" # Update to '{yourResourceManagerConnectionName}'
+  AZURE_SUBSCRIPTION_ID: "17588eb2-2943-461a-ab3f-00a3ceac3112"                     # Update to '{yourDataManagementZoneSubscriptionId}'
+  AZURE_LOCATION: "North Europe"                                                    # Update to '{yourRegionName}'
+
+stages:
+  - stage: Validation
+    displayName: "Validation of IaC templates"
+    jobs:
+      - job: Validation
+        displayName: "Validation of IaC templates"
+        continueOnError: false
+        pool:
+          vmImage: "ubuntu-latest"
+
+        steps:
+          # Checkout code
+          - checkout: self
+            name: checkout_repository
+            displayName: Checkout repository
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+
+          # Deploy Data Management Zone - validation
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_management_zone_validation
+            displayName: Data Management Zone - validation
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentMode: "Validation"
+
+  - stage: Deployment
+    displayName: "Deployment of IaC templates"
+    dependsOn: Validation
+    # condition: and(succeeded(), in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI'))
+    jobs:
+      - job: Deployment
+        displayName: "Deployment of IaC templates"
+        continueOnError: false
+        pool:
+          vmImage: "windows-latest"
+
+        steps:
+          # Checkout repository
+          - checkout: self
+            name: checkout_repository
+            displayName: "Checkout repository"
+            submodules: true
+            lfs: false
+            clean: true
+            continueOnError: false
+            enabled: true
+
+          # Deploy Data Management Zone
+          - task: AzureResourceManagerTemplateDeployment@3
+            name: data_management_zone_deployment
+            displayName: Data Management Zone
+            enabled: true
+            continueOnError: false
+            inputs:
+              deploymentScope: "Subscription"
+              azureResourceManagerConnection: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
+              location: ${{ variables.AZURE_LOCATION }}
+              templateLocation: "Linked artifact"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
+              deploymentMode: "Incremental"
