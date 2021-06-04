@@ -49,6 +49,7 @@ jobs:
           template: ${{ github.workspace }}/infra/main.json
           parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Validate
+        continue-on-error: true
 
       # Log out from Azure
       - name: Log out from Azure
@@ -91,6 +92,7 @@ jobs:
           template: ${{ github.workspace }}/infra/main.json
           parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Incremental
+        continue-on-error: true
 
       # Log out from Azure
       - name: Log out from Azure
