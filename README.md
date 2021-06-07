@@ -289,7 +289,7 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 | File/folder                   | Description                                |
 | ----------------------------- | ------------------------------------------ |
 | `.ado/workflows`              | Folder for ADO workflows. The `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
-| `.github/workflows`           | Folder for GitHub workflows. The `updateParameters.yml` workflow is used for the parameter update process, while the `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.github/workflows`           | Folder for GitHub workflows. The `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
 | `code`                        | Sample password generation script that will be run in the deployment workflow for resources that require a password during the deployment. |
 | `docs`                        | Resources for this README.                 |
 | `infra`                       | Folder containing all the Bicep and ARM templates for each of the resources that will be deployed. |
