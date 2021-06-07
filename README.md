@@ -221,7 +221,14 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-TBD
+| location | Specifies the location for all resources. | `northeurope` |
+| environment | Specifies the environment of the deployment. | `dev`, `test` or `prod` |
+| prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
+| vnetAddressPrefix | Specifies the address space of the vnet. | `10.0.0.0/16` |
+| azureFirewallSubnetAddressPrefix | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
+| servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
+| firewallPrivateIp | Specifies the private IP address of the central firewall. | `10.0.0.4` |
+| dnsServerAdresses | Specifies the private IP addresses of the dns servers. | [ `10.0.0.4` ] |
 
 ### 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
