@@ -221,7 +221,14 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-TBD
+| location | Specifies the location for all resources. | `northeurope` |
+| environment | Specifies the environment of the deployment. | `dev`, `test` or `prod` |
+| prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
+| vnetAddressPrefix | Specifies the address space of the vnet. | `10.0.0.0/16` |
+| azureFirewallSubnetAddressPrefix | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
+| servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
+| firewallPrivateIp | Specifies the private IP address of the central firewall. | `10.0.0.4` |
+| dnsServerAdresses | Specifies the private IP addresses of the dns servers. | [ `10.0.0.4` ] |
 
 ### 5. (not applicable for GH Actions) Reference pipeline from GitHub repository in Azure DevOps Pipelines
 
@@ -282,7 +289,7 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 | File/folder                   | Description                                |
 | ----------------------------- | ------------------------------------------ |
 | `.ado/workflows`              | Folder for ADO workflows. The `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
-| `.github/workflows`           | Folder for GitHub workflows. The `updateParameters.yml` workflow is used for the parameter update process, while the `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
+| `.github/workflows`           | Folder for GitHub workflows. The `dataManagementZoneDeployment.yml` workflow shows the steps for an end-to-end deployment of the architecture. |
 | `code`                        | Sample password generation script that will be run in the deployment workflow for resources that require a password during the deployment. |
 | `docs`                        | Resources for this README.                 |
 | `infra`                       | Folder containing all the Bicep and ARM templates for each of the resources that will be deployed. |
