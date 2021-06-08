@@ -85,3 +85,7 @@ output privateDnsZoneIdNamespace string = '${resourceGroup().id}/providers/Micro
 output privateDnsZoneIdKeyVault string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net'
 output privateDnsZoneIdContainerRegistry string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io'
 output privateDnsZoneIdSynapse string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net'
+output privateDnsZoneIdAnalysis string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net'
+output privateDnsZoneIdPbiDedicated string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net'
+output privateDnsZoneIdPowerQuery string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.prod.powerquery.microsoft.com'
+

@@ -17,6 +17,9 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2020-11-01-pr
   name: containerRegistryNameCleaned
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   sku: {
     name: 'Premium'
   }

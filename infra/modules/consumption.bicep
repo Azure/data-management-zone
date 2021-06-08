@@ -8,6 +8,9 @@ param prefix string
 param tags object
 param subnetId string
 param privateDnsZoneIdSynapseprivatelinkhub string
+param privateDnsZoneIdAnalysis string
+param privateDnsZoneIdPbiDedicated string
+param privateDnsZoneIdPowerQuery string
 
 // Variables
 
@@ -23,5 +26,19 @@ module synapsePrivateLinkHub001 'services/synapseprivatelinkhub.bicep' = {
     privateDnsZoneIdSynapseprivatelinkhub: privateDnsZoneIdSynapseprivatelinkhub
   }
 }
+
+// module powerbiPrivateLink001 'services/powerbiprivatelink.bicep' = {  // Uncomment if you want to enable private connectivity to your power bi tenant
+//   name: 'powerbiPrivateLink001'
+//   scope: resourceGroup()
+//   params: {
+//     location: location
+//     tags: tags
+//     subnetId: subnetId
+//     powerbiPrivateLinkName: '${prefix}-powerbipl001'
+//     privateDnsZoneIdAnalysis: privateDnsZoneIdAnalysis
+//     privateDnsZoneIdPbiDedicated: privateDnsZoneIdPbiDedicated
+//     privateDnsZoneIdPowerQuery: privateDnsZoneIdPowerQuery
+//   }
+// }
 
 // Outputs
