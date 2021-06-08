@@ -44,7 +44,7 @@ var privateDnsZoneNames = [
   'privatelink.sql.azuresynapse.net'
   'privatelink.table.${environment().suffixes.storage}'
   'privatelink.table.cosmos.azure.com'
-  'privatelink.tip1.powerquery.microsoft.com'
+  'privatelink.prod.powerquery.microsoft.com'
   'privatelink.vaultcore.azure.net'
   'privatelink.web.${environment().suffixes.storage}'
   'privatelink.northeurope.azmk8s.io'
@@ -88,4 +88,3 @@ output privateDnsZoneIdSynapse string = '${resourceGroup().id}/providers/Microso
 output privateDnsZoneIdAnalysis string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.analysis.windows.net'
 output privateDnsZoneIdPbiDedicated string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.pbidedicated.windows.net'
 output privateDnsZoneIdPowerQuery string = '${resourceGroup().id}/providers/Microsoft.Network/privateDnsZones/privatelink.prod.powerquery.microsoft.com'
-

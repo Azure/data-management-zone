@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "2318265272147819427"
+      "templateHash": "18140803598650263287"
     }
   },
   "parameters": {
@@ -1019,7 +1019,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "17123663731977026187"
+              "templateHash": "888565290877563230"
             }
           },
           "parameters": {
@@ -1070,7 +1070,7 @@
               "privatelink.sql.azuresynapse.net",
               "[format('privatelink.table.{0}', environment().suffixes.storage)]",
               "privatelink.table.cosmos.azure.com",
-              "privatelink.tip1.powerquery.microsoft.com",
+              "privatelink.prod.powerquery.microsoft.com",
               "privatelink.vaultcore.azure.net",
               "[format('privatelink.web.{0}', environment().suffixes.storage)]",
               "privatelink.northeurope.azmk8s.io",
