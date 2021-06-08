@@ -141,6 +141,9 @@ module consumptionResources 'modules/consumption.bicep' = {
     tags: tags
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdSynapseprivatelinkhub: globalDnsZones.outputs.privateDnsZoneIdSynapse
+    privateDnsZoneIdAnalysis: globalDnsZones.outputs.privateDnsZoneIdAnalysis
+    privateDnsZoneIdPbiDedicated: globalDnsZones.outputs.privateDnsZoneIdPbiDedicated
+    privateDnsZoneIdPowerQuery: globalDnsZones.outputs.privateDnsZoneIdPowerQuery
   }
 }
 
