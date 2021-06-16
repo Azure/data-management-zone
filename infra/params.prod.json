@@ -6,7 +6,7 @@
             "value": "northeurope"
         },
         "environment": {
-            "value": "prod"
+            "value": "prd"
         },
         "prefix": {
             "value": "dmz"

@@ -25,7 +25,7 @@ module artifactstorage001 'services/artifactstorage.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    artifactstorageName: '${prefix}-artifact001'
+    artifactstorageName: '${prefix}-artfct001'
   }
 }
 
