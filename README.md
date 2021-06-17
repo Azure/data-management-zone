@@ -303,8 +303,8 @@ If you are using Azure DevOps Pipelines, you can navigate to the pipeline that y
 - [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
 - [Implementation - Data Management](https://github.com/Azure/data-management-zone)
 - [Implementation - Data Landing Zone](https://github.com/Azure/data-landing-zone)
-- [Implementation - Data Domain - Batch](https://github.com/Azure/data-domain-batch)
-- [Implementation - Data Domain - Streaming](https://github.com/Azure/data-domain-streaming)
+- [Implementation - Data Integration - Batch](https://github.com/Azure/data-integration-batch)
+- [Implementation - Data Integration - Streaming](https://github.com/Azure/data-integration-streaming)
 - [Implementation - Data Product - Reporting](https://github.com/Azure/data-product-reporting)
 - [Implementation - Data Product - Analytics & Data Science](https://github.com/Azure/data-product-analytics)
 
