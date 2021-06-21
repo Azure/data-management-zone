@@ -47,7 +47,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2020-11-01-pr
       }
     }
     publicNetworkAccess: 'Disabled'
-    zoneRedundancy: 'Enabled'
+    // zoneRedundancy: 'Enabled'  // Uncomment to allow zone redundancy for your Container Registry
   }
 }
 

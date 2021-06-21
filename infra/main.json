@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "10167330776117077173"
+      "templateHash": "14753997723832435664"
     }
   },
   "parameters": {
@@ -1844,7 +1844,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "2139338129145066199"
+              "templateHash": "8230107600572377917"
             }
           },
           "parameters": {
@@ -1899,7 +1899,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "14537680597961171150"
+                      "templateHash": "10128722007286821417"
                     }
                   },
                   "parameters": {
@@ -1960,8 +1960,7 @@
                             "type": "Notary"
                           }
                         },
-                        "publicNetworkAccess": "Disabled",
-                        "zoneRedundancy": "Enabled"
+                        "publicNetworkAccess": "Disabled"
                       }
                     },
                     {
