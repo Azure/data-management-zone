@@ -124,6 +124,48 @@ Additional required role assignments include:
 |:----------|:------------|:------|
 | [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}`</div> |
 
+To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands using Azure CLI/Azure Powershell:
+
+#### Azure CLI - Add role assignments
+
+```sh
+# Get Service Principal Object ID
+az ad sp list --display-name "{servicePrincipalName}" --query "[].{objectId:objectId}" --output tsv
+
+# Add role assignment
+# Resource Scope level assignment
+az role assignment create \
+  --assignee "{servicePrincipalObjectId}" \
+  --role "{roleName}" \
+  --scopes "{scope}"
+
+# Resource group scope level assignment
+az role assignment create \
+  --assignee "{servicePrincipalObjectId}" \
+  --role "{roleName}" \
+  --resource-group "{resourceGroupName}"
+```
+
+#### Azure Powershell - Add role assignments
+
+```powershell
+# Get Service Principal Object ID
+$spObjectId = (Get-AzADServicePrincipal -DisplayName "{servicePrincipalName}").id
+
+# Add role assignment
+# For Resource Scope level assignment
+New-AzRoleAssignment `
+  -ObjectId $spObjectId `
+  -RoleDefinitionName "{roleName}" `
+  -Scope "{scope}"
+
+# For Resource group scope level assignment
+New-AzRoleAssignment `
+  -ObjectId $spObjectId `
+  -RoleDefinitionName "{roleName}" `
+  -ResourceGroupName "{resourceGroupName}"
+```
+
 ### 3. Resource Deployment
 
 Now that you have set up the Service Principal, you need to choose how would you like to deploy the resources. Deployment options:
