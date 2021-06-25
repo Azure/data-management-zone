@@ -206,3 +206,4 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
 // Outputs
 output vnetId string = vnet.id
 output serviceSubnet string = vnet.properties.subnets[1].id
+output firewallPrivateIp string = firewall.properties.ipConfigurations[0].properties.privateIPAddress
