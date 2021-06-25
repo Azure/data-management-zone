@@ -55,3 +55,4 @@ module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignment.bicep' = {
 }
 
 // Outputs
+output purviewId string = purview001.outputs.purviewId

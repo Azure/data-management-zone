@@ -164,3 +164,16 @@ resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 }
 
 // Outputs
+output vnetId string = networkServices.outputs.vnetId
+output firewallPrivateIp string = networkServices.outputs.firewallPrivateIp
+output purviewId string = governanceResources.outputs.purviewId
+output privateDnsZoneIdKeyVault string = globalDnsZones.outputs.privateDnsZoneIdKeyVault
+output privateDnsZoneIdDataFactory string = globalDnsZones.outputs.privateDnsZoneIdDataFactory
+output privateDnsZoneIdDataFactoryPortal string = globalDnsZones.outputs.privateDnsZoneIdDataFactoryPortal
+output privateDnsZoneIdBlob string = globalDnsZones.outputs.privateDnsZoneIdBlob
+output privateDnsZoneIdDfs string = globalDnsZones.outputs.privateDnsZoneIdDfs
+output privateDnsZoneIdSqlServer string = globalDnsZones.outputs.privateDnsZoneIdSqlServer
+output privateDnsZoneIdMySqlServer string = globalDnsZones.outputs.privateDnsZoneIdMySqlServer
+output privateDnsZoneIdNamespace string = globalDnsZones.outputs.privateDnsZoneIdNamespace
+output privateDnsZoneIdSynapseDev string = globalDnsZones.outputs.privateDnsZoneIdSynapseDev
+output privateDnsZoneIdSynapseSql string = globalDnsZones.outputs.privateDnsZoneIdSynapseSql

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "14753997723832435664"
+      "templateHash": "3926077083506329494"
     }
   },
   "parameters": {
@@ -187,7 +187,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "4614330429513968550"
+              "templateHash": "1667069575903608964"
             }
           },
           "parameters": {
@@ -986,6 +986,10 @@
             "serviceSubnet": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))).subnets[1].id]"
+            },
+            "firewallPrivateIp": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress]"
             }
           }
         }
@@ -1019,7 +1023,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "888565290877563230"
+              "templateHash": "1052137394841814509"
             }
           },
           "parameters": {
@@ -1115,17 +1119,117 @@
             }
           ],
           "outputs": {
+            "privateDnsZoneIdFileSync": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.afs.azure.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdMachineLearningApi": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.api.azureml.ms', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdMachineLearningNotebooks": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.notebooks.azure.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdAutomation": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.azure-automation.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdIothub": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.azure-devices.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdDataFactory": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.datafactory.azure.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdDataFactoryPortal": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.adf.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdAppService": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.azurewebsites.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCosmosdbCassandra": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.cassandra.cosmos.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCosmosdbSql": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.documents.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCosmosdbGremlin": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.gremlin.cosmos.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCosmosdbMongo": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.mongo.cosmos.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCosmosdbTable": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.table.cosmos.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdCognitiveService": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.cognitiveservices.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdSqlServer": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink{1}', resourceGroup().id, environment().suffixes.sqlServerHostname)]"
+            },
+            "privateDnsZoneIdMySqlServer": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.mysql.database.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdMariaDb": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.mariadb.database.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdPostgreSql": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdRedis": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.redis.cache.windows.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdSearch": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.search.windows.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdSignalr": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.service.signalr.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdEventGrid": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.eventgrid.azure.net', resourceGroup().id)]"
+            },
             "privateDnsZoneIdPurview": {
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdDfs": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.{1}', resourceGroup().id, environment().suffixes.storage)]"
             },
             "privateDnsZoneIdBlob": {
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.{1}', resourceGroup().id, environment().suffixes.storage)]"
             },
+            "privateDnsZoneIdFile": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.file.{1}', resourceGroup().id, environment().suffixes.storage)]"
+            },
             "privateDnsZoneIdQueue": {
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.{1}', resourceGroup().id, environment().suffixes.storage)]"
+            },
+            "privateDnsZoneIdWeb": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.web.{1}', resourceGroup().id, environment().suffixes.storage)]"
             },
             "privateDnsZoneIdNamespace": {
               "type": "string",
@@ -1142,6 +1246,14 @@
             "privateDnsZoneIdSynapse": {
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdSynapseDev": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.dev.azuresynapse.net', resourceGroup().id)]"
+            },
+            "privateDnsZoneIdSynapseSql": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.sql.azuresynapse.net', resourceGroup().id)]"
             },
             "privateDnsZoneIdAnalysis": {
               "type": "string",
@@ -1209,7 +1321,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "13275006668752806694"
+              "templateHash": "12550012802113183117"
             }
           },
           "parameters": {
@@ -1801,7 +1913,13 @@
                 "[resourceId('Microsoft.Resources/deployments', 'purview001')]"
               ]
             }
-          ]
+          ],
+          "outputs": {
+            "purviewId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2019-10-01').outputs.purviewId.value]"
+            }
+          }
         }
       },
       "dependsOn": [
@@ -2222,5 +2340,59 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices')]"
       ]
     }
-  ]
+  ],
+  "outputs": {
+    "vnetId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.vnetId.value]"
+    },
+    "firewallPrivateIp": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.firewallPrivateIp.value]"
+    },
+    "purviewId": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-governance', variables('name'))), 'Microsoft.Resources/deployments', 'governanceResources'), '2019-10-01').outputs.purviewId.value]"
+    },
+    "privateDnsZoneIdKeyVault": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdKeyVault.value]"
+    },
+    "privateDnsZoneIdDataFactory": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactory.value]"
+    },
+    "privateDnsZoneIdDataFactoryPortal": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactoryPortal.value]"
+    },
+    "privateDnsZoneIdBlob": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value]"
+    },
+    "privateDnsZoneIdDfs": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDfs.value]"
+    },
+    "privateDnsZoneIdSqlServer": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSqlServer.value]"
+    },
+    "privateDnsZoneIdMySqlServer": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdMySqlServer.value]"
+    },
+    "privateDnsZoneIdNamespace": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdNamespace.value]"
+    },
+    "privateDnsZoneIdSynapseDev": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseDev.value]"
+    },
+    "privateDnsZoneIdSynapseSql": {
+      "type": "string",
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseSql.value]"
+    }
+  }
 }
