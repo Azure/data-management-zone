@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "13348185231110930124"
+      "templateHash": "10332831309280036554"
     }
   },
   "parameters": {
@@ -234,6 +234,132 @@
       },
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/deployments', 'dataManagementZoneDeployment')]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "vnetPeeringDeployment",
+        "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]"
+      },
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "[format('vnetPeeringDeployment{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()])]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "sourceVnetId": {
+            "value": "[reference(format('dataLandingZoneDeployment-{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()])).outputs.vnetId.value]"
+          },
+          "destinationVnetIds": {
+            "copy": [
+              {
+                "name": "value",
+                "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]",
+                "input": "[reference(format('dataLandingZoneDeployment-{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex('value')])).outputs.vnetId.value]"
+              }
+            ]
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.63.48766",
+              "templateHash": "8036094195194754972"
+            }
+          },
+          "parameters": {
+            "sourceVnetId": {
+              "type": "string"
+            },
+            "destinationVnetIds": {
+              "type": "array"
+            }
+          },
+          "functions": [],
+          "variables": {
+            "sourceVnetSubscriptionId": "[split(parameters('sourceVnetId'), '')[2]]",
+            "sourceVnetResourceGroupName": "[split(parameters('sourceVnetId'), '')[4]]"
+          },
+          "resources": [
+            {
+              "copy": {
+                "name": "vnetPeering",
+                "count": "[length(parameters('destinationVnetIds'))]"
+              },
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "[format('vnetPeering{0}', copyIndex())]",
+              "subscriptionId": "[variables('sourceVnetSubscriptionId')]",
+              "resourceGroup": "[variables('sourceVnetResourceGroupName')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "sourceVnetId": {
+                    "value": "[parameters('sourceVnetId')]"
+                  },
+                  "destinationVnetId": {
+                    "value": "[parameters('destinationVnetIds')[copyIndex()]]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.63.48766",
+                      "templateHash": "14960388980379507136"
+                    }
+                  },
+                  "parameters": {
+                    "sourceVnetId": {
+                      "type": "string"
+                    },
+                    "destinationVnetId": {
+                      "type": "string"
+                    }
+                  },
+                  "functions": [],
+                  "variables": {
+                    "sourceVnetName": "[last(split(parameters('sourceVnetId'), '/'))]",
+                    "destinationVnetName": "[last(split(parameters('destinationVnetId'), '/'))]"
+                  },
+                  "resources": [
+                    {
+                      "condition": "[not(equals(parameters('sourceVnetId'), parameters('destinationVnetId')))]",
+                      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+                      "apiVersion": "2020-11-01",
+                      "name": "[format('{0}/{1}', variables('sourceVnetName'), variables('destinationVnetName'))]",
+                      "properties": {
+                        "allowForwardedTraffic": true,
+                        "allowGatewayTransit": true,
+                        "allowVirtualNetworkAccess": true,
+                        "peeringState": "Connected",
+                        "remoteVirtualNetwork": {
+                          "id": "[parameters('destinationVnetId')]"
+                        },
+                        "useRemoteGateways": false
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "dataLandingZoneDeployment"
       ]
     }
   ]

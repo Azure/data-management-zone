@@ -189,4 +189,13 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
   }
 }]
 
+module vnetPeeringDeployment 'modules/vnetPeeringOrchestration.bicep' = [for index1 in range(0, length(dataLandingZoneDetails)): {
+  name: 'vnetPeeringDeployment${index1}'
+  scope: subscription()
+  params: {
+    sourceVnetId: reference(dataLandingZoneDeployment[index1].name).outputs.vnetId.value
+    destinationVnetIds: [for index2 in range(0, length(dataLandingZoneDetails)): reference(dataLandingZoneDeployment[index2].name).outputs.vnetId.value]
+  }
+}]
+
 // Outputs
