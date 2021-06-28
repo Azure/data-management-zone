@@ -18,6 +18,8 @@ param prefix string
 param tags object = {}
 
 // Network parameters
+@description('Specifies whether firewall and private DNS Zones should be deployed.')
+param enableDnsAndFirewallDeployment bool = true
 @description('Specifies the address space of the vnet.')
 param vnetAddressPrefix string = '10.0.0.0/16'
 @description('Specifies the address space of the subnet that is use for Azure Firewall.')
@@ -30,6 +32,22 @@ param firewallPrivateIp string = '10.0.0.4'
 param dnsServerAdresses array = [
   '10.0.0.4'
 ]
+
+// Private DNS Zone parameters
+@description('Specifies the resource ID of the private DNS zone for Key Vault.')
+param privateDnsZoneIdKeyVault string = ''
+@description('Specifies the resource ID of the private DNS zone for Purview.')
+param privateDnsZoneIdPurview string = ''
+@description('Specifies the resource ID of the private DNS zone for Queue storage.')
+param privateDnsZoneIdQueue string = ''
+@description('Specifies the resource ID of the private DNS zone for Blob storage.')
+param privateDnsZoneIdBlob string = ''
+@description('Specifies the resource ID of the private DNS zone for EventHub namespaces.')
+param privateDnsZoneIdNamespace string = ''
+@description('Specifies the resource ID of the private DNS zone for Container Registry.')
+param privateDnsZoneIdContainerRegistry string = ''
+@description('Specifies the resource ID of the private DNS zone for Synapse.')
+param privateDnsZoneIdSynapse string = ''
 
 // Variables
 var name = toLower('${prefix}-${environment}')
@@ -61,7 +79,7 @@ module networkServices 'modules/network.bicep' = {
     azureFirewallSubnetAddressPrefix: azureFirewallSubnetAddressPrefix
     servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
     dnsServerAdresses: dnsServerAdresses
-    enableDnsAndFirewallDeployment: true
+    enableDnsAndFirewallDeployment: enableDnsAndFirewallDeployment
     firewallPrivateIp: firewallPrivateIp
   }
 }
@@ -74,7 +92,7 @@ resource globalDnsResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' 
   properties: {}
 }
 
-module globalDnsZones 'modules/services/privatednszones.bicep' = {
+module globalDnsZones 'modules/services/privatednszones.bicep' = if (enableDnsAndFirewallDeployment) {
   name: 'globalDnsZones'
   scope: globalDnsResourceGroup
   params: {
@@ -99,11 +117,11 @@ module governanceResources 'modules/governance.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
-    privateDnsZoneIdPurview: globalDnsZones.outputs.privateDnsZoneIdPurview
-    privateDnsZoneIdStorageBlob: globalDnsZones.outputs.privateDnsZoneIdBlob
-    privateDnsZoneIdStorageQueue: globalDnsZones.outputs.privateDnsZoneIdQueue
-    privateDnsZoneIdEventhubNamespace: globalDnsZones.outputs.privateDnsZoneIdNamespace
-    privateDnsZoneIdKeyVault: globalDnsZones.outputs.privateDnsZoneIdKeyVault
+    privateDnsZoneIdPurview: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPurview : privateDnsZoneIdPurview
+    privateDnsZoneIdStorageBlob: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdBlob : privateDnsZoneIdBlob
+    privateDnsZoneIdStorageQueue: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdQueue : privateDnsZoneIdQueue
+    privateDnsZoneIdEventhubNamespace: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdNamespace : privateDnsZoneIdNamespace
+    privateDnsZoneIdKeyVault: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdKeyVault : privateDnsZoneIdKeyVault
   }
 }
 
@@ -123,7 +141,7 @@ module containerResources 'modules/container.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
-    privateDnsZoneIdContainerRegistry: globalDnsZones.outputs.privateDnsZoneIdContainerRegistry
+    privateDnsZoneIdContainerRegistry: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdContainerRegistry : privateDnsZoneIdContainerRegistry
   }
 }
 
@@ -143,10 +161,10 @@ module consumptionResources 'modules/consumption.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
-    privateDnsZoneIdSynapseprivatelinkhub: globalDnsZones.outputs.privateDnsZoneIdSynapse
-    privateDnsZoneIdAnalysis: globalDnsZones.outputs.privateDnsZoneIdAnalysis
-    privateDnsZoneIdPbiDedicated: globalDnsZones.outputs.privateDnsZoneIdPbiDedicated
-    privateDnsZoneIdPowerQuery: globalDnsZones.outputs.privateDnsZoneIdPowerQuery
+    privateDnsZoneIdSynapseprivatelinkhub: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdSynapse : privateDnsZoneIdSynapse
+    privateDnsZoneIdAnalysis: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdAnalysis : ''
+    privateDnsZoneIdPbiDedicated: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPbiDedicated : ''
+    privateDnsZoneIdPowerQuery: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPowerQuery : ''
   }
 }
 
@@ -170,13 +188,13 @@ resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 output vnetId string = networkServices.outputs.vnetId
 output firewallPrivateIp string = networkServices.outputs.firewallPrivateIp
 output purviewId string = governanceResources.outputs.purviewId
-output privateDnsZoneIdKeyVault string = globalDnsZones.outputs.privateDnsZoneIdKeyVault
-output privateDnsZoneIdDataFactory string = globalDnsZones.outputs.privateDnsZoneIdDataFactory
-output privateDnsZoneIdDataFactoryPortal string = globalDnsZones.outputs.privateDnsZoneIdDataFactoryPortal
-output privateDnsZoneIdBlob string = globalDnsZones.outputs.privateDnsZoneIdBlob
-output privateDnsZoneIdDfs string = globalDnsZones.outputs.privateDnsZoneIdDfs
-output privateDnsZoneIdSqlServer string = globalDnsZones.outputs.privateDnsZoneIdSqlServer
-output privateDnsZoneIdMySqlServer string = globalDnsZones.outputs.privateDnsZoneIdMySqlServer
-output privateDnsZoneIdNamespace string = globalDnsZones.outputs.privateDnsZoneIdNamespace
-output privateDnsZoneIdSynapseDev string = globalDnsZones.outputs.privateDnsZoneIdSynapseDev
-output privateDnsZoneIdSynapseSql string = globalDnsZones.outputs.privateDnsZoneIdSynapseSql
+output privateDnsZoneIdKeyVault string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdKeyVault : ''
+output privateDnsZoneIdDataFactory string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdDataFactory : ''
+output privateDnsZoneIdDataFactoryPortal string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdDataFactoryPortal : ''
+output privateDnsZoneIdBlob string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdBlob : ''
+output privateDnsZoneIdDfs string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdDfs : ''
+output privateDnsZoneIdSqlServer string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdSqlServer : ''
+output privateDnsZoneIdMySqlServer string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdMySqlServer : ''
+output privateDnsZoneIdNamespace string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdNamespace : ''
+output privateDnsZoneIdSynapseDev string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdSynapseDev : ''
+output privateDnsZoneIdSynapseSql string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdSynapseSql : ''

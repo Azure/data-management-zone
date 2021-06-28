@@ -33,7 +33,7 @@ resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01
   properties: {
     addressPrefix: '0.0.0.0/0'
     nextHopType: 'VirtualAppliance'
-    nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+    nextHopIpAddress: enableDnsAndFirewallDeployment ? firewall.properties.ipConfigurations[0].properties.privateIPAddress : firewallPrivateIp
   }
 }
 
@@ -95,7 +95,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   }
 }
 
-resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
+resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicipprefix'
   location: location
   tags: tags
@@ -109,7 +109,7 @@ resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
   }
 }
 
-resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicip001'
   location: location
   tags: tags
@@ -129,7 +129,7 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
   }
 }
 
-resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
+resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
@@ -156,7 +156,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
   }
 }
 
-module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
+module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy-rules'
   scope: resourceGroup()
   dependsOn: [
@@ -167,7 +167,7 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
   }
 }
 
-resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
+resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewall'
   dependsOn: [
     firewallPolicyRules
