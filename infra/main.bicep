@@ -14,6 +14,8 @@ param environment string = 'dev'
 @maxLength(10)
 @description('Specifies the prefix for all resources created in this deployment.')
 param prefix string
+@description('Specifies the tags that you want to apply to all resources.')
+param tags object = {}
 
 // Network parameters
 @description('Specifies the address space of the vnet.')
@@ -31,19 +33,20 @@ param dnsServerAdresses array = [
 
 // Variables
 var name = toLower('${prefix}-${environment}')
-var tags = {
+var tagsDefault = {
   Owner: 'Enterprise Scale Analytics'
   Project: 'Enterprise Scale Analytics'
   Environment: environment
   Toolkit: 'bicep'
   Name: name
 }
+var tagsJoined = union(tagsDefault, tags)
 
 // Network resources
 resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-network'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -53,7 +56,7 @@ module networkServices 'modules/network.bicep' = {
   params: {
     prefix: name
     location: location
-    tags: tags
+    tags: tagsJoined
     vnetAddressPrefix: vnetAddressPrefix
     azureFirewallSubnetAddressPrefix: azureFirewallSubnetAddressPrefix
     servicesSubnetAddressPrefix: servicesSubnetAddressPrefix
@@ -67,7 +70,7 @@ module networkServices 'modules/network.bicep' = {
 resource globalDnsResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-global-dns'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -75,7 +78,7 @@ module globalDnsZones 'modules/services/privatednszones.bicep' = {
   name: 'globalDnsZones'
   scope: globalDnsResourceGroup
   params: {
-    tags: tags
+    tags: tagsJoined
     vnetId: networkServices.outputs.vnetId
   }
 }
@@ -84,7 +87,7 @@ module globalDnsZones 'modules/services/privatednszones.bicep' = {
 resource governanceResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-governance'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -94,7 +97,7 @@ module governanceResources 'modules/governance.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdPurview: globalDnsZones.outputs.privateDnsZoneIdPurview
     privateDnsZoneIdStorageBlob: globalDnsZones.outputs.privateDnsZoneIdBlob
@@ -108,7 +111,7 @@ module governanceResources 'modules/governance.bicep' = {
 resource containerResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-container'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -118,7 +121,7 @@ module containerResources 'modules/container.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdContainerRegistry: globalDnsZones.outputs.privateDnsZoneIdContainerRegistry
   }
@@ -128,7 +131,7 @@ module containerResources 'modules/container.bicep' = {
 resource consumptionResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-consumption'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -138,7 +141,7 @@ module consumptionResources 'modules/consumption.bicep' = {
   params: {
     location: location
     prefix: name
-    tags: tags
+    tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdSynapseprivatelinkhub: globalDnsZones.outputs.privateDnsZoneIdSynapse
     privateDnsZoneIdAnalysis: globalDnsZones.outputs.privateDnsZoneIdAnalysis
@@ -151,7 +154,7 @@ module consumptionResources 'modules/consumption.bicep' = {
 resource automationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-automation'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
@@ -159,7 +162,7 @@ resource automationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: '${name}-mgmt'
   location: location
-  tags: tags
+  tags: tagsJoined
   properties: {}
 }
 
