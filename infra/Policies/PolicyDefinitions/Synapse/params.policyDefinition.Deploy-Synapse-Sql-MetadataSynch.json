@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-SynapseSql-TransparentDataEncryption"
+            "value": "Deploy-Synapse-Sql-MetadataSynch"
         },
         "policyDescription": {
-            "value": "Deploy Synapse SQL transparent data encryption."
+            "value": "Setup metadata synch for Synapse sql pools."
         },
         "policyMode": {
             "value": "Indexed"
@@ -40,13 +40,13 @@
                 "then": {
                     "effect": "[parameters('effect')]",
                     "details": {
-                        "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
-                        "name": "current",
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
+                        "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption/status",
-                                    "equals": "Enabled"
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/metadataSync/enabled",
+                                    "equals": "true"
                                 }
                             ]
                         },
@@ -73,11 +73,11 @@
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/metadataSync",
                                             "apiVersion": "2019-06-01-preview",
-                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/current')]",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
                                             "properties": {
-                                                "status": "Enabled"
+                                                "enabled": true
                                             }
                                         }
                                     ],

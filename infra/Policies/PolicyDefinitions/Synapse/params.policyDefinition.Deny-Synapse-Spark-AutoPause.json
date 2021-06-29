@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSpark-ComputeIsolation"
+            "value": "Deny-Synapse-Spark-AutoPause"
         },
         "policyDescription": {
-            "value": "Enforces compute isolation for Synapse Spark Pools."
+            "value": "Enforces autopause for Synapse Spark Pools."
         },
         "policyMode": {
             "value": "Indexed"
@@ -37,8 +37,16 @@
                             "equals": "Microsoft.Synapse/workspaces/bigDataPools"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
-                            "notEquals": true
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoPause.delayInMinutes",
+                                    "greater": 60
+                                }
+                            ]
                         }
                     ]
                 },
