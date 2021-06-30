@@ -32,6 +32,8 @@ param firewallPrivateIp string = '10.0.0.4'
 param dnsServerAdresses array = [
   '10.0.0.4'
 ]
+@description('Specifies the resource ID of the Azure Firewall Policy.')
+param firewallPolicyId string = ''
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault.')
@@ -81,6 +83,7 @@ module networkServices 'modules/network.bicep' = {
     dnsServerAdresses: dnsServerAdresses
     enableDnsAndFirewallDeployment: enableDnsAndFirewallDeployment
     firewallPrivateIp: firewallPrivateIp
+    firewallPolicyId: firewallPolicyId
   }
 }
 

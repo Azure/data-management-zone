@@ -12,10 +12,14 @@ param vnetAddressPrefix string
 param azureFirewallSubnetAddressPrefix string
 param servicesSubnetAddressPrefix string
 param enableDnsAndFirewallDeployment bool = true
+param firewallPolicyId string
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
+var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : subscription().subscriptionId
+var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : resourceGroup().name
+var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
@@ -164,6 +168,14 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsA
   ]
   params: {
     firewallPolicyName: firewallPolicy.name
+  }
+}
+
+module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules.bicep' = if (!enableDnsAndFirewallDeployment && !empty(firewallPolicyId)) {
+  name: '${prefix}-firewallpolicy-rules'
+  scope: resourceGroup(firewallPolicySubscriptionId, firewallPolicyResourceGroupName)
+  params: {
+    firewallPolicyName: firewallPolicyName
   }
 }
 
