@@ -28,7 +28,6 @@ var purviewRegions = [
 ]
 
 // Resources
-// Resources
 resource purview 'Microsoft.Purview/accounts@2020-12-01-preview' = {
   name: purviewName
   location: contains(purviewRegions, location) ? location : 'westeurope'

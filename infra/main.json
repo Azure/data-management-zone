@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "14346534480022985162"
+      "templateHash": "8033647115883274577"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "217978580424867667"
+              "templateHash": "9965200127293697397"
             }
           },
           "parameters": {
@@ -1066,7 +1066,7 @@
               "condition": "[and(not(parameters('enableDnsAndFirewallDeployment')), not(empty(parameters('firewallPolicyId'))))]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
-              "name": "[format('{0}-firewallpolicy-rules', parameters('prefix'))]",
+              "name": "[format('{0}-firewallpolicy-rules-toExistingFirewallPolicy', parameters('prefix'))]",
               "subscriptionId": "[variables('firewallPolicySubscriptionId')]",
               "resourceGroup": "[variables('firewallPolicyResourceGroupName')]",
               "properties": {

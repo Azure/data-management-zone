@@ -172,7 +172,7 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsA
 }
 
 module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules.bicep' = if (!enableDnsAndFirewallDeployment && !empty(firewallPolicyId)) {
-  name: '${prefix}-firewallpolicy-rules'
+  name: '${prefix}-firewallpolicy-rules-toExistingFirewallPolicy'
   scope: resourceGroup(firewallPolicySubscriptionId, firewallPolicyResourceGroupName)
   params: {
     firewallPolicyName: firewallPolicyName
