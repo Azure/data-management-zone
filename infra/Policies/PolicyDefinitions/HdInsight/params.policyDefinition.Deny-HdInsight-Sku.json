@@ -52,7 +52,7 @@
                     ]
                 },
                 "maxTargetInstanceCount": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Target Instance Count",
                         "description": "Specifies the maximum target instance count"
@@ -60,7 +60,7 @@
                     "defaultValue": 100
                 },
                 "maxAutoscaleInstanceCount": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Autoscale Instance Count",
                         "description": "Specifies the maximum autoscale instance count"
@@ -155,7 +155,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "HDInsight",
+                "category": "Budget",
                 "preview": false,
                 "deprecated": false
             }
