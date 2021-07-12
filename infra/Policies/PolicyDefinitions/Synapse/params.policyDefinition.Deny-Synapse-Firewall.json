@@ -6,7 +6,7 @@
             "value": "Deny-Synapse-Firewall"
         },
         "policyDescription": {
-            "value": "Setup firewall of Synapse."
+            "value": "Denies opening up the Firewall of Synapse workspaces."
         },
         "policyMode": {
             "value": "All"
