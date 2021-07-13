@@ -75,7 +75,7 @@ resource containerRegistryPrivateEndpoint 'Microsoft.Network/privateEndpoints@20
   }
 }
 
-resource containerRegistryPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource containerRegistryPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (empty(privateDnsZoneIdContainerRegistry)) {
   parent: containerRegistryPrivateEndpoint
   name: 'aRecord'
   properties: {

@@ -44,7 +44,7 @@ resource synapsePrivatelinkHubPrivateEndpoint 'Microsoft.Network/privateEndpoint
   }
 }
 
-resource synapsePrivatelinkHubPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource synapsePrivatelinkHubPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdSynapseprivatelinkhub)) {
   parent: synapsePrivatelinkHubPrivateEndpoint
   name: 'aRecord'
   properties: {
