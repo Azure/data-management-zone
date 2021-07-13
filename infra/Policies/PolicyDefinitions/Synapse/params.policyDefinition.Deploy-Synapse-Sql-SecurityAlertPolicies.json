@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-SynapseSql-TransparentDataEncryption"
+            "value": "Deploy-Synapse-Sql-SecurityAlertPolicies"
         },
         "policyDescription": {
-            "value": "Deploy Synapse SQL transparent data encryption."
+            "value": "Deploy Synapse SQL pool security alert policy."
         },
         "policyMode": {
             "value": "Indexed"
@@ -24,6 +24,13 @@
                         "Disabled"
                     ],
                     "defaultValue": "DeployIfNotExists"
+                },
+                "securityAlertPolicyEmail": {
+                    "type": "String",
+                    "metadata": {
+                        "description": "The email address to send alerts",
+                        "displayName": "Email Address"
+                    }
                 }
             }
         },
@@ -40,13 +47,13 @@
                 "then": {
                     "effect": "[parameters('effect')]",
                     "details": {
-                        "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
-                        "name": "current",
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies",
+                        "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption/status",
-                                    "equals": "Enabled"
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies/state",
+                                    "equals": "enabled"
                                 }
                             ]
                         },
@@ -68,16 +75,29 @@
                                         },
                                         "synapseSqlPoolName": {
                                             "type": "string"
+                                        },
+                                        "securityAlertPolicyEmail": {
+                                            "type": "string"
                                         }
                                     },
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/securityAlertPolicies",
                                             "apiVersion": "2019-06-01-preview",
-                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/current')]",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
                                             "properties": {
-                                                "status": "Enabled"
+                                                "state": "Enabled",
+                                                "disabledAlerts": [
+                                                    ""
+                                                ],
+                                                "emailAddresses": [
+                                                    "[parameters('securityAlertPolicyEmail')]"
+                                                ],
+                                                "emailAccountAdmins": true,
+                                                "storageEndpoint": null,
+                                                "storageAccountAccessKey": "",
+                                                "retentionDays": 0
                                             }
                                         }
                                     ],
@@ -92,6 +112,9 @@
                                     },
                                     "synapseSqlPoolName": {
                                         "value": "[field('name')]"
+                                    },
+                                    "securityAlertPolicyEmail": {
+                                        "value": "[parameters('securityAlertPolicyEmail')]"
                                     }
                                 }
                             }

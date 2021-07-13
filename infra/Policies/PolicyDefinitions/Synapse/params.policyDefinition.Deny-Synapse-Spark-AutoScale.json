@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Deny-Synapse-Spark-AutoScale"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse SQL Pool Sku's."
+            "value": "Enforces autoscale for Synapse Spark Pools."
         },
         "policyMode": {
-            "value": "All"
+            "value": "Indexed"
         },
         "policyParameters": {
             "value": {
@@ -26,30 +26,13 @@
                     ],
                     "defaultValue": "Deny"
                 },
-                "allowedSynapseSqlSkus": {
-                    "type": "Array",
+                "maxNodeCount": {
+                    "type": "Integer",
                     "metadata": {
-                        "displayName": "Allowed subscriptions",
-                        "description": "A list of subscriptions IDs"
+                        "displayName": "Maximum Node Count",
+                        "description": "Specifies the maximum node count of Spark clusters"
                     },
-                    "defaultValue": [
-                        "DW100c",
-                        "DW200c",
-                        "DW300c",
-                        "DW400c",
-                        "DW500c",
-                        "DW1000c",
-                        "DW1500c",
-                        "DW2000c",
-                        "DW2500c",
-                        "DW3000c",
-                        "DW5000c",
-                        "DW6000c",
-                        "DW7500C",
-                        "DW10000c",
-                        "DW15000c",
-                        "DW30000c"
-                    ]
+                    "defaultValue": 20
                 }
             }
         },
@@ -59,11 +42,19 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                            "equals": "Microsoft.Synapse/workspaces/bigDataPools"
                         },
                         {
-                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
-                            "notIn": "[parameters('allowedSynapseSqlSkus')]"
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.enabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.maxNodeCount",
+                                    "greater": "[parameters('maxNodeCount')]"
+                                }
+                            ]
                         }
                     ]
                 },

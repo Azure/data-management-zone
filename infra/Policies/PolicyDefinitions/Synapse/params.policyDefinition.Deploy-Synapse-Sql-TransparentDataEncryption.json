@@ -1,0 +1,112 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deploy-Synapse-Sql-TransparentDataEncryption"
+        },
+        "policyDescription": {
+            "value": "Deploy Synapse SQL transparent data encryption."
+        },
+        "policyMode": {
+            "value": "Indexed"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "DeployIfNotExists",
+                        "Disabled"
+                    ],
+                    "defaultValue": "DeployIfNotExists"
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]",
+                    "details": {
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
+                        "name": "current",
+                        "existenceCondition": {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption/status",
+                                    "equals": "Enabled"
+                                }
+                            ]
+                        },
+                        "roleDefinitionIds": [
+                            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                        ],
+                        "deployment": {
+                            "properties": {
+                                "mode": "incremental",
+                                "template": {
+                                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "parameters": {
+                                        "location": {
+                                            "type": "string"
+                                        },
+                                        "synapseWorkspaceName": {
+                                            "type": "string"
+                                        },
+                                        "synapseSqlPoolName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "variables": {},
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption",
+                                            "apiVersion": "2019-06-01-preview",
+                                            "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/current')]",
+                                            "properties": {
+                                                "status": "Enabled"
+                                            }
+                                        }
+                                    ],
+                                    "outputs": {}
+                                },
+                                "parameters": {
+                                    "location": {
+                                        "value": "[field('location')]"
+                                    },
+                                    "synapseWorkspaceName": {
+                                        "value": "[first(split(field('fullname'),'/'))]"
+                                    },
+                                    "synapseSqlPoolName": {
+                                        "value": "[field('name')]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

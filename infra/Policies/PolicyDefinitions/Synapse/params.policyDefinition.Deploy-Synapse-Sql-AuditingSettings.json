@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-SynapseSql-VulnerabilityAssessment"
+            "value": "Deploy-Synapse-Sql-AuditingSettings"
         },
         "policyDescription": {
-            "value": "Deploy Synapse SQL pool vulnerability assessments."
+            "value": "Send auditing logs for Synapse SQL pools to log analytics."
         },
         "policyMode": {
             "value": "Indexed"
@@ -24,20 +24,6 @@
                         "Disabled"
                     ],
                     "defaultValue": "DeployIfNotExists"
-                },
-                "vulnerabilityAssessmentsEmail": {
-                    "type": "String",
-                    "metadata": {
-                        "description": "The email address to send alerts",
-                        "displayName": "Email Address"
-                    }
-                },
-                "vulnerabilityAssessmentsStorageID": {
-                    "type": "String",
-                    "metadata": {
-                        "description": "The storage account to store assessments",
-                        "displayName": "Storage account"
-                    }
                 }
             }
         },
@@ -54,17 +40,17 @@
                 "then": {
                     "effect": "[parameters('effect')]",
                     "details": {
-                        "type": "Microsoft.Synapse/workspaces/sqlPools/vulnerabilityAssessments",
+                        "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
                         "name": "default",
                         "existenceCondition": {
                             "allOf": [
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/sqlPools/vulnerabilityAssessments/recurringScans.emails",
-                                    "equals": "[parameters('vulnerabilityAssessmentsEmail')]"
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/state",
+                                    "equals": "enabled"
                                 },
                                 {
-                                    "field": "Microsoft.Synapse/workspaces/sqlPools/vulnerabilityAssessments/recurringScans.isEnabled",
-                                    "equals": true
+                                    "field": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings/isAzureMonitorTargetEnabled",
+                                    "equals": "true"
                                 }
                             ]
                         },
@@ -86,30 +72,22 @@
                                         },
                                         "synapseSqlPoolName": {
                                             "type": "string"
-                                        },
-                                        "vulnerabilityAssessmentsEmail": {
-                                            "type": "string"
-                                        },
-                                        "vulnerabilityAssessmentsStorageID": {
-                                            "type": "string"
                                         }
                                     },
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Synapse/workspaces/sqlPools/vulnerabilityAssessments",
+                                            "type": "Microsoft.Synapse/workspaces/sqlPools/auditingSettings",
                                             "apiVersion": "2019-06-01-preview",
                                             "name": "[concat(parameters('synapseWorkspaceName'), '/', parameters('synapseSqlPoolName'), '/default')]",
                                             "properties": {
-                                                "storageContainerPath": "[concat('https://', last(split(parameters('vulnerabilityAssessmentsStorageID'), '/')), '.blob.core.windows.net/vulneraabilitylogs')]",
-                                                "storageAccountAccessKey": "[listkeys(parameters('vulnerabilityAssessmentsStorageID'), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]",
-                                                "recurringScans": {
-                                                    "isEnabled": true,
-                                                    "emailSubscriptionAdmins": false,
-                                                    "emails": [
-                                                        "[parameters('vulnerabilityAssessmentsEmail')]"
-                                                    ]
-                                                }
+                                                "auditActionsAndGroups": [
+                                                    "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+                                                    "FAILED_DATABASE_AUTHENTICATION_GROUP",
+                                                    "BATCH_COMPLETED_GROUP"
+                                                ],
+                                                "isAzureMonitorTargetEnabled": true,
+                                                "state": "Enabled"
                                             }
                                         }
                                     ],
@@ -124,12 +102,6 @@
                                     },
                                     "synapseSqlPoolName": {
                                         "value": "[field('name')]"
-                                    },
-                                    "vulnerabilityAssessmentsEmail": {
-                                        "value": "[parameters('vulnerabilityAssessmentsEmail')]"
-                                    },
-                                    "vulnerabilityAssessmentsStorageID": {
-                                        "value": "[parameters('vulnerabilityAssessmentsStorageID')]"
                                     }
                                 }
                             }

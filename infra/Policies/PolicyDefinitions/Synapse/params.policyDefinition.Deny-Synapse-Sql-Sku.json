@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSpark-DefaultSparkLogFolder"
+            "value": "Deny-Synapse-Sql-Sku"
         },
         "policyDescription": {
-            "value": "Enforces spark logging for Synapse Spark Pools."
+            "value": "Denies certain Synapse SQL Pool Sku's."
         },
         "policyMode": {
-            "value": "Indexed"
+            "value": "All"
         },
         "policyParameters": {
             "value": {
@@ -25,6 +25,31 @@
                         "Deny"
                     ],
                     "defaultValue": "Deny"
+                },
+                "allowedSynapseSqlSkus": {
+                    "type": "Array",
+                    "metadata": {
+                        "displayName": "Allowed subscriptions",
+                        "description": "A list of subscriptions IDs"
+                    },
+                    "defaultValue": [
+                        "DW100c",
+                        "DW200c",
+                        "DW300c",
+                        "DW400c",
+                        "DW500c",
+                        "DW1000c",
+                        "DW1500c",
+                        "DW2000c",
+                        "DW2500c",
+                        "DW3000c",
+                        "DW5000c",
+                        "DW6000c",
+                        "DW7500C",
+                        "DW10000c",
+                        "DW15000c",
+                        "DW30000c"
+                    ]
                 }
             }
         },
@@ -34,19 +59,11 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Synapse/workspaces/bigDataPools"
+                            "equals": "Microsoft.Synapse/workspaces/sqlPools"
                         },
                         {
-                            "anyOf": [
-                                {
-                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder",
-                                    "exists": false
-                                },
-                                {
-                                    "value": "[empty(field('Microsoft.Synapse/workspaces/bigDataPools/defaultSparkLogFolder'))]",
-                                    "equals": true
-                                }
-                            ]
+                            "field": "Microsoft.Synapse/workspaces/sqlPools/sku.name",
+                            "notIn": "[parameters('allowedSynapseSqlSkus')]"
                         }
                     ]
                 },

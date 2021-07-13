@@ -42,7 +42,7 @@
                     ]
                 },
                 "maxReplicaCount": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Max Replica Count",
                         "description": "Specifies the maximum replica count for Azure Search"
@@ -115,7 +115,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Search",
+                "category": "Budget",
                 "preview": false,
                 "deprecated": false
             }
