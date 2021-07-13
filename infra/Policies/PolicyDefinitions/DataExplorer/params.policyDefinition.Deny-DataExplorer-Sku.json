@@ -68,7 +68,7 @@
                     ]
                 },
                 "maxSkuCapacity": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum SKU Capacity",
                         "description": "Specifies the maximum sku capacity"
@@ -111,7 +111,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Azure Data Explorer",
+                "category": "Budget",
                 "preview": false,
                 "deprecated": false
             }

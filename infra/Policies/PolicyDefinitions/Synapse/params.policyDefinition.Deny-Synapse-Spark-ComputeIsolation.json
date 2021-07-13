@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSpark-AutoScale"
+            "value": "Deny-Synapse-Spark-ComputeIsolation"
         },
         "policyDescription": {
-            "value": "Enforces autoscale for Synapse Spark Pools."
+            "value": "Enforces compute isolation for Synapse Spark Pools."
         },
         "policyMode": {
             "value": "Indexed"
@@ -37,16 +37,8 @@
                             "equals": "Microsoft.Synapse/workspaces/bigDataPools"
                         },
                         {
-                            "anyOf": [
-                                {
-                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.enabled",
-                                    "notEquals": true
-                                },
-                                {
-                                    "field": "Microsoft.Synapse/workspaces/bigDataPools/autoScale.maxNodeCount",
-                                    "greater": 20
-                                }
-                            ]
+                            "field": "Microsoft.Synapse/workspaces/bigDataPools/isComputeIsolationEnabled",
+                            "notEquals": true
                         }
                     ]
                 },

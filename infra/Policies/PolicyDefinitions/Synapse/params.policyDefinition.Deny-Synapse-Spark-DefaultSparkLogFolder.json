@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSpark-DefaultSparkLogFolder"
+            "value": "Deny-Synapse-Spark-DefaultSparkLogFolder"
         },
         "policyDescription": {
             "value": "Enforces spark logging for Synapse Spark Pools."

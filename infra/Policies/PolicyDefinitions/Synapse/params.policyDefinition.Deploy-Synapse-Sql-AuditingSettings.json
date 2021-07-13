@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deploy-SynapseSql-AuditingSettings"
+            "value": "Deploy-Synapse-Sql-AuditingSettings"
         },
         "policyDescription": {
             "value": "Send auditing logs for Synapse SQL pools to log analytics."

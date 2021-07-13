@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSql-Sku"
+            "value": "Deny-Synapse-Sql-Sku"
         },
         "policyDescription": {
             "value": "Denies certain Synapse Sql Pool Sku's."

@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-SynapseSpark-SessionLevelPackages"
+            "value": "Deny-Synapse-Spark-SessionLevelPackages"
         },
         "policyDescription": {
             "value": "Enforces session level packages for Synapse Spark Pools."

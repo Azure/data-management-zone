@@ -27,7 +27,7 @@
                     "defaultValue": "Deny"
                 },
                 "maxStreamingUnits": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Streaming Units",
                         "description": "Specifies the maximum streaming units that should be allowed"
@@ -58,7 +58,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Stream Analytics",
+                "category": "Budget",
                 "preview": false,
                 "deprecated": false
             }
