@@ -64,6 +64,9 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
       servicesSubnetAddressPrefix: {
         value: '10.0.1.0/24'
       }
+      enableDnsAndFirewallDeployment: {
+        value: true
+      }
       firewallPrivateIp: {
         value: '10.0.0.4'
       }
@@ -71,6 +74,30 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
         value: [
           '10.0.0.4'
         ]
+      }
+      firewallPolicyId: {
+        value: ''
+      }
+      privateDnsZoneIdBlob: {
+        value: ''
+      }
+      privateDnsZoneIdContainerRegistry: {
+        value: ''
+      }
+      privateDnsZoneIdKeyVault: {
+        value: ''
+      }
+      privateDnsZoneIdNamespace: {
+        value: ''
+      }
+      privateDnsZoneIdPurview: {
+        value: ''
+      }
+      privateDnsZoneIdQueue: {
+        value: ''
+      }
+      privateDnsZoneIdSynapse: {
+        value: ''
       }
     }
   }

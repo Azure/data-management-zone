@@ -1,4 +1,4 @@
-// This template is used as a module from the main.bicep template. 
+// This template is used as a module from the main.bicep template.
 // The module contains a template to create network resources.
 targetScope = 'resourceGroup'
 
@@ -61,7 +61,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
       ]
     }
     dhcpOptions: {
-      dnsServers: dnsServerAdresses
+      dnsServers: enableDnsAndFirewallDeployment ? [] : dnsServerAdresses
     }
     enableDdosProtection: false
     subnets: [
