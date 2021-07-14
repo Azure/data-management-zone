@@ -41,7 +41,7 @@ jobs:
       # Deploy Data Management Zone - validation
       - name: Deploy Data Management Zone - validation
         id: data_management_zone_validation
-        uses: azure/arm-deploy@v1.0.5
+        uses: azure/arm-deploy@v1
         with:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -49,7 +49,7 @@ jobs:
           template: ${{ github.workspace }}/infra/main.json
           parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Validate
-        continue-on-error: true
+          failOnStdErr: true
 
       # Log out from Azure
       - name: Log out from Azure
@@ -84,7 +84,7 @@ jobs:
       # Deploy Data Management Zone
       - name: Deploy Data Management Zone
         id: data_management_zone_deployment
-        uses: azure/arm-deploy@v1.0.5
+        uses: azure/arm-deploy@v1
         with:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -92,7 +92,7 @@ jobs:
           template: ${{ github.workspace }}/infra/main.json
           parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Incremental
-        continue-on-error: true
+          failOnStdErr: true
 
       # Log out from Azure
       - name: Log out from Azure
