@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "14867421825370856991"
+      "templateHash": "15047807320078670946"
     }
   },
   "parameters": {
@@ -1960,7 +1960,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "7551515932400319921"
+              "templateHash": "6378645714657336246"
             }
           },
           "parameters": {
@@ -2040,7 +2040,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "6239909792932435579"
+                      "templateHash": "3445734237497400507"
                     }
                   },
                   "parameters": {
@@ -2073,9 +2073,9 @@
                   "variables": {
                     "purviewPrivateEndpointNamePortal": "[format('{0}-portal-private-endpoint', parameters('purviewName'))]",
                     "purviewPrivateEndpointNameAccount": "[format('{0}-account-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameQueue": "[format('{0}-queue-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameNamespace": "[format('{0}-namespace-private-endpoint', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameBlob": "[format('{0}-private-endpoint-blob', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameQueue": "[format('{0}-private-endpoint-queue', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameNamespace": "[format('{0}-private-endpoint-namespace', parameters('purviewName'))]",
                     "purviewRegions": [
                       "brazilsouth",
                       "canadacentral",
