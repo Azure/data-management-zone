@@ -167,17 +167,6 @@
                     ]
                 },
                 {
-                    "name": "generalSettings",
-                    "label": "General Settings",
-                    "subLabel": {
-                        "preValidation": "Provide all general settings for your Data Management Zone.",
-                        "postValidation": "Done"
-                    },
-                    "bladeTitle": "General Settings",
-                    "bladeSubtitle": "General Settings",
-                    "elements": []
-                },
-                {
                     "name": "connectivitySettings",
                     "label": "Connectivity Settings",
                     "subLabel": {
@@ -193,6 +182,18 @@
 							"type": "Microsoft.Common.Section",
                             "visible": true,
 							"elements": [
+                                {
+									"name": "virtualNetworkConfigurationText",
+									"type": "Microsoft.Common.TextBlock",
+									"visible": true,
+									"options": {
+										"text": "Specify the Virtual network and subnet CIDR range for your Data Management Zone.",
+										"link": {
+											"label": "",
+											"uri": ""
+										}
+									}
+								},
                                 {
                                     "name": "virtualNetworkAddressCidrRange",
                                     "label": "Vnet Address CIDR Range",
@@ -241,12 +242,34 @@
                             "visible": true,
 							"elements": [
                                 {
-                                    "name": "enableDnsAndFirewallDeployment",
-                                    "label": "Enable DNS and Azure Firewall Deployment",
+                                    "name": "infoBoxVirtualNetworkConfiguration",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                        "style": "Info",
+                                        "uri": "https://aka.ms/adopt/datamanagement"
+                                    }
+                                },
+                                {
+									"name": "firewallConfigurationText",
+									"type": "Microsoft.Common.TextBlock",
+									"visible": true,
+									"options": {
+										"text": "Specify whether the deployment takes place in an existing Enterprise-Scale Landing Zone environment. If so, it is recommended to make use of the existing network infrastructure in your connectivity hub in your tenant.",
+										"link": {
+											"label": "Learn more",
+											"uri": "https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/architecture#high-level-architecture"
+										}
+									}
+								},
+                                {
+                                    "name": "disableDnsAndFirewallDeployment",
+                                    "label": "Deploy into Enterprise-Scale Landing Zone environment",
                                     "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
-                                    "toolTip": "If 'Yes' is selected, an Azure Firewall and all required Private DNS Zones will be deployed in the Data Management Zone.",
-                                    "defaultValue": "Yes",
+                                    "toolTip": "If 'Yes' is selected, you can configure the deployment to make use of the networking infrastructure in your ESLZ Connectivity Hub.",
+                                    "defaultValue": "No",
                                     "constraints": {
                                         "allowedValues": [
                                             {
@@ -261,36 +284,94 @@
                                     }
                                 },
                                 {
-                                    "name": "firewallPrivateIp",
-                                    "label": "Firewall Private IP Address",
-                                    "type": "Microsoft.Common.TextBox",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.enableDnsAndFirewallDeployment, 'no')]",
-                                    "defaultValue": "10.0.0.4",
-                                    "toolTip": "Specify the private IP address of your Firewall.",
+                                    "name": "existingFirewallType",
+                                    "label": "Existing Firewall",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'yes')]",
+                                    "defaultValue": "Azure Firewall",
+                                    "toolTip": "Select the Firewall that is used inside your environment.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": false,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
                                     "constraints": {
-                                        "required": true,
-                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                        "allowedValues": [
+                                            {
+                                                "label": "Azure Firewall",
+                                                "value": "azureFirewall"
+                                            },
+                                            {
+                                                "label": "Third Party Appliance",
+                                                "value": "custom"
+                                            }
+                                        ],
+                                        "required": true
                                     }
                                 },
                                 {
-                                    "name": "dnsServerAdresses",
-                                    "label": "DNS Server Addresses",
-                                    "type": "Microsoft.Common.TextBox",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.enableDnsAndFirewallDeployment, 'no')]",
-                                    "defaultValue": "10.0.0.4",
-                                    "toolTip": "Specify the private IP addresses of your DNS forwarders. You can specify more than one private IP address ('10.0.0.4,10.0.0.5').",
+                                    "name": "subscriptionFirewallApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "subscriptions?api-version=2020-01-01"
+                                    }
+                                },
+                                {
+                                    "name": "azureFirewallSub",
+                                    "label": "Azure Firewall Subscription",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Select the Subscription of your Azure Firewall.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
                                     "constraints": {
-                                        "required": true,
-                                        "regex": "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(,)?)*$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                        "allowedValues": "[map(steps('connectivitySettings').firewallConfiguration.subscriptionFirewallApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "azureFirewallApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('connectivitySettings').firewallConfiguration.azureFirewallSub, '/providers/Microsoft.Network/azureFirewalls?api-version=2020-11-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "azureFirewallId",
+                                    "label": "Azure Firewall",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall')]",
+                                    "defaultValue": "",
+                                    "toolTip": "Select the central Azure Firewall that should be used.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(steps('connectivitySettings').firewallConfiguration.azureFirewallApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Subscription ID: ', last(take(split(item.id, '/'), 3)), '\"}')))]",
+                                        "required": true
+                                    }
+                                },
+                                {
+                                    "name": "azureFirewallPrivateIpApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "[concat(steps('connectivitySettings').firewallConfiguration.azureFirewallId, '?api-version=2020-11-01')]"
                                     }
                                 },
                                 {
                                     "name": "enableFirewallRulesDeployment",
                                     "label": "Deploy Rules to Azure Firewall Policy",
                                     "type": "Microsoft.Common.OptionsGroup",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.enableDnsAndFirewallDeployment, 'no')]",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall')]",
                                     "toolTip": "If 'Yes' is selected, you will have to select an Azure Firewall Policy to which network and application rules will be deployed.",
                                     "defaultValue": "No",
                                     "constraints": {
@@ -321,7 +402,7 @@
                                     "type": "Microsoft.Solutions.ArmApiControl",
                                     "request": {
                                         "method": "GET",
-                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Network/firewallPolicies?api-version=2020-11-01')]"
+                                        "path": "[concat(steps('connectivitySettings').firewallConfiguration.azureFirewallSub, '/providers/Microsoft.Network/firewallPolicies?api-version=2020-11-01')]"
                                     }
                                 },
                                 {
@@ -340,6 +421,42 @@
                                         "allowedValues": "[map(steps('connectivitySettings').firewallConfiguration.firewallPolicyApi.value, (item) => parse(concat('{\"label\":\"', item.name, '\",\"value\":\"', item.id, '\",\"description\":\"', 'Subscription ID: ', last(take(split(item.id, '/'), 3)), '\"}')))]",
                                         "required": true
                                     }
+                                },
+                                {
+                                    "name": "infoBoxFirewallRulesCustomDeployment",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
+                                    "options": {
+                                        "text": "Please follow the link and make sure you apply the network and application rules to your Firewall. Otherwise, functionality of some services inside your data platform will be limited or may not function. This includes but is not limited to DataFactory, Databricks, Azure Machine Learning and HDInsight.",
+                                        "style": "Info",
+                                        "uri": "https://github.com/Azure/data-management-zone/blob/main/infra/modules/services/firewallPolicyRules.bicep"
+                                    }
+                                },
+                                {
+                                    "name": "firewallPrivateIp",
+                                    "label": "Firewall Private IP Address",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
+                                    "defaultValue": "10.0.0.4",
+                                    "toolTip": "Specify the private IP address of your Firewall.",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$",
+                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                    }
+                                },
+                                {
+                                    "name": "dnsServerAdresses",
+                                    "label": "DNS Server Addresses",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
+                                    "defaultValue": "10.0.0.4",
+                                    "toolTip": "Specify the private IP addresses of your DNS forwarders. You can specify more than one private IP address ('10.0.0.4,10.0.0.5').",
+                                    "constraints": {
+                                        "required": true,
+                                        "regex": "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(,)?)*$",
+                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                    }
                                 }
                             ]
                         },
@@ -347,14 +464,14 @@
 							"name": "privateDnsZones",
 							"label": "Private DNS Zones",
 							"type": "Microsoft.Common.Section",
-                            "visible": "[equals(steps('connectivitySettings').firewallConfiguration.enableDnsAndFirewallDeployment, 'no')]",
+                            "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'yes')]",
 							"elements": [
                                 {
 									"name": "privateDnsZonesText",
 									"type": "Microsoft.Common.TextBlock",
 									"visible": true,
 									"options": {
-										"text": "Select the Private DNS Zones for your deployment.",
+										"text": "Select the Private DNS Zone settings for your deployment.",
 										"link": {
 											"label": "",
 											"uri": ""
@@ -366,31 +483,69 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "We are deploying all services with private endpoints and disabled public network access to reduce the data exfiltration risk. For each private endpoint, DNS A-records need to be created in a Private DNS Zones. Therefore, you have to provide the Private DNS Zones that should be used for this deployment. We are assuming that all Private DNS Zones are created in the same subscription.",
-                                        "style": "Info"
+                                        "text": "We are deploying all services with private endpoints and disabled public network access to reduce the data exfiltration risk. For each private endpoint, DNS A-records need to be created in a Private DNS Zones. Therefore, these either need to deployed through Azure Policies or you have to provide the Private DNS Zones that should be used for this deployment. We are assuming that all Private DNS Zones are created in the same subscription. Deploying DNS A-Records through Private Endpoints is the recommended solution.",
+                                        "style": "Info",
+                                        "uri": "https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale"
                                     }
                                 },
                                 {
-									"name": "privateDnsZonesSub",
-									"label": "Private DNS Zone Subscription",
-									"type":"Microsoft.Common.SubscriptionSelector",
+                                    "name": "automatedPrivateDnsZoneGroups",
+                                    "label": "DNS A-Records are deployed through Azure Policy",
+                                    "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
+                                    "toolTip": "If 'No' is selected, you will have to choose private DNS Zones that will be used for the A-Record deployment of the private DNS Zones.",
+                                    "defaultValue": "Yes",
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Yes",
+                                                "value": "yes"
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": "no"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "subscriptionPrivateDnsZonesApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "GET",
+                                        "path": "subscriptions?api-version=2020-01-01"
+                                    }
+                                },
+                                {
+                                    "name": "privateDnsZonesSub",
+                                    "label": "Private DNS Zone Subscription",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
-                                    "toolTip": "Subscription of Private DNS Zones."
-								},
+                                    "toolTip": "Select the Subscription of your Private DNS Zones.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": "[map(steps('connectivitySettings').privateDnsZones.subscriptionPrivateDnsZonesApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                                        "required": true
+                                    }
+                                },
                                 {
                                     "name": "privateDnsZonesApi",
                                     "type": "Microsoft.Solutions.ArmApiControl",
                                     "request": {
                                         "method": "GET",
-                                        "path": "[concat('/subscriptions/', steps('connectivitySettings').privateDnsZones.privateDnsZonesSub.subscriptionId, '/providers/Microsoft.Network/privateDnsZones?api-version=2018-09-01')]"
+                                        "path": "[concat(steps('connectivitySettings').privateDnsZones.privateDnsZonesSub, '/providers/Microsoft.Network/privateDnsZones?api-version=2018-09-01')]"
                                     }
                                 },
                                 {
                                     "name": "privateDnsZoneIdKeyVault",
                                     "label": "Private DNS Zone Key Vault (privatelink.vaultcore.azure.net)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Key Vault (privatelink.vaultcore.azure.net).",
                                     "multiselect": false,
@@ -407,7 +562,7 @@
                                     "name": "privateDnsZoneIdBlob",
                                     "label": "Private DNS Zone Blob Storage (privatelink.blob.core.windows.net)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Blob Storage (privatelink.blob.core.windows.net).",
                                     "multiselect": false,
@@ -424,7 +579,7 @@
                                     "name": "privateDnsZoneIdQueue",
                                     "label": "Private DNS Zone Queue Storage (privatelink.queue.core.windows.net)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Queue Storage (privatelink.queue.core.windows.net).",
                                     "multiselect": false,
@@ -441,7 +596,7 @@
                                     "name": "privateDnsZoneIdContainerRegistry",
                                     "label": "Private DNS Zone Container Registry (privatelink.azurecr.io)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Synapse Sql (privatelink.azurecr.io).",
                                     "multiselect": false,
@@ -458,7 +613,7 @@
                                     "name": "privateDnsZoneIdNamespace",
                                     "label": "Private DNS Zone EventHub Namespace (privatelink.servicebus.windows.net)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for EventHub Namespace (privatelink.servicebus.windows.net).",
                                     "multiselect": false,
@@ -475,7 +630,7 @@
                                     "name": "privateDnsZoneIdPurview",
                                     "label": "Private DNS Zone Purview (privatelink.purview.azure.com)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Purview (privatelink.purview.azure.com).",
                                     "multiselect": false,
@@ -492,7 +647,7 @@
                                     "name": "privateDnsZoneIdSynapse",
                                     "label": "Private DNS Zone Synapse Private Link Hub (privatelink.azuresynapse.net)",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').privateDnsZones.automatedPrivateDnsZoneGroups, 'no')]",
                                     "defaultValue": "",
                                     "toolTip": "Private DNS Zone for Synapse Private Link Hub (privatelink.azuresynapse.net).",
                                     "multiselect": false,
@@ -532,12 +687,29 @@
                 }
             ]
         },
-        "deployment": {
+        "outputs": {
             "kind": "Subscription",
             "location": "[steps('basics').deploymentDetails.locationName]",
+            "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
             "parameters": {
-                "environment": "[steps('basics').dataManagementZoneName.environment]",
-                "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
+                "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
+                "environment": "[if(empty(steps('basics').dataManagementZoneName.environment), '', steps('basics').dataManagementZoneName.environment)]",
+                "prefix": "[if(empty(steps('basics').dataManagementZoneName.dataManagementZonePrefix), '', steps('basics').dataManagementZoneName.dataManagementZonePrefix)]",
+                "tags": "[if(empty(steps('tags').tagsByResource.EnterpriseScaleAnalytics), parse('{}'), steps('tags').tagsByResource.EnterpriseScaleAnalytics)]",
+                "vnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange)]",
+                "azureFirewallSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange)]",
+                "servicesSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange)]",
+                "enableDnsAndFirewallDeployment": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), true, false)]",
+                "firewallPrivateIp": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), '', if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), first(map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress)), steps('connectivitySettings').firewallConfiguration.firewallPrivateIp))]",
+                "dnsServerAdresses": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), parse('[]'), if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(steps('connectivitySettings').firewallConfiguration.dnsServerAdresses, ',')))]",
+                "firewallPolicyId": "[if(empty(steps('connectivitySettings').firewallConfiguration.firewallPolicyId), '', steps('connectivitySettings').firewallConfiguration.firewallPolicyId)]",
+                "privateDnsZoneIdBlob": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob)]",
+                "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
+                "privateDnsZoneIdNamespace": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace)]",
+                "privateDnsZoneIdPurview": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdPurview), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdPurview)]",
+                "privateDnsZoneIdQueue": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdQueue), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdQueue)]",
+                "privateDnsZoneIdSynapse": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapse), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdSynapse)]",
+                "privateDnsZoneIdContainerRegistry": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdContainerRegistry), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdContainerRegistry)]"
             }
         }
     }
