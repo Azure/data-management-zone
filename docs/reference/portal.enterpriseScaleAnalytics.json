@@ -397,7 +397,7 @@
                 }
             ]
         },
-        "deployment": {
+        "outputs": {
             "kind": "Subscription",
             "location": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
             "subscriptionId": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId)]",
