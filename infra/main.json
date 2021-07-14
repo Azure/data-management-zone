@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "12748817926163215631"
+      "templateHash": "15047807320078670946"
     }
   },
   "parameters": {
@@ -40,6 +40,13 @@
       "defaultValue": {},
       "metadata": {
         "description": "Specifies the tags that you want to apply to all resources."
+      }
+    },
+    "enableDnsAndFirewallDeployment": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Specifies whether firewall and private DNS Zones should be deployed."
       }
     },
     "vnetAddressPrefix": {
@@ -77,6 +84,62 @@
       ],
       "metadata": {
         "description": "Specifies the private IP addresses of the dns servers."
+      }
+    },
+    "firewallPolicyId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the Azure Firewall Policy."
+      }
+    },
+    "privateDnsZoneIdKeyVault": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Key Vault."
+      }
+    },
+    "privateDnsZoneIdPurview": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Purview."
+      }
+    },
+    "privateDnsZoneIdQueue": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Queue storage."
+      }
+    },
+    "privateDnsZoneIdBlob": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Blob storage."
+      }
+    },
+    "privateDnsZoneIdNamespace": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for EventHub namespaces."
+      }
+    },
+    "privateDnsZoneIdContainerRegistry": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Container Registry."
+      }
+    },
+    "privateDnsZoneIdSynapse": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Synapse."
       }
     }
   },
@@ -182,10 +245,13 @@
             "value": "[parameters('dnsServerAdresses')]"
           },
           "enableDnsAndFirewallDeployment": {
-            "value": true
+            "value": "[parameters('enableDnsAndFirewallDeployment')]"
           },
           "firewallPrivateIp": {
             "value": "[parameters('firewallPrivateIp')]"
+          },
+          "firewallPolicyId": {
+            "value": "[parameters('firewallPolicyId')]"
           }
         },
         "template": {
@@ -195,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "1667069575903608964"
+              "templateHash": "7257010835712389732"
             }
           },
           "parameters": {
@@ -228,12 +294,18 @@
             "enableDnsAndFirewallDeployment": {
               "type": "bool",
               "defaultValue": true
+            },
+            "firewallPolicyId": {
+              "type": "string"
             }
           },
           "functions": [],
           "variables": {
             "azureFirewallSubnetName": "AzureFirewallSubnet",
-            "servicesSubnetName": "ServicesSubnet"
+            "servicesSubnetName": "ServicesSubnet",
+            "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), subscription().subscriptionId)]",
+            "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), resourceGroup().name)]",
+            "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
           },
           "resources": [
             {
@@ -254,7 +326,7 @@
               "properties": {
                 "addressPrefix": "0.0.0.0/0",
                 "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress]"
+                "nextHopIpAddress": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))]",
@@ -284,7 +356,7 @@
                   ]
                 },
                 "dhcpOptions": {
-                  "dnsServers": "[parameters('dnsServerAdresses')]"
+                  "dnsServers": "[if(parameters('enableDnsAndFirewallDeployment'), createArray(), parameters('dnsServerAdresses'))]"
                 },
                 "enableDdosProtection": false,
                 "subnets": [
@@ -326,6 +398,7 @@
               ]
             },
             {
+              "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/publicIPPrefixes",
               "apiVersion": "2020-11-01",
               "name": "[format('{0}-publicipprefix', parameters('prefix'))]",
@@ -341,6 +414,7 @@
               }
             },
             {
+              "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/publicIPAddresses",
               "apiVersion": "2020-11-01",
               "name": "[format('{0}-publicip001', parameters('prefix'))]",
@@ -365,6 +439,7 @@
               ]
             },
             {
+              "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/firewallPolicies",
               "apiVersion": "2020-11-01",
               "name": "[format('{0}-firewallpolicy', parameters('prefix'))]",
@@ -393,6 +468,7 @@
               }
             },
             {
+              "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/azureFirewalls",
               "apiVersion": "2020-11-01",
               "name": "[format('{0}-firewall', parameters('prefix'))]",
@@ -433,6 +509,7 @@
               ]
             },
             {
+              "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2019-10-01",
               "name": "[format('{0}-firewallpolicy-rules', parameters('prefix'))]",
@@ -984,6 +1061,559 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Network/firewallPolicies', format('{0}-firewallpolicy', parameters('prefix')))]"
               ]
+            },
+            {
+              "condition": "[and(not(parameters('enableDnsAndFirewallDeployment')), not(empty(parameters('firewallPolicyId'))))]",
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2019-10-01",
+              "name": "[format('{0}-firewallpolicy-rules-toExistingFirewallPolicy', parameters('prefix'))]",
+              "subscriptionId": "[variables('firewallPolicySubscriptionId')]",
+              "resourceGroup": "[variables('firewallPolicyResourceGroupName')]",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "firewallPolicyName": {
+                    "value": "[variables('firewallPolicyName')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.4.63.48766",
+                      "templateHash": "15227424568943126364"
+                    }
+                  },
+                  "parameters": {
+                    "firewallPolicyName": {
+                      "type": "string"
+                    }
+                  },
+                  "functions": [],
+                  "resources": [
+                    {
+                      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+                      "apiVersion": "2020-11-01",
+                      "name": "[format('{0}/networkrules-rulecollection', parameters('firewallPolicyName'))]",
+                      "properties": {
+                        "priority": 10000,
+                        "ruleCollections": [
+                          {
+                            "name": "MachineLearning-NetworkRules",
+                            "priority": 10100,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "MachineLearning-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "AzureActiveDirectory",
+                                  "AzureMachineLearning",
+                                  "AzureResourceManager",
+                                  "Storage",
+                                  "AzureKeyVault",
+                                  "AzureContainerRegistry",
+                                  "MicrosoftContainerRegistry",
+                                  "AzureFrontDoor.FirstParty"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "*"
+                                ],
+                                "description": "Allow outbound access to required services"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "HDInsight-NetworkRules",
+                            "priority": 10200,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "HDInsight-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "Sql"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "1433"
+                                ],
+                                "description": "Allow default SQL servers provided by HDInsight"
+                              },
+                              {
+                                "name": "HDInsight-NetworkRule-002",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "AzureMonitor"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "*"
+                                ],
+                                "description": "Allows scale feature of HDInsight"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Databricks-NetworkRules",
+                            "priority": 10300,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "Databricks-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "AzureActiveDirectory",
+                                  "AzureFrontDoor.Frontend"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "443"
+                                ],
+                                "description": "Allow OAuth flow for the User to the Workspace Private Endpoint and features like Mount Points, Credential Passthrough, etc."
+                              },
+                              {
+                                "name": "Databricks-NetworkRule-002",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "AzureDatabricks",
+                                  "Storage"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "443"
+                                ],
+                                "description": "Required for workers communication with Azure Storage services and Databricks Webapp"
+                              },
+                              {
+                                "name": "Databricks-NetworkRule-003",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "Sql"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "3306"
+                                ],
+                                "description": "Required for workers communication with Azure SQL services"
+                              },
+                              {
+                                "name": "Databricks-NetworkRule-004",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [
+                                  "EventHub"
+                                ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
+                                "destinationPorts": [
+                                  "9093"
+                                ],
+                                "description": "Required for workers communication with Azure Eventhub services"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+                      "apiVersion": "2020-11-01",
+                      "name": "[format('{0}/applicationrules-rulecollection', parameters('firewallPolicyName'))]",
+                      "properties": {
+                        "priority": 20000,
+                        "ruleCollections": [
+                          {
+                            "name": "MachineLearning-ApplicationRules",
+                            "priority": 20100,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "MachineLearning-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "anaconda.com",
+                                  "*.anaconda.com",
+                                  "*.anaconda.org",
+                                  "pypi.org",
+                                  "cloud.r-project.org",
+                                  "*pytorch.org",
+                                  "*.tensorflow.org",
+                                  "*.instances.azureml.net",
+                                  "*.instances.azureml.ms"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "MachineLearning allow common FQDNs"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "HDInsight-ApplicationRules",
+                            "priority": 20200,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "HDInsight-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [
+                                  "HDInsight",
+                                  "WindowsUpdate"
+                                ],
+                                "targetFqdns": [],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "HDInsight Service Tag Rule"
+                              },
+                              {
+                                "name": "HDInsight-ApplicationRule-002",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "login.microsoftonline.com",
+                                  "login.windows.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows Windows login activity"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DataFactory-ApplicationRules",
+                            "priority": 20300,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "DataFactory-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "go.microsoft.com",
+                                  "download.microsoft.com",
+                                  "browser.events.data.msn.com",
+                                  "*.clouddatahub.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows download of Self-hosted Integration Runtime installer and updates"
+                              },
+                              {
+                                "name": "DataFactory-ApplicationRule-002",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "*.servicebus.windows.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                              },
+                              {
+                                "name": "DataFactory-ApplicationRule-003",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "*.githubusercontent.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows download of SHIR install script from GitHub"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Databricks-ApplicationRules",
+                            "priority": 20400,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "Databricks-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "tunnel.australiaeast.azuredatabricks.net",
+                                  "tunnel.brazilsouth.azuredatabricks.net",
+                                  "tunnel.canadacentral.azuredatabricks.net",
+                                  "tunnel.centralindia.azuredatabricks.net",
+                                  "tunnel.eastus2.azuredatabricks.net",
+                                  "tunnel.eastus2c2.azuredatabricks.net",
+                                  "tunnel.eastusc3.azuredatabricks.net",
+                                  "tunnel.centralusc2.azuredatabricks.net",
+                                  "tunnel.northcentralusc2.azuredatabricks.net",
+                                  "tunnel.southeastasia.azuredatabricks.net",
+                                  "tunnel.francecentral.azuredatabricks.net",
+                                  "tunnel.japaneast.azuredatabricks.net",
+                                  "tunnel.koreacentral.azuredatabricks.net",
+                                  "tunnel.northeuropec2.azuredatabricks.net",
+                                  "tunnel.westus.azuredatabricks.net",
+                                  "tunnel.westeurope.azuredatabricks.net",
+                                  "tunnel.westeuropec2.azuredatabricks.net",
+                                  "tunnel.southafricanorth.azuredatabricks.net",
+                                  "tunnel.switzerlandnorth.azuredatabricks.net",
+                                  "tunnel.uaenorth.azuredatabricks.net",
+                                  "tunnel.ukwest.azuredatabricks.net"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows Secure Cluster Connectivity option"
+                              },
+                              {
+                                "name": "Databricks-ApplicationRule-002",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "archive.ubuntu.com",
+                                  "github.com",
+                                  "*.maven.apache.org",
+                                  "conjars.org"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows Databricks Setup Notebook to run successfully"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Azure-ApplicationRules",
+                            "priority": 20500,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "Azure-ApplicationRule-001",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                  {
+                                    "protocolType": "Http",
+                                    "port": 80
+                                  },
+                                  {
+                                    "protocolType": "Https",
+                                    "port": 443
+                                  }
+                                ],
+                                "fqdnTags": [],
+                                "targetFqdns": [
+                                  "*microsoft.com",
+                                  "*azure.com"
+                                ],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "description": "Allows communication with azure and microsoft"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Network/firewallPolicies/ruleCollectionGroups', split(format('{0}/networkrules-rulecollection', parameters('firewallPolicyName')), '/')[0], split(format('{0}/networkrules-rulecollection', parameters('firewallPolicyName')), '/')[1])]"
+                      ]
+                    }
+                  ]
+                }
+              }
             }
           ],
           "outputs": {
@@ -1007,6 +1637,7 @@
       ]
     },
     {
+      "condition": "[parameters('enableDnsAndFirewallDeployment')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
       "name": "globalDnsZones",
@@ -1307,19 +1938,19 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.serviceSubnet.value]"
           },
           "privateDnsZoneIdPurview": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPurview.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPurview.value, parameters('privateDnsZoneIdPurview'))]"
           },
           "privateDnsZoneIdStorageBlob": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value, parameters('privateDnsZoneIdBlob'))]"
           },
           "privateDnsZoneIdStorageQueue": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdQueue.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdQueue.value, parameters('privateDnsZoneIdQueue'))]"
           },
           "privateDnsZoneIdEventhubNamespace": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdNamespace.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdNamespace.value, parameters('privateDnsZoneIdNamespace'))]"
           },
           "privateDnsZoneIdKeyVault": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdKeyVault.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdKeyVault.value, parameters('privateDnsZoneIdKeyVault'))]"
           }
         },
         "template": {
@@ -1329,7 +1960,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "12550012802113183117"
+              "templateHash": "6378645714657336246"
             }
           },
           "parameters": {
@@ -1409,7 +2040,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "16332333401552126682"
+                      "templateHash": "3445734237497400507"
                     }
                   },
                   "parameters": {
@@ -1442,9 +2073,9 @@
                   "variables": {
                     "purviewPrivateEndpointNamePortal": "[format('{0}-portal-private-endpoint', parameters('purviewName'))]",
                     "purviewPrivateEndpointNameAccount": "[format('{0}-account-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameBlob": "[format('{0}-blob-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameQueue": "[format('{0}-queue-private-endpoint', parameters('purviewName'))]",
-                    "purviewPrivateEndpointNameNamespace": "[format('{0}-namespace-private-endpoint', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameBlob": "[format('{0}-private-endpoint-blob', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameQueue": "[format('{0}-private-endpoint-queue', parameters('purviewName'))]",
+                    "purviewPrivateEndpointNameNamespace": "[format('{0}-private-endpoint-namespace', parameters('purviewName'))]",
                     "purviewRegions": [
                       "brazilsouth",
                       "canadacentral",
@@ -1505,6 +2136,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdPurview')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNamePortal'), 'aRecord')]",
@@ -1551,6 +2183,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdPurview')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameAccount'), 'aRecord')]",
@@ -1597,6 +2230,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdStorageBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameBlob'), 'aRecord')]",
@@ -1643,6 +2277,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdStorageQueue')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameQueue'), 'aRecord')]",
@@ -1689,6 +2324,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdEventhubNamespace')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameNamespace'), 'aRecord')]",
@@ -1749,7 +2385,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "7462647776196913756"
+                      "templateHash": "1839621709434224338"
                     }
                   },
                   "parameters": {
@@ -1832,6 +2468,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'aRecord')]",
@@ -1960,7 +2597,7 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.serviceSubnet.value]"
           },
           "privateDnsZoneIdContainerRegistry": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdContainerRegistry.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdContainerRegistry.value, parameters('privateDnsZoneIdContainerRegistry'))]"
           }
         },
         "template": {
@@ -1970,7 +2607,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "8230107600572377917"
+              "templateHash": "1452569919325921120"
             }
           },
           "parameters": {
@@ -2025,7 +2662,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "10128722007286821417"
+                      "templateHash": "14894617842215961301"
                     }
                   },
                   "parameters": {
@@ -2118,6 +2755,7 @@
                       ]
                     },
                     {
+                      "condition": "[empty(parameters('privateDnsZoneIdContainerRegistry'))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('containerRegistryPrivateEndpointName'), 'aRecord')]",
@@ -2172,16 +2810,16 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.serviceSubnet.value]"
           },
           "privateDnsZoneIdSynapseprivatelinkhub": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapse.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapse.value, parameters('privateDnsZoneIdSynapse'))]"
           },
           "privateDnsZoneIdAnalysis": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdAnalysis.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdAnalysis.value, '')]"
           },
           "privateDnsZoneIdPbiDedicated": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPbiDedicated.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPbiDedicated.value, '')]"
           },
           "privateDnsZoneIdPowerQuery": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPowerQuery.value]"
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPowerQuery.value, '')]"
           }
         },
         "template": {
@@ -2191,7 +2829,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "15017580405301601805"
+              "templateHash": "4519639632825634868"
             }
           },
           "parameters": {
@@ -2255,7 +2893,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "2262139237238781167"
+                      "templateHash": "8521460621187716226"
                     }
                   },
                   "parameters": {
@@ -2318,6 +2956,7 @@
                       ]
                     },
                     {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdSynapseprivatelinkhub')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('synapsePrivatelinkHubPrivateEndpointName'), 'aRecord')]",
@@ -2364,43 +3003,43 @@
     },
     "privateDnsZoneIdKeyVault": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdKeyVault.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdKeyVault.value, '')]"
     },
     "privateDnsZoneIdDataFactory": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactory.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactory.value, '')]"
     },
     "privateDnsZoneIdDataFactoryPortal": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactoryPortal.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDataFactoryPortal.value, '')]"
     },
     "privateDnsZoneIdBlob": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value, '')]"
     },
     "privateDnsZoneIdDfs": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDfs.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdDfs.value, '')]"
     },
     "privateDnsZoneIdSqlServer": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSqlServer.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSqlServer.value, '')]"
     },
     "privateDnsZoneIdMySqlServer": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdMySqlServer.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdMySqlServer.value, '')]"
     },
     "privateDnsZoneIdNamespace": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdNamespace.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdNamespace.value, '')]"
     },
     "privateDnsZoneIdSynapseDev": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseDev.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseDev.value, '')]"
     },
     "privateDnsZoneIdSynapseSql": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseSql.value]"
+      "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdSynapseSql.value, '')]"
     }
   }
 }

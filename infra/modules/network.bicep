@@ -1,4 +1,4 @@
-// This template is used as a module from the main.bicep template. 
+// This template is used as a module from the main.bicep template.
 // The module contains a template to create network resources.
 targetScope = 'resourceGroup'
 
@@ -12,10 +12,14 @@ param vnetAddressPrefix string
 param azureFirewallSubnetAddressPrefix string
 param servicesSubnetAddressPrefix string
 param enableDnsAndFirewallDeployment bool = true
+param firewallPolicyId string
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
+var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : subscription().subscriptionId
+var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : resourceGroup().name
+var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
@@ -33,7 +37,7 @@ resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01
   properties: {
     addressPrefix: '0.0.0.0/0'
     nextHopType: 'VirtualAppliance'
-    nextHopIpAddress: firewall.properties.ipConfigurations[0].properties.privateIPAddress
+    nextHopIpAddress: enableDnsAndFirewallDeployment ? firewall.properties.ipConfigurations[0].properties.privateIPAddress : firewallPrivateIp
   }
 }
 
@@ -57,7 +61,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
       ]
     }
     dhcpOptions: {
-      dnsServers: dnsServerAdresses
+      dnsServers: enableDnsAndFirewallDeployment ? [] : dnsServerAdresses
     }
     enableDdosProtection: false
     subnets: [
@@ -95,7 +99,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   }
 }
 
-resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
+resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicipprefix'
   location: location
   tags: tags
@@ -109,7 +113,7 @@ resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
   }
 }
 
-resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicip001'
   location: location
   tags: tags
@@ -129,7 +133,7 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
   }
 }
 
-resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
+resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
@@ -156,7 +160,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = {
   }
 }
 
-module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
+module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy-rules'
   scope: resourceGroup()
   dependsOn: [
@@ -167,7 +171,15 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = {
   }
 }
 
-resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = {
+module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules.bicep' = if (!enableDnsAndFirewallDeployment && !empty(firewallPolicyId)) {
+  name: '${prefix}-firewallpolicy-rules-toExistingFirewallPolicy'
+  scope: resourceGroup(firewallPolicySubscriptionId, firewallPolicyResourceGroupName)
+  params: {
+    firewallPolicyName: firewallPolicyName
+  }
+}
+
+resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewall'
   dependsOn: [
     firewallPolicyRules

@@ -221,11 +221,11 @@
                             "visible": true,
 							"elements": [
                                 {
-									"name": "dataManagementZonesNameText",
+									"name": "dataLandingZonesNameText",
 									"type": "Microsoft.Common.TextBlock",
 									"visible": true,
 									"options": {
-										"text": "Specify a prefix for all resource names in your Data Management Zone. The Data Landing Zones will be numbered as part of the deployment.",
+										"text": "Specify a prefix for all resource names in your Data Landing Zone. The Data Landing Zones will be numbered as part of the deployment.",
 										"link": {
 											"label": "",
 											"uri": ""
@@ -233,8 +233,8 @@
 									}
 								},
                                 {
-                                    "name": "dataManagementZonesPrefix",
-                                    "label": "Data Management Zone Prefix",
+                                    "name": "dataLandingZonesPrefix",
+                                    "label": "Data Landing Zone Prefix",
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "",
@@ -400,6 +400,7 @@
         "deployment": {
             "kind": "Subscription",
             "location": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
+            "subscriptionId": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId)]",
             "parameters": {
                 "environment": "[steps('basics').deploymentDetails.environment]",
                 "administratorPassword": "",
@@ -407,7 +408,7 @@
                 "dataManagementZonePrefix": "[steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix]",
                 "dataManagementZoneLocation": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
-                "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataManagementZonesName.dataManagementZonesPrefix]",
+                "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataManagementZonesName.dataLandingZonesPrefix]",
                 "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
             }
         }

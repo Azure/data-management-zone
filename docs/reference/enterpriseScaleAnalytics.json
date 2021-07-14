@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "10332831309280036554"
+      "templateHash": "12986689156610426232"
     }
   },
   "parameters": {
@@ -104,6 +104,9 @@
           "servicesSubnetAddressPrefix": {
             "value": "10.0.1.0/24"
           },
+          "enableDnsAndFirewallDeployment": {
+            "value": true
+          },
           "firewallPrivateIp": {
             "value": "10.0.0.4"
           },
@@ -111,6 +114,30 @@
             "value": [
               "10.0.0.4"
             ]
+          },
+          "firewallPolicyId": {
+            "value": ""
+          },
+          "privateDnsZoneIdBlob": {
+            "value": ""
+          },
+          "privateDnsZoneIdContainerRegistry": {
+            "value": ""
+          },
+          "privateDnsZoneIdKeyVault": {
+            "value": ""
+          },
+          "privateDnsZoneIdNamespace": {
+            "value": ""
+          },
+          "privateDnsZoneIdPurview": {
+            "value": ""
+          },
+          "privateDnsZoneIdQueue": {
+            "value": ""
+          },
+          "privateDnsZoneIdSynapse": {
+            "value": ""
           }
         }
       }

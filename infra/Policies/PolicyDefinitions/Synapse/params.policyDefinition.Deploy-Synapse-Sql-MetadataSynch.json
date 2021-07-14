@@ -6,7 +6,7 @@
             "value": "Deploy-Synapse-Sql-MetadataSynch"
         },
         "policyDescription": {
-            "value": "Setup metadata synch for Synapse sql pools."
+            "value": "Setup metadata synch for Synapse SQL pools."
         },
         "policyMode": {
             "value": "Indexed"

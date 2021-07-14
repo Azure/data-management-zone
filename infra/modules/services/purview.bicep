@@ -14,9 +14,9 @@ param privateDnsZoneIdEventhubNamespace string
 // Variables
 var purviewPrivateEndpointNamePortal = '${purview.name}-portal-private-endpoint'
 var purviewPrivateEndpointNameAccount = '${purview.name}-account-private-endpoint'
-var purviewPrivateEndpointNameBlob = '${purview.name}-blob-private-endpoint'
-var purviewPrivateEndpointNameQueue = '${purview.name}-queue-private-endpoint'
-var purviewPrivateEndpointNameNamespace = '${purview.name}-namespace-private-endpoint'
+var purviewPrivateEndpointNameBlob = '${purview.name}-private-endpoint-blob'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
+var purviewPrivateEndpointNameQueue = '${purview.name}-private-endpoint-queue'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
+var purviewPrivateEndpointNameNamespace = '${purview.name}-private-endpoint-namespace'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
 var purviewRegions = [
   'brazilsouth'
   'canadacentral'
@@ -27,7 +27,6 @@ var purviewRegions = [
   'westeurope'
 ]
 
-// Resources
 // Resources
 resource purview 'Microsoft.Purview/accounts@2020-12-01-preview' = {
   name: purviewName
@@ -72,7 +71,7 @@ resource purviewPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@2020-1
   }
 }
 
-resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurview)) {
   parent: purviewPrivateEndpointPortal
   name: 'aRecord'
   properties: {
@@ -111,7 +110,7 @@ resource purviewPrivateEndpointAccount 'Microsoft.Network/privateEndpoints@2020-
   }
 }
 
-resource purviewPrivateEndpointAccountARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource purviewPrivateEndpointAccountARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurview)) {
   parent: purviewPrivateEndpointAccount
   name: 'aRecord'
   properties: {
@@ -150,7 +149,7 @@ resource purviewPrivateEndpointBlob 'Microsoft.Network/privateEndpoints@2020-11-
   }
 }
 
-resource purviewPrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource purviewPrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdStorageBlob)) {
   parent: purviewPrivateEndpointBlob
   name: 'aRecord'
   properties: {
@@ -189,7 +188,7 @@ resource purviewPrivateEndpointQueue 'Microsoft.Network/privateEndpoints@2020-11
   }
 }
 
-resource purviewPrivateEndpointQueueARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource purviewPrivateEndpointQueueARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdStorageQueue)) {
   parent: purviewPrivateEndpointQueue
   name: 'aRecord'
   properties: {
@@ -228,7 +227,7 @@ resource purviewPrivateEndpointNamespace 'Microsoft.Network/privateEndpoints@202
   }
 }
 
-resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = {
+resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdEventhubNamespace)) {
   parent: purviewPrivateEndpointNamespace
   name: 'aRecord'
   properties: {

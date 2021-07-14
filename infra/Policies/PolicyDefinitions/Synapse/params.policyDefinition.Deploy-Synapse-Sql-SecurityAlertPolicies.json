@@ -6,7 +6,7 @@
             "value": "Deploy-Synapse-Sql-SecurityAlertPolicies"
         },
         "policyDescription": {
-            "value": "Deploy Synapse sql pool security alert policy."
+            "value": "Deploy Synapse SQL pool security alert policy."
         },
         "policyMode": {
             "value": "Indexed"

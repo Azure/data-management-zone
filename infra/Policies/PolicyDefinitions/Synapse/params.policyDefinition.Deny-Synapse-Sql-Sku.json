@@ -6,7 +6,7 @@
             "value": "Deny-Synapse-Sql-Sku"
         },
         "policyDescription": {
-            "value": "Denies certain Synapse Sql Pool Sku's."
+            "value": "Denies certain Synapse SQL Pool Sku's."
         },
         "policyMode": {
             "value": "All"
