@@ -41,7 +41,7 @@ jobs:
       # Deploy Data Management Zone - validation
       - name: Deploy Data Management Zone - validation
         id: data_management_zone_validation
-        uses: azure/arm-deploy@v1
+        uses: azure/arm-deploy@main
         with:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
