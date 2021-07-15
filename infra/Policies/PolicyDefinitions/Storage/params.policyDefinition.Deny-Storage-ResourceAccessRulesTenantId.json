@@ -1,0 +1,65 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Storage-ResourceAccessRulesTenantId"
+        },
+        "policyDescription": {
+            "value": "Deny Resource Access Rules for services outside of the tenant of the storage account."
+        },
+        "policyMode": {
+            "value": "Indexed"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Storage/storageAccounts"
+                        },
+                        {
+                            "count": {
+                                "field": "Microsoft.Storage/storageAccounts/networkAcls.resourceAccessRules[*]"
+                            },
+                            "greater": 0
+                        },
+                        {
+                            "field": "Microsoft.Storage/storageAccounts/networkAcls.resourceAccessRules[*].tenantId",
+                            "notEquals": "[subscription().tenantId]"
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Storage",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
