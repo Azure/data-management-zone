@@ -6,10 +6,10 @@ param purviewId string
 param keyVaultId string
 
 // Variables
-var keyVaultName = last(split(keyVaultId, '/'))
-var purviewSubscriptionId = split(purviewId, '/')[2]
-var purviewResourceGroupName = split(purviewId, '/')[4]
-var purviewName = last(split(purviewId, '/'))
+var keyVaultName = length(split(keyVaultId, '/')) >= 9 ? last(split(keyVaultId, '/')) : 'incorrectSegmentLength'
+var purviewSubscriptionId = length(split(purviewId, '/')) >= 9 ? split(purviewId, '/')[2] : subscription().subscriptionId
+var purviewResourceGroupName = length(split(purviewId, '/')) >= 9 ? split(purviewId, '/')[4] : resourceGroup().name
+var purviewName = length(split(purviewId, '/')) >= 9 ? last(split(purviewId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' existing = {

@@ -14,9 +14,9 @@ param privateDnsZoneIdEventhubNamespace string
 // Variables
 var purviewPrivateEndpointNamePortal = '${purview.name}-portal-private-endpoint'
 var purviewPrivateEndpointNameAccount = '${purview.name}-account-private-endpoint'
-var purviewPrivateEndpointNameBlob = '${purview.name}-private-endpoint-blob'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
-var purviewPrivateEndpointNameQueue = '${purview.name}-private-endpoint-queue'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
-var purviewPrivateEndpointNameNamespace = '${purview.name}-private-endpoint-namespace'  // Specific naming convention required for ingestion private endpoint so that these show up in the portal today
+var purviewPrivateEndpointNameBlob = '${purview.name}-private-endpoint-blob'  // Suffix '-blob' required for ingestion private endpoint so that these show up in the portal today
+var purviewPrivateEndpointNameQueue = '${purview.name}-private-endpoint-queue'  // Suffix '-queue' required for ingestion private endpoint so that these show up in the portal today
+var purviewPrivateEndpointNameNamespace = '${purview.name}-private-endpoint-namespace'  // Suffix '-namespace' required for ingestion private endpoint so that these show up in the portal today
 var purviewRegions = [
   'brazilsouth'
   'canadacentral'

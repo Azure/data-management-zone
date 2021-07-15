@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.63.48766",
-      "templateHash": "15047807320078670946"
+      "templateHash": "9046231942216492695"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "7257010835712389732"
+              "templateHash": "2873677472285105375"
             }
           },
           "parameters": {
@@ -303,9 +303,9 @@
           "variables": {
             "azureFirewallSubnetName": "AzureFirewallSubnet",
             "servicesSubnetName": "ServicesSubnet",
-            "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), subscription().subscriptionId)]",
-            "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), resourceGroup().name)]",
-            "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 8), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
+            "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), subscription().subscriptionId)]",
+            "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), resourceGroup().name)]",
+            "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
           },
           "resources": [
             {
@@ -1960,7 +1960,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.63.48766",
-              "templateHash": "6378645714657336246"
+              "templateHash": "2338381050250506700"
             }
           },
           "parameters": {
@@ -2520,7 +2520,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.63.48766",
-                      "templateHash": "16488986146922369797"
+                      "templateHash": "1624911776383429414"
                     }
                   },
                   "parameters": {
@@ -2533,10 +2533,10 @@
                   },
                   "functions": [],
                   "variables": {
-                    "keyVaultName": "[last(split(parameters('keyVaultId'), '/'))]",
-                    "purviewSubscriptionId": "[split(parameters('purviewId'), '/')[2]]",
-                    "purviewResourceGroupName": "[split(parameters('purviewId'), '/')[4]]",
-                    "purviewName": "[last(split(parameters('purviewId'), '/'))]"
+                    "keyVaultName": "[if(greaterOrEquals(length(split(parameters('keyVaultId'), '/')), 9), last(split(parameters('keyVaultId'), '/')), 'incorrectSegmentLength')]",
+                    "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
+                    "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], resourceGroup().name)]",
+                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]"
                   },
                   "resources": [
                     {
