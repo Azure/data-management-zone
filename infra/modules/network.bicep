@@ -17,9 +17,9 @@ param firewallPolicyId string
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
-var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : subscription().subscriptionId
-var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : resourceGroup().name
-var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 8 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
+var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : subscription().subscriptionId
+var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : resourceGroup().name
+var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
