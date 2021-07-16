@@ -418,7 +418,7 @@
                                     "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
                                     "options": {
                                         "text": "Please follow the link and make sure you apply the network and application rules to your Firewall. Otherwise, functionality of some services inside your data platform will be limited or may not function. This includes but is not limited to DataFactory, Databricks, Azure Machine Learning and HDInsight.",
-                                        "style": "Info",
+                                        "style": "Warning",
                                         "uri": "https://github.com/Azure/data-management-zone/blob/main/infra/modules/services/firewallPolicyRules.bicep"
                                     }
                                 },
