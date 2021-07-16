@@ -51,7 +51,7 @@
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Data Landing Zone.",
+                                    "toolTip": "Select the Subscription of your Data Management Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -242,16 +242,6 @@
                             "visible": true,
 							"elements": [
                                 {
-                                    "name": "infoBoxVirtualNetworkConfiguration",
-                                    "type": "Microsoft.Common.InfoBox",
-                                    "visible": true,
-                                    "options": {
-                                        "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
-                                        "style": "Info",
-                                        "uri": "https://aka.ms/adopt/datamanagement"
-                                    }
-                                },
-                                {
 									"name": "firewallConfigurationText",
 									"type": "Microsoft.Common.TextBlock",
 									"visible": true,
@@ -428,7 +418,7 @@
                                     "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
                                     "options": {
                                         "text": "Please follow the link and make sure you apply the network and application rules to your Firewall. Otherwise, functionality of some services inside your data platform will be limited or may not function. This includes but is not limited to DataFactory, Databricks, Azure Machine Learning and HDInsight.",
-                                        "style": "Info",
+                                        "style": "Warning",
                                         "uri": "https://github.com/Azure/data-management-zone/blob/main/infra/modules/services/firewallPolicyRules.bicep"
                                     }
                                 },
