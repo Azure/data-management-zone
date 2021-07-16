@@ -355,7 +355,7 @@
                                         "confirmPassword": "Confirm password"
                                     },
                                     "type": "Microsoft.Compute.CredentialsCombo",
-                                    "visible": "[equals(steps('generalSettings').dataProcessingServiceDeploymentSettings.processingService, 'synapse')]",
+                                    "visible": true,
                                     "defaultValue": "",
                                     "toolTip": {
                                         "password": "Specify an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS."
