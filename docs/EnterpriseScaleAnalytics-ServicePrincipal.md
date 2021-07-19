@@ -84,5 +84,7 @@ New-AzRoleAssignment `
 ```
 
 >[Previous](/docs/EnterpriseScaleAnalytics-Prerequisites.md)
->[Next (Option GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
->[Next (Option Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
+
+>[Next (Option (a) GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
+
+>[Next (Option (b) Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
