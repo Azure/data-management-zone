@@ -48,7 +48,7 @@ You have two options for deploying this reference architecture:
 * [Code structure](./docs/ESA-ManagementZone-CodeStructure.md)
 * [Known issues](./docs/ESA-ManagementZone-KnownIssues.md)
 
-### Enterprise Scale Analytics and AI - Documentation and Implementation
+## Enterprise Scale Analytics and AI - Documentation and Implementation
 
 - [Documentation](https://github.com/Azure/Enterprise-Scale-Analytics)
 - [Implementation - Data Management](https://github.com/Azure/data-management-zone)
