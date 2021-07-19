@@ -82,6 +82,7 @@ To use the Deploy to Azure Button, please click on the button below:
 
 | Reference implementation   | Description | Deploy to Azure |
 |:---------------------------|:------------|:----------------|
+| Enterprise-Scale Analytics | Deploys a Data Management Zone and one or multiple Data Landing Zones all at once. Provides less options than the the individual Data Management Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://docs.microsoft.com/en-us/azure/templates/media/deploy-to-azure.svg)]() |
 | Data Management Zone       | Deploys a single Data Management Zone to a subscription. |[![Deploy To Azure](https://docs.microsoft.com/en-us/azure/templates/media/deploy-to-azure.svg)]() |
 
 Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Management Zone through GitHub Actions and Azure DevOps.

@@ -1,4 +1,4 @@
-# Data Management Zone - Setting up the Service Principal
+# Data Management Zone - Setting up Service Principal
 
 A service principal with *Contributor* and *User Access Administrator* rights needs to be generated for authentication and authorization from GitHub or Azure DevOps to your Azure subscription. This is required to deploy resources to your environment. 
 
@@ -85,4 +85,4 @@ New-AzRoleAssignment `
 
 >[Previous](/docs/EnterpriseScaleAnalytics-Prerequisites.md)
 >[Next (Option GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
->[Next (Option Azure DevOps)]()
+>[Next (Option Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)

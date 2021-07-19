@@ -26,3 +26,6 @@ OR
 **Solution:**
 
 This error message appears, in case during the deployment it tries to create a type of resource which has never been deployed before inside the subscription. We recommend to check prior the deployment whether the required resource providers are registered for your subscription and if needed, register them through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
+
+>[Previous (Option GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
+>[Previous (Option Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
