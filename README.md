@@ -36,8 +36,9 @@ To deploy the Data Management Zone Deployment into your Azure Subscription, plea
 1. [Prerequisites](/docs/EnterpriseScaleAnalytics-Prerequisites.md)
 2. [Create repository](/docs/EnterpriseScaleAnalytics-CreateRepository.md)
 3. [Setting up Service Principal](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
-4. (a) [GitHub Action Deployment](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
-4. (b) [Azure DevOps Deployment](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
+4. Template Deployment
+    1. [GitHub Action Deployment](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
+    2. [Azure DevOps Deployment](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
 5. [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
 
 ## Contributing
