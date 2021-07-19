@@ -1,8 +1,8 @@
-# Enterprise Scale Analytics - Data Management
+# Enterprise Scale Analytics - Data Management Zone
 
 ## Objective
 
-The Enterprise-Scale Analytics architecture provides prescriptive guidance coupled with Azure best practices, and it follows design principles across the critical design areas for organizations to define their Azure data platform architecture. It will continue to evolve alongside the Azure platform and is ultimately drivem by the various design decisions that organizations must make to define their Azure data journey.
+The Enterprise-Scale Analytics architecture provides prescriptive guidance coupled with Azure best practices, and it follows design principles across the critical design areas for organizations to define their Azure data platform architecture. It will continue to evolve alongside the Azure platform and is ultimately driven by the various design decisions that organizations must make to define their Azure data journey.
 
 The Enterprise-Scale Analytics architecture consists of two core building blocks: Data Management Zone and Data Landing Zone. The architecture is modular by design and allows organizations to start small with a single Data Mangagement Zone and Single Data Landing Zone and allows them to scale by adding more Data Landing Zones to their architecture. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
 
