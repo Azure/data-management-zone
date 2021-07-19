@@ -6,7 +6,7 @@ The Enterprise-Scale Analytics architecture provides prescriptive guidance coupl
 
 The Enterprise-Scale Analytics architecture consists of two core building blocks: Data Management Zone and Data Landing Zone. The architecture is modular by design and allows organizations to start small with a single Data Mangagement Zone and Single Data Landing Zone and allows them to scale by adding more Data Landing Zones to their architecture. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
 
-![Enterprise-Scale Analytics](/docs/images/EnterpriseScaleAnalytics.png)
+![Enterprise-Scale Analytics](/docs/images/EnterpriseScaleAnalytics.gif)
 
 ---
 
