@@ -12,7 +12,7 @@ In the previous step we have generated a JSON output similar to the following, w
 }
 ```
 
-# Create Service Connection
+## Create Service Connection
 
 First, you need to create an Azure Resource Manager service connection. To do so, execute the following steps:
 

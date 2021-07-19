@@ -1,6 +1,6 @@
 # Data Management Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Management Zone of the Enterprise-Scale Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that. 
+This template repsitory contains all templates to deploy the Data Management Zone of the Enterprise-Scale Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
 
 ## What will be deployed?
 
