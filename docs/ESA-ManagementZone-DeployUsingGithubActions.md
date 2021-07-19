@@ -4,7 +4,7 @@
 
 If you want to use GitHub Actions for deploying the resources, add the previous JSON output as a [repository secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository) with the name `AZURE_CREDENTIALS` in your GitHub repository:
 
-![GitHub Secrets](docs/images/AzureCredentialsGH.png)
+![GitHub Secrets](images/AzureCredentialsGH.png)
 
 To do so, execute the following steps:
 

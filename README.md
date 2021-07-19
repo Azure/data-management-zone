@@ -1,7 +1,5 @@
 # Enterprise Scale Analytics - Data Management
 
-> **General disclaimer:** Please be aware that this template is in private preview. Therefore, expect smaller bugs and issues when working with the solution. Please submit an Issue in GitHub if you come across any issues that you would like us to fix.
-
 ## Description
 
 The Data Management template is, as the name suggests, classified as a management function and is at the heart of the [**Enterprise Scale Analytics and AI**](https://github.com/Azure/Enterprise-Scale-Analytics) solution pattern. It is responsible for the governance of the platform and enables communication to ingest data sources from Azure, third-party clouds and on-premises data sources.
@@ -35,25 +33,19 @@ You have two options for deploying this reference architecture:
 1. Use the `Deploy to Azure` button for an immediate deployment
 2. Use GitHub Actions or Azure DevOps Pipelines for an automated, repeatable deployment
 
-## Option 1: Deploy to Azure - Quickstart (Coming soon ...)
-
-
-
 ## Navigation Menu
 
 * [Prerequisites](./docs/ESA-ManagementZone-Prerequisites.md)
 * Option 1: Deploy to Azure - Quickstart (Coming soon ..)
 
-| Data Management Zone |
-|:---------------------|
 <!-- [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Finfra%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.enterpriseScaleAnalytics.json) -->
 ![Deploy to Azure](/docs/images/deploytoazuregrey.png)
 
-* Option 2: Deploy reference implementation :
+* Option 2: Automated deployment
   * [Prepare the deployment](./docs/ESA-ManagementZone-PrepareDeployment.md)
-  * [Using Azure DevOps](./docs/ESA-ManagementZone-DeployUsingAzureDevops.md)
-  * [Using GitHub Actions](./docs/ESA-ManagementZone-DeployUsingGithubActions.md)
-* [Code Structure](./docs/ESA-ManagementZone-CodeStructure.md)
+  * [Deploy reference implementation using Azure DevOps](./docs/ESA-ManagementZone-DeployUsingAzureDevops.md)
+  * [Deploy reference implementation using GitHub Actions](./docs/ESA-ManagementZone-DeployUsingGithubActions.md)
+* [Code structure](./docs/ESA-ManagementZone-CodeStructure.md)
 * [Known issues](./docs/ESA-ManagementZone-KnownIssues.md)
 
 ### Enterprise Scale Analytics and AI - Documentation and Implementation

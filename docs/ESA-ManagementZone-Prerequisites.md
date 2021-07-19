@@ -22,4 +22,6 @@ The following prerequisites are required to make this repository work:
 
 If you don't have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/free/).
 
+<p align="right">  Next: <a href="./ESA-ManagementZone-PrepareDeployment.md">Prepare the deployment</a> > </p>
+
 < Previous: [Data Management Zone template](../README.md)
