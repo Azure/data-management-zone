@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.63.48766",
-      "templateHash": "9046231942216492695"
+      "version": "0.4.412.5873",
+      "templateHash": "3302151058947695792"
     }
   },
   "parameters": {
@@ -74,7 +74,7 @@
       "type": "string",
       "defaultValue": "10.0.0.4",
       "metadata": {
-        "description": "Specifies the private IP address of the central firewall."
+        "description": "Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "dnsServerAdresses": {
@@ -83,63 +83,63 @@
         "10.0.0.4"
       ],
       "metadata": {
-        "description": "Specifies the private IP addresses of the dns servers."
+        "description": "Specifies the private IP addresses of the dns servers. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "firewallPolicyId": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the Azure Firewall Policy."
+        "description": "Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`."
       }
     },
     "privateDnsZoneIdKeyVault": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Key Vault."
+        "description": "Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdPurview": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Purview."
+        "description": "Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdQueue": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Queue storage."
+        "description": "Specifies the resource ID of the private DNS zone for Queue storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdBlob": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Blob storage."
+        "description": "Specifies the resource ID of the private DNS zone for Blob storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdNamespace": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for EventHub namespaces."
+        "description": "Specifies the resource ID of the private DNS zone for EventHub namespaces. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdContainerRegistry": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Container Registry."
+        "description": "Specifies the resource ID of the private DNS zone for Container Registry. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdSynapse": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource ID of the private DNS zone for Synapse."
+        "description": "Specifies the resource ID of the private DNS zone for Synapse. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     }
   },
@@ -260,8 +260,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "2873677472285105375"
+              "version": "0.4.412.5873",
+              "templateHash": "2825550464458618366"
             }
           },
           "parameters": {
@@ -529,8 +529,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "15227424568943126364"
+                      "version": "0.4.412.5873",
+                      "templateHash": "2821946951772005946"
                     }
                   },
                   "parameters": {
@@ -1085,8 +1085,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "15227424568943126364"
+                      "version": "0.4.412.5873",
+                      "templateHash": "2821946951772005946"
                     }
                   },
                   "parameters": {
@@ -1661,8 +1661,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "1052137394841814509"
+              "version": "0.4.412.5873",
+              "templateHash": "16327019871847525363"
             }
           },
           "parameters": {
@@ -1959,8 +1959,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "2338381050250506700"
+              "version": "0.4.412.5873",
+              "templateHash": "2867621549937791727"
             }
           },
           "parameters": {
@@ -2039,8 +2039,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "3445734237497400507"
+                      "version": "0.4.412.5873",
+                      "templateHash": "7219908878367076521"
                     }
                   },
                   "parameters": {
@@ -2384,8 +2384,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "1839621709434224338"
+                      "version": "0.4.412.5873",
+                      "templateHash": "14530066335976404577"
                     }
                   },
                   "parameters": {
@@ -2519,8 +2519,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "1624911776383429414"
+                      "version": "0.4.412.5873",
+                      "templateHash": "6577002660160140457"
                     }
                   },
                   "parameters": {
@@ -2606,8 +2606,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "1452569919325921120"
+              "version": "0.4.412.5873",
+              "templateHash": "10326781329042011974"
             }
           },
           "parameters": {
@@ -2661,8 +2661,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "14894617842215961301"
+                      "version": "0.4.412.5873",
+                      "templateHash": "10738548854465742601"
                     }
                   },
                   "parameters": {
@@ -2828,8 +2828,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "4519639632825634868"
+              "version": "0.4.412.5873",
+              "templateHash": "4560153910259632213"
             }
           },
           "parameters": {
@@ -2892,8 +2892,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "8521460621187716226"
+                      "version": "0.4.412.5873",
+                      "templateHash": "10971921684144110257"
                     }
                   },
                   "parameters": {
