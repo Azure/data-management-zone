@@ -85,7 +85,7 @@ After following the instructions and updating the parameters and variables in yo
 
 ## Follow the workflow deployment
 
-**Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
+**Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions.
 
 Now, you can navigate to the **Actions** tab of the main page of the repository, where you will see a workflow with the name `Data Management Zone Deployment` running. Click on it to see how it deploys the environment. If you run into any issues, please check the [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-management-zone/issues) if you come accross a potential bug in the repository.
 
