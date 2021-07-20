@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Append-MachineLearningCompute-SetupScriptsCreationScript"
+        },
+        "policyDescription": {
+            "value": "Enforces a creation script for all machine learning compute instances in the specified scope."
+        },
+        "policyMode": {
+            "value": "Indexed"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Append",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Append"
+                },
+                "creationScriptBase64": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Base 64 encoded Creation Script",
+                        "description": "Specifies the base64 encoded creation script for Aml Compute Instances"
+                    },
+                    "defaultValue": ""
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.MachineLearningServices/workspaces/computes"
+                        },
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/computeType",
+                            "in": [
+                                "ComputeInstance"
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]",
+                    "details": [
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/setupScripts.scripts.creationScript.scriptSource",
+                            "value": "inline"
+                        },
+                        {
+                            "field": "Microsoft.MachineLearningServices/workspaces/computes/setupScripts.scripts.creationScript.scriptData",
+                            "value": "[parameters('creationScriptBase64')]"
+                        }
+                    ]
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Machine Learning",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

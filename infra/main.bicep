@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 targetScope = 'subscription'
 
 // General parameters
@@ -26,29 +29,29 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 @description('Specifies the address space of the subnet that is used for the services.')
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
-@description('Specifies the private IP address of the central firewall.')
+@description('Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param firewallPrivateIp string = '10.0.0.4'
-@description('Specifies the private IP addresses of the dns servers.')
+@description('Specifies the private IP addresses of the dns servers. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param dnsServerAdresses array = [
   '10.0.0.4'
 ]
-@description('Specifies the resource ID of the Azure Firewall Policy.')
+@description('Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`.')
 param firewallPolicyId string = ''
 
 // Private DNS Zone parameters
-@description('Specifies the resource ID of the private DNS zone for Key Vault.')
+@description('Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdKeyVault string = ''
-@description('Specifies the resource ID of the private DNS zone for Purview.')
+@description('Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdPurview string = ''
-@description('Specifies the resource ID of the private DNS zone for Queue storage.')
+@description('Specifies the resource ID of the private DNS zone for Queue storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdQueue string = ''
-@description('Specifies the resource ID of the private DNS zone for Blob storage.')
+@description('Specifies the resource ID of the private DNS zone for Blob storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdBlob string = ''
-@description('Specifies the resource ID of the private DNS zone for EventHub namespaces.')
+@description('Specifies the resource ID of the private DNS zone for EventHub namespaces. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdNamespace string = ''
-@description('Specifies the resource ID of the private DNS zone for Container Registry.')
+@description('Specifies the resource ID of the private DNS zone for Container Registry. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdContainerRegistry string = ''
-@description('Specifies the resource ID of the private DNS zone for Synapse.')
+@description('Specifies the resource ID of the private DNS zone for Synapse. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdSynapse string = ''
 
 // Variables

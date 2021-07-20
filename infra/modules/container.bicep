@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // This template is used as a module from the main.bicep template. 
 // The module contains a template to create the container services.
 targetScope = 'resourceGroup'

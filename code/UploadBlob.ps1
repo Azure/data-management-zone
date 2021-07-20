@@ -1,3 +1,7 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
+# Define script arguments
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $true)]
