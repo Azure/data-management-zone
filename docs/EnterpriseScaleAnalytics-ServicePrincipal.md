@@ -81,6 +81,15 @@ New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
   -ResourceGroupName "{resourceGroupName}"
+
+# For Child-Resource Scope level assignment
+New-AzRoleAssignment `
+  -ObjectId $spObjectId `
+  -RoleDefinitionName "{roleName}" `
+  -ResourceName "{resourceName}" `
+  -ResourceType "{resourceType (e.g. 'Microsoft.Network/virtualNetworks/subnets')}" `
+  -ParentResource "{parentResource (e.g. 'virtualNetworks/{virtualNetworkName}')" `
+  -ResourceGroupName "{resourceGroupName}
 ```
 
 >[Previous](/docs/EnterpriseScaleAnalytics-Prerequisites.md)

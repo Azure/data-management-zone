@@ -132,7 +132,7 @@ After following the instructions and updating the parameters and variables in yo
 
 ## Follow the workflow deployment
 
-**Congratulations!** You have successfully executed all steps to deploy the template into your environment through GitHub Actions or Azure DevOps.
+**Congratulations!** You have successfully executed all steps to deploy the template into your environment through Azure DevOps.
 
 Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-management-zone/issues) if you come accross a potential bug in the repository.
 
