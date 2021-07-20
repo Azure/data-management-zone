@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 // This template is used to create Private DNS Zones.
 targetScope = 'resourceGroup'
 

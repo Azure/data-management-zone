@@ -1,5 +1,7 @@
-// This template is used as a module from the network.bicep template. 
-// The module contains a template to create firewall policy rules.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+// This template is used to create a Firewall Policy.
 targetScope = 'resourceGroup'
 
 // Parameters

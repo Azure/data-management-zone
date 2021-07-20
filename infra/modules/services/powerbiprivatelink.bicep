@@ -1,4 +1,7 @@
-// This template is used to create a KeyVault.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+// This template is used to create a Power BI Private Link Service.
 targetScope = 'resourceGroup'
 
 // Parameters
