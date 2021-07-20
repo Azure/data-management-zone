@@ -21,7 +21,7 @@ _The Enterprise-Scale Analytics architecture represents the strategic design pat
 
 This respository describes the Data Management Zone, which is classified as data management hub. It is the heart of the Enterprise Scale Analytics architecture pattern and enables central governance of data assets across all Data Landing Zones. Enterprise-Scale Anayltics targets the deployment of a single Data Management Zone instance inside a tenant of an organization.
 
-> **Note:** After deploying your Data Management Zone, please move on to the [Data Landing Zone](https://github.com/Azure/data-landing-zone) deployment to create an environment in which you can start working on generating insights and value with data. The minimal recommended setup consists of a single Data Management Zone and a single [Data Landing Zone](https://github.com/Azure/data-landing-zone).
+> **Note:** Before getting started with the deployment, please make sure you are familiar with the [Cloud Adoption Framework docs](https://aka.ms/adopt/datamanagement). After deploying your Data Management Zone, please move on to the [Data Landing Zone](https://github.com/Azure/data-landing-zone) deployment to create an environment in which you can start working on generating insights and value with data. The minimal recommended setup consists of a single Data Management Zone and a single [Data Landing Zone](https://github.com/Azure/data-landing-zone).
 
 ## Deploy Enterprise Scale Analytics
 
