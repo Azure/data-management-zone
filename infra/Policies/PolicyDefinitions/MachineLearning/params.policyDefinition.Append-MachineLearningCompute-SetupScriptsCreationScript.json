@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Deny-MachineLearningCompute-VmSize"
+            "value": "Append-MachineLearningCompute-SetupScriptsCreationScript"
         },
         "policyDescription": {
-            "value": "Limit allowed vm sizes for machine learning compute clusters and instances."
+            "value": "Enforces a creation script for all machine learning compute instances in the specified scope."
         },
         "policyMode": {
             "value": "Indexed"
