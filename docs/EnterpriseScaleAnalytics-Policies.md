@@ -1,8 +1,8 @@
-# Azure Policies for Enterprise Scale Analytics and AI
+# Azure Policies for Enterprise-Scale Analytics and AI
 
-[Implementing custom policies](/azure/governance/policy/tutorials/create-and-manage) allows you to do more with Azure Policy. Enterprise Scale Analytics and AI comes with a set of pre-created policies to help you implement the required guard rails in your environment.
+[Implementing custom policies](/azure/governance/policy/tutorials/create-and-manage) allows you to do more with Azure Policy. Enterprise-Scale Analytics and AI comes with a set of pre-created policies to help you implement the required guard rails in your environment.
 
-Enterprise Scale Analytics and AI contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
+Enterprise-Scale Analytics and AI contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
 
 - [All Services](#all-services)
 - [Storage](#storage)
