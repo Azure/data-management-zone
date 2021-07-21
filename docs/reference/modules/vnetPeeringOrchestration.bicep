@@ -9,8 +9,8 @@ param sourceVnetId string
 param destinationVnetIds array
 
 // Variables
-var sourceVnetSubscriptionId = split(sourceVnetId, '')[2]
-var sourceVnetResourceGroupName = split(sourceVnetId, '')[4]
+var sourceVnetSubscriptionId = split(sourceVnetId, '/')[2]
+var sourceVnetResourceGroupName = split(sourceVnetId, '/')[4]
 
 // Resources
 module vnetPeering 'auxiliary/vnetPeering.bicep' = [for (destinationVnetId, index) in destinationVnetIds: {
