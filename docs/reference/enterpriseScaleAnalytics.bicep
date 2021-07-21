@@ -106,7 +106,6 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
   }
 }
 
-@batchSize(1)
 resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' = [for (item, index) in dataLandingZoneDetails: {
   name: 'dataLandingZoneDeployment-${index}'
   location: item.location
