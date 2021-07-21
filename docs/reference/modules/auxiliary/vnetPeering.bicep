@@ -9,8 +9,8 @@ param sourceVnetId string
 param destinationVnetId string
 
 // Variables
-var sourceVnetName = last(split(sourceVnetId, '/'))
-var destinationVnetName = last(split(destinationVnetId, '/'))
+var sourceVnetName = length(split(sourceVnetId, '/')) >= 9 ? last(split(sourceVnetId, '/')) : 'incorrectSegmentLength'
+var destinationVnetName = length(split(destinationVnetId, '/')) >= 9 ? last(split(destinationVnetId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource dataLandingZoneToDataLandingZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = if (sourceVnetId != destinationVnetId) {

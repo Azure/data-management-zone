@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.412.5873",
-      "templateHash": "13173665914883867931"
+      "templateHash": "6991178869754887272"
     }
   },
   "parameters": {
@@ -301,7 +301,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.412.5873",
-              "templateHash": "9977553713389095136"
+              "templateHash": "5002283350215662956"
             }
           },
           "parameters": {
@@ -314,8 +314,8 @@
           },
           "functions": [],
           "variables": {
-            "sourceVnetSubscriptionId": "[split(parameters('sourceVnetId'), '')[2]]",
-            "sourceVnetResourceGroupName": "[split(parameters('sourceVnetId'), '')[4]]"
+            "sourceVnetSubscriptionId": "[split(parameters('sourceVnetId'), '/')[2]]",
+            "sourceVnetResourceGroupName": "[split(parameters('sourceVnetId'), '/')[4]]"
           },
           "resources": [
             {
@@ -348,7 +348,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.412.5873",
-                      "templateHash": "35349449574632837"
+                      "templateHash": "7085083534013262743"
                     }
                   },
                   "parameters": {
@@ -361,8 +361,8 @@
                   },
                   "functions": [],
                   "variables": {
-                    "sourceVnetName": "[last(split(parameters('sourceVnetId'), '/'))]",
-                    "destinationVnetName": "[last(split(parameters('destinationVnetId'), '/'))]"
+                    "sourceVnetName": "[if(greaterOrEquals(length(split(parameters('sourceVnetId'), '/')), 9), last(split(parameters('sourceVnetId'), '/')), 'incorrectSegmentLength')]",
+                    "destinationVnetName": "[if(greaterOrEquals(length(split(parameters('destinationVnetId'), '/')), 9), last(split(parameters('destinationVnetId'), '/')), 'incorrectSegmentLength')]"
                   },
                   "resources": [
                     {
