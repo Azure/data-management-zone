@@ -1,5 +1,7 @@
-// This template is used as a module from the network.bicep template. 
-// The module contains a template to create vnet peering from the data management zone vnet.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+// The module contains a template to create vnet peering between two vnets.
 targetScope = 'resourceGroup'
 
 // Parameters
@@ -11,7 +13,7 @@ var sourceVnetName = last(split(sourceVnetId, '/'))
 var destinationVnetName = last(split(destinationVnetId, '/'))
 
 // Resources
-resource dataManagementZoneDataLandingZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = if (sourceVnetId != destinationVnetId) {
+resource dataLandingZoneToDataLandingZoneVnetPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-11-01' = if (sourceVnetId != destinationVnetId) {
   name: '${sourceVnetName}/${destinationVnetName}'
   properties: {
     allowForwardedTraffic: true

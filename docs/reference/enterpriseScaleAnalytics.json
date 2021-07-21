@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.63.48766",
-      "templateHash": "12986689156610426232"
+      "version": "0.4.412.5873",
+      "templateHash": "13173665914883867931"
     }
   },
   "parameters": {
@@ -224,8 +224,11 @@
           "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""
           },
+          "portalDeployment": {
+            "value": true
+          },
           "deploySelfHostedIntegrationRuntimes": {
-            "value": false
+            "value": true
           },
           "privateDnsZoneIdKeyVault": {
             "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdKeyVault.value]"
@@ -297,8 +300,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.63.48766",
-              "templateHash": "8036094195194754972"
+              "version": "0.4.412.5873",
+              "templateHash": "9977553713389095136"
             }
           },
           "parameters": {
@@ -344,8 +347,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.63.48766",
-                      "templateHash": "14960388980379507136"
+                      "version": "0.4.412.5873",
+                      "templateHash": "35349449574632837"
                     }
                   },
                   "parameters": {
