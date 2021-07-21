@@ -1,4 +1,7 @@
-// The module contains a template to create a role assignment to a storage account file system.
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+// The module contains a template to orchestrate vnet peering deployments.
 targetScope = 'subscription'
 
 // Parameters

@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 targetScope = 'subscription'
 
 // General parameters
@@ -179,8 +182,11 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       purviewSelfHostedIntegrationRuntimeAuthKey: {
         value: ''
       }
+      portalDeployment: {
+        value: true
+      }
       deploySelfHostedIntegrationRuntimes: {
-        value: false
+        value: true
       }
       privateDnsZoneIdKeyVault: {
         value: reference(dataManagementZoneDeployment.name).outputs.privateDnsZoneIdKeyVault.value

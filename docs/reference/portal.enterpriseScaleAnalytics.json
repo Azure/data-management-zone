@@ -403,10 +403,10 @@
             "subscriptionId": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId)]",
             "parameters": {
                 "environment": "[steps('basics').deploymentDetails.environment]",
-                "administratorPassword": "",
                 "dataManagementZoneSubscriptionId": "[steps('dataManagementZoneSettings').deploymentDetails.subscriptionId]",
                 "dataManagementZonePrefix": "[steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix]",
                 "dataManagementZoneLocation": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
+                "administratorPassword": "[steps('dataLandingZoneSettings').deploymentDetails.administratorPassword.password]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
                 "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataManagementZonesName.dataLandingZonesPrefix]",
                 "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
