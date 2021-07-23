@@ -21,12 +21,15 @@ var purviewPrivateEndpointNameBlob = '${purview.name}-private-endpoint-blob'  //
 var purviewPrivateEndpointNameQueue = '${purview.name}-private-endpoint-queue'  // Suffix '-queue' required for ingestion private endpoint so that these show up in the portal today
 var purviewPrivateEndpointNameNamespace = '${purview.name}-private-endpoint-namespace'  // Suffix '-namespace' required for ingestion private endpoint so that these show up in the portal today
 var purviewRegions = [
+  'australiaeast'
   'brazilsouth'
   'canadacentral'
+  'centralindia'
   'eastus'
   'eastus2'
   'southcentralus'
   'southeastasia'
+  'uksouth'
   'westeurope'
 ]
 
