@@ -27,5 +27,30 @@ OR
 
 This error message appears, in case during the deployment it tries to create a type of resource which has never been deployed before inside the subscription. We recommend to check prior the deployment whether the required resource providers are registered for your subscription and if needed, register them through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
+## Error: Purview soft-limit reached in Tenant and Region
+
+**Error Message:**
+
+```sh
+ERROR: Deployment failed. Correlation ID: ***
+{
+    "status": "Failed",
+    "error": {
+        "code": "DeploymentFailed",
+        "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/DeployOperations for usage details.",
+        "details": [
+            {
+                "code": "BadRequest",
+                "message": "{\r\n \"error\": {\r\n \"code\": \"InvalidTemplateDeployment\",\r\n \"message\": \"The template deployment 'purview001' is not valid according to the validation procedure. The tracking id is '<tracking_id>'. See inner errors for details.\",\r\n \"details\": [\r\n {\r\n \"code\": \"2005\",\r\n \"message\": \"Tenant <tenant-id> with 100 accounts has surpassed its resource quota for southeastasia location. Please try creating in other available locations or contact support.\"\r\n }\r\n ]\r\n }\r\n}"
+            }
+        ]
+    }
+}
+```
+
+**Solution:**
+
+This error message appears, if the Purview soft-limit has been reached inside your tenant. Please open a support ticket and ask for a quote increase in the selected region.
+
 >[Previous (Option (a) GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
 >[Previous (Option (b) Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
