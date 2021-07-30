@@ -109,7 +109,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Specify a prefix and environment name which will both be used as a prefix for all resource names.",
+                                        "text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
