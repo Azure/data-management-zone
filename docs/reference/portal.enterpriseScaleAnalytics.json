@@ -313,6 +313,11 @@
                                                     "name": "subscription",
                                                     "type": "Microsoft.Common.DropDown",
                                                     "placeholder": "Select a subscription...",
+                                                    "multiselect": false,
+                                                    "selectAll": false,
+                                                    "filter": true,
+                                                    "filterPlaceholder": "Filter items ...",
+                                                    "multiLine": true,
                                                     "constraints": {
                                                         "allowedValues": "[map(steps('dataLandingZoneSettings').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
                                                         "required": true
@@ -327,6 +332,11 @@
                                                     "name": "location",
                                                     "type": "Microsoft.Common.DropDown",
                                                     "placeholder": "Select a location...",
+                                                    "multiselect": false,
+                                                    "selectAll": false,
+                                                    "filter": true,
+                                                    "filterPlaceholder": "Filter items ...",
+                                                    "multiLine": true,
                                                     "constraints": {
                                                         "allowedValues": "[map(filter(steps('dataLandingZoneSettings').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                                                         "required": true
