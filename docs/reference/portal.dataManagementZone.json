@@ -170,6 +170,10 @@
                                             {
                                                 "isValid": "[not(equals(steps('basics').dataManagementZoneName.containerRegistryNameApi.nameAvailable, false))]",
                                                 "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('basics').dataManagementZoneName.purviewNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
                                             }
                                         ]
                                     }
@@ -195,6 +199,18 @@
                                         "body": {
                                             "name": "[concat(steps('basics').dataManagementZoneName.dataManagementZonePrefix, steps('basics').dataManagementZoneName.environment, 'containerregistry001')]",
                                             "type": "Microsoft.ContainerRegistry/registries"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "purviewNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Purview/checkNameAvailability?api-version=2020-12-01-preview')]",
+                                        "body": {
+                                            "name": "[concat(steps('basics').dataManagementZoneName.dataManagementZonePrefix, '-', steps('basics').dataManagementZoneName.environment, '-purview001')]",
+                                            "type": "Microsoft.Purview/accounts"
                                         }
                                     }
                                 }
