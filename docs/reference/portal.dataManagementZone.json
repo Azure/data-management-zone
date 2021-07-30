@@ -685,7 +685,7 @@
                 "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
                 "environment": "[if(empty(steps('basics').dataManagementZoneName.environment), '', steps('basics').dataManagementZoneName.environment)]",
                 "prefix": "[if(empty(steps('basics').dataManagementZoneName.dataManagementZonePrefix), '', steps('basics').dataManagementZoneName.dataManagementZonePrefix)]",
-                "tags": "[if(empty(steps('tags').tagsByResource.EnterpriseScaleAnalytics), parse('{}'), steps('tags').tagsByResource.EnterpriseScaleAnalytics)]",
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]",
                 "vnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange)]",
                 "azureFirewallSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange)]",
                 "servicesSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange)]",

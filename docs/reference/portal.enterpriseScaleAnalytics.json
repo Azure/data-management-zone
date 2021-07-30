@@ -409,7 +409,7 @@
                 "administratorPassword": "[steps('dataLandingZoneSettings').deploymentDetails.administratorPassword.password]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
                 "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataManagementZonesName.dataLandingZonesPrefix]",
-                "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]"
             }
         }
     }
