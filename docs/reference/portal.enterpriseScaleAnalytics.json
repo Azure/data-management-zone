@@ -154,7 +154,7 @@
                                     "filterPlaceholder": "Filter items ...",
                                     "multiLine": true,
                                     "constraints": {
-                                        "allowedValues": "[map(filter(steps('dataManagementZoneSettings').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2,usgovvirginia', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+                                        "allowedValues": "[map(filter(steps('dataManagementZoneSettings').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                                         "required": true
                                     }
                                 }
