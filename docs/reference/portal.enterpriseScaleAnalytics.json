@@ -440,11 +440,11 @@
                                                 "message": "Prefix currently unavailable. Please choose a different one."
                                             },
                                             {
-                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.sqlServerNameApi.nameAvailable, false))]",
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.sqlServerNameApi.available, false))]",
                                                 "message": "Prefix currently unavailable. Please choose a different one."
                                             },
                                             {
-                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.synapseNameApi.nameAvailable, false))]",
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.synapseNameApi.available, false))]",
                                                 "message": "Prefix currently unavailable. Please choose a different one."
                                             }
                                         ]
