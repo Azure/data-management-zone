@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.451.19169",
-      "templateHash": "880387641665577441"
+      "templateHash": "10324138329887264373"
     }
   },
   "parameters": {
@@ -273,7 +273,7 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "[format('vnetPeeringDeployment{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()])]",
+      "name": "[format('vnetPeeringDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()], deployment().location)]",
       "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
