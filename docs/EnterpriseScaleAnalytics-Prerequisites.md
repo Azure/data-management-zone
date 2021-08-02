@@ -75,7 +75,7 @@ Before we start with the deployment, please make sure that you have the followin
 
 Now you have two options for the deployment of the Data Managememt Zone:
 
-1. Deploy to Azure Button (Coming soon ...)
+1. Deploy to Azure Button
 2. GitHub Actions or Azure DevOps Pipelines
 
 To use the Deploy to Azure Button, please click on the button below:
