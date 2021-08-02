@@ -10,19 +10,31 @@
                     "label": "Enterprise-Scale Analytics",
                     "elements": [
                         {
-							"name": "deploymentDetails",
-							"label": "Deployment Details",
-							"type": "Microsoft.Common.Section",
+                            "name": "infoBoxEnterpriseScaleAnalytics",
+                            "type": "Microsoft.Common.InfoBox",
                             "visible": true,
-							"elements": [
+                            "options": {
+                                "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "style": "Info",
+                                "uri": "https://aka.ms/adopt/datamanagement"
+                            }
+                        },
+                        {
+                            "name": "deploymentDetails",
+                            "label": "Deployment Details",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
                                 {
-                                    "name": "infoBoxEnterpriseScaleAnalytics",
-                                    "type": "Microsoft.Common.InfoBox",
+                                    "name": "deploymentDetailsText",
+                                    "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
-                                        "style": "Info",
-                                        "uri": "https://aka.ms/adopt/datamanagement"
+                                        "text": "Select an environment (Development, Test, Production) which will be used as a prefix for all resource names. Independent of the environment, the same resources get deployed.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
                                     }
                                 },
                                 {
@@ -77,61 +89,28 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics & AI uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for Data Management Zone and Data Landing Zones.",
+                                "text": "Enterprise-Scale Analytics & AI uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for the Data Management Zone and each Data Landing Zone.",
                                 "style": "Info"
                             }
                         },
                         {
-							"name": "dataManagementZonesName",
-							"label": "Name",
-							"type": "Microsoft.Common.Section",
+                            "name": "deploymentDetails",
+                            "label": "Deployment Details",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "dataManagementZonesNameText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Specify a prefix for all resource names in your Data Management Zone.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
-                                {
-                                    "name": "dataManagementZonesPrefix",
-                                    "label": "Data Management Zone Prefix",
-                                    "type": "Microsoft.Common.TextBox",
+                                    "name": "deploymentDetailsText",
+                                    "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
-                                    "defaultValue": "",
-                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
-                                    "constraints": {
-                                        "required": true,
-                                        "regex": "^[a-z0-9]{1,10}$",
-                                        "validationMessage": "The prefix must be between 1-10 lowercase characters and numbers."
+                                    "options": {
+                                        "text": "Select the subscription as well as the location in which your Data Management Zone will be deployed.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
                                     }
-                                }
-                            ]
-                        },
-                        {
-							"name": "deploymentDetails",
-							"label": "Deployment Details",
-							"type": "Microsoft.Common.Section",
-                            "visible": true,
-							"elements": [
-                                {
-									"name": "deploymentDetailsText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select the subscription as well as the location in which your Data Management Zone will be deployed.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                },
                                 {
                                     "name": "subscriptionApi",
                                     "type": "Microsoft.Solutions.ArmApiControl",
@@ -192,6 +171,91 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "name": "dataManagementZonesName",
+                            "label": "Name",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "dataManagementZonesNameText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify a prefix for all resource names in your Data Management Zone.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "dataManagementZonesPrefix",
+                                    "label": "Data Management Zone Prefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": true,
+                                    "defaultValue": "",
+                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
+                                    "constraints": {
+                                        "required": true,
+                                        "validations": [
+                                            {
+                                                "regex": "^[a-z0-9]{1,10}$",
+                                                "message": "The prefix must be between 1-10 lowercase characters and numbers."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataManagementZoneSettings').dataManagementZonesName.keyVaultNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataManagementZoneSettings').dataManagementZonesName.containerRegistryNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataManagementZoneSettings').dataManagementZonesName.purviewNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "keyVaultNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.KeyVault/checkNameAvailability?api-version=2019-09-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix, '-', steps('basics').deploymentDetails.environment, '-vault001')]",
+                                            "type": "Microsoft.KeyVault/vaults"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "containerRegistryNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.ContainerRegistry/checkNameAvailability?api-version=2019-05-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix, steps('basics').deploymentDetails.environment, 'containerregistry001')]",
+                                            "type": "Microsoft.ContainerRegistry/registries"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "purviewNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Purview/checkNameAvailability?api-version=2020-12-01-preview')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix, '-', steps('basics').deploymentDetails.environment, '-purview001')]",
+                                            "type": "Microsoft.Purview/accounts"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
@@ -215,56 +279,23 @@
                             }
                         },
                         {
-							"name": "dataManagementZonesName",
-							"label": "Name",
-							"type": "Microsoft.Common.Section",
+                            "name": "deploymentDetails",
+                            "label": "Deployment Details",
+                            "type": "Microsoft.Common.Section",
                             "visible": true,
-							"elements": [
+                            "elements": [
                                 {
-									"name": "dataLandingZonesNameText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Specify a prefix for all resource names in your Data Landing Zone. The Data Landing Zones will be numbered as part of the deployment.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
-                                {
-                                    "name": "dataLandingZonesPrefix",
-                                    "label": "Data Landing Zone Prefix",
-                                    "type": "Microsoft.Common.TextBox",
+                                    "name": "deploymentDetailsText",
+                                    "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
-                                    "defaultValue": "",
-                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
-                                    "constraints": {
-                                        "required": true,
-                                        "regex": "^[a-z0-9]{1,7}$",
-                                        "validationMessage": "The prefix must be between 1-7 lowercase characters and numbers."
+                                    "options": {
+                                        "text": "Select the subscription as well as the location in which your Data Landing Zones will be deployed.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
                                     }
-                                }
-                            ]
-                        },
-                        {
-							"name": "deploymentDetails",
-							"label": "Deployment Details",
-							"type": "Microsoft.Common.Section",
-                            "visible": true,
-							"elements": [
-                                {
-									"name": "deploymentDetailsText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select the subscription as well as the location in which your Data Landing Zones will be deployed.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                },
                                 {
                                     "name": "infoBoxLocation",
                                     "type": "Microsoft.Common.InfoBox",
@@ -313,6 +344,11 @@
                                                     "name": "subscription",
                                                     "type": "Microsoft.Common.DropDown",
                                                     "placeholder": "Select a subscription...",
+                                                    "multiselect": false,
+                                                    "selectAll": false,
+                                                    "filter": true,
+                                                    "filterPlaceholder": "Filter items ...",
+                                                    "multiLine": true,
                                                     "constraints": {
                                                         "allowedValues": "[map(steps('dataLandingZoneSettings').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
                                                         "required": true
@@ -327,6 +363,11 @@
                                                     "name": "location",
                                                     "type": "Microsoft.Common.DropDown",
                                                     "placeholder": "Select a location...",
+                                                    "multiselect": false,
+                                                    "selectAll": false,
+                                                    "filter": true,
+                                                    "filterPlaceholder": "Filter items ...",
+                                                    "multiLine": true,
                                                     "constraints": {
                                                         "allowedValues": "[map(filter(steps('dataLandingZoneSettings').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                                                         "required": true
@@ -335,19 +376,255 @@
                                             }
                                         ]
                                     }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "dataLandingZonesName",
+                            "label": "Name",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "dataLandingZonesNameText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify a prefix for all resource names in your Data Landing Zone. The Data Landing Zones will be numbered as part of the deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
                                 },
                                 {
-									"name": "administratorPasswordText",
-									"type": "Microsoft.Common.TextBlock",
-									"visible": true,
-									"options": {
-										"text": "Select an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS.",
-										"link": {
-											"label": "",
-											"uri": ""
-										}
-									}
-								},
+                                    "name": "dataLandingZonesPrefix",
+                                    "label": "Data Landing Zone Prefix",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": true,
+                                    "defaultValue": "",
+                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
+                                    "constraints": {
+                                        "required": true,
+                                        "validations": [
+                                            {
+                                                "regex": "^[a-z0-9]{1,7}$",
+                                                "message": "The prefix must be between 1-7 lowercase characters and numbers."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.keyVaultNameApi001.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.keyVaultNameApi002.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.keyVaultNameApi003.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.storageAccountNameApi001.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.storageAccountNameApi002.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.storageAccountNameApi003.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.storageAccountNameApi004.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.storageAccountNameApi005.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.eventHubNamespaceNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.mySqlServerNameApi.nameAvailable, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.sqlServerNameApi.available, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            },
+                                            {
+                                                "isValid": "[not(equals(steps('dataLandingZoneSettings').dataLandingZonesName.synapseNameApi.available, false))]",
+                                                "message": "Prefix currently unavailable. Please choose a different one."
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "keyVaultNameApi001",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.KeyVault/checkNameAvailability?api-version=2019-09-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-vault001')]",
+                                            "type": "Microsoft.KeyVault/vaults"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "keyVaultNameApi002",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.KeyVault/checkNameAvailability?api-version=2019-09-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-vault002')]",
+                                            "type": "Microsoft.KeyVault/vaults"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "keyVaultNameApi003",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.KeyVault/checkNameAvailability?api-version=2019-09-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-vault003')]",
+                                            "type": "Microsoft.KeyVault/vaults"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountNameApi001",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', steps('basics').deploymentDetails.environment, 'raw')]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountNameApi002",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', steps('basics').deploymentDetails.environment, 'encur')]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountNameApi003",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', steps('basics').deploymentDetails.environment, 'work')]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountNameApi004",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', steps('basics').deploymentDetails.environment, 'ext001')]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "storageAccountNameApi005",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', steps('basics').deploymentDetails.environment, 'artfct001')]",
+                                            "type": "Microsoft.Storage/storageAccounts"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "eventHubNamespaceNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.EventHub/checkNameAvailability?api-version=2017-04-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-integration-eventhub001')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "mySqlServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.DBforMySQL/checkNameAvailability?api-version=2017-12-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-mysqlserver001')]",
+                                            "type": "Microsoft.DBforMySQL"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "sqlServerNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Sql/checkNameAvailability?api-version=2021-02-01-preview')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-sqlserver001')]",
+                                            "type": "Microsoft.Sql/servers"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "synapseNameApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Synapse/checkNameAvailability?api-version=2021-03-01')]",
+                                        "body": {
+                                            "name": "[concat(steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix, '001', '-', steps('basics').deploymentDetails.environment, '-product-synapse001')]",
+                                            "type": "Microsoft.Synapse/workspaces"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "name": "dataLandingZonesServicesSettings",
+                            "label": "Services Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "administratorPasswordText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
                                 {
                                     "name": "administratorPassword",
                                     "label": {
@@ -406,10 +683,10 @@
                 "dataManagementZoneSubscriptionId": "[steps('dataManagementZoneSettings').deploymentDetails.subscriptionId]",
                 "dataManagementZonePrefix": "[steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix]",
                 "dataManagementZoneLocation": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
-                "administratorPassword": "[steps('dataLandingZoneSettings').deploymentDetails.administratorPassword.password]",
+                "administratorPassword": "[steps('dataLandingZoneSettings').dataLandingZonesServicesSettings.administratorPassword.password]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
-                "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataManagementZonesName.dataLandingZonesPrefix]",
-                "tags": "[steps('tags').tagsByResource.EnterpriseScaleAnalytics]"
+                "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix]",
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]"
             }
         }
     }
