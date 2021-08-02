@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.412.5873",
-      "templateHash": "6991178869754887272"
+      "version": "0.4.451.19169",
+      "templateHash": "880387641665577441"
     }
   },
   "parameters": {
@@ -73,7 +73,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "dataManagementZoneDeployment",
+      "name": "[format('dataManagementZoneDeployment-{0}', deployment().location)]",
       "location": "[parameters('dataManagementZoneLocation')]",
       "subscriptionId": "[parameters('dataManagementZoneSubscriptionId')]",
       "properties": {
@@ -149,7 +149,7 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "[format('dataLandingZoneDeployment-{0}', copyIndex())]",
+      "name": "[format('dataLandingZoneDeployment-{0}-{1}', copyIndex(), deployment().location)]",
       "location": "[parameters('dataLandingZoneDetails')[copyIndex()].location]",
       "subscriptionId": "[parameters('dataLandingZoneDetails')[copyIndex()].subscription]",
       "properties": {
@@ -205,21 +205,21 @@
             "value": "[format('10.{0}.9.0/24', add(copyIndex(), 1))]"
           },
           "dataManagementZoneVnetId": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.vnetId.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.vnetId.value]"
           },
           "firewallPrivateIp": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.firewallPrivateIp.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.firewallPrivateIp.value]"
           },
           "dnsServerAdresses": {
             "value": [
-              "[reference('dataManagementZoneDeployment').outputs.firewallPrivateIp.value]"
+              "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.firewallPrivateIp.value]"
             ]
           },
           "administratorPassword": {
             "value": "[parameters('administratorPassword')]"
           },
           "purviewId": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.purviewId.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewId.value]"
           },
           "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""
@@ -231,39 +231,39 @@
             "value": true
           },
           "privateDnsZoneIdKeyVault": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdKeyVault.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdKeyVault.value]"
           },
           "privateDnsZoneIdDataFactory": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdDataFactory.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdDataFactory.value]"
           },
           "privateDnsZoneIdDataFactoryPortal": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdDataFactoryPortal.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdDataFactoryPortal.value]"
           },
           "privateDnsZoneIdBlob": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdBlob.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdBlob.value]"
           },
           "privateDnsZoneIdDfs": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdDfs.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdDfs.value]"
           },
           "privateDnsZoneIdSqlServer": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdSqlServer.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdSqlServer.value]"
           },
           "privateDnsZoneIdMySqlServer": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdMySqlServer.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdMySqlServer.value]"
           },
           "privateDnsZoneIdEventhubNamespace": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdNamespace.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdNamespace.value]"
           },
           "privateDnsZoneIdSynapseDev": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdSynapseDev.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdSynapseDev.value]"
           },
           "privateDnsZoneIdSynapseSql": {
-            "value": "[reference('dataManagementZoneDeployment').outputs.privateDnsZoneIdSynapseSql.value]"
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdSynapseSql.value]"
           }
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/deployments', 'dataManagementZoneDeployment')]"
+        "[subscriptionResourceId('Microsoft.Resources/deployments', format('dataManagementZoneDeployment-{0}', deployment().location))]"
       ]
     },
     {
@@ -282,14 +282,14 @@
         "mode": "Incremental",
         "parameters": {
           "sourceVnetId": {
-            "value": "[reference(format('dataLandingZoneDeployment-{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()])).outputs.vnetId.value]"
+            "value": "[reference(format('dataLandingZoneDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()], deployment().location)).outputs.vnetId.value]"
           },
           "destinationVnetIds": {
             "copy": [
               {
                 "name": "value",
                 "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]",
-                "input": "[reference(format('dataLandingZoneDeployment-{0}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex('value')])).outputs.vnetId.value]"
+                "input": "[reference(format('dataLandingZoneDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex('value')], deployment().location)).outputs.vnetId.value]"
               }
             ]
           }
@@ -300,8 +300,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.412.5873",
-              "templateHash": "5002283350215662956"
+              "version": "0.4.451.19169",
+              "templateHash": "576035924618958491"
             }
           },
           "parameters": {
@@ -347,8 +347,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.412.5873",
-                      "templateHash": "7085083534013262743"
+                      "version": "0.4.451.19169",
+                      "templateHash": "1778449547404713228"
                     }
                   },
                   "parameters": {

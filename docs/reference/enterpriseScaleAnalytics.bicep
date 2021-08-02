@@ -36,7 +36,7 @@ var dataLandingZoneTemplateLink = 'https://raw.githubusercontent.com/Azure/data-
 
 // Resources
 resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' = {
-  name: 'dataManagementZoneDeployment'
+  name: 'dataManagementZoneDeployment-${deployment().location}'
   location: dataManagementZoneLocation
   subscriptionId: dataManagementZoneSubscriptionId
   properties: {
@@ -107,7 +107,7 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
 }
 
 resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' = [for (item, index) in dataLandingZoneDetails: {
-  name: 'dataLandingZoneDeployment-${index}'
+  name: 'dataLandingZoneDeployment-${index}-${deployment().location}'
   location: item.location
   subscriptionId: item.subscription
   properties: {
