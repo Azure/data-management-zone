@@ -125,7 +125,7 @@
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Select the Subscription of your Data Management Zone.",
+                                    "toolTip": "Select the Subscription for your Data Management Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -159,7 +159,7 @@
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Select the Location for your Data Product Deployment.",
+                                    "toolTip": "Select the Location for your Data Management Zone.",
                                     "multiselect": false,
                                     "selectAll": false,
                                     "filter": true,
@@ -403,7 +403,7 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": true,
                                     "defaultValue": "",
-                                    "toolTip": "Specify a prefix (min 1 and max 10 lowercase characters and numbers).",
+                                    "toolTip": "Specify a prefix (min 1 and max 7 lowercase characters and numbers).",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
