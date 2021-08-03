@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Audit-IotHub-PrivateEndpointId"
+            "value": "Deny-ContainerRegistry-PrivateEndpointConnections"
         },
         "policyDescription": {
-            "value": "Audit public endpoints that are created in other subscriptions for iot hubs."
+            "value": "Deny private endpoints connections that are created in other subscriptions than the service itself."
         },
         "policyMode": {
-            "value": "Indexed"
+            "value": "All"
         },
         "policyParameters": {
             "value": {
@@ -21,9 +21,10 @@
                     },
                     "allowedValues": [
                         "Audit",
+                        "Deny",
                         "Disabled"
                     ],
-                    "defaultValue": "Audit"
+                    "defaultValue": "Deny"
                 }
             }
         },
@@ -33,17 +34,23 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.Devices/IotHubs"
+                            "equals": "Microsoft.ContainerRegistry/registries/privateEndpointConnections"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.Devices/IotHubs/privateEndpointConnections[*]",
-                                "where": {
-                                    "field": "Microsoft.Devices/IotHubs/privateEndpointConnections[*].privateEndpoint.id",
-                                    "notContains": "[subscription().id]"
+                            "field": "Microsoft.ContainerRegistry/registries/privateEndpointConnections/privateLinkServiceConnectionState.status",
+                            "equals": "Approved"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.ContainerRegistry/registries/privateEndpointConnections/privateEndpoint.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[split(concat(field('Microsoft.ContainerRegistry/registries/privateEndpointConnections/privateEndpoint.id'), '//'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
                                 }
-                            },
-                            "greaterOrEquals": 1
+                            ]
                         }
                     ]
                 },
@@ -55,7 +62,7 @@
         "policyMetadata": {
             "value": {
                 "version": "1.0.0",
-                "category": "Internet of Things",
+                "category": "Container Registry",
                 "preview": false,
                 "deprecated": false
             }

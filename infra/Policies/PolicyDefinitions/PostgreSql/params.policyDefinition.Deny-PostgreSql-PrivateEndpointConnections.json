@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Audit-MariaDb-PrivateEndpointId"
+            "value": "Deny-PostgreSql-PrivateEndpointConnections"
         },
         "policyDescription": {
-            "value": "Audit private endpoints that are created in other subscriptions for maria db."
+            "value": "Deny private endpoints connections that are created in other subscriptions than the service itself."
         },
         "policyMode": {
-            "value": "Indexed"
+            "value": "All"
         },
         "policyParameters": {
             "value": {
@@ -21,9 +21,10 @@
                     },
                     "allowedValues": [
                         "Audit",
+                        "Deny",
                         "Disabled"
                     ],
-                    "defaultValue": "Audit"
+                    "defaultValue": "Deny"
                 }
             }
         },
@@ -33,17 +34,23 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.DBforMariaDB/servers"
+                            "equals": "Microsoft.DBforPostgreSQL/servers/privateEndpointConnections"
                         },
                         {
-                            "count": {
-                                "field": "Microsoft.DBforMariaDB/servers/privateEndpointConnections[*]",
-                                "where": {
-                                    "field": "Microsoft.DBforMariaDB/servers/privateEndpointConnections[*].privateEndpoint.id",
-                                    "notContains": "[subscription().id]"
+                            "field": "Microsoft.DBforPostgreSQL/servers/privateEndpointConnections/privateLinkServiceConnectionState.status",
+                            "equals": "Approved"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DBforPostgreSQL/servers/privateEndpointConnections/privateEndpoint.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[split(concat(field('Microsoft.DBforPostgreSQL/servers/privateEndpointConnections/privateEndpoint.id'), '//'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
                                 }
-                            },
-                            "greaterOrEquals": 1
+                            ]
                         }
                     ]
                 },
