@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "Audit-PostgreSql-PrivateEndpointId"
+            "value": "Deny-SqlManagedInstance-PrivateEndpointConnections"
         },
         "policyDescription": {
-            "value": "Audit private endpoints that are created in other subscriptions for postgre sql."
+            "value": "Deny private endpoints connections that are created in other subscriptions than the service itself."
         },
         "policyMode": {
-            "value": "Indexed"
+            "value": "All"
         },
         "policyParameters": {
             "value": {
@@ -21,9 +21,10 @@
                     },
                     "allowedValues": [
                         "Audit",
+                        "Deny",
                         "Disabled"
                     ],
-                    "defaultValue": "Audit"
+                    "defaultValue": "Deny"
                 }
             }
         },
@@ -33,11 +34,23 @@
                     "allOf": [
                         {
                             "field": "type",
-                            "equals": "Microsoft.DBforPostgreSQL/servers"
+                            "equals": "Microsoft.Sql/managedInstances/privateEndpointConnections"
                         },
                         {
-                            "field": "Microsoft.DBforPostgreSQL/servers/privateEndpointConnections/privateEndpoint.id",
-                            "notContains": "[subscription().id]"
+                            "field": "Microsoft.Sql/managedInstances/privateEndpointConnections/privateLinkServiceConnectionState.status",
+                            "equals": "Approved"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Sql/managedInstances/privateEndpointConnections/privateEndpoint.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[split(concat(field('Microsoft.Sql/managedInstances/privateEndpointConnections/privateEndpoint.id'), '//'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
+                                }
+                            ]
                         }
                     ]
                 },

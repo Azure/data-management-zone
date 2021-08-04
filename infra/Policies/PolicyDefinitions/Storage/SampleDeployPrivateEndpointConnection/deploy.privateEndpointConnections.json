@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the storage account name."
+            }
+        },
+        "privateEndpointConnectionName": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the privateEndpointConnections name."
+            }
+        },
+        "privateEndpointId": {
+            "type": "string",
+            "metadata": {
+                "description": "Specifies the privateEndpoint resource id."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts/privateEndpointConnections",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(parameters('storageAccountName'), '/', parameters('privateEndpointConnectionName'))]",
+            "properties": {
+                "privateEndpoint": {
+                    "id": "[parameters('privateEndpointId')]"
+                },
+                "privateLinkServiceConnectionState": {
+                    "status": "Approved"
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

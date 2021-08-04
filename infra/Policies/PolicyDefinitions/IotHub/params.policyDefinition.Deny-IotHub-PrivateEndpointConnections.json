@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-IotHub-PrivateEndpointConnections"
+        },
+        "policyDescription": {
+            "value": "Deny private endpoints connections that are created in other subscriptions than the service itself."
+        },
+        "policyMode": {
+            "value": "All"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Deny"
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Devices/iotHubs/privateEndpointConnections"
+                        },
+                        {
+                            "field": "Microsoft.Devices/iotHubs/privateEndpointConnections/privateLinkServiceConnectionState.status",
+                            "equals": "Approved"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Devices/iotHubs/privateEndpointConnections/privateEndpoint.id",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[split(concat(field('Microsoft.Devices/iotHubs/privateEndpointConnections/privateEndpoint.id'), '//'), '/')[2]]",
+                                    "notEquals": "[subscription().subscriptionId]"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Internet of Things",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}
