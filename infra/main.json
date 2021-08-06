@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.451.19169",
-      "templateHash": "9192285008178226078"
+      "templateHash": "3848180678466051826"
     }
   },
   "parameters": {
@@ -1668,7 +1668,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "17622350918409881745"
+              "templateHash": "489961371540884449"
             }
           },
           "parameters": {
@@ -1681,7 +1681,7 @@
           },
           "functions": [],
           "variables": {
-            "vnetName": "[last(split(parameters('vnetId'), '/'))]",
+            "vnetName": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), last(split(parameters('vnetId'), '/')), 'incorrectSegmentLength')]",
             "privateDnsZoneNames": [
               "privatelink.afs.azure.net",
               "privatelink.analysis.windows.net",
