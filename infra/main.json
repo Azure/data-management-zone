@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.451.19169",
-      "templateHash": "1202503820046294049"
+      "templateHash": "9192285008178226078"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.451.19169",
-              "templateHash": "13524236432299316618"
+              "templateHash": "10616819189306188906"
             }
           },
           "parameters": {
@@ -280,16 +280,21 @@
             },
             "dnsServerAdresses": {
               "type": "array",
-              "defaultValue": []
+              "defaultValue": [
+                "10.0.0.4"
+              ]
             },
             "vnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.0.0/16"
             },
             "azureFirewallSubnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.0.0/24"
             },
             "servicesSubnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.1.0/24"
             },
             "enableDnsAndFirewallDeployment": {
               "type": "bool",
