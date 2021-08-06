@@ -10,12 +10,14 @@ param location string
 param prefix string
 param tags object
 param firewallPrivateIp string = '10.0.0.4'
-param dnsServerAdresses array = []
-param vnetAddressPrefix string
-param azureFirewallSubnetAddressPrefix string
-param servicesSubnetAddressPrefix string
+param dnsServerAdresses array = [
+  '10.0.0.4'
+]
+param vnetAddressPrefix string = '10.0.0.0/16'
+param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
+param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 param enableDnsAndFirewallDeployment bool = true
-param firewallPolicyId string
+param firewallPolicyId string = ''
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
@@ -36,7 +38,8 @@ resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
 }
 
 resource routeTableDefaultRoute 'Microsoft.Network/routeTables/routes@2020-11-01' = {
-  name: '${routeTable.name}/to-firewall-default'
+  name: 'to-firewall-default'
+  parent: routeTable
   properties: {
     addressPrefix: '0.0.0.0/0'
     nextHopType: 'VirtualAppliance'

@@ -10,12 +10,14 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdSynapseprivatelinkhub string
-param privateDnsZoneIdAnalysis string
-param privateDnsZoneIdPbiDedicated string
-param privateDnsZoneIdPowerQuery string
+param privateDnsZoneIdSynapseprivatelinkhub string = ''
+param privateDnsZoneIdAnalysis string = ''
+param privateDnsZoneIdPbiDedicated string = ''
+param privateDnsZoneIdPowerQuery string = ''
 
 // Variables
+var synapsePrivatelinkHub001Name = '${prefix}-synapseplhub001'
+var powerbiPrivateLink001Name = '${prefix}-powerbipl001'
 
 // Resources
 module synapsePrivateLinkHub001 'services/synapseprivatelinkhub.bicep' = {
@@ -25,7 +27,7 @@ module synapsePrivateLinkHub001 'services/synapseprivatelinkhub.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    synapsePrivatelinkHubName: '${prefix}-synapseplhub001'
+    synapsePrivatelinkHubName: synapsePrivatelinkHub001Name
     privateDnsZoneIdSynapseprivatelinkhub: privateDnsZoneIdSynapseprivatelinkhub
   }
 }
@@ -37,7 +39,7 @@ module synapsePrivateLinkHub001 'services/synapseprivatelinkhub.bicep' = {
 //     location: location
 //     tags: tags
 //     subnetId: subnetId
-//     powerbiPrivateLinkName: '${prefix}-powerbipl001'
+//     powerbiPrivateLinkName: powerbiPrivateLink001Name
 //     privateDnsZoneIdAnalysis: privateDnsZoneIdAnalysis
 //     privateDnsZoneIdPbiDedicated: privateDnsZoneIdPbiDedicated
 //     privateDnsZoneIdPowerQuery: privateDnsZoneIdPowerQuery

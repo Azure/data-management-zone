@@ -19,7 +19,7 @@ param vmssAdmininstratorUsername string = 'VmssMainUser'
 param vmssAdministratorPublicSshKey string
 
 // Variables
-var storageAccountName = last(split(storageAccountId, '/'))
+var storageAccountName = length(split(storageAccountId, '/')) >= 9 ? last(split(storageAccountId, '/')) : 'incorrectSegmentLength'
 
 // Resources
 resource loadBalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {

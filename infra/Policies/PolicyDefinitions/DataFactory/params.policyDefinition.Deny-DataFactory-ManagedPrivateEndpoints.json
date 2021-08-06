@@ -44,8 +44,16 @@
                             "equals": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints"
                         },
                         {
-                            "value": "[split(field('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints/privateLinkResourceId'), '/')[2]]",
-                            "notIn": "[parameters('allowedSubscriptions')]"
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints/privateLinkResourceId",
+                                    "exists": false
+                                },
+                                {
+                                    "value": "[split(field('Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints/privateLinkResourceId'), '/')[2]]",
+                                    "notIn": "[parameters('allowedSubscriptions')]"
+                                }
+                            ]
                         }
                     ]
                 },
