@@ -9,7 +9,7 @@ param location string
 param tags object
 param subnetId string
 param keyvaultName string
-param privateDnsZoneIdKeyVault string
+param privateDnsZoneIdKeyVault string = ''
 
 // Variables
 var keyVaultPrivateEndpointName = '${keyVault.name}-private-endpoint'

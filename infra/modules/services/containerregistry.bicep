@@ -9,7 +9,7 @@ param location string
 param tags object
 param subnetId string
 param containerRegistryName string
-param privateDnsZoneIdContainerRegistry string
+param privateDnsZoneIdContainerRegistry string = ''
 
 // Variables
 var containerRegistryNameCleaned = replace(containerRegistryName, '-', '')
