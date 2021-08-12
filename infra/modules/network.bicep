@@ -190,7 +190,6 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsA
   dependsOn: [
     firewallPolicyRules
   ]
-  apiVersion: '2020-07-01'
   location: location
   tags: tags
   zones: [
