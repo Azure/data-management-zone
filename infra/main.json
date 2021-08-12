@@ -476,7 +476,7 @@
             {
               "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/azureFirewalls",
-              "apiVersion": "2020-07-01",
+              "apiVersion": "2020-11-01",
               "name": "[format('{0}-firewall', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
