@@ -332,7 +332,7 @@
               "properties": {
                 "addressPrefix": "0.0.0.0/0",
                 "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
+                "nextHopIpAddress": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix'))), '2020-11-01').ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))]",
@@ -1633,7 +1633,7 @@
             },
             "firewallPrivateIp": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress]"
+              "value": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix'))), '2020-11-01').ipConfigurations[0].properties.privateIPAddress]"
             }
           }
         }
