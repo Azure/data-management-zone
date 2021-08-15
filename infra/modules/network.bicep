@@ -22,8 +22,8 @@ param firewallPolicyId string = ''
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
-var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : subscription().subscriptionId
-var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : resourceGroup().name
+var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[2] : subscription().subscriptionId
+var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[4] : resourceGroup().name
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
 // Resources
@@ -224,4 +224,4 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsA
 // Outputs
 output vnetId string = vnet.id
 output serviceSubnet string = vnet.properties.subnets[1].id
-output firewallPrivateIp string = firewall.properties.ipConfigurations[0].properties.privateIPAddress
+output firewallPrivateIp string = enableDnsAndFirewallDeployment ? firewall.properties.ipConfigurations[0].properties.privateIPAddress : firewallPrivateIp
