@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "7619330531645682821"
+      "templateHash": "974034123924531819"
     }
   },
   "parameters": {
@@ -1966,7 +1966,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "10209778494982289058"
+              "templateHash": "7660076124829650051"
             }
           },
           "parameters": {
@@ -2051,7 +2051,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "17922476316647096415"
+                      "templateHash": "10421698733680776878"
                     }
                   },
                   "parameters": {
@@ -2103,7 +2103,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Purview/accounts",
-                      "apiVersion": "2020-12-01-preview",
+                      "apiVersion": "2021-07-01",
                       "name": "[parameters('purviewName')]",
                       "location": "[if(contains(variables('purviewRegions'), parameters('location')), parameters('location'), 'westeurope')]",
                       "tags": "[parameters('tags')]",
@@ -2112,7 +2112,7 @@
                       },
                       "sku": {
                         "name": "Standard",
-                        "capacity": 4
+                        "capacity": 1
                       },
                       "properties": {
                         "cloudConnectors": {},
