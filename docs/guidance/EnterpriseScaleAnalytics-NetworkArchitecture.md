@@ -32,7 +32,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Service Management
 
-The most relevant benefit of this network architecture design is that it is in line with the existing network setup of most customers. Therefore, it is easy to explain and implement. In addition, a centralized and Azure native DNS solution with Private DNS Zones can be used to provide FQDN resolution inside the Azure tenant. The use of Private DNS Zones also allows for the automation of the DNS A-record lifecycle through [Azure Policies](/infra/Policies/PolicyDefinitions/PrivateDnsZoneGroups). Since tarffic is routed through a central NVA, network traffic that is sent from one Spoke to another one can also be logged and inspected, which can be another benefit of this design.
+The most relevant benefit of this network architecture design is that it is in line with the existing network setup of most customers. Therefore, it is easy to explain and implement. In addition, a centralized and Azure native DNS solution with Private DNS Zones can be used to provide FQDN resolution inside the Azure tenant. The use of Private DNS Zones also allows for the automation of the DNS A-record lifecycle through [Azure Policies](/infra/Policies/PolicyDefinitions/PrivateDnsZoneGroups/). Since tarffic is routed through a central NVA, network traffic that is sent from one Spoke to another one can also be logged and inspected, which can be another benefit of this design.
 
 A downside of this solution from a service management perspective is that the central Azure Platform team must manage Route Tables manually. This is required to ensure the necessary transitivity between Spokes to enable the process of sharing data assets across multiple Data Landing Zones. The management of routes can become complex and error prone over time and is something that should be considered upfront. The more critical disadvantage of this network setup is the central NVA. Firstly, the NVA acts as a single point of failure and can cause serius downtime inside the data platform in case of a failure. Secondly, as the dataset sizes grow inside the data platform and as the cross Data Landing Zone use cases grow more and more traffic will be sent through the central NVA. Over time, this can result in gigabytes or terabytes of data that is sent through the central instance. However, the bandwith of existing NVAs is often limited to a one- or two-digit gigabyte bandwith. Therefore, the appliance can act as a critical bottleneck limiting the traffic flowing between Data Landing Zones and therefore limiting the shareability of data assets. The only way to overcome this issue would be to scale out the central NVA across multiple instances, which will have huge implications on cost of this solution.
 
@@ -70,11 +70,17 @@ Since all private endpoints of a particular service (e.g. Storage Account A) hav
 
 ### User Access Management
 
-Summary: 
+From a user access maangement perspective this scenario is very similar to the first option except for the fact that access rights may also be required for other Data Landing Zones to not just create private endpoints within the designated Data Landing Zone and Vnet but also in the other Data Landing Zones and their respective Vnets. Hence, Data Product teams may not only require  write access to the respective resource group in the designated Data Landing Zone as well as join access to their designated subnet to be able to create new services including the private endpoints in a self-service manner, but they may also require access to a resource group and subnet inside the other Data Landing Zones to create the respective local private endpoints. In summary, this setup increases the complexity on the acces management layer since Data Product teams may require few permissions in each and every Data Landing Zone. In addition, it may lead to confusion and inconsistent RBAC over time. If required access rights are not provided to Data Landing Zone teams or Data Product teams, problems described in [Option 1: Traditional Hub & Spoke Design]() will be applicable.
+
+Summary: :heavy_minus_sign:
 
 ### Service Management
 
-Summary: 
+Option 2 has the benefit that there is no NVA acting as a single point of failure or throttling throughput. Not sending the datasets through the Connectivity Hub also reduces the management overhead for the central Azure platform team, as there is no need for scaling out the virtual appliance. This has the implication that the central Azure platform team can no longer inspect and log all traffic that is sent between Data Landing Zones. Nonetheless, this is not seen as disadvantage since Enterprise-Scale Analytics can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. If all resources would be hosted inside a single subscription, traffic would also not be inspected in the central Connectivity Hub. In addition, network logs can still be captured through the use of Network Security Group Flow Logs and additional application and service level logs can be consolidated and stored through the use of service specific Diagnostic Settings. All of these logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/).
+
+On ther other hand, the exponential growth of the number of required Private Endpoints also increases the network address space required by the data platform, which is not optimal. Lastly, the above mentioned DNS challenges are the biggest concern of this network architecture. An Azure native solution in the form of Private DNS Zones cannot be used. Hence, a third party solution will be required that is capable of resolving FQDNS based on the IP/origin of the requestor. In addition, tools must be developed to manage the lifecycle of Private DNS A-records which drastically increases the management overhead compared to the proposed [Azure Policy driven solution](/infra/Policies/PolicyDefinitions/PrivateDnsZoneGroups/). It would also be possible to create a distributed DNS infrastructure using Private DNS Zones, but with this solution we would create DNS islands which ultimately would lead to issues when trying to access services within other Landing Zones within the tenant. Therefore, this is not a viable alternative.
+
+Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
 ### Cost
 
@@ -84,13 +90,19 @@ _When accessing a private endpoint across a peered network customers will only e
 
 ---
 
-Summary: 
+With this network design, customers only pay for the private endpoints (charged per hour) as well as the ingress and egress traffic that is sent through the private endpoints to load the raw (1) and store the processed dataset (4). However, due to the exponential growth of the number of private endpoints inside the data platform additional costs must be expected and will highly depend on the number of private endpoints that are created since these are charged per hour. 
+
+Summary: :heavy_plus_sign:
 
 ### Bandwith
 
-Summary: 
+Due to the fact that there are no NVAs limiting throughput for cross Data Landing Zone data exchange, there are no known limitatons from a bandwith perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light). 
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Summary
+
+This network architecture suffers from the potential exponential growth of private endpoints which may even cause loosing track of which private endpoints are used where and for which purpose. Another limiting factor are the access management issues described above as well as the complexities created on the DNS layer. Therfore, in summary, this network design cannot be recommended.
 
 ## Option 3: Private Endpoint in Connectivity Hub
 
