@@ -21,7 +21,7 @@ _Virtual machine B (VM B) hosted in Data Landing Zone B loads a dataset from Sto
 
 The most obvious option would be to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets gets loaded by the virtual machine (6). 
 
-![Meshed Network Architecture](/docs/images/NetworkOptions-HubAndSpoke.png)
+![Hub and Spoke Architecture](/docs/images/NetworkOptions-HubAndSpoke.png)
 
 
 ### User Access Management
@@ -42,11 +42,11 @@ Summary: :heavy_minus_sign:
 
 ---
 
-_When accessing a private endpoint across a peered network customers will only ever be charged for the Private Endpoint itself and not for the Vnet peering. The official statement can be found [here (FAQ: How will billing work when accessing a private endpoint from a peered network?)](https://azure.microsoft.com/en-us/pricing/details/private-link/)._
+_When accessing a private endpoint across a peered network customers will only ever be charged for the private Endpoint itself and not for the Vnet peering. The official statement can be found [here (FAQ: How will billing work when accessing a private endpoint from a peered network?)](https://azure.microsoft.com/en-us/pricing/details/private-link/)._
 
 ---
 
-From a network perspective, customers have to pay for the two private endpoints of the storage accounts (charged per hour) as well as the ingress and egress traffic that is sent through the private endpoints to load the raw (1) and store the processed dataset (8). In addition, the customer will be charged for the ingress and egress of one Vnet peering (5). Due to the statement above, the other Vnet pering will not be charged (2). Lastly, customers will end up with very significant cost for the central NVA when choosing this network design ((3) and (4)). The high cost will be generated either because additional licenses need to be purchased to scale out based on demand or it will be generated because of the charge per processed gigabyte as it is done with Azure Firewall.
+From a network perspective, customers have to pay for the two private endpoints of the Storage Accounts (charged per hour) as well as the ingress and egress traffic that is sent through the private endpoints to load the raw (1) and store the processed dataset (8). In addition, the customer will be charged for the ingress and egress of one Vnet peering (5). Due to the statement above, the other Vnet pering will not be charged (2). Lastly, customers will end up with very significant cost for the central NVA when choosing this network design ((3) and (4)). The high cost will be generated either because additional licenses need to be purchased to scale out based on demand or it will be generated because of the charge per processed gigabyte as it is done with Azure Firewall.
 
 Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
@@ -60,5 +60,87 @@ Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
 From an access management and partially from a service management perspective, this setup has benefits. But due to the critical limitations pointed out in the service management, cost and bandwith section, this network design cannot be recommended for cross Data Landing Zone use cases.
 
-## Option 2: Private Endpoint Porjection
+## Option 2: Private Endpoint Projection
 
+Another design alternative that was evaluated was the projection of private endpoints across each and every Landing Zone. With this approach, a private endpoint for Storage Account A would be created each Data Landing Zone. Therefore, this option leads to a first private endpoint in Data Landing Zone A that is connected to to the Vnet in Data Landing Zone A, a second private private endpoint in Data Landing Zone B that is connected to to the Vnet in Data Landing Zone B, etc. The same applies to Storage Account B and potentially other services inside the Data Landing Zones. If the number of Data Landing Zones is defined as _n_, one would end up with _n_ private endpoints for at least all of the storage accounts and potentially other services within the Data Landing Zones.
+
+![Private Endpoint Projection Architecture](/docs/images/NetworkOptions-PrivateEndpointProjection.png)
+
+Since all private endpoints of a particular service (e.g. Storage Account A) have the same FQDN (e.g. `storageaccounta.privatelink.blob.core.windows.net`) this solution creates challenges on the DNS layer which cannot be solved with Private DNS Zones. A custom DNS solution is required that is capable of resolving DNS names based on the origin/IP of the requestor in order to make VM A connect to the Private Endpoints connected to the Vnet in Data Landing Zone A and make VM B connect to the Private Endpoints connected to the Vnet in Data Landing Zone B. This can be done with a setup based on Windows Servers, whereas the lifecycle of DNS A-records can be automated through a combination of Activity Log and Azure Functions.
+
+### User Access Management
+
+Summary: 
+
+### Service Management
+
+Summary: 
+
+### Cost
+
+---
+
+_When accessing a private endpoint across a peered network customers will only ever be charged for the private Endpoint itself and not for the Vnet peering. The official statement can be found [here (FAQ: How will billing work when accessing a private endpoint from a peered network?)](https://azure.microsoft.com/en-us/pricing/details/private-link/)._
+
+---
+
+Summary: 
+
+### Bandwith
+
+Summary: 
+
+### Summary
+
+## Option 3: Private Endpoint in Connectivity Hub
+
+### User Access Management
+
+Summary: 
+
+### Service Management
+
+Summary: 
+
+### Cost
+
+---
+
+_When accessing a private endpoint across a peered network customers will only ever be charged for the private Endpoint itself and not for the Vnet peering. The official statement can be found [here (FAQ: How will billing work when accessing a private endpoint from a peered network?)](https://azure.microsoft.com/en-us/pricing/details/private-link/)._
+
+---
+
+Summary: 
+
+### Bandwith
+
+Summary: 
+
+### Summary
+
+
+## Option 4: Meshed Network Architecture
+
+### User Access Management
+
+Summary: 
+
+### Service Management
+
+Summary: 
+
+### Cost
+
+---
+
+_When accessing a private endpoint across a peered network customers will only ever be charged for the private Endpoint itself and not for the Vnet peering. The official statement can be found [here (FAQ: How will billing work when accessing a private endpoint from a peered network?)](https://azure.microsoft.com/en-us/pricing/details/private-link/)._
+
+---
+
+Summary: 
+
+### Bandwith
+
+Summary: 
+
+### Summary
