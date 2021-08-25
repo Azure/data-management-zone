@@ -19,10 +19,9 @@ _Virtual machine B (VM B) hosted in Data Landing Zone B loads a dataset from Sto
 
 ## Option 1: Traditional Hub & Spoke Design
 
-The most obvious option would be to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets gets loaded by the virtual machine (6). 
+The most obvious option would be to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets gets loaded by the virtual machine (6) and then stored back into the Storage Account B (8). 
 
 ![Hub and Spoke Architecture](/docs/images/NetworkOptions-HubAndSpoke.png)
-
 
 ### User Access Management
 
@@ -62,11 +61,13 @@ From an access management and partially from a service management perspective, t
 
 ## Option 2: Private Endpoint Projection
 
-Another design alternative that was evaluated was the projection of private endpoints across each and every Landing Zone. With this approach, a private endpoint for Storage Account A would be created each Data Landing Zone. Therefore, this option leads to a first private endpoint in Data Landing Zone A that is connected to to the Vnet in Data Landing Zone A, a second private private endpoint in Data Landing Zone B that is connected to to the Vnet in Data Landing Zone B, etc. The same applies to Storage Account B and potentially other services inside the Data Landing Zones. If the number of Data Landing Zones is defined as _n_, one would end up with _n_ private endpoints for at least all of the storage accounts and potentially other services within the Data Landing Zones.
+Another design alternative that was evaluated was the projection of private endpoints across each and every Landing Zone. With this approach, a private endpoint for Storage Account A would be created each Data Landing Zone. Therefore, this option leads to a first private endpoint in Data Landing Zone A that is connected to to the Vnet in Data Landing Zone A, a second private private endpoint in Data Landing Zone B that is connected to to the Vnet in Data Landing Zone B, etc. The same applies to Storage Account B and potentially other services inside the Data Landing Zones. If the number of Data Landing Zones is defined as _n_, one would end up with _n_ private endpoints for at least all of the storage accounts and potentially other services within the Data Landing Zones leading to an exponential growth of the number of private endpoints.
 
 ![Private Endpoint Projection Architecture](/docs/images/NetworkOptions-PrivateEndpointProjection.png)
 
 Since all private endpoints of a particular service (e.g. Storage Account A) have the same FQDN (e.g. `storageaccounta.privatelink.blob.core.windows.net`) this solution creates challenges on the DNS layer which cannot be solved with Private DNS Zones. A custom DNS solution is required that is capable of resolving DNS names based on the origin/IP of the requestor in order to make VM A connect to the Private Endpoints connected to the Vnet in Data Landing Zone A and make VM B connect to the Private Endpoints connected to the Vnet in Data Landing Zone B. This can be done with a setup based on Windows Servers, whereas the lifecycle of DNS A-records can be automated through a combination of Activity Log and Azure Functions.
+
+With this setup, VM B can load the raw dataset in Storage Account A by accessing it through the local private endpoint (1). After the dataset has been loaded and processed ((2) and (3)) the dataset can be stored on Storage Account B by again directly accessing the local private endpoint (4). Data must not traverse any vnet peerings within this scenario.
 
 ### User Access Management
 
@@ -104,15 +105,25 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 This network architecture suffers from the potential exponential growth of private endpoints which may even cause loosing track of which private endpoints are used where and for which purpose. Another limiting factor are the access management issues described above as well as the complexities created on the DNS layer. Therfore, in summary, this network design cannot be recommended.
 
-## Option 3: Private Endpoint in Connectivity Hub
+## Option 3: Private Endpoints in Connectivity Hub
+
+The third option proposes to host the Private Endpoints in the Connectivity Hub and connect them to the Hub Vnet. With this solution, only a single private endpoint would be hosted on the corporate vnet for each service. Transitivity would also not be required due to the existing Hub and Spoke network architecture at most corporations and therfore the vnet peering between the Connectivity Hub and Data Landing Zones.
+
+In order to load a dataset stored in Storage Account A in VM B, data would have to traverse a single Vnet peering between the Connectivity Hub and the Data Landing Zone (5). Once the dataset has been loaded and processed ((3) and (4)) the dataset can be stored on Storage Account B by accessing the private endoint connected to the Hub Vnet (6). Before this is done, the data must traverse the vnet peering a second time (5).
+
+![Private Endpoints in Connectivity Hub](/docs/images/NetworkOptions-PrivateEndpointsInConnectivityHub.png)
 
 ### User Access Management
 
-Summary: 
+When opting for this network design, Data Landing Zone teams and Data Product teams must be given write permissions to a resource group in the Connectivity Hub subscription as well as join permissions to the the Hub Vnet to be able to connect private endpoints to the Hub Vnet. This is not in line with the Enterprise-Scale Landing Zone base principles, since the Connectivity Hub is a subscription that is designated for the Azure platform team of an organization and is dedicated for hosting the necessary and shared network infrastructure of an organization, including Firewalls, gateways and network management tools. This network option would make the design inconsistent, since these  and therefore something that most Azure platform teams will not allow.
+
+Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
 ### Service Management
 
-Summary: 
+Similar to Option 2, this network design has the benefit that there is no NVA acting as a single point of failure or throttling throughput. Not sending the datasets through the Connectivity Hub also reduces the management overhead for the central Azure platform team, as there is no need for scaling out the virtual appliance. This has the implication that the central Azure platform team can no longer inspect and log all traffic that is sent between Data Landing Zones. Nonetheless, this is not seen as disadvantage since Enterprise-Scale Analytics can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. If all resources would be hosted inside a single subscription, traffic would also not be inspected in the central Connectivity Hub. In addition, network logs can still be captured through the use of Network Security Group Flow Logs and additional application and service level logs can be consolidated and stored through the use of service specific Diagnostic Settings. All of these logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/). Also, this pattern allows for an Azure native DNS solution based on Private DNS Zones and allows for the automation of the DNS A-record lifecycle through [Azure Policies](/infra/Policies/PolicyDefinitions/PrivateDnsZoneGroups/).
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Cost
 
@@ -122,16 +133,23 @@ _When accessing a private endpoint across a peered network customers will only e
 
 ---
 
-Summary: 
+With this network design, customers only pay for the private endpoints (charged per hour) as well as the ingress and egress traffic that is sent through the private endpoints to load the raw (1) and store the processed dataset (6).
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Bandwith
 
-Summary: 
+Due to the fact that there are no NVAs limiting throughput for cross Data Landing Zone data exchange, there are no known limitatons from a bandwith perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light). 
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Summary
 
+There are many benefits that come with this network architecture design. However, the above mentioned inconsistencies from an access management perspectives make the design subpar and therefore the approach does not qualify as a recommended design.
 
-## Option 4: Meshed Network Architecture
+## Option 4: Meshed Network Architecture (Recommended)
+
+
 
 ### User Access Management
 
