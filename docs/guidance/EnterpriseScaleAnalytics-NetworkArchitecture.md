@@ -149,15 +149,21 @@ There are many benefits that come with this network architecture design. However
 
 ## Option 4: Meshed Network Architecture (Recommended)
 
+The recommended design proposes the use of a network mesh, which means adding vnet peerings between all Data Landing Zone Vnets and between the Data Management Zone and each Data Landing Zone in addition to the existing Hub and Spoke network design that most organisations have. For the scenario mentioned in the introduction, data loaded from Storage Account A would first transition a Vnet peering connection (2) between the Data Landing Zones before it would be loaded and processed by VM B ((3) and (4)). Lastly, the data can be stored on Storage Account B by sending the data through the local private endpoint (5). With this option, the data does not pass the Connectivity Hub and stays within the Data Platform consisting of a Data Management Zones and one or multiple Data Landing Zones. 
 
+![Meshed Network Architecture](/docs/images/NetworkOptions-MeshedNetworkArchitecture.png)
 
 ### User Access Management
 
-Summary: 
+With this solution approach Data Product teams will only require write access to the respective resource group in the Data Landing Zone as well as join access to their designated subnet to be able to create new services including the private endpoints in a self-service manner. Therefore, Data Product teams can deploy private endpoints themselves and don't require support to setup the necessary connectivity if they get the access rights provided to connect private endpoints to a subnet in that Spoke.
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Service Management
 
-Summary: 
+Similar to Option 2, this network design has the benefit that there is no NVA acting as a single point of failure or throttling throughput. Not sending the datasets through the Connectivity Hub also reduces the management overhead for the central Azure platform team, as there is no need for scaling out the virtual appliance. This has the implication that the central Azure platform team can no longer inspect and log all traffic that is sent between Data Landing Zones. Nonetheless, this is not seen as disadvantage since Enterprise-Scale Analytics can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. If all resources would be hosted inside a single subscription, traffic would also not be inspected in the central Connectivity Hub. In addition, network logs can still be captured through the use of Network Security Group Flow Logs and additional application and service level logs can be consolidated and stored through the use of service specific Diagnostic Settings. All of these logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/). Also, this pattern allows for an Azure native DNS solution based on Private DNS Zones and allows for the automation of the DNS A-record lifecycle through [Azure Policies](/infra/Policies/PolicyDefinitions/PrivateDnsZoneGroups/).
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Cost
 
@@ -167,10 +173,16 @@ _When accessing a private endpoint across a peered network customers will only e
 
 ---
 
-Summary: 
+With this network design, customers only pay for the private endpoints (charged per hour) as well as the ingress and egress traffic that is sent through the private endpoints to load the raw (1) and store the processed dataset (6). Due to the statement above, the Vnet pering will not be charged (2), which is why we end up with minimal cost with this option. 
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Bandwith
 
-Summary: 
+Due to the fact that there are no NVAs limiting throughput for cross Data Landing Zone data exchange, there are no known limitatons from a bandwith perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light). 
+
+Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 ### Summary
+
+The meshed network design offers maximum bandwith at minimal cost without maing comprimises from a user access management perspective or on the DNS layer. Hence, this network architecture design is the recommended for customers wanting to adopt Enterprise-Scale Analytics. If additional network policies need to be enforced within the Data Platform, it is advised to use Network Security Groups instead of central NVAs.
