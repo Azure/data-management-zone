@@ -1,6 +1,6 @@
 # Network Architecture Considerations
 
-Enterprise-Scale Analytics promises the possibility to easily share and access datasets across multiple data domains and Data Landing Zones without critical bandwith limitations and without creating multiple copies of the same dataset. To deliver on that promise, different network designs were considered, evaluated and tested. Based on the current capabilities of Azure Networking Services it is recommended to rely on a meshed network architecture. What this means is that it is recommended to setup vnet peering between
+Enterprise-Scale Analytics promises the possibility to easily share and access datasets across multiple data domains and Data Landing Zones without critical bandwith limitations and without creating multiple copies of the same dataset. To deliver on that promise, different network designs had to be considered, evaluated and tested to make sure that these are compatible with the existing Hub and Spoke and vWAN deployments of corporations. Based on the current capabilities of Azure Networking Services it is recommended to rely on a meshed network architecture. What this means is that it is recommended to setup vnet peering between
 
 1. The Connectivity Hub and Data Management Zone,
 2. The Connectivity Hub and each Data Landing Zone,
@@ -9,17 +9,17 @@ Enterprise-Scale Analytics promises the possibility to easily share and access d
 
 ![Meshed Network Architecture](/docs/images/NetworkOptions-NetworkMesh.png)
 
-To explain the rational behind the recommended design, this article will illustrate the advantages and disadvantages that come with each of the different network architecture approaches that were considered when designing Enterprise-Scale Analytics. Every design pattern will be evaluated along the following criteria: Cost, User Access Management, Service Management and Bandwith. Each scenario will be analyzed with the following cross-Data Landing Zone use-case in mind:d
+To explain the rational behind the recommended design, this article will illustrate the advantages and disadvantages that come with each of the different network architecture approaches that were considered when designing Enterprise-Scale Analytics. Every design pattern will be evaluated along the following criteria: Cost, User Access Management, Service Management and Bandwith. Each scenario will be analyzed with the following cross-Data Landing Zone use-case in mind:
 
 ---
 
-_Virtual machine B (VM B) hosted in Data Landing Zone B loads a dataset from Storage Account A hosted in Data Landing Zone A. Next, it processes the dataset and finally it stores the processed dataset and finally stores the processed dataset in Storage Account B hosted in Data Landing Zone B._
+_Virtual machine B (VM B) hosted in Data Landing Zone B loads a dataset from Storage Account A hosted in Data Landing Zone A. Next, it processes the dataset and finally it stores the processed dataset and in Storage Account B hosted in Data Landing Zone B._
 
 ---
 
 ## Option 1: Traditional Hub & Spoke Design
 
-The most obvious option would be to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets gets loaded by the virtual machine (6) and then stored back into the Storage Account B (8).
+The most obvious option is to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets gets loaded by the virtual machine (6) and then stored back into the Storage Account B (8).
 
 ![Hub and Spoke Architecture](/docs/images/NetworkOptions-HubAndSpoke.png)
 
