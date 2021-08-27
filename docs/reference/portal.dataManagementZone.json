@@ -255,8 +255,12 @@
                                     "toolTip": "Specify a Vnet address CIDR range within the range [10,24].",
                                     "constraints": {
                                         "required": true,
-                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(1[0-9]|2[0-4]))$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                        "validations": [
+                                            {
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(1[0-9]|2[0-4]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                            }
+                                        ]
                                     }
                                 },
                                 {
@@ -268,8 +272,28 @@
                                     "toolTip": "Specify a CIDR range for the Azure Firewall Subnet within the range [24,28].",
                                     "constraints": {
                                         "required": true,
-                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(2[4-8]))$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                        "validations": [
+                                            {
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(2[4-8]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange, '/')), '.'), 1))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (first octet)."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 16), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 2)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange, '/')), '.'), 2))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (second octet)."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange, '/')), '.'), 3))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
+                                            }
+                                        ]
                                     }
                                 },
                                 {
@@ -281,8 +305,28 @@
                                     "toolTip": "Specify a CIDR range for the Subnet to which privat endpoints and other services will be connected. The subnet should be within the range [24,28].",
                                     "constraints": {
                                         "required": true,
-                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(2[4-8]))$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                        "validations": [
+                                            {
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:$|/(2[4-8]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange, '/')), '.'), 1))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (first octet)."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 16), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 2)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange, '/')), '.'), 2))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (second octet)."
+                                            },
+                                            {
+                                                "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 24), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 3)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange, '/')), '.'), 3))), true)]",
+                                                "message": "CIDR range not within virtual network CIDR range (third octet)."
+                                            },
+                                            {
+                                                "isValid": "[lessOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), last(split(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange, '/')))]",
+                                                "message": "CIDR range not within virtual network CIDR range (subnet mask)."
+                                            }
+                                        ]
                                     }
                                 }
                             ]
@@ -483,8 +527,12 @@
                                     "toolTip": "Specify the private IP address of your Firewall.",
                                     "constraints": {
                                         "required": true,
-                                        "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                        "validations": [
+                                            {
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)$",
+                                                "message": "Invalid IP address. Please specify a single valid IP adress (e.g. '10.0.0.4')."
+                                            }
+                                        ]
                                     }
                                 },
                                 {
@@ -496,8 +544,12 @@
                                     "toolTip": "Specify the private IP addresses of your DNS forwarders. You can specify more than one private IP address ('10.0.0.4,10.0.0.5').",
                                     "constraints": {
                                         "required": true,
-                                        "regex": "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(,)?)*$",
-                                        "validationMessage": "Invalid CIDR range. The address prefix must be in the range [10,24]."
+                                        "validations": [
+                                            {
+                                                "regex": "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(,)?)*$",
+                                                "message": "Invalid IP addresses. Please specify one or more valid IP adresses (e.g. '10.0.0.4' or '10.0.0.4,10.0.0.5')."
+                                            }
+                                        ]
                                     }
                                 }
                             ]
