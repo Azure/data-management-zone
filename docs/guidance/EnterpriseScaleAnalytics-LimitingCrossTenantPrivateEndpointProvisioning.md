@@ -6,8 +6,8 @@ Customers are increasingly using private endpoints in their tenants to connect t
 
 Private Endpoints can be used to control the traffic within a customer Azure environement using an existing network perimeter, however even using private endpoints within Azure there is still a  potential risk of data exfiltration. This risk arises from the fact that a rogue user could:
 
-*	Scenario A: Create endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (other subscription and/or tenant) or
-*	Scenario B: Create private endpoints in other subscriptions and tenants that are linked to services that are hosted in the customer environment.
+* Scenario A: Create endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (other subscription and/or tenant) or
+* Scenario B: Create private endpoints in other subscriptions and tenants that are linked to services that are hosted in the customer environment.
 
 ![Data exfiltration scenarios](/docs/images/CrossTenantPrivateEndpointProvisioning.png)
 
@@ -23,8 +23,8 @@ The following sections will therefore propose options to overcome the respective
 
 For the first data exfiltration scenario, a rogue user requires the following rights in the customer environment:
 
-1.	“Microsoft.Network/virtualNetworks/join/action” rights on a subnet with “privateEndpointNetworkPolicies” set to “Disabled” and
-2.	“Microsoft.Network/privateEndpoints/write” access to a resource group in the customer environment.
+1. “Microsoft.Network/virtualNetworks/join/action” rights on a subnet with “privateEndpointNetworkPolicies” set to “Disabled” and
+2. “Microsoft.Network/privateEndpoints/write” access to a resource group in the customer environment.
 
 With these rights, the person has the possibility to create a private endpoint that is linked to a service in a separate subscription and tenant. The scenario is illustrated in Figure 1: Data exfiltration scenarios.
 
@@ -108,7 +108,7 @@ The policy shown above blocks the creation of private endpoints in a different s
 
 For the second scenario, a rogue user requires the following rights in the customer environment:
 
-1.	“*/write” rights on the service in the customer environment to which a private endpoint should be created.
+1. “*/write” rights on the service in the customer environment to which a private endpoint should be created.
 
 With these rights, the person has the possibility to create a private endpoint in an external tenant and subscription that is linked to a service in the customer environment. The scenario is illustrated in Figure 1: Data exfiltration scenarios.
 
@@ -160,7 +160,7 @@ It is recommended to assign the policy to the top-level management group and use
 
 With the introduction of managed virtual networks and managed private endpoints in Synapse and Data Factory as well as managed private endpoints, this policy is blocking the secure and private usage of these services. In general, this means that the development of (data) solutions on top of these services will be blocked across the tenant.
 
-Therefore, we are proposing the use of an “Audit” effect instead of a “Deny” affect in [Scenario B: Deny private endpoints being created in other tenants and subscriptions](#) to keep track of private endpoints being created in separate subscriptions and tenants or to use policy exemptions for the respective data platform scopes. Additional policies must be created for Data Factory and Synapse to overcome the data exfiltration risk on these managed virtual networks that are hosted in a Microsoft subscription. How this can be done will be described in the next paragraphs.
+Therefore, we are proposing the use of an “Audit” effect instead of a “Deny” affect in [Scenario B: Deny private endpoints being created in other tenants and subscriptions](#scenario-b-deny-private-endpoints-being-created-in-other-tenants-and-subscriptions) to keep track of private endpoints being created in separate subscriptions and tenants or to use policy exemptions for the respective data platform scopes. Additional policies must be created for Data Factory and Synapse to overcome the data exfiltration risk on these managed virtual networks that are hosted in a Microsoft subscription. How this can be done will be described in the next paragraphs.
 
 ### Azure Data Factory
 
@@ -240,12 +240,12 @@ The policy above enforces the use of the data exfiltration feature of Synapse. S
 
 These policies are now available as built-in:
 
-1.	Azure Synapse workspaces should allow outbound data traffic only to approved targets
+1. Azure Synapse workspaces should allow outbound data traffic only to approved targets
 
-    Definition ID: /providers/Microsoft.Authorization/policyDefinitions/3484ce98-c0c5-4c83-994b-c5ac24785218
+   Definition ID: /providers/Microsoft.Authorization/policyDefinitions/3484ce98-c0c5-4c83-994b-c5ac24785218
 
-2.	Synapse managed private endpoints should only connect to resources in approved Azure Active Directory tenants
+2. Synapse managed private endpoints should only connect to resources in approved Azure Active Directory tenants
 
-    Definition ID: “/providers/Microsoft.Authorization/policyDefinitions/3a003702-13d2-4679-941b-937e58c443f0”
+   Definition ID: “/providers/Microsoft.Authorization/policyDefinitions/3a003702-13d2-4679-941b-937e58c443f0”
 
 It is recommended to assign the policy to the top-level management group and use exemptions where required.
