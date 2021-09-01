@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "974034123924531819"
+      "templateHash": "16791622274931099965"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "14220586640209570468"
+              "templateHash": "7515835829504360486"
             }
           },
           "parameters": {
@@ -536,7 +536,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "753927496380084065"
+                      "templateHash": "12646215261701148621"
                     }
                   },
                   "parameters": {
@@ -729,6 +729,36 @@
                                   "9093"
                                 ],
                                 "description": "Required for workers communication with Azure Eventhub services"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Azure-NetworkRules",
+                            "priority": 10400,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "Azure-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [
+                                  "kms.core.windows.net"
+                                ],
+                                "destinationPorts": [
+                                  "1688"
+                                ],
+                                "description": "Allow Windows Activation in Azure through Azure KMS Service"
                               }
                             ]
                           }
@@ -1042,7 +1072,11 @@
                                 "fqdnTags": [],
                                 "targetFqdns": [
                                   "*microsoft.com",
-                                  "*azure.com"
+                                  "*azure.com",
+                                  "*windows.com",
+                                  "*windows.net",
+                                  "*azure-automation.net",
+                                  "*digicert.com"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
@@ -1051,7 +1085,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows communication with azure and microsoft"
+                                "description": "Allows communication with Azure and Microsoft for Logging and Metrics as well as other services"
                               }
                             ]
                           }
@@ -1092,7 +1126,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "753927496380084065"
+                      "templateHash": "12646215261701148621"
                     }
                   },
                   "parameters": {
@@ -1285,6 +1319,36 @@
                                   "9093"
                                 ],
                                 "description": "Required for workers communication with Azure Eventhub services"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Azure-NetworkRules",
+                            "priority": 10400,
+                            "action": {
+                              "type": "Allow"
+                            },
+                            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                            "rules": [
+                              {
+                                "name": "Azure-NetworkRule-001",
+                                "ruleType": "NetworkRule",
+                                "ipProtocols": [
+                                  "TCP"
+                                ],
+                                "sourceAddresses": [
+                                  "*"
+                                ],
+                                "sourceIpGroups": [],
+                                "destinationAddresses": [],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [
+                                  "kms.core.windows.net"
+                                ],
+                                "destinationPorts": [
+                                  "1688"
+                                ],
+                                "description": "Allow Windows Activation in Azure through Azure KMS Service"
                               }
                             ]
                           }
@@ -1598,7 +1662,11 @@
                                 "fqdnTags": [],
                                 "targetFqdns": [
                                   "*microsoft.com",
-                                  "*azure.com"
+                                  "*azure.com",
+                                  "*windows.com",
+                                  "*windows.net",
+                                  "*azure-automation.net",
+                                  "*digicert.com"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
@@ -1607,7 +1675,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows communication with azure and microsoft"
+                                "description": "Allows communication with Azure and Microsoft for Logging and Metrics as well as other services"
                               }
                             ]
                           }
@@ -1966,7 +2034,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "7660076124829650051"
+              "templateHash": "6496827630037915884"
             }
           },
           "parameters": {
@@ -2051,7 +2119,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "10421698733680776878"
+                      "templateHash": "6970155837839612296"
                     }
                   },
                   "parameters": {
@@ -2153,7 +2221,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdPurview')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNamePortal'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNamePortal'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2200,7 +2268,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdPurview')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameAccount'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameAccount'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2247,7 +2315,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdStorageBlob')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameBlob'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameBlob'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2294,7 +2362,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdStorageQueue')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameQueue'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameQueue'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2341,7 +2409,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdEventhubNamespace')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameNamespace'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameNamespace'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2399,7 +2467,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "15339723277993214204"
+                      "templateHash": "11855677596500727104"
                     }
                   },
                   "parameters": {
@@ -2486,7 +2554,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdKeyVault')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('keyVaultPrivateEndpointName'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2622,7 +2690,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "14677442166513541376"
+              "templateHash": "5356972810412908287"
             }
           },
           "parameters": {
@@ -2681,7 +2749,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "14542384004817403614"
+                      "templateHash": "6362078172727923713"
                     }
                   },
                   "parameters": {
@@ -2778,7 +2846,7 @@
                       "condition": "[empty(parameters('privateDnsZoneIdContainerRegistry'))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('containerRegistryPrivateEndpointName'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('containerRegistryPrivateEndpointName'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {
@@ -2849,7 +2917,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "90372749121783991"
+              "templateHash": "16741161157066635221"
             }
           },
           "parameters": {
@@ -2921,7 +2989,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "3001418668052607286"
+                      "templateHash": "6038565975922814865"
                     }
                   },
                   "parameters": {
@@ -2987,7 +3055,7 @@
                       "condition": "[not(empty(parameters('privateDnsZoneIdSynapseprivatelinkhub')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('synapsePrivatelinkHubPrivateEndpointName'), 'aRecord')]",
+                      "name": "[format('{0}/{1}', variables('synapsePrivatelinkHubPrivateEndpointName'), 'default')]",
                       "properties": {
                         "privateDnsZoneConfigs": [
                           {

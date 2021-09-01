@@ -194,6 +194,36 @@ resource networkRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2
           }
         ]
       }
+      {
+        name: 'Azure-NetworkRules'
+        priority: 10400
+        action: {
+          type: 'Allow'
+        }
+        ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+        rules: [
+          {
+            name: 'Azure-NetworkRule-001'
+            ruleType: 'NetworkRule'
+            ipProtocols: [
+              'TCP'
+            ]
+            sourceAddresses: [
+              '*'
+            ]
+            sourceIpGroups: []
+            destinationAddresses: []
+            destinationIpGroups: []
+            destinationFqdns: [
+              'kms.core.windows.net'
+            ]
+            destinationPorts: [
+              '1688'
+            ]
+            description: 'Allow Windows Activation in Azure through Azure KMS Service'
+          }
+        ]
+      }
     ]
   }
 }
@@ -507,6 +537,10 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
             targetFqdns: [
               '*microsoft.com'
               '*azure.com'
+              '*windows.com'
+              '*windows.net'
+              '*azure-automation.net'
+              '*digicert.com'
             ]
             targetUrls: []
             terminateTLS: false
@@ -515,7 +549,7 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
             ]
             destinationAddresses: []
             sourceIpGroups: []
-            description: 'Allows communication with azure and microsoft'
+            description: 'Allows communication with Azure and Microsoft for Logging and Metrics as well as other services'
           }
         ]
       }
