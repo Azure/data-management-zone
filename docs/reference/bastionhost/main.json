@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "1275529519328453974"
+      "templateHash": "13109523197203963234"
     }
   },
   "parameters": {
@@ -44,9 +44,34 @@
     },
     "vnetId": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
-        "description": "Specifies the resource Id of the vnet in  your Data Landing Zone or Data Management Zone."
+        "description": "Specifies the resource Id of the vnet in your Data Landing Zone or Data Management Zone."
+      }
+    },
+    "defaultNsgId": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the resource Id of the default network security group of your Data Landing Zone or Data Management Zone."
+      }
+    },
+    "defaultRouteTableId": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the resource Id of the default route table of your Data Landing Zone or Data Management Zone."
+      }
+    },
+    "bastionSubnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.1.10.0/24",
+      "metadata": {
+        "description": "Specifies the address space of the subnet that is used for Azure Bastion."
+      }
+    },
+    "jumpboxSubnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "10.1.11.0/24",
+      "metadata": {
+        "description": "Specifies the address space of the subnet that is used for Jumboxes."
       }
     },
     "virtualMachineSku": {
@@ -81,7 +106,7 @@
       "Name": "[variables('name')]"
     },
     "tagsJoined": "[union(variables('tagsDefault'), parameters('tags'))]",
-    "vnetSubscriptionId": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), split(parameters('vnetId'), '/')[1], subscription().id)]",
+    "vnetSubscriptionId": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), split(parameters('vnetId'), '/')[2], subscription().id)]",
     "vnetResourceGroupName": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), split(parameters('vnetId'), '/')[4], 'incorrectSegmentLength')]",
     "vnetName": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), last(split(parameters('vnetId'), '/')), 'incorrectSegmentLength')]"
   },
@@ -117,6 +142,18 @@
           },
           "vnetName": {
             "value": "[variables('vnetName')]"
+          },
+          "bastionSubnetAddressPrefix": {
+            "value": "[parameters('bastionSubnetAddressPrefix')]"
+          },
+          "jumpboxSubnetAddressPrefix": {
+            "value": "[parameters('jumpboxSubnetAddressPrefix')]"
+          },
+          "defaultNsgId": {
+            "value": "[parameters('defaultNsgId')]"
+          },
+          "defaultRouteTableId": {
+            "value": "[parameters('defaultRouteTableId')]"
           }
         },
         "template": {
@@ -126,7 +163,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "10409687429141260389"
+              "templateHash": "13030817408545927700"
             }
           },
           "parameters": {
@@ -142,9 +179,19 @@
             "vnetName": {
               "type": "string"
             },
-            "subnetAddressPrefix": {
+            "bastionSubnetAddressPrefix": {
               "type": "string",
               "defaultValue": "10.1.10.0/24"
+            },
+            "jumpboxSubnetAddressPrefix": {
+              "type": "string",
+              "defaultValue": "10.1.11.0/24"
+            },
+            "defaultNsgId": {
+              "type": "string"
+            },
+            "defaultRouteTableId": {
+              "type": "string"
             }
           },
           "functions": [],
@@ -194,14 +241,14 @@
                     }
                   },
                   {
-                    "name": "AllowBastionCommunicationInbound",
+                    "name": "AllowAzureLoadBalancerInbound",
                     "properties": {
-                      "description": "Required for data plane communication between the underlying components of Azure Bastion.",
-                      "protocol": "*",
+                      "description": "Required for the control plane, that is, Gateway Manager to be able to talk to Azure Bastion.",
+                      "protocol": "Tcp",
                       "sourcePortRange": "*",
-                      "destinationPortRange": "8080,5701",
-                      "sourceAddressPrefix": "VirtualNetwork",
-                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
                       "access": "Allow",
                       "priority": 140,
                       "direction": "Inbound",
@@ -212,19 +259,43 @@
                     }
                   },
                   {
+                    "name": "AllowBastionCommunicationInbound",
+                    "properties": {
+                      "description": "Required for data plane communication between the underlying components of Azure Bastion.",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 150,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [
+                        "5701",
+                        "8080"
+                      ],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                    }
+                  },
+                  {
                     "name": "AllowSshRdpOutbound",
                     "properties": {
                       "description": "Required for SSH and RDP outbound connectivity.",
                       "protocol": "*",
                       "sourcePortRange": "*",
-                      "destinationPortRange": "22,2289",
+                      "destinationPortRange": "",
                       "sourceAddressPrefix": "*",
                       "destinationAddressPrefix": "VirtualNetwork",
                       "access": "Allow",
                       "priority": 100,
                       "direction": "Outbound",
                       "sourcePortRanges": [],
-                      "destinationPortRanges": [],
+                      "destinationPortRanges": [
+                        "22",
+                        "3389"
+                      ],
                       "sourceAddressPrefixes": [],
                       "destinationAddressPrefixes": []
                     }
@@ -253,14 +324,17 @@
                       "description": "Required for data plane communication between the underlying components of Azure Bastion.",
                       "protocol": "*",
                       "sourcePortRange": "*",
-                      "destinationPortRange": "8080,5701",
+                      "destinationPortRange": "",
                       "sourceAddressPrefix": "VirtualNetwork",
                       "destinationAddressPrefix": "VirtualNetwork",
                       "access": "Allow",
                       "priority": 120,
                       "direction": "Outbound",
                       "sourcePortRanges": [],
-                      "destinationPortRanges": [],
+                      "destinationPortRanges": [
+                        "5701",
+                        "8080"
+                      ],
                       "sourceAddressPrefixes": [],
                       "destinationAddressPrefixes": []
                     }
@@ -291,7 +365,7 @@
               "apiVersion": "2021-02-01",
               "name": "[format('{0}/{1}', parameters('vnetName'), 'AzureBastionSubnet')]",
               "properties": {
-                "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                "addressPrefix": "[parameters('bastionSubnetAddressPrefix')]",
                 "addressPrefixes": [],
                 "networkSecurityGroup": {
                   "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-bastion-nsg', parameters('prefix')))]"
@@ -306,12 +380,40 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-bastion-nsg', parameters('prefix')))]"
               ]
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks/subnets",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}/{1}', parameters('vnetName'), 'JumpboxSubnet')]",
+              "properties": {
+                "addressPrefix": "[parameters('jumpboxSubnetAddressPrefix')]",
+                "addressPrefixes": [],
+                "networkSecurityGroup": {
+                  "id": "[parameters('defaultNsgId')]"
+                },
+                "routeTable": {
+                  "id": "[parameters('defaultRouteTableId')]"
+                },
+                "delegations": [],
+                "ipAllocations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled",
+                "serviceEndpointPolicies": [],
+                "serviceEndpoints": []
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureBastionSubnet')]"
+              ]
             }
           ],
           "outputs": {
-            "subnetId": {
+            "bastionSubnetId": {
               "type": "string",
               "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureBastionSubnet')]"
+            },
+            "jumpboxSubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'JumpboxSubnet')]"
             }
           }
         }
@@ -340,8 +442,11 @@
           "virtualMachineSku": {
             "value": "[parameters('virtualMachineSku')]"
           },
-          "subnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.subnetId.value]"
+          "bastionSubnetId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.bastionSubnetId.value]"
+          },
+          "jumpboxSubnetId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.jumpboxSubnetId.value]"
           },
           "administratorUsername": {
             "value": "[parameters('administratorUsername')]"
@@ -357,7 +462,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "6739285981377474591"
+              "templateHash": "2911986044145184865"
             }
           },
           "parameters": {
@@ -370,7 +475,10 @@
             "tags": {
               "type": "object"
             },
-            "subnetId": {
+            "bastionSubnetId": {
+              "type": "string"
+            },
+            "jumpboxSubnetId": {
               "type": "string"
             },
             "virtualMachineSku": {
@@ -411,7 +519,7 @@
                     "value": "[variables('bastion001Name')]"
                   },
                   "subnetId": {
-                    "value": "[parameters('subnetId')]"
+                    "value": "[parameters('bastionSubnetId')]"
                   }
                 },
                 "template": {
@@ -421,7 +529,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "6545635793969789677"
+                      "templateHash": "11836717545045514781"
                     }
                   },
                   "parameters": {
@@ -479,7 +587,7 @@
                               "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpName'))]"
                               },
-                              "privateIPAllocationMethod": "Static"
+                              "privateIPAllocationMethod": "Dynamic"
                             }
                           }
                         ]
@@ -509,7 +617,7 @@
                     "value": "[parameters('tags')]"
                   },
                   "subnetId": {
-                    "value": "[parameters('subnetId')]"
+                    "value": "[parameters('jumpboxSubnetId')]"
                   },
                   "virtualmachineName": {
                     "value": "[variables('virtualMachine001Name')]"
@@ -531,7 +639,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "1364571238251276946"
+                      "templateHash": "16085726132535864956"
                     }
                   },
                   "parameters": {
@@ -620,19 +728,11 @@
                           }
                         },
                         "priority": "Regular",
-                        "securityProfile": {
-                          "encryptionAtHost": true,
-                          "securityType": "TrustedLaunch",
-                          "uefiSettings": {
-                            "secureBootEnabled": true,
-                            "vTpmEnabled": true
-                          }
-                        },
                         "storageProfile": {
                           "imageReference": {
                             "offer": "WindowsServer",
                             "publisher": "MicrosoftWindowsServer",
-                            "sku": "2019-Datacenter",
+                            "sku": "2022-datacenter",
                             "version": "latest"
                           },
                           "osDisk": {

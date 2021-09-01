@@ -10,7 +10,10 @@ param location string
 param prefix string
 param tags object
 param vnetName string
-param subnetAddressPrefix string = '10.1.10.0/24'
+param bastionSubnetAddressPrefix string = '10.1.10.0/24'
+param jumpboxSubnetAddressPrefix string = '10.1.11.0/24'
+param defaultNsgId string
+param defaultRouteTableId string
 
 // Variables
 
@@ -58,14 +61,14 @@ resource bastionNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
         }
       }
       {
-        name: 'AllowBastionCommunicationInbound'
+        name: 'AllowAzureLoadBalancerInbound'
         properties: {
-          description: 'Required for data plane communication between the underlying components of Azure Bastion.'
-          protocol: '*'
+          description: 'Required for the control plane, that is, Gateway Manager to be able to talk to Azure Bastion.'
+          protocol: 'Tcp'
           sourcePortRange: '*'
-          destinationPortRange: '8080,5701'
-          sourceAddressPrefix: 'VirtualNetwork'
-          destinationAddressPrefix: 'VirtualNetwork'
+          destinationPortRange: '443'
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          destinationAddressPrefix: '*'
           access: 'Allow'
           priority: 140
           direction: 'Inbound'
@@ -76,19 +79,43 @@ resource bastionNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
         }
       }
       {
+        name: 'AllowBastionCommunicationInbound'
+        properties: {
+          description: 'Required for data plane communication between the underlying components of Azure Bastion.'
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: ''
+          sourceAddressPrefix: 'VirtualNetwork'
+          destinationAddressPrefix: 'VirtualNetwork'
+          access: 'Allow'
+          priority: 150
+          direction: 'Inbound'
+          sourcePortRanges: []
+          destinationPortRanges: [
+            '5701'
+            '8080'
+          ]
+          sourceAddressPrefixes: []
+          destinationAddressPrefixes: []
+        }
+      }
+      {
         name: 'AllowSshRdpOutbound'
         properties: {
           description: 'Required for SSH and RDP outbound connectivity.'
           protocol: '*'
           sourcePortRange: '*'
-          destinationPortRange: '22,2289'
+          destinationPortRange: ''
           sourceAddressPrefix: '*'
           destinationAddressPrefix: 'VirtualNetwork'
           access: 'Allow'
           priority: 100
           direction: 'Outbound'
           sourcePortRanges: []
-          destinationPortRanges: []
+          destinationPortRanges: [
+            '22'
+            '3389'
+          ]
           sourceAddressPrefixes: []
           destinationAddressPrefixes: []
         }
@@ -117,14 +144,17 @@ resource bastionNsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           description: 'Required for data plane communication between the underlying components of Azure Bastion.'
           protocol: '*'
           sourcePortRange: '*'
-          destinationPortRange: '8080,5701'
+          destinationPortRange: ''
           sourceAddressPrefix: 'VirtualNetwork'
           destinationAddressPrefix: 'VirtualNetwork'
           access: 'Allow'
           priority: 120
           direction: 'Outbound'
           sourcePortRanges: []
-          destinationPortRanges: []
+          destinationPortRanges: [
+            '5701'
+            '8080'
+          ]
           sourceAddressPrefixes: []
           destinationAddressPrefixes: []
         }
@@ -155,11 +185,11 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
   name: vnetName
 }
 
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
-  name: 'AzureBastionSubnet'
+resource bastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
   parent: vnet
+  name: 'AzureBastionSubnet'
   properties: {
-    addressPrefix: subnetAddressPrefix
+    addressPrefix: bastionSubnetAddressPrefix
     addressPrefixes: []
     networkSecurityGroup: {
       id: bastionNsg.id
@@ -176,5 +206,30 @@ resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
   }
 }
 
+resource jumpboxSubnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
+  parent: vnet
+  name: 'JumpboxSubnet'
+  dependsOn: [
+    bastionSubnet
+  ]
+  properties: {
+    addressPrefix: jumpboxSubnetAddressPrefix
+    addressPrefixes: []
+    networkSecurityGroup: {
+      id: defaultNsgId
+    }
+    routeTable: {
+      id: defaultRouteTableId
+    }
+    delegations: []
+    ipAllocations: []
+    privateEndpointNetworkPolicies: 'Enabled'
+    privateLinkServiceNetworkPolicies: 'Enabled'
+    serviceEndpointPolicies: []
+    serviceEndpoints: []
+  }
+}
+
 // Outputs
-output subnetId string = subnet.id
+output bastionSubnetId string = bastionSubnet.id
+output jumpboxSubnetId string = jumpboxSubnet.id

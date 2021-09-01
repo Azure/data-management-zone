@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-// This template is used as a module from the main.bicep template. 
+// This template is used as a module from the main.bicep template.
 // The module contains a template to deploy a virtual machine.
 targetScope = 'resourceGroup'
 
@@ -72,19 +72,11 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
       }
     }
     priority: 'Regular'
-    securityProfile: {
-      encryptionAtHost: true
-      securityType: 'TrustedLaunch'
-      uefiSettings: {
-        secureBootEnabled: true
-        vTpmEnabled: true
-      }
-    }
     storageProfile: {
       imageReference: {
         offer: 'WindowsServer'
         publisher: 'MicrosoftWindowsServer'
-        sku: '2019-Datacenter'
+        sku: '2022-datacenter'
         version: 'latest'
       }
       osDisk: {

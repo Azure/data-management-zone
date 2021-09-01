@@ -9,7 +9,8 @@ targetScope = 'resourceGroup'
 param location string
 param prefix string
 param tags object
-param subnetId string
+param bastionSubnetId string
+param jumpboxSubnetId string
 param virtualMachineSku string = 'Standard_DS2_v2'
 param administratorUsername string = 'VmMainUser'
 @secure()
@@ -27,7 +28,7 @@ module bastion001 'services/bastion.bicep' = {
     location: location
     tags: tags
     bastionName: bastion001Name
-    subnetId: subnetId
+    subnetId: bastionSubnetId
   }
 }
 
@@ -37,7 +38,7 @@ module virtualMachine001 'services/virtualmachine.bicep' = {
   params: {
     location: location
     tags: tags
-    subnetId: subnetId
+    subnetId: jumpboxSubnetId
     virtualmachineName: virtualMachine001Name
     virtualMachineSku: virtualMachineSku
     administratorUsername: administratorUsername

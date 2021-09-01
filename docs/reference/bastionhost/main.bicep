@@ -21,8 +21,16 @@ param prefix string
 param tags object = {}
 
 // Network parameters
-@description('Specifies the resource Id of the vnet in  your Data Landing Zone or Data Management Zone.')
-param vnetId string = ''
+@description('Specifies the resource Id of the vnet in your Data Landing Zone or Data Management Zone.')
+param vnetId string
+@description('Specifies the resource Id of the default network security group of your Data Landing Zone or Data Management Zone.')
+param defaultNsgId string
+@description('Specifies the resource Id of the default route table of your Data Landing Zone or Data Management Zone.')
+param defaultRouteTableId string
+@description('Specifies the address space of the subnet that is used for Azure Bastion.')
+param bastionSubnetAddressPrefix string = '10.1.10.0/24'
+@description('Specifies the address space of the subnet that is used for Jumboxes.')
+param jumpboxSubnetAddressPrefix string = '10.1.11.0/24'
 
 // Virtual Machine parameters
 @description('Specifies the SKU of the virtual machine that gets created.')
@@ -43,7 +51,7 @@ var tagsDefault = {
   Name: name
 }
 var tagsJoined = union(tagsDefault, tags)
-var vnetSubscriptionId = length(split(vnetId, '/')) >= 9 ? split(vnetId, '/')[1] : subscription().id
+var vnetSubscriptionId = length(split(vnetId, '/')) >= 9 ? split(vnetId, '/')[2] : subscription().id
 var vnetResourceGroupName = length(split(vnetId, '/')) >= 9 ? split(vnetId, '/')[4] : 'incorrectSegmentLength'
 var vnetName = length(split(vnetId, '/')) >= 9 ? last(split(vnetId, '/')) : 'incorrectSegmentLength'
 
@@ -56,6 +64,10 @@ module networkServices 'modules/network.bicep' = {
     prefix: name
     tags: tagsJoined
     vnetName: vnetName
+    bastionSubnetAddressPrefix: bastionSubnetAddressPrefix
+    jumpboxSubnetAddressPrefix: jumpboxSubnetAddressPrefix
+    defaultNsgId: defaultNsgId
+    defaultRouteTableId: defaultRouteTableId
   }
 }
 
@@ -74,7 +86,8 @@ module bastionServices 'modules/bastion.bicep' = {
     prefix: name
     tags: tagsJoined
     virtualMachineSku: virtualMachineSku
-    subnetId: networkServices.outputs.subnetId
+    bastionSubnetId: networkServices.outputs.bastionSubnetId
+    jumpboxSubnetId: networkServices.outputs.jumpboxSubnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
   }
