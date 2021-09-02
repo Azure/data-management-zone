@@ -8,7 +8,7 @@ Network features like private endpoints and disabled public network access great
 
 The most simple solution is to host a jumpbox on the virtual network of the Data Management Zone or Data Landing Zone to connect to the data services through private endpoints. The jumpbox would be an Azure Virtual Machine (VM) running Linux or Windows to which users can connect via Remote Desktp Protocol (RDP) or Secure Shell Protocol (SSH).
 
-Previously, jumpbox VMs had to be hosted with public IPs to enable RDP and SSH sessions from the public internet. Network Security Groups (NSGs) could be used to further lock down traffic to only allow connections from a limited number of public Ips. However, this meant that a public IP needed to be exposed from the Azure environment, which again increased the attack surface of an organization. Alternatively, customers could have used DNAT rules in their Azure Firewall to expose the SSH or RDP port of a VM to the public internet, leading to similar security risks.
+Previously, jumpbox VMs had to be hosted with public IPs to enable RDP and SSH sessions from the public internet. Network Security Groups (NSGs) could be used to further lock down traffic to only allow connections from a limited set of public Ips. However, this meant that a public IP needed to be exposed from the Azure environment, which again increased the attack surface of an organization. Alternatively, customers could have used DNAT rules in their Azure Firewall to expose the SSH or RDP port of a VM to the public internet, leading to similar security risks.
 
 Today, instead of exposing a VM publicly, customers can rely on Azure Bastion as a more secure alternative. Azure Bastion provides a secure remote connection from the Azure portal to Azure VMs over Transport Layer Security (TLS). Azure Bastion needs to be provisioned to a dedicated subnet (subnet with name `AzureBastionSubnet`) in the Azure Data Landing Zone or Azure Data Management Zone and can then be used to connect to any VM on that virtual network or a peered virtual network directly from the Azure portal. No additional clients or agents need to be installed on any VM. NSGs can again be used to allow RDP and SSH from Azure Bastion only.
 
@@ -42,6 +42,8 @@ It is recommended to setup the VPN Gateway in the Hub Vnet of the Hub & Spoke ar
 
 If users are already connected to the on-premise network environment and connectivity should be extended to Azure, Site to Site (S2S) connections can be used to connect the on-prem and Azure Connectivity Hub. Simmilar to the VPN tunnel, the S2S connection allows to extend the connectivity to the Azure environment to allow users connected to the corporate network to connect privately to services hosted on the virtual network inside the Azure tenant including storage accounts, Synapse and Purview.
 
-The recommended and Azure native apporach for such connectivity is the usage of ExpressRoute. Detailed step-by-step guidance on how to setup ExpressRoute connectivity can be found [here](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-howto-routing-portal-resource-manager).
+The recommended and Azure native apporach for such connectivity is the usage of ExpressRoute. It is recommended to setup the ExpressRoute Gateway in the Hub Vnet of the Hub & Spoke architecture. Detailed step-by-step guidance on how to setup ExpressRoute connectivity can be found [here](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-howto-routing-portal-resource-manager).
+
+## More Guidance
 
 More guidance around how to setup connectivity to Azure can be found in the [Cloud Adoption Framework](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/connectivity-to-azure).
