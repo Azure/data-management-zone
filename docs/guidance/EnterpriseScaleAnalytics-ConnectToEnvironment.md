@@ -12,7 +12,7 @@ Previously, jumpbox VMs had to be hosted with public IPs to enable RDP and SSH s
 
 Today, instead of exposing a VM publicly, customers can rely on Azure Bastion as a more secure alternative. Azure Bastion provides a secure remote connection from the Azure portal to Azure VMs over Transport Layer Security (TLS). Azure Bastion needs to be provisioned to a dedicated subnet (subnet with name `AzureBastionSubnet`) in the Azure Data Landing Zone or Azure Data Management Zone and can then be used to connect to any VM on that virtual network or a peered virtual network directly from the Azure portal. No additional clients or agents need to be installed on any VM. NSGs can again be used to allow RDP and SSH from Azure Bastion only. 
 
-![Azure Bastion Architecture](AzureBastionArchitecture.png)
+![Azure Bastion Network Architecture](/docs/images/AzureBastionNetworkArchitecture.png)
 
 A few other core security benefits of Azure Bastion are:
 
@@ -22,6 +22,24 @@ A few other core security benefits of Azure Bastion are:
 4. The service integrates with native security appliances for an Azure virtual network, like Azure Firewall.
 5. Azure Bastion can be used to monitor and manage remote connections.
 
-To deploy a jumpbox and Azure Bastion to your Data Management Zone or Data Landing Zone, you can use the following Deploy to Azure Button:
+To simplify the setup for Enterprise-Scale Aalytics users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
 
-[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbastionhost%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-product-batch%2Fmain%2Fdocs%2Freference%2Fportal.dataProduct.json)
+![Azure Bastion Architecture](/docs/images/AzureBastionArchitecture.png)
+
+To deploy this yourself, please use the following Deploy to Azure Button:
+
+[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbastionhost%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbastionhost%2Fportal.json)
+
+## Point to Site (P2S) Connection
+
+Another alternative to connect users to the virtual network is through the use of Point to Site (P2S) connections. An Azure native solution for this approach, requires setting up a VPN Gateway to allow Virtual Private Network (VPN) connections between users and the VPN Gateway over an encrypted tunnel. Once the connection is established, users can start connecting privately to services hosted on the virtual network inside the Azure tenant including storage accounts, Synapse and Purview.
+
+It is recommended to setup the VPN Gateway in the Hub Vnet of the Hub & Spoke architecture. Detailed step-by-step guidance on how to setup a VPN gateway can be found [here](https://docs.microsoft.com/en-us/azure/vpn-gateway/tutorial-create-gateway-portal).
+
+## Site to Site (S2S) Connection
+
+If users are already connected to the on-premise network environment and connectivity should be extended to Azure, Site to Site (S2S) connections can be used to connect the on-prem and Azure Connectivity Hub. Simmilar to the VPN tunnel, the S2S connection allows to extend the connectivity to the Azure environment to allow users connected to the corporate network to connect privately to services hosted on the virtual network inside the Azure tenant including storage accounts, Synapse and Purview.
+
+The recommended and Azure native apporach for such connectivity is the usage of ExpressRoute. Detailed step-by-step guidance on how to setup ExpressRoute connectivity can be found [here](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-howto-routing-portal-resource-manager).
+
+More guidance around how to setup connectivity to Azure can be found in the [Cloud Adoption Framework](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/connectivity-to-azure).
