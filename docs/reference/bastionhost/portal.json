@@ -187,6 +187,18 @@
                             "visible": true,
                             "elements": [
                                 {
+                                    "name": "virtualMachineSettingsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify a Username, password and SKU for your Virtual Machine. This will be required later when logging into the machine via Azure Bastion.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
                                     "name": "administratorUsername",
                                     "label": "Username",
                                     "type": "Microsoft.Compute.UserNameTextBox",
@@ -395,7 +407,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Please make sure you are selecting subnet CIDR ranges that are within the Vnet CIDR range. Otherwise your deployment will fail, because this deployment will add subnets to your existing Data LAnding Zone Virtual Network.",
+                                        "text": "Please make sure you are selecting subnet CIDR ranges that are within the Vnet CIDR range and that are not overlapping with other subnet ranges. Otherwise your deployment will fail, because this deployment will try to add subnets to your existing Data Landing Zone Virtual Network.",
                                         "style": "Warning"
                                     }
                                 },
