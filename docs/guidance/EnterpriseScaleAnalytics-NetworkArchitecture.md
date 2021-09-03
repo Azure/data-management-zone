@@ -183,6 +183,6 @@ Due to the fact that there are no NVAs limiting throughput for cross-Data Landin
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
-### Summary
+## Summary
 
 The meshed network design offers maximum bandwidth at minimal cost without any compromises from a user access management perspective or on the DNS layer. Hence, this network architecture design is the recommended for customers wanting to adopt Enterprise-Scale Analytics. If additional network policies need to be enforced within the Data Platform, it is advised to use Network Security Groups instead of central NVAs.
