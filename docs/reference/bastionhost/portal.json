@@ -109,7 +109,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed. You can select the same valued as for your Data Landing Zone. The Bastion Host Deploymen can be understood as an addon that can be deployed o top of an existing Data LAnding Zone Deployment.",
+                                        "text": "Specify a prefix and select an environment (Development, Test, Production) which will both be used as a prefix for all resource names. Independent of the environment, the same resources get deployed. You can select the same valued as for your Data Landing Zone. The Bastion Host Deploymen can be understood as an addon that can be deployed o top of an existing Data Landing Zone Deployment.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
@@ -224,29 +224,36 @@
                                 },
                                 {
                                     "name": "virtualMachineSku",
-                                    "label": "SKU",
-                                    "type": "Microsoft.Compute.SizeSelector",
+                                    "label": "VM SKU",
+                                    "type": "Microsoft.Common.DropDown",
                                     "visible": true,
+                                    "defaultValue": "Standard_DS2_v2",
                                     "toolTip": "Specify the SKU of the Virtual Machine.",
-                                    "recommendedSizes": [
-                                        "Standard_DS2_v2"
-                                    ],
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
                                     "constraints": {
-                                        "allowedSizes": [],
-                                        "excludedSizes": [],
-                                        "numAvailabilityZonesRequired": 1,
-                                        "zone": "1"
-                                    },
-                                    "options": {
-                                        "hideDiskTypeFilter": true
-                                    },
-                                    "osPlatform": "Windows",
-                                    "imageReference": {
-                                        "publisher": "MicrosoftWindowsServer",
-                                        "offer": "WindowsServer",
-                                        "sku": "2022-datacenter-g2"
-                                    },
-                                    "count": 1
+                                        "allowedValues": [
+                                            {
+                                                "label": "Standard_DS1_v2",
+                                                "description": "1 vCPUs, 3.5 GB RAM, 4 Data disks, 3200 Max IOPs, 7 GB Temp Storage",
+                                                "value": "Standard_DS1_v2"
+                                            },
+                                            {
+                                                "label": "Standard_DS2_v2",
+                                                "description": "2 vCPUs, 7 GB RAM, 8 Data disks, 6400 Max IOPs, 14 GB Temp Storage",
+                                                "value": "Standard_DS2_v2"
+                                            },
+                                            {
+                                                "label": "Standard_DS3_v2",
+                                                "description": "4 vCPUs, 14 GB RAM, 16 Data disks, 12800 Max IOPs, 28 GB Temp Storage",
+                                                "value": "Standard_DS3_v2"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
                                 }
                             ]
                         }
@@ -467,7 +474,7 @@
                 "defaultRouteTableId": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.routeTableId), '', steps('connectivitySettings').virtualNetworkConfiguration.routeTableId)]",
                 "bastionSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').subnetConfiguration.bastionSubnetCidrRange), '', steps('connectivitySettings').subnetConfiguration.bastionSubnetCidrRange)]",
                 "jumpboxSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').subnetConfiguration.jumpboxSubnetAddressPrefix), '', steps('connectivitySettings').subnetConfiguration.jumpboxSubnetAddressPrefix)]",
-                "virtualMachineSku": "[if(empty('Standard_DS2_v2'), '', 'Standard_DS2_v2')]",
+                "virtualMachineSku": "[if(empty(steps('generalSettings').virtualMachineSettings.virtualMachineSku), '', steps('generalSettings').virtualMachineSettings.virtualMachineSku)]",
                 "administratorUsername": "[if(empty(steps('generalSettings').virtualMachineSettings.administratorUsername), '', steps('generalSettings').virtualMachineSettings.administratorUsername)]",
                 "administratorPassword": "[if(empty(steps('generalSettings').virtualMachineSettings.administratorPassword.password), '', steps('generalSettings').virtualMachineSettings.administratorPassword.password)]"
             }
