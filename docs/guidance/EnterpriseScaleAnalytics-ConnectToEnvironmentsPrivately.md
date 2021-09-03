@@ -24,13 +24,40 @@ A few other core security benefits of Azure Bastion are:
 
 More details about Azure bAstion can be found [here](https://docs.microsoft.com/en-us/azure/bastion/bastion-overview).
 
+### Deployment
+
 To simplify the setup for Enterprise-Scale Aalytics users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
 
 ![Azure Bastion Architecture](/docs/images/AzureBastionArchitecture.png)
 
-To deploy this yourself, please use the following Deploy to Azure Button:
+To deploy this yourself, please use the following Deploy to Azure button:
 
 [![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbastionhost%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbastionhost%2Fportal.json)
+
+When deploying Azure Bastion and the jumpbox through the Deploy to Azure button, you can provide the same prefix and environment as for your Data Landing Zone or Data Management Zone. There will be no conflicts and this deployment acts as an add-on to your Data Landing or Management Zone. Additional, VMs can be added manually to allow more users to work inside the environment.
+
+### Connecting to the VM
+
+After the deployment, you will notice that two additional subnets have been created on the Data Landing Zone Vnet.
+
+![Bastion And Jumpbox Subnets](/docs/images/AzureBastionSubnets.png)
+
+In addition, you will find a new resource group inside your subscripion, which includes the Azure Bastion resource as well as a Virtual Machine:
+
+![Bastion And Jumpbox Subnets](/docs/images/AzureBastionResourceGroup.png)
+
+If you want to connect to the VM using Azure Bastion, execute the following steps:
+
+1. Click on the VM (in our case `dlz01-dev-bastion`) > "Connect" > "Bastion".
+
+    ![Connect to VM via Bastion](/docs/images/AzureBastionConnectToVm.png)
+
+2. Click on the blue button "Use Bastion".
+3. Enter your Credentials and click "Connect".
+
+    ![Connect to VM via Bastion](/docs/images/AzureBastionEnterCredentials.png)
+
+4. The RDP session opens in a  new Tab inside your Browser and you can start connecting to your data services.
 
 ## Point to Site (P2S) Connection
 
