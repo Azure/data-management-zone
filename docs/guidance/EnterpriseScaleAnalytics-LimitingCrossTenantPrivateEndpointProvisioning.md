@@ -1,42 +1,41 @@
 # Limiting Cross-Tenant Private Endpoint Connections
 
-Customers are increasingly using private endpoints in their tenants to connect to their PaaS services privately and securely. Some users have the perception that the use of Private Endpoints automatically prevents any data exfiltration risks. However, this is an incorrect assumption and highly depends on the overall configuration of the respective scope in the tenant. Therefore, this paper will recommend configuration options to achieve the desired security level and meet the data leakage prevention (DLP) controls inside your Azure environment.
+Customers are increasingly using private endpoints in their tenants to connect to their Azure PaaS services privately and securely. Some users are not aware of the fact that Private Endpoints can connect to services across Azure AD tenants. For compliance and security reasons, some customers require to block cross Azure AD tenants’ connections on their Private Endpoints.  This article describes recommended configuration options to limit or prevent cross-tenant private endpoint connections to help meet the data leakage prevention (DLP) controls inside your Azure environment.
 
 ## Introduction
 
-Private Endpoints can be used to control the traffic within a customer Azure environement using an existing network perimeter, however even using private endpoints within Azure there is still a  potential risk of data exfiltration. This risk arises from the fact that a rogue user could:
+Private Endpoints can be used to control the traffic within a customer’s Azure environment using an existing network perimeter, however there are scenarios where customers are required to ensure that private endpoint connections are kept within the corporate Azure AD tenant only. These scenarios are summarized below and arise  from the fact that a rogue admin could:
 
-* Scenario A: Create endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (other subscription and/or tenant) or
-* Scenario B: Create private endpoints in other subscriptions and tenants that are linked to services that are hosted in the customer environment.
+1. Scenario 1: Create private endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (another Azure AD tenant).
+2. Scenario 2: Create private endpoints in other Azure AD tenants that are linked to services hosted in the customers Azure AD tenant.
+
+These two scenarios are depicted in figure 1 below:
 
 ![Data exfiltration scenarios](/docs/images/CrossTenantPrivateEndpointProvisioning.png)
+For both scenarios, it is as simple as specifying the resource ID of the service and manually approving the private endpoint connection on the respective service. In addition, the user requires some RBAC access to execute these actions. This will be further described in the sections below.
 
-For both scenarios, it is as simple as specifying the resource ID of the service and manually approving the private endpoint connection on the respective service. In addition, the user requires some RBAC access to execute these actions. This will be further specified in the sections below.
+Limiting or blocking these scenarios are of high interest to companies within highly regulated industries such as health care and finance who are required to enforce stricter levels of control on internal users administering their cloud service provider (CSP) environments.
 
-Solutions for these scenarios are of high interest to companies within highly regulated industries such as health care and finance who are required to enforce stricter levels of control on internal users administering their cloud service provider (CSP) environments.
+The following sections on this article will describe options to prevent the provisioning of private endpoints across Azure AD tenants as explained on the respective scenarios mentioned above.
 
-The following sections will therefore propose options to overcome the respective scenarios mentioned above.
+## Scenario 1: Deny private endpoints linked to services in other tenants
 
-## Scenario A: Deny Private Endpoints from other tenants and subscriptions
+### Description
 
-### Scenario
-
-For the first data exfiltration scenario, a rogue user requires the following rights in the customer environment:
+For the first scenario, a rogue admin requires the following rights in a subscription in the customers Azure AD tenant:
 
 1. “Microsoft.Network/virtualNetworks/join/action” rights on a subnet with “privateEndpointNetworkPolicies” set to “Disabled” and
 2. “Microsoft.Network/privateEndpoints/write” access to a resource group in the customer environment.
 
-With these rights, the person has the possibility to create a private endpoint that is linked to a service in a separate subscription and tenant. The scenario is illustrated in Figure 1: Data exfiltration scenarios.
+With these rights, a rogue admin has the possibility to create a private endpoint in the customers Azure AD tenant that is linked to a service in a separate subscription and Azure AD tenant. The scenario is illustrated in Figure 1 (represented as connection A).
 
-To do so, the user first needs to setup an external tenant and subscription. As a next step, the private endpoint needs to be created in the customer environment, by manually specifying the resource id of the service. Finally, the person needs to approve the private endpoint on the linked service hosted in the external tenant to allow traffic over the connection.
+To do so, the user first needs to setup an external Azure AD tenant and Azure subscription. As a next step, the private endpoint needs to be created in the customer environment, by manually specifying the resource id of the service. Finally, the rogue admin needs to approve the private endpoint on the linked service hosted in the external Azure AD tenant to allow traffic over the connection.
 
-Once the private endpoint is approved by the user, data can be exfiltrated over the corporate virtual network, in case access was granted via Azure RBAC.
+Once the private endpoint connection is approved by the rogue admin, corporate data could be copied over the corporate virtual network to an Azure service on an external Azure AD tenant (in case access was granted via Azure RBAC).
 
 ### Mitigation
 
-To ensure a scalable approach we will follow best practices and principles defined by the [Enterprise-Scale architecture by Microsoft](https://github.com/Azure/Enterprise-Scale). Therefore, we will focus on policies as a mean to solve the aforementioned scenario.
-
-Customer can use the following [policy definition](/infra/Policies/PolicyDefinitions/PrivateEndpoint/params.policyDefinition.Deny-PrivateEndpoint-PrivateLinkServiceConnections.json), to automatically deny the first data exfiltration scenario across a tenant:
+Customers can use the following Azure policy, to automatically deny the creation of a private endpoint in the corporate Azure AD tenant which is linked to Azure services hosted outside the corporate Azure AD tenant:
 
 ```json
 "if": {
@@ -92,35 +91,35 @@ Customer can use the following [policy definition](/infra/Policies/PolicyDefinit
 }
 ```
 
-The policy shown above denies any private endpoints being created outside of the subscription of the linked service (Scenario A and D). The policy also provides the flexibility to use manualprivateLinkServiceConnections as well as privateLinkServiceConnections within the same subscription.
+The policy shown above denies any private endpoints being created outside of the subscription of the linked service (represented as connections A and D in Figure 1). The policy also provides the flexibility to use manualprivateLinkServiceConnections as well as privateLinkServiceConnections.
 
-This policy can be changed so that private endpoints are only allowed to be created inside a certain set of subscriptions. This can be done by adding a parameter of type List and by using the "notIn": "[parameters('allowedSubscriptions')]" construct. However, this is not the recommended approach as this would mean that customers would have to constantly maintain the list of subscriptions for this policy. Whenever a new subscription gets created inside the customer tenant, the subscription ID would have to be added to the parameter.
+This policy can be updated so that private endpoints are only allowed to be created inside a certain set of subscriptions. This can be done by adding a parameter of type List and by using the "notIn": "[parameters('allowedSubscriptions')]" construct. However, this is not the recommended approach as this would mean that customers would have to constantly maintain the list of subscriptions for this policy. Whenever a new subscription gets created inside the customer tenant, the subscription ID would have to be added to the parameter.
 
 It is recommended to assign the policy to the top-level management group and use exemptions where required.
 
-### Affected scenarios by the policy definition
+### Considerations when assigning this policy definition
 
-The policy shown above blocks the creation of private endpoints in a different subscription than the service itself (Scenario A and D). If this is a requirement for certain use-cases, we are recommending using policy exemptions. There are no other known patterns that are blocked by this policy definition.
+The policy shown above blocks the creation of private endpoints in a different subscription than the service itself (represented as connections A and D in Figure 1). If this is a requirement for certain use-cases, we are recommending using . There are no other known patterns that are blocked by this policy definition.
 
-## Scenario B: Deny private endpoints being created in other tenants and subscriptions
+## Scenario 2: Deny connections from private endpoints created in other tenants
 
-### Scenario
+### Description
 
-For the second scenario, a rogue user requires the following rights in the customer environment:
+For the second scenario, a rogue admin requires the following rights in the customer environment:
 
-1. “*/write” rights on the service in the customer environment to which a private endpoint should be created.
+1. “*/write” rights on the service in the customer environment for which a private endpoint should be created.
 
-With these rights, the person has the possibility to create a private endpoint in an external tenant and subscription that is linked to a service in the customer environment. The scenario is illustrated in Figure 1: Data exfiltration scenarios.
+With these rights, a rogue admin has the possibility to create a private endpoint in an external Azure AD tenant and subscription that is linked to a service in the customer’s Azure AD tenant. The scenario is illustrated in Figure 1 (represented as connection B).
 
-Again, the user first needs to first setup an external private tenant and subscription. As a next step, the private endpoint needs to be created in the environment of the rogue user, by manually specifying the resource id and group id of the service. Finally, the person needs to approve the private endpoint on the linked service to allow traffic over the connection.
+On this scenario, the rogue admin needs to first setup an external private Azure AD tenant and Azure subscription. As a next step, a private endpoint needs to be created in the environment of the rogue admin, by manually specifying the resource id and group id of the service in the corporate Azure AD tenant. Finally, the rogue admin needs to approve the private endpoint on the linked service to allow traffic over the connection across Azure AD tenants.
 
-Once the private endpoint is approved by the user, data can be exfiltrated over the corporate virtual network, in case access was granted via Azure RBAC.
+Once the private endpoint is approved by the rogue admin or service owner, data can be accessed from the external virtual network.
 
 ### Mitigation
 
 To ensure a scalable approach we will follow best practices and principles defined by the [Enterprise-Scale architecture by Microsoft](https://github.com/Azure/Enterprise-Scale). Therefore, we will focus on policies as a mean to solve the aforementioned scenario.
 
-Similarly, service specific policies could be used to deny these scenarios across the customer tenant. Private endpoint connections are sub-resources of the respective services and therefore show up under the properties section of the respective service. Incompliant connections can be denied using the following [policy definition (example for Azure Storage)](/infra/Policies/PolicyDefinitions/Storage/params.policyDefinition.Deny-Storage-PrivateEndpointConnections.json):
+Service specific policies should be used to deny these scenarios across the customer tenant. Private endpoint connections are sub-resources of the respective services and therefore show up under the properties section of the respective service. Incompliant connections can be denied using the [following policy definition (example for Azure Storage)](/infra/Policies/PolicyDefinitions/Storage/params.policyDefinition.Deny-Storage-PrivateEndpointConnections.json):
 
 ```json
 "if": {
@@ -152,19 +151,19 @@ Similarly, service specific policies could be used to deny these scenarios acros
 }
 ```
 
-The policy above shows an example for Azure Storage. The same policy definition needs to be replicated for other services such as [Key Vault](/infra/Policies/PolicyDefinitions/KeyVault/params.policyDefinition.Deny-KeyVault-PrivateEndpointConnections.json), [Cognitive Services](/infra/Policies/PolicyDefinitions/CognitiveServices/params.policyDefinition.Deny-CognitiveServices-PrivateEndpointConnections.json), [SQL Server](/infra/Policies/PolicyDefinitions/Sql/params.policyDefinition.Deny-Sql-PrivateEndpointConnections.json) etc. The policy denies the approval of private endpoint connections to private endpoints that are hosted outside of the subscription of the respective service. It does not deny the rejection or removal of private endpoint connections, which is the desired behavior of customers. Auto-approval workflows are also not affected by this policy (Scenario C). Sadly, the approval of compliant private endpoint connections within the portal is blocked with this method, because the portal UI does not send the resource ID of the connected private endpoint in their payload. Therefore, we are advising customers to use [ARM (storage example)](/infra/Policies/PolicyDefinitions/Storage/SampleDeployPrivateEndpointConnection) for approving the private endpoint connection.
+The policy above shows an example for Azure Storage. The same policy definition needs to be replicated for other services such as [Key Vault](/infra/Policies/PolicyDefinitions/KeyVault/params.policyDefinition.Deny-KeyVault-PrivateEndpointConnections.json), [Cognitive Services](/infra/Policies/PolicyDefinitions/CognitiveServices/params.policyDefinition.Deny-CognitiveServices-PrivateEndpointConnections.json), [SQL Server](/infra/Policies/PolicyDefinitions/Sql/params.policyDefinition.Deny-Sql-PrivateEndpointConnections.json) etc. In order to further improve manageability, it is suggested bundling the service specific policies into an Initiative. The policy denies the approval of private endpoint connections to private endpoints that are hosted outside of the subscription of the respective service. It does not deny the rejection or removal of private endpoint connections, which is the desired behavior of customers. Auto-approval workflows are also not affected by this policy (represented as connection C in Figure 1). However, the approval of compliant private endpoint connections within the portal is blocked with this method, because the portal UI does not send the resource ID of the connected private endpoint in their payload. Therefore, we are advising customers to use [ARM (storage example)](/infra/Policies/PolicyDefinitions/Storage/SampleDeployPrivateEndpointConnection) for approving the private endpoint connection.
 
 It is recommended to assign the policy to the top-level management group and use exemptions where required.
 
-### Affected scenarios by the policy definition
+### Considerations when assigning this policy definition
 
-With the introduction of managed virtual networks and managed private endpoints in Synapse and Data Factory as well as managed private endpoints, this policy is blocking the secure and private usage of these services. In general, this means that the development of (data) solutions on top of these services will be blocked across the tenant.
+With the introduction of managed virtual networks and managed private endpoints in Synapse and Data Factory, this policy is blocking the secure and private usage of these services. In general, this means that the development of (data) solutions on top of these services will be blocked across the tenant.
 
-Therefore, we are proposing the use of an “Audit” effect instead of a “Deny” affect in [Scenario B: Deny private endpoints being created in other tenants and subscriptions](#scenario-b-deny-private-endpoints-being-created-in-other-tenants-and-subscriptions) to keep track of private endpoints being created in separate subscriptions and tenants or to use policy exemptions for the respective data platform scopes. Additional policies must be created for Data Factory and Synapse to overcome the data exfiltration risk on these managed virtual networks that are hosted in a Microsoft subscription. How this can be done will be described in the next paragraphs.
+Therefore, we are recommending the use of an “Audit” effect instead of a “Deny” affect in the policy definition described in section 3.2 of this article to keep track of private endpoints being created in separate subscriptions and tenants or to use policy exemptions for the respective data platform scopes. Additional policies must be created for Data Factory and Synapse to make sure managed private endpoints hosted on the managed virtual network can only connect to services hosted within the customers Azure AD tenant.
 
 ### Azure Data Factory
 
-To overcome the Scenario A on the managed virtual network of Data Factory, customers can use the following [policy definition](/infra/Policies/PolicyDefinitions/DataFactory/params.policyDefinition.Deny-DataFactory-ManagedPrivateEndpoints.json):
+To overcome the Scenario 1 on the managed virtual network of Data Factory, customers can use the [following policy definition](/infra/Policies/PolicyDefinitions/DataFactory/params.policyDefinition.Deny-DataFactory-ManagedPrivateEndpoints.json):
 
 ```json
 "if": {
@@ -192,13 +191,13 @@ To overcome the Scenario A on the managed virtual network of Data Factory, custo
 }
 ```
 
-The policy shown above mitigates the data exfiltration risk for managed virtual networks of Data Factory, by denying private endpoints that are linked to services that are hosted outside the subscription of the data factory. With Enterprise-Scale analytics it is expected that private endpoints will also be created to services that are hosted outside of the subscription of the Data Factory. Therefore, this policy can also be changed to allow a connection to services hosted in a set of subscriptions by adding a parameter of type List and by using the "notIn": "[parameters('allowedSubscriptions')]" construct. This change is recommended for the data platform scope inside the tenant.
+The policy shown above denies managed private endpoints that are linked to services that are hosted outside the subscription of the data factory. This policy can be changed to allow connections to services hosted in a set of subscriptions by adding a parameter of type List and by using the "notIn": "[parameters('allowedSubscriptions')]" construct. This change is recommended for the data platform scope inside the tenant or environments where services with managed virtual networks and managed private endpoints are extensively used.
 
 It is recommended to assign the policy shown above to the top-level management group and use exemptions where required. For the data platform, it is recommended to make the changes mentioned above and assign the policy to the set of data platform subscriptions.
 
 ### Azure Synapse
 
-Azure Synapse also uses managed virtual networks and therefore a similar policy to the one proposed for Data Factory must be applied to cover Scenario A. Azure Synapse does not provide a policy alias for managed private endpoints, but introduced a data exfiltration feature, which can be enforced for workspaces via the following policy:
+Azure Synapse also uses managed virtual networks and therefore a similar policy to the one proposed for Data Factory must be applied to cover Scenario 1. Azure Synapse does not provide a policy alias for managed private endpoints, but introduced a data exfiltration prevention feature, which can be enforced for workspaces via the following policy:
 
 ```json
 "if": {
