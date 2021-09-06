@@ -19,6 +19,8 @@ param vmssAdmininstratorUsername string = 'VmssMainUser'
 param vmssAdministratorPublicSshKey string
 
 // Variables
+var artifactstorage001Name = '${prefix}-artfct001'
+var dnsForwarder001Name = '${prefix}dnsproxy001'
 
 // Resources
 module artifactstorage001 'services/artifactstorage.bicep' = {
@@ -27,7 +29,7 @@ module artifactstorage001 'services/artifactstorage.bicep' = {
   params: {
     location: location
     tags: tags
-    artifactstorageName: '${prefix}-artfct001'
+    artifactstorageName: artifactstorage001Name
   }
 }
 
@@ -38,7 +40,7 @@ module dnsforwarder001 'services/dnsforwarder.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    dnsForwarderName: '${prefix}dnsproxy001'
+    dnsForwarderName: dnsForwarder001Name
     storageAccountId: artifactstorage001.outputs.storageAccountId
     storageAccountContainerName: artifactstorage001.outputs.storageAccountContainerName
     vmssSkuName: vmssSkuName

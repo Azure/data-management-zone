@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.451.19169",
-      "templateHash": "994820835219217883"
+      "version": "0.4.613.9944",
+      "templateHash": "974034123924531819"
     }
   },
   "parameters": {
@@ -260,8 +260,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.451.19169",
-              "templateHash": "18161166195572330300"
+              "version": "0.4.613.9944",
+              "templateHash": "14220586640209570468"
             }
           },
           "parameters": {
@@ -280,31 +280,37 @@
             },
             "dnsServerAdresses": {
               "type": "array",
-              "defaultValue": []
+              "defaultValue": [
+                "10.0.0.4"
+              ]
             },
             "vnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.0.0/16"
             },
             "azureFirewallSubnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.0.0/24"
             },
             "servicesSubnetAddressPrefix": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": "10.0.1.0/24"
             },
             "enableDnsAndFirewallDeployment": {
               "type": "bool",
               "defaultValue": true
             },
             "firewallPolicyId": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
           "variables": {
             "azureFirewallSubnetName": "AzureFirewallSubnet",
             "servicesSubnetName": "ServicesSubnet",
-            "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), subscription().subscriptionId)]",
-            "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), resourceGroup().name)]",
+            "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[2], subscription().subscriptionId)]",
+            "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[4], resourceGroup().name)]",
             "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
           },
           "resources": [
@@ -322,7 +328,7 @@
             {
               "type": "Microsoft.Network/routeTables/routes",
               "apiVersion": "2020-11-01",
-              "name": "[format('{0}/to-firewall-default', format('{0}-routetable', parameters('prefix')))]",
+              "name": "[format('{0}/{1}', format('{0}-routetable', parameters('prefix')), 'to-firewall-default')]",
               "properties": {
                 "addressPrefix": "0.0.0.0/0",
                 "nextHopType": "VirtualAppliance",
@@ -529,8 +535,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "8932681855104013710"
+                      "version": "0.4.613.9944",
+                      "templateHash": "753927496380084065"
                     }
                   },
                   "parameters": {
@@ -1085,8 +1091,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "8932681855104013710"
+                      "version": "0.4.613.9944",
+                      "templateHash": "753927496380084065"
                     }
                   },
                   "parameters": {
@@ -1627,7 +1633,7 @@
             },
             "firewallPrivateIp": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress]"
+              "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
             }
           }
         }
@@ -1661,8 +1667,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.451.19169",
-              "templateHash": "17622350918409881745"
+              "version": "0.4.613.9944",
+              "templateHash": "4579642614199511655"
             }
           },
           "parameters": {
@@ -1675,7 +1681,7 @@
           },
           "functions": [],
           "variables": {
-            "vnetName": "[last(split(parameters('vnetId'), '/'))]",
+            "vnetName": "[if(greaterOrEquals(length(split(parameters('vnetId'), '/')), 9), last(split(parameters('vnetId'), '/')), 'incorrectSegmentLength')]",
             "privateDnsZoneNames": [
               "privatelink.afs.azure.net",
               "privatelink.analysis.windows.net",
@@ -1959,8 +1965,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.451.19169",
-              "templateHash": "5255777638833002945"
+              "version": "0.4.613.9944",
+              "templateHash": "7660076124829650051"
             }
           },
           "parameters": {
@@ -1977,19 +1983,24 @@
               "type": "string"
             },
             "privateDnsZoneIdPurview": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdStorageBlob": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdStorageQueue": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdEventhubNamespace": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdKeyVault": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
@@ -2039,8 +2050,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "10304872764707191687"
+                      "version": "0.4.613.9944",
+                      "templateHash": "10421698733680776878"
                     }
                   },
                   "parameters": {
@@ -2092,7 +2103,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Purview/accounts",
-                      "apiVersion": "2020-12-01-preview",
+                      "apiVersion": "2021-07-01",
                       "name": "[parameters('purviewName')]",
                       "location": "[if(contains(variables('purviewRegions'), parameters('location')), parameters('location'), 'westeurope')]",
                       "tags": "[parameters('tags')]",
@@ -2101,7 +2112,7 @@
                       },
                       "sku": {
                         "name": "Standard",
-                        "capacity": 4
+                        "capacity": 1
                       },
                       "properties": {
                         "cloudConnectors": {},
@@ -2387,8 +2398,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "17396931380066691428"
+                      "version": "0.4.613.9944",
+                      "templateHash": "15339723277993214204"
                     }
                   },
                   "parameters": {
@@ -2405,7 +2416,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdKeyVault": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -2522,8 +2534,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "10178877996694685010"
+                      "version": "0.4.613.9944",
+                      "templateHash": "9549520977106992190"
                     }
                   },
                   "parameters": {
@@ -2609,8 +2621,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.451.19169",
-              "templateHash": "9470554192967531828"
+              "version": "0.4.613.9944",
+              "templateHash": "14677442166513541376"
             }
           },
           "parameters": {
@@ -2627,10 +2639,14 @@
               "type": "string"
             },
             "privateDnsZoneIdContainerRegistry": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
+          "variables": {
+            "containerRegistry001Name": "[format('{0}-containerregistry001', parameters('prefix'))]"
+          },
           "resources": [
             {
               "type": "Microsoft.Resources/deployments",
@@ -2652,7 +2668,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "containerRegistryName": {
-                    "value": "[format('{0}-containerregistry001', parameters('prefix'))]"
+                    "value": "[variables('containerRegistry001Name')]"
                   },
                   "privateDnsZoneIdContainerRegistry": {
                     "value": "[parameters('privateDnsZoneIdContainerRegistry')]"
@@ -2664,8 +2680,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "4932386650946434806"
+                      "version": "0.4.613.9944",
+                      "templateHash": "14542384004817403614"
                     }
                   },
                   "parameters": {
@@ -2682,7 +2698,8 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdContainerRegistry": {
-                      "type": "string"
+                      "type": "string",
+                      "defaultValue": ""
                     }
                   },
                   "functions": [],
@@ -2831,8 +2848,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.451.19169",
-              "templateHash": "4691744853802545741"
+              "version": "0.4.613.9944",
+              "templateHash": "90372749121783991"
             }
           },
           "parameters": {
@@ -2849,19 +2866,27 @@
               "type": "string"
             },
             "privateDnsZoneIdSynapseprivatelinkhub": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdAnalysis": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdPbiDedicated": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             },
             "privateDnsZoneIdPowerQuery": {
-              "type": "string"
+              "type": "string",
+              "defaultValue": ""
             }
           },
           "functions": [],
+          "variables": {
+            "synapsePrivatelinkHub001Name": "[format('{0}-synapseplhub001', parameters('prefix'))]",
+            "powerbiPrivateLink001Name": "[format('{0}-powerbipl001', parameters('prefix'))]"
+          },
           "resources": [
             {
               "type": "Microsoft.Resources/deployments",
@@ -2883,7 +2908,7 @@
                     "value": "[parameters('subnetId')]"
                   },
                   "synapsePrivatelinkHubName": {
-                    "value": "[format('{0}-synapseplhub001', parameters('prefix'))]"
+                    "value": "[variables('synapsePrivatelinkHub001Name')]"
                   },
                   "privateDnsZoneIdSynapseprivatelinkhub": {
                     "value": "[parameters('privateDnsZoneIdSynapseprivatelinkhub')]"
@@ -2895,8 +2920,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.451.19169",
-                      "templateHash": "8108545363093131900"
+                      "version": "0.4.613.9944",
+                      "templateHash": "3001418668052607286"
                     }
                   },
                   "parameters": {

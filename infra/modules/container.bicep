@@ -10,9 +10,10 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdContainerRegistry string
+param privateDnsZoneIdContainerRegistry string = ''
 
 // Variables
+var containerRegistry001Name = '${prefix}-containerregistry001'
 
 // Resources
 module containerRegistry001 'services/containerregistry.bicep' = {
@@ -22,7 +23,7 @@ module containerRegistry001 'services/containerregistry.bicep' = {
     location: location
     tags: tags
     subnetId: subnetId
-    containerRegistryName: '${prefix}-containerregistry001'
+    containerRegistryName: containerRegistry001Name
     privateDnsZoneIdContainerRegistry: privateDnsZoneIdContainerRegistry
   }
 }

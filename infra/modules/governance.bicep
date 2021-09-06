@@ -10,11 +10,11 @@ param location string
 param prefix string
 param tags object
 param subnetId string
-param privateDnsZoneIdPurview string
-param privateDnsZoneIdStorageBlob string
-param privateDnsZoneIdStorageQueue string
-param privateDnsZoneIdEventhubNamespace string
-param privateDnsZoneIdKeyVault string
+param privateDnsZoneIdPurview string = ''
+param privateDnsZoneIdStorageBlob string = ''
+param privateDnsZoneIdStorageQueue string = ''
+param privateDnsZoneIdEventhubNamespace string = ''
+param privateDnsZoneIdKeyVault string = ''
 
 // Variables
 var purview001Name = '${prefix}-purview001'

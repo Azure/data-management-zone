@@ -9,9 +9,9 @@ param location string
 param tags object
 param subnetId string
 param powerbiPrivateLinkName string
-param privateDnsZoneIdAnalysis string
-param privateDnsZoneIdPbiDedicated string
-param privateDnsZoneIdPowerQuery string
+param privateDnsZoneIdAnalysis string = ''
+param privateDnsZoneIdPbiDedicated string = ''
+param privateDnsZoneIdPowerQuery string = ''
 
 // Variables
 var powerbiPrivateLinkPrivateEndpointName = '${powerbiPrivateLink.name}-private-endpoint'

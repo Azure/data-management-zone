@@ -34,7 +34,7 @@ var purviewRegions = [
 ]
 
 // Resources
-resource purview 'Microsoft.Purview/accounts@2020-12-01-preview' = {
+resource purview 'Microsoft.Purview/accounts@2021-07-01' = {
   name: purviewName
   location: contains(purviewRegions, location) ? location : 'westeurope'
   tags: tags
@@ -43,7 +43,7 @@ resource purview 'Microsoft.Purview/accounts@2020-12-01-preview' = {
   }
   sku: {
     name: 'Standard'
-    capacity: 4
+    capacity: 1
   }
   properties: {
     cloudConnectors: {}

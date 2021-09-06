@@ -9,7 +9,7 @@ param vnetId string
 param tags object
 
 // Variables
-var vnetName = last(split(vnetId, '/'))
+var vnetName = length(split(vnetId, '/')) >= 9 ? last(split(vnetId, '/')) : 'incorrectSegmentLength'
 var privateDnsZoneNames = [
   'privatelink.afs.azure.net'
   'privatelink.analysis.windows.net'
