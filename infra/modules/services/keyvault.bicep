@@ -69,7 +69,7 @@ resource keyVaultPrivateEndpoint 'Microsoft.Network/privateEndpoints@2020-11-01'
 
 resource keyVaultPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdKeyVault)) {
   parent: keyVaultPrivateEndpoint
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {

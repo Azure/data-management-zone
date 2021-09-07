@@ -52,7 +52,7 @@ resource powerbiPrivateLinkPrivateEndpoint 'Microsoft.Network/privateEndpoints@2
 
 resource powerbiPrivateLinkPrivateEndpointARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdAnalysis) && !empty(privateDnsZoneIdPbiDedicated) && !empty(privateDnsZoneIdPowerQuery)) {
   parent: powerbiPrivateLinkPrivateEndpoint
-  name: 'aRecord'
+  name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
