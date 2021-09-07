@@ -6,18 +6,20 @@ Customers are increasingly using private endpoints in their tenants to connect t
 
 Private Endpoints can be used to control the traffic within a customer’s Azure environment using an existing network perimeter, however there are scenarios where customers are required to ensure that private endpoint connections are kept within the corporate Azure AD tenant only. These scenarios are summarized below and arise  from the fact that a rogue admin could:
 
-1. **Scenario 1**: Create private endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (another Azure AD tenant).
-2. **Scenario 2**: Create private endpoints in other Azure AD tenants that are linked to services hosted in the customers Azure AD tenant.
+1. **Scenario 1** (represented as connection A in Figure 1): Create private endpoints on the customer virtual network, which are linked to services that are hosted outside the customer environment (another Azure AD tenant).
+2. **Scenario 2** (represented as connection B in Figure 1): Create private endpoints in other Azure AD tenants that are linked to services hosted in the customers Azure AD tenant.
 
 These two scenarios are depicted in figure 1 below:
 
 ![Data exfiltration scenarios](/docs/images/CrossTenantPrivateEndpointProvisioning.png)
 
+Figure 1: Illustration of all scenarios
+
 For both scenarios, it is as simple as specifying the resource ID of the service and manually approving the private endpoint connection on the respective service. In addition, the user requires some RBAC access to execute these actions. This will be further described in the sections below.
 
 Limiting or blocking these scenarios are of high interest to companies within highly regulated industries such as health care and finance who are required to enforce stricter levels of control on internal users administering their cloud service provider (CSP) environments.
 
-The following sections on this article will describe options to prevent the provisioning of private endpoints across Azure AD tenants as explained on the respective scenarios mentioned above.
+The following sections in this article will describe options to prevent the provisioning of private endpoints across Azure AD tenants as explained on the respective scenarios mentioned above.
 
 ## Scenario 1: Deny private endpoints linked to services in other tenants
 
@@ -100,7 +102,7 @@ It is recommended to assign the policy to the top-level management group and use
 
 ### Considerations when assigning this policy definition
 
-The policy shown above blocks the creation of private endpoints in a different subscription than the service itself (represented as connections A and D in Figure 1). If this is a requirement for certain use-cases, we are recommending using . There are no other known patterns that are blocked by this policy definition.
+The policy shown above blocks the creation of private endpoints in a different subscription than the service itself (represented as connections A and D in Figure 1). If this is a requirement for certain use-cases, we recommend using policy exemptions. There are no other known patterns that are blocked by this policy definition.
 
 ## Scenario 2: Deny connections from private endpoints created in other tenants
 
