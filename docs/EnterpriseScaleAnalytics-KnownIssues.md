@@ -52,5 +52,28 @@ ERROR: Deployment failed. Correlation ID: ***
 
 This error message appears, if the Purview soft-limit has been reached inside your tenant. Please open a support ticket and ask for a quote increase in the selected region.
 
+## Error: Failed to get resource provider Microsoft.EventHub
+
+**Error Message**
+
+```sh
+{
+  "error": {
+    "code": "InvalidTemplateDeployment",
+    "message": "The template deployment 'purview001' is not valid according to the validation procedure. The tracking id is '<tracking_id>'. See inner errors for details.",
+    "details": [
+      {
+        "code": "23001",
+        "message": "Failed to get resource provider Microsoft.EventHub, requestId: <request_id>. Exception: (Exception) ErrorCode:AuthorizationFailed. Message:The client '<client_id>' with object id '<object_id>' does not have authorization to perform action 'Microsoft.Resources/subscriptions/providers/read' over scope '/subscriptions/subscription_id' or the scope is invalid. If access was recently granted, please refresh your credentials.. Target:.."
+      }
+    ]
+  }
+}
+```
+
+**Solution:**
+
+This error message appears, when deploying Purview and the `Microsoft.EventHub` or `Microsoft.Storage` Resource Provider has not been registered on the subscription. We have released a fix to our Deploy To Azure Buttons to overcome this issue until it gets fixed on the Purview side. If you still run into this problem, please open an Issue in this repo. To overcome this issue, please register the Resource Provider through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types). Once that is done, use the "Redeploy" button on the failed deployment to restart the deployment and successfuly deploy the components.
+
 >[Previous (Option (a) GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
 >[Previous (Option (b) Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
