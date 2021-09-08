@@ -27,10 +27,13 @@ var purviewRegions = [
   'centralindia'
   'eastus'
   'eastus2'
+  'northeurope'
   'southcentralus'
   'southeastasia'
   'uksouth'
+  'westcentralus'
   'westeurope'
+  'westus2'
 ]
 
 // Resources

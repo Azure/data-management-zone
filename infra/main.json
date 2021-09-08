@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "16791622274931099965"
+      "templateHash": "17267303737142956023"
     }
   },
   "parameters": {
@@ -2034,7 +2034,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "6496827630037915884"
+              "templateHash": "4682323295724537596"
             }
           },
           "parameters": {
@@ -2119,7 +2119,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "6970155837839612296"
+                      "templateHash": "14419562256841131389"
                     }
                   },
                   "parameters": {
@@ -2162,10 +2162,13 @@
                       "centralindia",
                       "eastus",
                       "eastus2",
+                      "northeurope",
                       "southcentralus",
                       "southeastasia",
                       "uksouth",
-                      "westeurope"
+                      "westcentralus",
+                      "westeurope",
+                      "westus2"
                     ]
                   },
                   "resources": [
