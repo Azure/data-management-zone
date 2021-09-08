@@ -20,7 +20,7 @@
                             }
                         },
                         {
-                            "name": "infoBoxOurview",
+                            "name": "infoBoxPurview",
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
