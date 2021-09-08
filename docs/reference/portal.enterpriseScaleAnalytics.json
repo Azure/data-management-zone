@@ -137,6 +137,22 @@
                                     }
                                 },
                                 {
+                                    "name": "eventHubProviderApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.EventHub/register?api-version=2021-04-01')]"
+                                    }
+                                },
+                                {
+                                    "name": "storageProviderApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/register?api-version=2021-04-01')]"
+                                    }
+                                },
+                                {
                                     "name": "infoBoxLocation",
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
