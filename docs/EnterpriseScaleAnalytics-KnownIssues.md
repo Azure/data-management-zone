@@ -73,7 +73,7 @@ This error message appears, if the Purview soft-limit has been reached inside yo
 
 **Solution:**
 
-This error message appears, when deploying Purview and the `Microsoft.EventHub` or `Microsoft.Storage` Resource Provider has not been registered on the subscription. We have released a fix to our Deploy To Azure Buttons to overcome this issue until it gets fixed on the Purview side. If you still run into this problem, please open an Issue in this repo. To overcome this issue, please register the Resource Provider through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types). Once that is done, use the "Redeploy" button on the failed deployment to restart the deployment and successfuly deploy the components.
+This error message appears, when deploying Purview and the `Microsoft.EventHub` or `Microsoft.Storage` Resource Provider has not been registered on the subscription. We have released a fix to our Deploy To Azure Buttons to overcome this issue until it gets fixed on the Purview side. If you still run into this problem, please open an Issue in this repo and start registering the Resource Provider manually through the `Azure Portal`, `Azure Powershell` or `Azure CLI` as mentioned [here](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types). Once that is done, use the "Redeploy" button on the failed deployment to restart the deployment and successfuly deploy the components.
 
 >[Previous (Option (a) GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
 >[Previous (Option (b) Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
