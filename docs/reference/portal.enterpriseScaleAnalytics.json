@@ -153,6 +153,14 @@
                                     }
                                 },
                                 {
+                                    "name": "purviewProviderApi",
+                                    "type": "Microsoft.Solutions.ArmApiControl",
+                                    "request": {
+                                        "method": "POST",
+                                        "path": "[concat('/subscriptions/', steps('dataManagementZoneSettings').deploymentDetails.subscriptionId, '/providers/Microsoft.Purview/register?api-version=2021-04-01')]"
+                                    }
+                                },
+                                {
                                     "name": "infoBoxLocation",
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
