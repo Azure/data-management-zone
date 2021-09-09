@@ -59,7 +59,7 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
 4. The RDP session opens in a  new Tab inside your Browser and you can start connecting to your data services.
 
-Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks are peered with each other. More details on why we recommend this network setup can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
+Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
 
 ## Point to Site (P2S) Connection
 
