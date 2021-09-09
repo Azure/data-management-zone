@@ -65,7 +65,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     osProfile: {
       adminUsername: administratorUsername
       adminPassword: administratorPassword
-      computerName: virtualmachineName
+      computerName: take(virtualmachineName, 15)
       allowExtensionOperations: true
       windowsConfiguration: {
         enableAutomaticUpdates: true
