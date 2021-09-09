@@ -59,6 +59,8 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
 4. The RDP session opens in a  new Tab inside your Browser and you can start connecting to your data services.
 
+Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks are peered with each other. More details on why we recommend this network setup can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
+
 ## Point to Site (P2S) Connection
 
 Another alternative to connect users to the virtual network is through the use of Point to Site (P2S) connections. An Azure native solution for this approach, requires setting up a VPN Gateway to allow Virtual Private Network (VPN) connections between users and the VPN Gateway over an encrypted tunnel. Once the connection is established, users can start connecting privately to services hosted on the virtual network inside the Azure tenant including storage accounts, Synapse and Purview.
