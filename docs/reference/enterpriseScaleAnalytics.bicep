@@ -29,6 +29,8 @@ param administratorPassword string
 param dataLandingZoneDetails array
 @description('Specifies the prefix of Data Landing Zones.')
 param dataLandingZonePrefix string
+@description('Specifies whether Azure Bastion will be deployed in the first Data Landing Zone.')
+param enableBastionHostDeployment bool
 
 // Variables
 var dataManagementZoneTemplateLink = 'https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/main.json'
@@ -221,6 +223,19 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
     }
   }
 }]
+
+module bastionHostDeployment 'bastionhost/main.bicep' = if (enableBastionHostDeployment) {
+  name: 'bastionHostDeployment'
+  scope: subscription(dataLandingZoneDetails[0].subscription)
+  params: {
+    location: dataLandingZoneDetails[0].location
+    prefix: '${dataLandingZonePrefix}${padLeft(1, 3, '0')}'
+    administratorPassword: administratorPassword
+    vnetId: reference(dataLandingZoneDeployment[0].name).outputs.vnetId.value
+    defaultNsgId: reference(dataLandingZoneDeployment[0].name).outputs.nsgId.value
+    defaultRouteTableId: reference(dataLandingZoneDeployment[0].name).outputs.routeTableId.value
+  }
+}
 
 module vnetPeeringDeployment 'modules/vnetPeeringOrchestration.bicep' = [for index1 in range(0, length(dataLandingZoneDetails)): {
   name: 'vnetPeeringDeployment-${index1}-${deployment().location}'

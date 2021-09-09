@@ -682,6 +682,35 @@
                                     "osPlatform": "Windows"
                                 }
                             ]
+                        },
+                        {
+                            "name": "azureBastionSettings",
+                            "label": "Azure Bastion Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "azureBastionText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Select whether you want to deploy an Azure Bastion in the first Data Landing Zone.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "azureBastionCheckbox",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "label": "Deploy Azure Bastion",
+                                    "constraints": {
+                                        "required": false,
+                                        "validationMessage": "Enable deployment of Azure Bastion inside the first Data Landing Zone."
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
@@ -720,6 +749,7 @@
                 "administratorPassword": "[steps('dataLandingZoneSettings').dataLandingZonesServicesSettings.administratorPassword.password]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
                 "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix]",
+                "enableBastionHostDeployment": "[steps('dataLandingZoneSettings').azureBastionSettings.azureBastionCheckbox]",
                 "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]"
             }
         }
