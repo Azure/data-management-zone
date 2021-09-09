@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "17267303737142956023"
+      "templateHash": "4934978826674156810"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "7515835829504360486"
+              "templateHash": "3232912003669773292"
             }
           },
           "parameters": {
@@ -314,6 +314,14 @@
             "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
           },
           "resources": [
+            {
+              "type": "Microsoft.Network/networkWatchers",
+              "apiVersion": "2021-02-01",
+              "name": "[format('{0}-networkwatcher', parameters('prefix'))]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {}
+            },
             {
               "type": "Microsoft.Network/routeTables",
               "apiVersion": "2020-11-01",

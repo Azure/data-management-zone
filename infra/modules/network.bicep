@@ -27,6 +27,13 @@ var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
 // Resources
+resource networkWatcher 'Microsoft.Network/networkWatchers@2021-02-01' = {
+  name: '${prefix}-networkwatcher'
+  location: location
+  tags: tags
+  properties: {}
+}
+
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
   name: '${prefix}-routetable'
   location: location
