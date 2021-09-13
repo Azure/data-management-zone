@@ -58,7 +58,7 @@ If you want to connect to the VM using Azure Bastion, execute the following step
     ![Connect to VM via Bastion](/docs/images/AzureBastionEnterCredentials.png)
 
 4. The RDP session opens in a  new Tab inside your Browser and you can start connecting to your data services.
-5. Once logged into the VM in a separate browser, go to Microsoft Edge and open [Azure Portal](https://portal.azure.com/), from here navigate to 'dev-product-Synapse001' resource group to open Synapse Workspace for Data Exploration or building Data Products.
+5. Once logged into the VM in a separate browser, go to Microsoft Edge and open [Azure Portal](https://portal.azure.com/). From here, navigate to the '{prefix}-{environment}-product-synapse001' Synapse workspace inside the '{prefix}-{environment}-shared-product' resource group for Data Exploration.
 
     ![Connect to Synapse Workspace](/docs/images/dev-shared-product-synapse.png)
 
