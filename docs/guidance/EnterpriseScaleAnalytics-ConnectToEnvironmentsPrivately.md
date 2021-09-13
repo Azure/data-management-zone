@@ -62,7 +62,7 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
     ![Connect to Synapse Workspace](/docs/images/dev-shared-product-synapse.png)
 
-6. Once within the Synapse Workspace to demonstrate Data Exploration and to establish connectivity with Data Services, import a NYC Taxi Dataset (OR any other) from the Gallery and once imported, click on 'New SQL Script' option to query 'TOP 100 rows'.
+6. After logging into the Synapse workspace, load a sample dataset from the gallery (e.g. NYC Taxi Dataset). Once imported, click on 'New SQL Script' to query 'TOP 100 rows'.
 
     ![Connect to New SQL Script](/docs/images/new-sql-script.png)
 
