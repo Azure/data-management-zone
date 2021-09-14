@@ -24,7 +24,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Before you start the deployment, please make sure you register the 'Microsoft.Purview', 'Microsoft.EventHub' and 'Microsoft.Storage' Resource Provider in your Data Management Zone Subscription. Otherwise, the deployment may fail.  Please follow the link to learn how this can be done.",
+                                "text": "Before you start the deployment, please make sure you register the 'Microsoft.Purview', 'Microsoft.EventHub' and 'Microsoft.Storage' Resource Provider (RP) in your Data Management Zone Subscription. Otherwise, the deployment may fail. If you have registered the Purview RP in an early preview phase, you may be required to re-register the 'Microsoft.Purview' RP. Please follow the link to learn how this can be done.",
                                 "style": "Warning",
                                 "uri": "https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types"
                             }
