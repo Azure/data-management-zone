@@ -212,10 +212,18 @@ resource networkRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2
               '*'
             ]
             sourceIpGroups: []
-            destinationAddresses: []
+            destinationAddresses: [
+              '23.102.135.246'  // Required IPs for Windows Activation (https://docs.microsoft.com/en-us/troubleshoot/azure/virtual-machines/custom-routes-enable-kms-activation#solution).
+              '51.4.143.248'
+              '23.97.0.13'
+              '42.159.7.249'
+            ]
             destinationIpGroups: []
             destinationFqdns: [
-              'kms.core.windows.net'
+              // 'kms.core.windows.net'  // FQDNs instead of hardcoded IPs can only be used, if the firewall policy has the DNS forwrder setting turned on. For compatibility reasons we will rely on IPs.
+              // 'kms.core.cloudapi.de'
+              // 'kms.core.usgovcloudapi.net'
+              // 'kms.core.chinacloudapi.cn'
             ]
             destinationPorts: [
               '1688'
