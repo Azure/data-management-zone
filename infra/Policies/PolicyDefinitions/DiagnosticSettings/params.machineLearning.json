@@ -95,34 +95,7 @@
                                                 "workspaceId": "[parameters('logAnalytics')]",
                                                 "metrics": [
                                                     {
-                                                        "category": "Run",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
-                                                    {
-                                                        "category": "Resource",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
-                                                    {
-                                                        "category": "Model",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
-                                                    {
-                                                        "category": "Quota",
+                                                        "category": "AllMetrics",
                                                         "enabled": true,
                                                         "retentionPolicy": {
                                                             "days": 0,
