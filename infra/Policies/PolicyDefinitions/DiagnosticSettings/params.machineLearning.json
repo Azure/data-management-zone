@@ -136,63 +136,63 @@
                                                         "category": "AmlComputeClusterEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlComputeClusterNodeEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlComputeCpuGpuUtilization",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlComputeInstanceEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlComputeJobEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlDataLabelEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlDataSetEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlDataStoreEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlDeploymentEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlEnvironmentEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlInferencingEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlModelsEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlPipelineEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlRunEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "AmlRunStatusChangedEvent",
                                                         "enabled": true
                                                     },
-                                                   {
+                                                    {
                                                         "category": "ApiManagementGatewayLogs",
                                                         "enabled": true
                                                     }
