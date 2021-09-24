@@ -114,51 +114,11 @@
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "AmlComputeCpuGpuUtilization",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlComputeInstanceEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
                                                         "category": "AmlComputeJobEvent",
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "AmlDataLabelEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlDataSetEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlDataStoreEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlDeploymentEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlEnvironmentEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlInferencingEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlModelsEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlPipelineEvent",
-                                                        "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "AmlRunEvent",
+                                                        "category": "AmlComputeCpuGpuUtilization",
                                                         "enabled": true
                                                     },
                                                     {
@@ -166,7 +126,87 @@
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "ApiManagementGatewayLogs",
+                                                        "category": "ModelsChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "ModelsReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "ModelsActionEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DeploymentReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DeploymentEventACI",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DeploymentEventAKS",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "InferencingOperationAKS",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "InferencingOperationACI",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "EnvironmentChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "EnvironmentReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataLabelChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataLabelReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "ComputeInstanceEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataStoreChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataStoreReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataSetChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "DataSetReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "PipelineChangeEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "PipelineReadEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "RunEvent",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "RunReadEvent",
                                                         "enabled": true
                                                     }
                                                 ]
