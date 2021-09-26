@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "17267303737142956023"
+      "templateHash": "14645738413971440377"
     }
   },
   "parameters": {
@@ -261,7 +261,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "7515835829504360486"
+              "templateHash": "1364315738341672417"
             }
           },
           "parameters": {
@@ -536,7 +536,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "12646215261701148621"
+                      "templateHash": "722980097855631450"
                     }
                   },
                   "parameters": {
@@ -750,11 +750,14 @@
                                   "*"
                                 ],
                                 "sourceIpGroups": [],
-                                "destinationAddresses": [],
-                                "destinationIpGroups": [],
-                                "destinationFqdns": [
-                                  "kms.core.windows.net"
+                                "destinationAddresses": [
+                                  "23.102.135.246",
+                                  "51.4.143.248",
+                                  "23.97.0.13",
+                                  "42.159.7.249"
                                 ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
                                 "destinationPorts": [
                                   "1688"
                                 ],
@@ -1126,7 +1129,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "12646215261701148621"
+                      "templateHash": "722980097855631450"
                     }
                   },
                   "parameters": {
@@ -1340,11 +1343,14 @@
                                   "*"
                                 ],
                                 "sourceIpGroups": [],
-                                "destinationAddresses": [],
-                                "destinationIpGroups": [],
-                                "destinationFqdns": [
-                                  "kms.core.windows.net"
+                                "destinationAddresses": [
+                                  "23.102.135.246",
+                                  "51.4.143.248",
+                                  "23.97.0.13",
+                                  "42.159.7.249"
                                 ],
+                                "destinationIpGroups": [],
+                                "destinationFqdns": [],
                                 "destinationPorts": [
                                   "1688"
                                 ],
