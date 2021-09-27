@@ -24,7 +24,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Before you start the deployment, please make sure you register the 'Microsoft.Purview', 'Microsoft.EventHub' and 'Microsoft.Storage' Resource Provider in your Data Management Zone Subscription. Otherwise, the deployment may fail. Please follow the link to learn how this can be done.",
+                                "text": "Before you start the deployment, please make sure you register the 'Microsoft.Purview', 'Microsoft.EventHub' and 'Microsoft.Storage' Resource Provider (RP) in your Data Management Zone Subscription. Otherwise, the deployment may fail. If you have registered the Purview RP in an early preview phase, you may be required to re-register the 'Microsoft.Purview' RP. Please follow the link to learn how this can be done.",
                                 "style": "Warning",
                                 "uri": "https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types"
                             }
@@ -367,7 +367,7 @@
                         },
                         {
                             "name": "firewallConfiguration",
-                            "label": "Firewall Configuration",
+                            "label": "Firewall & DNS Configuration",
                             "type": "Microsoft.Common.Section",
                             "visible": true,
                             "elements": [
@@ -430,6 +430,42 @@
                                     }
                                 },
                                 {
+                                    "name": "infoBoxFirewallRulesCustomDeployment",
+                                    "type": "Microsoft.Common.InfoBox",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
+                                    "options": {
+                                        "text": "Please follow the link and make sure you apply the network and application rules to your Firewall. Otherwise, functionality of some services inside your data platform will be limited or may not function. This includes but is not limited to DataFactory, Databricks, Azure Machine Learning and HDInsight.",
+                                        "style": "Warning",
+                                        "uri": "https://github.com/Azure/data-management-zone/blob/main/infra/modules/services/firewallPolicyRules.bicep"
+                                    }
+                                },
+                                {
+                                    "name": "existingDnsForwarderType",
+                                    "label": "Existing DNS Forwarder",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'yes')]",
+                                    "defaultValue": "Azure Firewall",
+                                    "toolTip": "Select the DNS Forwarder that is used inside your environment.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": false,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Azure Firewall",
+                                                "value": "azureFirewall"
+                                            },
+                                            {
+                                                "label": "Other",
+                                                "value": "custom"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
+                                },
+                                {
                                     "name": "subscriptionFirewallApi",
                                     "type": "Microsoft.Solutions.ArmApiControl",
                                     "request": {
@@ -441,7 +477,7 @@
                                     "name": "azureFirewallSub",
                                     "label": "Azure Firewall Subscription",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall')]",
+                                    "visible": "[or(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'azureFirewall'))]",
                                     "defaultValue": "",
                                     "toolTip": "Select the Subscription of your Azure Firewall.",
                                     "multiselect": false,
@@ -466,7 +502,7 @@
                                     "name": "azureFirewallId",
                                     "label": "Azure Firewall",
                                     "type": "Microsoft.Common.DropDown",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall')]",
+                                    "visible": "[or(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'azureFirewall'))]",
                                     "defaultValue": "",
                                     "toolTip": "Select the central Azure Firewall that should be used.",
                                     "multiselect": false,
@@ -543,16 +579,6 @@
                                     }
                                 },
                                 {
-                                    "name": "infoBoxFirewallRulesCustomDeployment",
-                                    "type": "Microsoft.Common.InfoBox",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
-                                    "options": {
-                                        "text": "Please follow the link and make sure you apply the network and application rules to your Firewall. Otherwise, functionality of some services inside your data platform will be limited or may not function. This includes but is not limited to DataFactory, Databricks, Azure Machine Learning and HDInsight.",
-                                        "style": "Warning",
-                                        "uri": "https://github.com/Azure/data-management-zone/blob/main/infra/modules/services/firewallPolicyRules.bicep"
-                                    }
-                                },
-                                {
                                     "name": "firewallPrivateIp",
                                     "label": "Firewall Private IP Address",
                                     "type": "Microsoft.Common.TextBox",
@@ -571,9 +597,9 @@
                                 },
                                 {
                                     "name": "dnsServerAdresses",
-                                    "label": "DNS Server Addresses",
+                                    "label": "DNS Forwarder IP Addresses",
                                     "type": "Microsoft.Common.TextBox",
-                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'custom')]",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'custom')]",
                                     "defaultValue": "10.0.0.4",
                                     "toolTip": "Specify the private IP addresses of your DNS forwarders. You can specify more than one private IP address ('10.0.0.4,10.0.0.5').",
                                     "constraints": {
@@ -581,7 +607,7 @@
                                         "validations": [
                                             {
                                                 "regex": "^((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(,)?)*$",
-                                                "message": "Invalid IP addresses. Please specify one or more valid IP adresses (e.g. '10.0.0.4' or '10.0.0.4,10.0.0.5')."
+                                                "message": "Invalid IP addresses. Please specify one or more valid IP adresses (e.g. '10.0.0.4' or '10.0.0.4,10.0.0.5') and remove whitespaces in your input."
                                             }
                                         ]
                                     }
@@ -829,7 +855,7 @@
                 "servicesSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange)]",
                 "enableDnsAndFirewallDeployment": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), true, false)]",
                 "firewallPrivateIp": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), '', if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), first(map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress)), steps('connectivitySettings').firewallConfiguration.firewallPrivateIp))]",
-                "dnsServerAdresses": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), parse('[]'), if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(steps('connectivitySettings').firewallConfiguration.dnsServerAdresses, ',')))]",
+                "dnsServerAdresses": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), parse('[]'), if(equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'azureFirewall'), map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(replace(steps('connectivitySettings').firewallConfiguration.dnsServerAdresses, ' ', ''), ',')))]",
                 "firewallPolicyId": "[if(empty(steps('connectivitySettings').firewallConfiguration.firewallPolicyId), '', steps('connectivitySettings').firewallConfiguration.firewallPolicyId)]",
                 "privateDnsZoneIdBlob": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob)]",
                 "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",

@@ -183,6 +183,10 @@ Due to the fact that there are no NVAs limiting throughput for cross-Data Landin
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
-## Summary
+### Summary
 
 The meshed network design offers maximum bandwidth at minimal cost without any compromises from a user access management perspective or on the DNS layer. Hence, this network architecture design is the recommended for customers wanting to adopt Enterprise-Scale Analytics. If additional network policies need to be enforced within the Data Platform, it is advised to use Network Security Groups instead of central NVAs.
+
+## Conclusion
+
+After reviewing all network architecture options from various angles and identifying pros and cons of each proposed pattern, [Option 4](#option-4-meshed-network-architecture-recommended) is the clear winner. Not only from a throughput perspective, but also from a cost and management perspective the solution has tremendous benefits and therefore should be used when deploying Enterprise-Scale Analytics. Peering spoke Virtual Networks has not been common in the past, but not doing so has also led to various issues when starting to share datasets across domains and business units. In addition, one can also argue that Enterprise-Scale Analytics can be seen as coherent solution that just spans across multiple subscriptions. In a single subscription setup, the network traffic flow would be equal to the flow in the meshed network architecture, with the difference that within a single subsciption users will most likely hit [subscription level limits and quotas](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits) of the platform, which is something that Enterprise-Scale Analytics wants to protect against.

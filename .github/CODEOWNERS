@@ -2,4 +2,7 @@
 # the repo. Unless a later match takes precedence,
 # @global-owner1 and @global-owner2 will be requested for
 # review when someone opens a pull request.
-*       @marvinbuss
+* @Azure/customer-architecture-team
+
+.github/CODEOWNERS @uday31in @marvinbuss
+.github/** @Azure/customer-architecture-team

@@ -57,7 +57,14 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
     ![Connect to VM via Bastion](/docs/images/AzureBastionEnterCredentials.png)
 
-4. The RDP session opens in a  new Tab inside your Browser and you can start connecting to your data services.
+4. The RDP session opens in a new Tab inside your Browser and you can start connecting to your data services.
+5. Once logged into the VM in a separate browser tab, go to Microsoft Edge and open [Azure Portal](https://portal.azure.com/). From here, navigate to the `{prefix}-{environment}-product-synapse001` Synapse workspace inside the `{prefix}-{environment}-shared-product` resource group for data exploration.
+
+    ![Connect to Synapse Workspace](/docs/images/dev-shared-product-synapse.png)
+
+6. After logging into the Synapse workspace, load a sample dataset from the gallery (e.g. NYC Taxi Dataset). Once imported, click on "New SQL Script" to query "TOP 100 rows".
+
+    ![Connect to New SQL Script](/docs/images/new-sql-script.png)
 
 Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
 
