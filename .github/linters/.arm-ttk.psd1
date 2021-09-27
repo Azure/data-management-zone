@@ -8,5 +8,7 @@
         'DeploymentTemplate Must Not Contain Hardcoded Uri'
         'DependsOn Best Practices'
         'IDs Should Be Derived From ResourceIDs'
+        'Parameters Must Be Referenced'
+        'Variables Must Be Referenced'
     )
 }
