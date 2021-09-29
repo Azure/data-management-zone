@@ -43,6 +43,8 @@ param firewallPolicyId string = ''
 param privateDnsZoneIdKeyVault string = ''
 @description('Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdPurview string = ''
+@description('Specifies the resource ID of the private DNS zone for Purview Portal. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
+param privateDnsZoneIdPurviewPortal string = ''
 @description('Specifies the resource ID of the private DNS zone for Queue storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param privateDnsZoneIdQueue string = ''
 @description('Specifies the resource ID of the private DNS zone for Blob storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
@@ -124,6 +126,7 @@ module governanceResources 'modules/governance.bicep' = {
     tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
     privateDnsZoneIdPurview: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPurview : privateDnsZoneIdPurview
+    privateDnsZoneIdPurviewPortal: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPurviewPortal : privateDnsZoneIdPurviewPortal
     privateDnsZoneIdStorageBlob: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdBlob : privateDnsZoneIdBlob
     privateDnsZoneIdStorageQueue: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdQueue : privateDnsZoneIdQueue
     privateDnsZoneIdEventhubNamespace: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdNamespace : privateDnsZoneIdNamespace

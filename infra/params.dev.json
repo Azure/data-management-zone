@@ -52,6 +52,9 @@
         "privateDnsZoneIdPurview": {
             "value": ""
         },
+        "privateDnsZoneIdPurviewPortal": {
+            "value": ""
+        },
         "privateDnsZoneIdQueue": {
             "value": ""
         },

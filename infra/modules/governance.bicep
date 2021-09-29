@@ -11,6 +11,7 @@ param prefix string
 param tags object
 param subnetId string
 param privateDnsZoneIdPurview string = ''
+param privateDnsZoneIdPurviewPortal string = ''
 param privateDnsZoneIdStorageBlob string = ''
 param privateDnsZoneIdStorageQueue string = ''
 param privateDnsZoneIdEventhubNamespace string = ''
@@ -30,6 +31,7 @@ module purview001 'services/purview.bicep' = {
     subnetId: subnetId
     purviewName: purview001Name
     privateDnsZoneIdPurview: privateDnsZoneIdPurview
+    privateDnsZoneIdPurviewPortal: privateDnsZoneIdPurviewPortal
     privateDnsZoneIdStorageBlob: privateDnsZoneIdStorageBlob
     privateDnsZoneIdStorageQueue: privateDnsZoneIdStorageQueue
     privateDnsZoneIdEventhubNamespace: privateDnsZoneIdEventhubNamespace
