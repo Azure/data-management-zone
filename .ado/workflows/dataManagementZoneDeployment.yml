@@ -61,6 +61,34 @@ stages:
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
               deploymentMode: "Validation"
 
+          # Deploy Data Management Zone - what-if
+          - task: AzureCLI@2
+            name: data_management_zone_whatif
+            displayName: Deploy Data Management Zone - what-if
+            enabled: true
+            continueOnError: false
+            inputs:
+              azureSubscription: ${{ variables.AZURE_RESOURCE_MANAGER_CONNECTION_NAME }}
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                az account set `
+                  --subscription ${{ variables.AZURE_SUBSCRIPTION_ID }}
+                
+                az deployment sub what-if `
+                  --location ${{ variables.AZURE_LOCATION }} `
+                  --subscription ${{ variables.AZURE_SUBSCRIPTION_ID }} `
+                  --exclude-change-types Ignore NoChange Unsupported `
+                  --template-file "$(System.DefaultWorkingDirectory)/infra/main.json" `
+                  --parameters "$(System.DefaultWorkingDirectory)/infra/params.dev.json" `
+                  --result-format "FullResourcePayloads"
+                
+              powerShellErrorActionPreference: "stop"
+              addSpnToEnvironment: false
+              useGlobalConfig: false
+              failOnStandardError: false
+              powerShellIgnoreLASTEXITCODE: false
+
   - stage: Deployment
     displayName: "Deployment of IaC templates"
     dependsOn: Validation
