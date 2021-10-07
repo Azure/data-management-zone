@@ -137,5 +137,9 @@ After following the instructions and updating the parameters and variables in yo
 
 Now, you can navigate to the pipeline that you have created as part of step 5 and monitor it as each service is deployed. If you run into any issues, please check the [Known Issues](/docs/EnterpriseScaleAnalytics-KnownIssues.md) first and open an [issue](https://github.com/Azure/data-management-zone/issues) if you come accross a potential bug in the repository.
 
+## Add Root Collection Administrator role to Purview account
+
+Since Purview account is being deployed using the SPN, at this point, the only account that has access to Purview account in the data plane, is the service principal. Use the [instructions in this guide](https://docs.microsoft.com/azure/purview/tutorial-metadata-policy-collections-apis#add-the-root-collection-administrator-role) to assign additional user accounts to Purview Root Collection as Collection Admins through the API. 
+
 >[Previous](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
 >[Next](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
