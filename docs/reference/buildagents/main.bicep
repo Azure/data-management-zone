@@ -43,42 +43,22 @@ var tagsDefault = {
   Name: name
 }
 var tagsJoined = union(tagsDefault, tags)
+var selfHostedAgentDevOps001Name = '${name}-agent001'
 
 // Resources
-module networkServices 'modules/network.bicep' = {
-  name: 'networkServices'
-  scope: resourceGroup(vnetSubscriptionId, vnetResourceGroupName)
+module selfHostedAgentDevOps001 'modules/services/selfHostedAgentAzureDevOps.bicep' = {
+  name: 'selfHostedAgentDevOps001'
+  scope: resourceGroup()
   params: {
     location: location
-    prefix: name
     tags: tagsJoined
-    vnetName: vnetName
-    bastionSubnetAddressPrefix: bastionSubnetAddressPrefix
-    jumpboxSubnetAddressPrefix: jumpboxSubnetAddressPrefix
-    defaultNsgId: defaultNsgId
-    defaultRouteTableId: defaultRouteTableId
-  }
-}
-
-resource bastionResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01' = {
-  name: '${name}-bastion'
-  location: location
-  tags: tagsJoined
-  properties: {}
-}
-
-module bastionServices 'modules/bastion.bicep' = {
-  name: 'bastionServices'
-  scope: bastionResourceGroup
-  params: {
-    location: location
-    prefix: name
-    tags: tagsJoined
-    virtualMachineSku: virtualMachineSku
-    bastionSubnetId: networkServices.outputs.bastionSubnetId
-    jumpboxSubnetId: networkServices.outputs.jumpboxSubnetId
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
+    subnetId: subnetId
+    vmssName: selfHostedAgentDevOps001Name
+    vmssSkuName: virtualMachineSku
+    vmssSkuTier: 'Standard'
+    vmssSkuCapacity: 1
   }
 }
 
