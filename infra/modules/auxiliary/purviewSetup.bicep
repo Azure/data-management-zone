@@ -10,13 +10,15 @@ param tags object
 param userAssignedIdentityId string
 param purviewId string
 param purviewRootCollectionAdminObjectIds array
+param forceUpdateTag string = utcNow()
 
 // Variables
 var purviewName = length(split(purviewId, '/')) >= 9 ? last(split(purviewId, '/')) : 'incorrectSegmentLength'
 var purviewSetupName = '${purviewName}-setup'
+var purviewRootCollectionAdminsInput = replace(replace(string(purviewRootCollectionAdminObjectIds), '[', ''), ']', '')
 
 // Resources
-resource purviewSetup 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+resource purviewSetup 'Microsoft.Resources/deploymentScripts@2020-10-01' = if(length(purviewRootCollectionAdminObjectIds) > 0) {
   name: purviewSetupName
   location: location
   tags: tags
@@ -28,14 +30,14 @@ resource purviewSetup 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
     }
   }
   properties: {
-    azPowerShellVersion: 'az6.4'
-    arguments: '-PurviewId \\"${purviewId}\\" -PurviewRootCollectionAdmins \\"${purviewRootCollectionAdminObjectIds}\\"'
+    azPowerShellVersion: '6.3'
+    arguments: '-PurviewId \\"${purviewId}\\" -PurviewRootCollectionAdmins ${purviewRootCollectionAdminsInput}'
     cleanupPreference: 'OnSuccess'
     containerSettings: {
       containerGroupName: purviewSetupName
     }
     environmentVariables: []
-    forceUpdateTag: '1'
+    forceUpdateTag: forceUpdateTag
     scriptContent: loadTextContent('../../../code/SetupPurview.ps1')
     retentionInterval: 'P1D'
     supportingScriptUris: []

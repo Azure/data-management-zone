@@ -28,11 +28,10 @@ module userAssignedIdentity001 'services/userassignedidentity.bicep' = {
   }
 }
 
-module userAssignedIdentity001RoleAssignmentPurview 'auxiliary/userAssignedIdentityRoleAssignmentPurview.bicep' = {
+module userAssignedIdentity001RoleAssignmentResourceGroup 'auxiliary/userAssignedIdentityRoleAssignmentResourceGroup.bicep' = {
   name: 'userAssignedIdentity001RoleAssignmentPurview'
   scope:  resourceGroup(purviewSubscriptionId, purviewResourceGroupName)
   params: {
-    purviewId: purviewId
     userAssignedIdentityId: userAssignedIdentity001.outputs.userAssignedIdentityId
   }
 }
@@ -41,7 +40,7 @@ module purviewSetup 'auxiliary/purviewSetup.bicep' = {
   name: 'purviewSetup'
   scope: resourceGroup()
   dependsOn: [
-    userAssignedIdentity001RoleAssignmentPurview
+    userAssignedIdentity001RoleAssignmentResourceGroup
   ]
   params: {
     location: location

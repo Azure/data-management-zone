@@ -9,10 +9,9 @@ param (
     [string]
     $PurviewId,
 
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
+    [Parameter(Mandatory = $false)]
     [string[]]
-    $PurviewRootCollectionAdmins,
+    $PurviewRootCollectionAdmins = @(),
 
     [Parameter(Mandatory=$false)]
     [Switch]
