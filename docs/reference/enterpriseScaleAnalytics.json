@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "1797952641007345041"
+      "templateHash": "4305783666002547374"
     }
   },
   "parameters": {
@@ -311,7 +311,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "13109523197203963234"
+              "templateHash": "16612088227531531207"
             }
           },
           "parameters": {
@@ -768,7 +768,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "2911986044145184865"
+                      "templateHash": "5974803606266919289"
                     }
                   },
                   "parameters": {
@@ -945,7 +945,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.4.613.9944",
-                              "templateHash": "16085726132535864956"
+                              "templateHash": "223020605881141162"
                             }
                           },
                           "parameters": {
@@ -1027,7 +1027,7 @@
                                 "osProfile": {
                                   "adminUsername": "[parameters('administratorUsername')]",
                                   "adminPassword": "[parameters('administratorPassword')]",
-                                  "computerName": "[parameters('virtualmachineName')]",
+                                  "computerName": "[take(parameters('virtualmachineName'), 15)]",
                                   "allowExtensionOperations": true,
                                   "windowsConfiguration": {
                                     "enableAutomaticUpdates": true
