@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-// This template is used to create a Purview account.
+// This template is used to setup a Purview account.
 targetScope = 'resourceGroup'
 
 // Parameters

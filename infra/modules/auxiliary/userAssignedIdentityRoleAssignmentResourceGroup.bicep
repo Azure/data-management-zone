@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-// The module contains a template to create a role assignment to a KeyVault.
+// The module contains a template to create a role assignment of a useer assigned identity to a resource group.
 targetScope = 'resourceGroup'
 
 // Parameters

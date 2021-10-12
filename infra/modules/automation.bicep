@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 // This template is used as a module from the main.bicep template. 
-// The module contains a template to create the governance services.
+// The module contains a template to create the automation services.
 targetScope = 'resourceGroup'
 
 // Parameters
