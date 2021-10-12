@@ -129,6 +129,9 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       tags: {
         value: tags
       }
+      purviewRootCollectionAdminObjectIds: {
+        value: []
+      }
       vnetAddressPrefix: {
         value: '10.${index + 1}.0.0/16'
       }
