@@ -175,7 +175,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
@@ -335,7 +335,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
