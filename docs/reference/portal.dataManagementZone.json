@@ -253,6 +253,51 @@
                     ]
                 },
                 {
+                    "name": "generalSettings",
+                    "label": "General Settings",
+                    "subLabel": {
+                        "preValidation": "Provide settings for your Data Management Zone deployment.",
+                        "postValidation": "Done"
+                    },
+                    "bladeTitle": "General Settings",
+                    "bladeSubtitle": "General Settings",
+                    "elements": [
+                        {
+                            "name": "purviewSettings",
+                            "label": "Purview Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "purviewSettingsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify Azure Purview settings for this deployment.",
+                                        "link": {
+                                            "label": "Learn more",
+                                            "uri": "https://docs.microsoft.com/en-us/azure/purview/overview"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "purviewRootCollectionAdminObjectIds",
+                                    "label": "Purview Root Collection Admin Object ID",
+                                    "type": "Microsoft.Common.TextBox",
+                                    "visible": true,
+                                    "defaultValue": "",
+                                    "toolTip": "Specify an AAD User Object ID of a the user in your AAD tenant that should be added as collection admin to the root collection of your Purview account.",
+                                    "constraints": {
+                                        "required": false,
+                                        "regex": "^(([a-z0-9-]{36})(,)?)*$",
+                                        "validationMessage": "Invalid Object ID(s) (36 lower-case chars, hyphens and numbers). Please specify one or more valid object IDs seperated by a comma (e.g. '{object-id}' or '{object-id-1},{object-id-2}') and remove whitespaces from your input."
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "connectivitySettings",
                     "label": "Connectivity Settings",
                     "subLabel": {
@@ -850,6 +895,7 @@
                 "environment": "[if(empty(steps('basics').dataManagementZoneName.environment), '', steps('basics').dataManagementZoneName.environment)]",
                 "prefix": "[if(empty(steps('basics').dataManagementZoneName.dataManagementZonePrefix), '', steps('basics').dataManagementZoneName.dataManagementZonePrefix)]",
                 "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]",
+                "purviewRootCollectionAdminObjectIds": "[if(empty(steps('generalSettings').purviewSettings.purviewRootCollectionAdminObjectIds), parse('[]'), split(replace(steps('generalSettings').purviewSettings.purviewRootCollectionAdminObjectIds, ' ', ''), ','))]",
                 "vnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange)]",
                 "azureFirewallSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange)]",
                 "servicesSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.servicesSubnetCidrRange)]",
