@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "14645738413971440377"
+      "templateHash": "9055763377870284445"
     }
   },
   "parameters": {
@@ -105,6 +105,13 @@
       "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
+      }
+    },
+    "privateDnsZoneIdPurviewPortal": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Specifies the resource ID of the private DNS zone for Purview Portal. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "privateDnsZoneIdQueue": {
@@ -1742,7 +1749,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "4579642614199511655"
+              "templateHash": "2587336424050217734"
             }
           },
           "parameters": {
@@ -1785,6 +1792,7 @@
               "privatelink.pbidedicated.windows.net",
               "privatelink.postgres.database.azure.com",
               "privatelink.purview.azure.com",
+              "privatelink.purviewstudio.azure.com",
               "[format('privatelink.queue.{0}', environment().suffixes.storage)]",
               "privatelink.redis.cache.windows.net",
               "privatelink.search.windows.net",
@@ -1930,6 +1938,10 @@
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com', resourceGroup().id)]"
             },
+            "privateDnsZoneIdPurviewPortal": {
+              "type": "string",
+              "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.purviewstudio.azure.com', resourceGroup().id)]"
+            },
             "privateDnsZoneIdDfs": {
               "type": "string",
               "value": "[format('{0}/providers/Microsoft.Network/privateDnsZones/privatelink.dfs.{1}', resourceGroup().id, environment().suffixes.storage)]"
@@ -2020,6 +2032,9 @@
           "privateDnsZoneIdPurview": {
             "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPurview.value, parameters('privateDnsZoneIdPurview'))]"
           },
+          "privateDnsZoneIdPurviewPortal": {
+            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdPurviewPortal.value, parameters('privateDnsZoneIdPurviewPortal'))]"
+          },
           "privateDnsZoneIdStorageBlob": {
             "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2019-10-01').outputs.privateDnsZoneIdBlob.value, parameters('privateDnsZoneIdBlob'))]"
           },
@@ -2040,7 +2055,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "4682323295724537596"
+              "templateHash": "7767679708356243486"
             }
           },
           "parameters": {
@@ -2057,6 +2072,10 @@
               "type": "string"
             },
             "privateDnsZoneIdPurview": {
+              "type": "string",
+              "defaultValue": ""
+            },
+            "privateDnsZoneIdPurviewPortal": {
               "type": "string",
               "defaultValue": ""
             },
@@ -2108,6 +2127,9 @@
                   "privateDnsZoneIdPurview": {
                     "value": "[parameters('privateDnsZoneIdPurview')]"
                   },
+                  "privateDnsZoneIdPurviewPortal": {
+                    "value": "[parameters('privateDnsZoneIdPurviewPortal')]"
+                  },
                   "privateDnsZoneIdStorageBlob": {
                     "value": "[parameters('privateDnsZoneIdStorageBlob')]"
                   },
@@ -2125,7 +2147,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.613.9944",
-                      "templateHash": "14419562256841131389"
+                      "templateHash": "9950942984261810285"
                     }
                   },
                   "parameters": {
@@ -2142,6 +2164,9 @@
                       "type": "string"
                     },
                     "privateDnsZoneIdPurview": {
+                      "type": "string"
+                    },
+                    "privateDnsZoneIdPurviewPortal": {
                       "type": "string"
                     },
                     "privateDnsZoneIdStorageBlob": {
@@ -2227,7 +2252,7 @@
                       ]
                     },
                     {
-                      "condition": "[not(empty(parameters('privateDnsZoneIdPurview')))]",
+                      "condition": "[not(empty(parameters('privateDnsZoneIdPurviewPortal')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNamePortal'), 'default')]",
@@ -2236,7 +2261,7 @@
                           {
                             "name": "[format('{0}-arecord', variables('purviewPrivateEndpointNamePortal'))]",
                             "properties": {
-                              "privateDnsZoneId": "[parameters('privateDnsZoneIdPurview')]"
+                              "privateDnsZoneId": "[parameters('privateDnsZoneIdPurviewPortal')]"
                             }
                           }
                         ]

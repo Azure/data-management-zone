@@ -10,6 +10,7 @@ param tags object
 param subnetId string
 param purviewName string
 param privateDnsZoneIdPurview string
+param privateDnsZoneIdPurviewPortal string
 param privateDnsZoneIdStorageBlob string
 param privateDnsZoneIdStorageQueue string
 param privateDnsZoneIdEventhubNamespace string
@@ -80,7 +81,7 @@ resource purviewPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@2020-1
   }
 }
 
-resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurview)) {
+resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurviewPortal)) {
   parent: purviewPrivateEndpointPortal
   name: 'default'
   properties: {
@@ -88,7 +89,7 @@ resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints
       {
         name: '${purviewPrivateEndpointPortal.name}-arecord'
         properties: {
-          privateDnsZoneId: privateDnsZoneIdPurview
+          privateDnsZoneId: privateDnsZoneIdPurviewPortal
         }
       }
     ]
