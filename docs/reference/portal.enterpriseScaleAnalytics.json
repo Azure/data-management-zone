@@ -694,7 +694,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Select whether you want to deploy an Azure Bastion in the first Data Landing Zone.",
+                                        "text": "Specify whether you want to deploy an Azure Bastion in the first Data Landing Zone.",
                                         "link": {
                                             "label": "",
                                             "uri": ""
@@ -703,8 +703,11 @@
                                 },
                                 {
                                     "name": "azureBastionCheckbox",
-                                    "type": "Microsoft.Common.CheckBox",
                                     "label": "Deploy Azure Bastion",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": true,
+                                    "defaultValue": false,
+                                    "toolTip": "Enable the deployment of an Azure Bastion Host in the first Data Landing Zone.",
                                     "constraints": {
                                         "required": false,
                                         "validationMessage": "Enable deployment of Azure Bastion inside the first Data Landing Zone."
