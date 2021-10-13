@@ -31,11 +31,8 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
   properties: {
     additionalCapabilities: {}
     automaticRepairsPolicy: {}
-    doNotRunExtensionsOnOverprovisionedVMs: true
     overprovision: false
-    orchestrationMode: 'Flexible'
     platformFaultDomainCount: 1
-    proximityPlacementGroup: {}
     scaleInPolicy: {
       rules: [
         'Default'
@@ -43,11 +40,7 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
     }
     singlePlacementGroup: false
     upgradePolicy: {
-      automaticOSUpgradePolicy: {
-        enableAutomaticOSUpgrade: true
-        disableAutomaticRollback: false
-      }
-      mode: 'Automatic'
+      mode: 'Manual'
     }
     virtualMachineProfile: {
       diagnosticsProfile: {
@@ -56,7 +49,6 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
         }
       }
       networkProfile: {
-        networkApiVersion: '2020-11-01'
         networkInterfaceConfigurations: [
           {
             name: '${vmssName}-nic'
@@ -85,10 +77,6 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
         customData: ''
         linuxConfiguration: {
           disablePasswordAuthentication: false
-          patchSettings: {
-            assessmentMode: 'AutomaticByPlatform'
-            patchMode: 'AutomaticByPlatform'
-          }
         }
       }
       priority: 'Regular'
