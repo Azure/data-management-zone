@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.613.9944",
-      "templateHash": "8133861051447516233"
+      "templateHash": "15262263412229329785"
     }
   },
   "parameters": {
@@ -128,7 +128,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.613.9944",
-              "templateHash": "87526709361371006"
+              "templateHash": "16656094663692197516"
             }
           },
           "parameters": {
@@ -165,7 +165,64 @@
             }
           },
           "functions": [],
+          "variables": {
+            "loadBalancerName": "[format('{0}-lb', parameters('vmssName'))]"
+          },
           "resources": [
+            {
+              "type": "Microsoft.Network/loadBalancers",
+              "apiVersion": "2021-02-01",
+              "name": "[variables('loadBalancerName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              },
+              "properties": {
+                "backendAddressPools": [
+                  {
+                    "name": "[format('{0}-backendpool', parameters('vmssName'))]"
+                  }
+                ],
+                "frontendIPConfigurations": [
+                  {
+                    "name": "[format('{0}-ipfrontend', parameters('vmssName'))]",
+                    "properties": {
+                      "subnet": {
+                        "id": "[parameters('subnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "inboundNatPools": [
+                  {
+                    "name": "[format('{0}-natpool', parameters('vmssName'))]",
+                    "properties": {
+                      "frontendIPConfiguration": {
+                        "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-ipfrontend', parameters('vmssName')))]"
+                      },
+                      "protocol": "Tcp",
+                      "frontendPortRangeStart": 50000,
+                      "frontendPortRangeEnd": 50099,
+                      "backendPort": 22,
+                      "idleTimeoutInMinutes": 4
+                    }
+                  }
+                ],
+                "probes": [
+                  {
+                    "name": "[format('{0}-probe', parameters('vmssName'))]",
+                    "properties": {
+                      "intervalInSeconds": 5,
+                      "numberOfProbes": 2,
+                      "port": 22,
+                      "protocol": "Tcp"
+                    }
+                  }
+                ]
+              }
+            },
             {
               "type": "Microsoft.Compute/virtualMachineScaleSets",
               "apiVersion": "2021-04-01",
@@ -187,7 +244,7 @@
                     "Default"
                   ]
                 },
-                "singlePlacementGroup": false,
+                "singlePlacementGroup": true,
                 "upgradePolicy": {
                   "mode": "Manual"
                 },
@@ -211,7 +268,17 @@
                                 "privateIPAddressVersion": "IPv4",
                                 "subnet": {
                                   "id": "[parameters('subnetId')]"
-                                }
+                                },
+                                "loadBalancerBackendAddressPools": [
+                                  {
+                                    "id": "[reference(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))).backendAddressPools[0].id]"
+                                  }
+                                ],
+                                "loadBalancerInboundNatPools": [
+                                  {
+                                    "id": "[reference(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))).inboundNatPools[0].id]"
+                                  }
+                                ]
                               }
                             }
                           ]
@@ -247,7 +314,10 @@
                     }
                   }
                 }
-              }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]"
+              ]
             }
           ]
         }

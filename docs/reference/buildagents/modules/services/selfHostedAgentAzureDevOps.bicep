@@ -17,8 +17,62 @@ param administratorUsername string = 'VmssMainUser'
 param administratorPassword string
 
 // Variables
+var loadBalancerName = '${vmssName}-lb'
 
 // Resources
+resource loadbalancer 'Microsoft.Network/loadBalancers@2021-02-01' = {
+  name: loadBalancerName
+  location: location
+  tags: tags
+  sku: {
+    name: 'Basic'
+    tier: 'Regional'
+  }
+  properties: {
+    backendAddressPools: [
+      {
+        name: '${vmssName}-backendpool'
+      }
+    ]
+    frontendIPConfigurations: [
+      {
+        name: '${vmssName}-ipfrontend'
+        properties: {
+          subnet: {
+            id: subnetId
+          }
+        }
+      }
+    ]
+    inboundNatPools: [
+      {
+        name: '${vmssName}-natpool'
+        properties: {
+          frontendIPConfiguration: {
+            id: resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', '${vmssName}-lb', '${vmssName}-ipfrontend')
+          }
+          protocol: 'Tcp'
+          frontendPortRangeStart: 50000
+          frontendPortRangeEnd: 50099
+          backendPort: 22
+          idleTimeoutInMinutes: 4
+        }
+      }
+    ]
+    probes: [
+      {
+        name: '${vmssName}-probe'
+        properties: {
+          intervalInSeconds: 5
+          numberOfProbes: 2
+          port: 22
+          protocol: 'Tcp'
+        }
+      }
+    ]
+  }
+}
+
 resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = {
   name: vmssName
   location: location
@@ -38,7 +92,7 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
         'Default'
       ]
     }
-    singlePlacementGroup: false
+    singlePlacementGroup: true
     upgradePolicy: {
       mode: 'Manual'
     }
@@ -63,6 +117,16 @@ resource scalesetagent 'Microsoft.Compute/virtualMachineScaleSets@2021-04-01' = 
                     subnet: {
                       id: subnetId
                     }
+                    loadBalancerBackendAddressPools: [
+                      {
+                        id: loadbalancer.properties.backendAddressPools[0].id
+                      }
+                    ]
+                    loadBalancerInboundNatPools: [
+                      {
+                        id: loadbalancer.properties.inboundNatPools[0].id
+                      }
+                    ]
                   }
                 }
               ]
