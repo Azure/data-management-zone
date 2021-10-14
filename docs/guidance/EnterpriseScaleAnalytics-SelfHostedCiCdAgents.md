@@ -6,7 +6,7 @@ When a Data Product team wants to deploy application code to an Azure service (e
 
 As a result, customers have to setup self-hosted agents that are connected to the corporate vnet. As these are hosted on the corporate network, the agents will be able to resolve the private IPs of the services and therefore will be able to deploy application code on services that are hosted using private endpoints. In order to simplify this setup, this doc will describe step-by-step how self-hosted agents can be deployed into an Enterprise-Scale Analytics environment.
 
-As each service has its own way of setting up agents, we will split the following sections by service. 
+As each service has its own way of setting up agents, we will split the following sections by service.
 
 ## Azure DevOps
 
