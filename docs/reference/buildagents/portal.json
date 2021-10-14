@@ -316,6 +316,15 @@
                     "bladeSubtitle": "Connectivity Settings",
                     "elements": [
                         {
+                            "name": "infoBoxResourceGroup",
+                            "type": "Microsoft.Common.InfoBox",
+                            "visible": true,
+                            "options": {
+                                "text": "We are recommending to use the 'ServicesSubnet' for the Self-Hosted Agent deployment.",
+                                "style": "Info"
+                            }
+                        },
+                        {
                             "name": "virtualNetworkConfiguration",
                             "label": "Virtual Network Configuration",
                             "type": "Microsoft.Common.Section",

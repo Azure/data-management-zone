@@ -24,7 +24,7 @@ Please follow the steps below to deploy a [Linux based Virtual Machine Scale Set
 
 1. Use the [Bicep templates](/docs/reference/buildagents/main.bicep), [ARM template](/docs/reference/buildagents/main.json) or the "Deploy To Azure" Button to deploy a virtual machine scale set (VMSS) into the environment. We are recommending to use the already existing `{prefix}-{environment}-mgmt` resource group and the `ServicesSubnet` for the deployment into your Data Management Zone or Data Landing Zone.
 
-    [![Deploy To Azure](https://aka.ms/deploytoazurebutton)](#TODO)
+    [![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbuildagents%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fbuildagents%2Fportal.json)
 
     **(Optional)** The VMSS defined in the IaC templates uses [ephemeral disk](https://docs.microsoft.com/en-us/azure/virtual-machines/ephemeral-os-disks). This feature is only availabe on a subset of virtual machine SKUs. All the options provided in the Azure Portal are supporting this functionality. If you want to deploy through ARM or Bicep and want to find out which SKUs are also supported, please run the following PowerShell script:
 
