@@ -139,7 +139,7 @@ Now, you can navigate to the pipeline that you have created as part of step 5 an
 
 ## Add Root Collection Administrator role to Purview account
 
-Since Purview account is being deployed using the SPN, at this point, the only account that has access to Purview account in the data plane, is the service principal. Use the [instructions in this guide](https://docs.microsoft.com/azure/purview/tutorial-metadata-policy-collections-apis#add-the-root-collection-administrator-role) to assign additional user accounts to Purview Root Collection as Collection Admins through the API. 
+Since the Purview account is being deployed using a Service Principal, at this point, the only identity that has access to the Purview data plane, is the Service Principal. Use the [instructions in this guide](https://docs.microsoft.com/azure/purview/tutorial-metadata-policy-collections-apis#add-the-root-collection-administrator-role) to assign additional user accounts to the Purview Root Collection as Collection Admin.
 
 >[Previous](/docs/EnterpriseScaleAnalytics-ServicePrincipal.md)
 >[Next](/docs/EnterpriseScaleAnalytics-KnownIssues.md)
