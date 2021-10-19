@@ -254,3 +254,5 @@ resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoi
 
 // Outputs
 output purviewId string = purview.id
+output purviewManagedStorageId string = purview.properties.managedResources.storageAccount
+output purviewManagedEventHubId string = purview.properties.managedResources.eventHubNamespace
