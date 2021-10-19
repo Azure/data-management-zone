@@ -45,10 +45,6 @@ resource purview 'Microsoft.Purview/accounts@2021-07-01' = {
   identity: {
     type: 'SystemAssigned'
   }
-  sku: {
-    name: 'Standard'
-    capacity: 1
-  }
   properties: {
     cloudConnectors: {}
     friendlyName: purviewName
