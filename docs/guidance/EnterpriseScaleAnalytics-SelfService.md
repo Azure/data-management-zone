@@ -21,7 +21,7 @@ If we now take into consideration that within a large organization there is not 
 Enterprise-Scale Analytics (ESA) uses two core concepts to overcome the issues mentioned in the [introduction](#introduction) above:
 
 - Scaling through the concept of Data Landing Zones.
-- Scaling through the concept of Data Product or Dat aIntegrations to enable distributed and decentralized data ownership.
+- Scaling through the concept of Data Product or Data Integrations to enable distributed and decentralized data ownership.
 
 The following paragraphs will elaborate on these core concepts and will also describe how self-service can be enabled for Data Products.
 
@@ -48,15 +48,37 @@ Lastly, it needs to be highlighted that the prescriptive ESA architecture and th
 
 ### Scaling with Data Products
 
-Within a Data Landing Zone, Enterprise-Scale Analytics allows to scale through the concept of Data Integrations or Data Products. A Data Integration or Data Product is an environment in form of resource group that allows cross-functional teams to implement data solutions and workloads on the platform. These teams then take care of ingest (only for Data Integration), cleansing, aggregation and serving.
+Within a Data Landing Zone, Enterprise-Scale Analytics allows organizations scale through the concept of Data Integrations and Data Products. A Data Integration or Data Product is an environment in form of resource group that allows cross-functional teams to implement data solutions and workloads on the platform. These teams then take care of the ingest (only for Data Integration), cleansing, aggregation and serving tasks for a particular data-domain, sub-domain, dataset or project.
 
-A Data Integration pattern is a special kind of Data Product that is concerned with the integration of data assets from source systems outside of the data platform onto a Data Landing Zone. These consistent data integration implementations reduce the impact on the transactional systems and allow multiple Data Product teams to consume the same dataset version without being concerned about the integration itself.
+A Data Integration pattern is a special kind of Data Product that is mainly concerned with the integration of data assets from source systems outside of the data platform onto a Data Landing Zone. These consistent data integration implementations reduce the impact on the transactional systems and allow multiple Data Product teams to consume the same dataset version without being concerned about the integration and without having to repeat the integration task.
 Data Products on the other hand are consuming one or multiple data assets within the same Data Landing Zone or across multiple Data Landing Zones to generate new data assets, insights or business value. The resulting data assets may again be shared with other Data Product teams to enhance the value being created within the business even further.
 
-Data Integrations are the core concept 
+With the Data Integration concept, Enterprise-Scale Analytics addresses the data integration and responsibility issue mentioned in the [introduction](#introduction). Instead of having an architectural design build around monolithic functional responsibilities for the ingestion of tables and integration of source systems, the referenece design is pivoting the design towards a distributed, data domains driven architecture, where cross functional teams take over the end-to-end functional responsibility and ownership for the respective data scope. In summary, this means that instead of having a centralized technical stack and team being responsible for each and every orthogonal solution of the data processing workflow, we are distributing the end-to-end responsibility from ingestion to the serving layer for data domains or sub-domains across multiple autonomously working cross-functional Data Integration teams. The Data Integration teams own a domain or sub-domain capability and also must be encouraged to serve datasets for access by any team for any purpose or project they may be working on.
 
-You may now ask the question of how this is addressing the concerns mentioned in the [introduction](#introduction). 
+This architectural paradigm shift ultimately leads to an increased velocity within the data platform as data consumers do no longer have to rely on a set of centralized teams or have to fight for prioritization of the requested changes. As smaller teams take ownership of the end-to-end integration workflow, the feedback loop between data provider and data consumer is much shorter and therefore allows for much quicker prioritization, development cycles and a more agile development process. Additionaly, complex synchronization processes and release plans between teams are no longer required as the cross-functional Data Integration team has full visibility of the end-to-end technical stack as well as any implications that may arise due to the implemented changes. The team can apply software engineering practices to run unit and integration tests to minimize overall impact on consumers. 
+
+In an ideal world, the data integration would be owned by the same team that owns the source systems. But the team should in general not ony consist of data engineers that work on the source systems, but also of subject matter experts (SMEs) for these datasets, cloud engineers and data product owners. Such a cross-functional team setup reduces the communication requird to teams outside and will be essential when developing the complete stack from infrastructure to actual data pipelines.
+
+Integrated datasets from source systems become the foundation of the data platform and will enable Data Product teams to further innovate on top of the business fact tables to eventually improve decision making and optimize business processes. Both Data Integration and Data Product teams should offer SLAs to consumers and ensure hat agreements are met. These SLAs can be related to data quality, timeliness, error rates, uptime and other tasks.
+
+### Summary
+
+The sections above are summarizing the scaling machanisms within Enterprise-Scale Analytics that organizations can use to grow their data estate within Azure over time without running into well-known technical limitations. Both scaling mechanisms are helping to overcome different technical complexities and can be used in an effecient and simple way.
+
+The previous section promises agility and quick development cycles within the Data Integration and Data Product environments. However, this will only be possible if teams get the required access rights to develop independently and roll out new dataset versions and features over time in a self-service manner. How this can be achieved will be covered as part of the next section.
+
+## Enabling Self-service for Data Products in Enterprise-Scale Analytics 
 
 
-- a distributed decentralized data ownership model to overcome the challenges mentioned above. Instead of a functional split, a domain-driven and cross-functional ownership model is used to 
-- In order to scale within an Enterprise Data Platform a more distributed approach needs to be followed
+
+
+- Data Catalog access, rg access, shared services access
+
+- policies to keep management plane secure
+
+- data product templates as blueprint that is handed over to domain and product teams so that they take over ownership of the e2e solution
+- blueprints are lowering the 'lead time to create a new data product' on the infrastructure
+- can also start from scratch
+- self-service wrt data services or any services
+- decentralized cost ownership also means that the team is paying
+- access to repo and board
