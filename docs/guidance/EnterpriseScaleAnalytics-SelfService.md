@@ -96,10 +96,13 @@ The individual teams will also require access to the central Purview account to 
 
 ### Access to other resources
 
-- Reoritory, Board, Service Principle
-- access to repo and board
+Outside of Azure, Data Product and Data Integration teams will also require access to a repository to store code artifacts, collaborate effectively and roll out updates and changes consistently via CI/CD to higher environments. In addition, a project board should be provided to allow for agile development, sprint planning, tracking of tasks and as well as user feedback and feature requests.
+
+Lastly, the CI/CD automation will require setting up a connection to Azure which is done in most services via Service Principles. Hence, teams will require access to a  Service Principle to achieve automation within their project.
 
 ### Data Product Blueprints
+
+
 
 - data product templates as blueprint that is handed over to domain and product teams so that they take over ownership of the e2e solution
 - blueprints are lowering the 'lead time to create a new data product' on the infrastructure
