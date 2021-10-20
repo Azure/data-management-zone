@@ -69,16 +69,39 @@ The previous section promises agility and quick development cycles within the Da
 
 ## Enabling Self-service for Data Products in Enterprise-Scale Analytics 
 
+Self-service is one of the key building blocks of Enterprise-Scale Analytics to allow agility, quick development and sharing of Data Products within the respective Data Landing Zones of an organization. Data Product teams are usually the ones demanding such capabilities whereas central IT teams usually have their concerns when enabling business units to deploy their own services, features and application code.
+
+However, as an organization scales beyond a handful of Data Products and projects, it will become impossible for a cenralized team to address all requests in a short and timely manner. Hence, the only solution to this is self-service, where support can still be requested by the Data Product teams to overcome technical challenges, to troubleshoot connectivity issues or other kinds of problems. To adress the concerns of both teams, we will look at a number of aspects that will eventually enable self-service in a secure and controlled way without loosing control over the overall compliance of the Data Platform environment.
+
+### Azure Policies
+
+Azure Policy should be the core instrument of the Azure (Data) Platform team to ensure compliance of resources within the Data Management Zone, Data Landing Zones as well as other landing zones within the organization's tenant. This platform feature should be used to introduce guardrails and enforce adherence to the overall approved service configuration within the respective management group scope. The platform teams can use Azure Policy to, for example, enforce private endpoints for any storage accounts that are being hosted within the data platform environment or enforce TLS 1.2 encryption in transit for any connections being made to the storage accounts. When done right, this will prohibit any Data Product teams from hosting services in an incompliant state within the respective tenant scope.
+
+The responsible IT teams should use this platform feature to address their security and compliance concerns and open up for a self-service approach within (Data) Landing Zones. [Please follow this link](/docs/guidance/EnterpriseScaleAnalytics-Policies.md) to read more about the Azure policies that are recommended for the ESA data platform environment.
+
+### Azure RBAC assignments
+
+In oder to develop, deliver and serve data products autonomously within the data platform, Data Product teams require few access rights within the Azure environment. Before going through the respective RBAC requirements it must be highlighted that different access models should be used for the development, test and production environments.
+
+The development environment should allowed to be accessed by the development team and their respective user identities to allow them to more quickly iterate, troubleshoot issues and quickly learn about certain capabilities within Azure services. This will aslo help them when developing or enhancing the infrastructure as code (IaC) and other code artifacts that will then be continuously rolled out to the higher enviornments. Higher environments, such as test and prod, should be locked off for the Data Product team. Only a service principle should have access to these environments and all deployments should happen through the service principle identity through the usage of CI/CD pipelines. To summarize, in the development environment access rights should be provided to the service principle and user identities and in higher environments access rights should only be provided to the service principle identity.
+
+To be able to create resources within the Data Product resoure group, `Contributor` rights must be provided. This will allow the teams to create and control services within their environment within the [boundaries of Azure Policy](#azure-policies). As Enterprise-Scale Analytics recommends the usage of private endpoints to overcome the data exfiltration risk and as other connectivity options should be blocked by the Azure Platform team via policies, Data Product teams will require few access rights to the shared virtual network of a Data Landing Zone to be able to successfully setup the required network connectivity for the services they are creating. To follow the least privilige principle, overcome conflicts between different Data Product teams 
 
 
 
-- Data Catalog access, rg access, shared services access
 
-- policies to keep management plane secure
+- self-service wrt data services or any services
+- decentralized cost ownership also means that the team is paying
+- Data Catalog access, rg access, shared services access (vnet, storage, databricks)
+
+### Access to other resources
+
+- Reoritory, Board, Service Principle
+- access to repo and board
+
+### Data Product Blueprints
 
 - data product templates as blueprint that is handed over to domain and product teams so that they take over ownership of the e2e solution
 - blueprints are lowering the 'lead time to create a new data product' on the infrastructure
 - can also start from scratch
-- self-service wrt data services or any services
-- decentralized cost ownership also means that the team is paying
-- access to repo and board
+
