@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.613.9944",
-      "templateHash": "4305783666002547374"
+      "version": "0.4.1008.15138",
+      "templateHash": "7330288685170802370"
     }
   },
   "parameters": {
@@ -275,7 +275,7 @@
     {
       "condition": "[parameters('enableBastionHostDeployment')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "bastionHostDeployment",
       "subscriptionId": "[parameters('dataLandingZoneDetails')[0].subscription]",
       "location": "[deployment().location]",
@@ -310,8 +310,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "16612088227531531207"
+              "version": "0.4.1008.15138",
+              "templateHash": "6987624965477586384"
             }
           },
           "parameters": {
@@ -427,7 +427,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "networkServices",
               "subscriptionId": "[variables('vnetSubscriptionId')]",
               "resourceGroup": "[variables('vnetResourceGroupName')]",
@@ -468,8 +468,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "13030817408545927700"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "10187757659530357192"
                     }
                   },
                   "parameters": {
@@ -727,7 +727,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "bastionServices",
               "resourceGroup": "[format('{0}-bastion', variables('name'))]",
               "properties": {
@@ -749,10 +749,10 @@
                     "value": "[parameters('virtualMachineSku')]"
                   },
                   "bastionSubnetId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.bastionSubnetId.value]"
+                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.bastionSubnetId.value]"
                   },
                   "jumpboxSubnetId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.jumpboxSubnetId.value]"
+                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.jumpboxSubnetId.value]"
                   },
                   "administratorUsername": {
                     "value": "[parameters('administratorUsername')]"
@@ -767,8 +767,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "5974803606266919289"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "4537990983907796400"
                     }
                   },
                   "parameters": {
@@ -807,7 +807,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2019-10-01",
+                      "apiVersion": "2020-06-01",
                       "name": "bastion001",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -834,8 +834,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.613.9944",
-                              "templateHash": "11836717545045514781"
+                              "version": "0.4.1008.15138",
+                              "templateHash": "9194233898920649047"
                             }
                           },
                           "parameters": {
@@ -908,7 +908,7 @@
                     },
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2019-10-01",
+                      "apiVersion": "2020-06-01",
                       "name": "virtualMachine001",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -944,8 +944,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.613.9944",
-                              "templateHash": "223020605881141162"
+                              "version": "0.4.1008.15138",
+                              "templateHash": "14575974093809669092"
                             }
                           },
                           "parameters": {
@@ -1081,7 +1081,7 @@
         "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "[format('vnetPeeringDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()], deployment().location)]",
       "location": "[deployment().location]",
       "properties": {
@@ -1109,8 +1109,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "10661167090285460076"
+              "version": "0.4.1008.15138",
+              "templateHash": "1258334118365795592"
             }
           },
           "parameters": {
@@ -1133,7 +1133,7 @@
                 "count": "[length(parameters('destinationVnetIds'))]"
               },
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "[format('vnetPeering{0}', copyIndex())]",
               "subscriptionId": "[variables('sourceVnetSubscriptionId')]",
               "resourceGroup": "[variables('sourceVnetResourceGroupName')]",
@@ -1156,8 +1156,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "4315184311947954713"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "10472092457843784458"
                     }
                   },
                   "parameters": {
