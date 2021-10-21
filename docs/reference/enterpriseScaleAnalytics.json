@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7330288685170802370"
+      "templateHash": "3381100486305273792"
     }
   },
   "parameters": {
@@ -276,7 +276,7 @@
       "condition": "[parameters('enableBastionHostDeployment')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "bastionHostDeployment",
+      "name": "[format('bastionHostDeployment-{0}', deployment().location)]",
       "subscriptionId": "[parameters('dataLandingZoneDetails')[0].subscription]",
       "location": "[deployment().location]",
       "properties": {

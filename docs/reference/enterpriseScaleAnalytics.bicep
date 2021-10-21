@@ -225,7 +225,7 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
 }]
 
 module bastionHostDeployment 'bastionhost/main.bicep' = if (enableBastionHostDeployment) {
-  name: 'bastionHostDeployment'
+  name: 'bastionHostDeployment-${deployment().location}'
   scope: subscription(dataLandingZoneDetails[0].subscription)
   params: {
     location: dataLandingZoneDetails[0].location
