@@ -18,6 +18,8 @@ If we now take into consideration that within a large organization there is not 
 
 ## Methods of scaling in Enterprise-Scale Analytics
 
+![Enterprise-Scale Analytics - Multiple Data Landing Zone Pattern](/docs/images/MultipleLandingZones.png)
+
 Enterprise-Scale Analytics (ESA) uses two core concepts to overcome the issues mentioned in the [introduction](#introduction) above:
 
 - Scaling through the concept of Data Landing Zones.
