@@ -4,7 +4,7 @@ This template repsitory contains all templates to deploy the Data Management Zon
 
 ## What will be deployed?
 
-By navigating through the deployment steps, you will deploy the folowing setup in a subscription:
+By navigating through the deployment steps, you will deploy the following setup in a subscription:
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
@@ -15,16 +15,15 @@ The deployment and code artifacts include the following services:
 - [Virtual Network](https://docs.microsoft.com/azure/virtual-network/virtual-networks-overview)
 - [Network Security Groups](https://docs.microsoft.com/azure/virtual-network/network-security-groups-overview)
 - [Route Tables](https://docs.microsoft.com/azure/virtual-network/virtual-networks-udr-overview)
-- [Azure Firewall](https://docs.microsoft.com/azure/firewall/overview)
-- [Firewall Policy](https://docs.microsoft.com/azure/firewall-manager/policy-overview#:~:text=Firewall%20Policy%20is%20an%20Azure,work%20across%20regions%20and%20subscriptions.)
-- [Private DNS Zones](https://docs.microsoft.com/azure/dns/private-dns-privatednszone#:~:text=By%20using%20private%20DNS%20zones,that%20are%20linked%20to%20it.)
+- [Azure Firewall](https://docs.microsoft.com/azure/firewall/overview) (optional)
+- [Firewall Policy](https://docs.microsoft.com/azure/firewall-manager/policy-overview#:~:text=Firewall%20Policy%20is%20an%20Azure,work%20across%20regions%20and%20subscriptions.) (optional)
+- [Private DNS Zones](https://docs.microsoft.com/azure/dns/private-dns-privatednszone#:~:text=By%20using%20private%20DNS%20zones,that%20are%20linked%20to%20it.) (optional)
 - [Container Registry](https://docs.microsoft.com/azure/container-registry/)
 - [Purview](https://docs.microsoft.com/azure/purview/)
 - [Key Vault](https://docs.microsoft.com/azure/key-vault/general)
 - [Storage Account](https://docs.microsoft.com/azure/storage/common/storage-account-overview)
 - [Synapse Private Link Hub](https://docs.microsoft.com/azure/synapse-analytics/security/synapse-private-link-hubs)
 - [PowerBI](https://docs.microsoft.com/power-bi/fundamentals/power-bi-overview)
-- [Policies](https://docs.microsoft.com/azure/governance/policy/overview)
 
 ## Code Structure
 

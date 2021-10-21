@@ -9,8 +9,6 @@ param location string
 param tags object
 param subnetId string
 param dnsForwarderName string
-param storageAccountId string
-param storageAccountContainerName string
 param vmssSkuName string = 'Standard_A1_v2'
 param vmssSkuTier string = 'Standard'
 param vmssSkuCapacity int = 2
@@ -19,16 +17,17 @@ param vmssAdmininstratorUsername string = 'VmssMainUser'
 param vmssAdministratorPublicSshKey string
 
 // Variables
-var storageAccountName = length(split(storageAccountId, '/')) >= 9 ? last(split(storageAccountId, '/')) : 'incorrectSegmentLength'
+var loadBalancerName = '${dnsForwarderName}-lb'
+var sshPublicKeyName = '${dnsForwarderName}-sshKey'
 
 // Resources
-resource loadBalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
-  name: '${dnsForwarderName}-lb'
+resource loadBalancer 'Microsoft.Network/loadBalancers@2020-11-01' = {
+  name: loadBalancerName
   location: location
   tags: tags
   sku: {
     name: 'Basic'
-    tier: 'Global'
+    tier: 'Regional'
   }
   properties: {
     backendAddressPools: [
@@ -97,7 +96,7 @@ resource loadBalancer001 'Microsoft.Network/loadBalancers@2020-11-01' = {
 }
 
 resource sshPublicKey 'Microsoft.Compute/sshPublicKeys@2020-12-01' = {
-  name: '${dnsForwarderName}-sshKey'
+  name: sshPublicKeyName
   location: location
   tags: tags
   properties: {
@@ -128,13 +127,10 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
         'Default'
       ]
     }
-    orchestrationMode: 'Flexible'
-    proximityPlacementGroup: {}
     singlePlacementGroup: true
     upgradePolicy: {
       mode: 'Manual'
     }
-    zoneBalance: true
     virtualMachineProfile: {
       networkProfile: {
         networkInterfaceConfigurations: [
@@ -152,12 +148,12 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
                   properties: {
                     loadBalancerBackendAddressPools: [
                       {
-                        id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', '${dnsForwarderName}-lb', '${dnsForwarderName}-backendpool')
+                        id: loadBalancer.properties.backendAddressPools[0].id
                       }
                     ]
                     loadBalancerInboundNatPools: [
                       {
-                        id: resourceId('Microsoft.Network/loadBalancers/inboundNatPools', '${dnsForwarderName}-lb', '${dnsForwarderName}-natpool')
+                        id: loadBalancer.properties.inboundNatPools[0].id
                       }
                     ]
                     primary: true
@@ -168,7 +164,6 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
                   }
                 }
               ]
-              networkSecurityGroup: {}
             }
           }
         ]
@@ -193,7 +188,7 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
         imageReference: {
           offer: 'UbuntuServer'
           publisher: 'Canonical'
-          sku: '20.04-LTS'
+          sku: '18.04-LTS'
           version: 'latest'
         }
         osDisk: {
@@ -206,19 +201,16 @@ resource vmss001 'Microsoft.Compute/virtualMachineScaleSets@2020-12-01' = {
           {
             name: '${dnsForwarderName}-linuxscriptextension'
             properties: {
-              publisher: 'Microsoft.OSTCExtensions'
-              type: 'CustomScriptForLinux'
-              typeHandlerVersion: '1.3'
+              publisher: 'Microsoft.Azure.Extensions'
+              type: 'CustomScript'
+              typeHandlerVersion: '2.1'
               autoUpgradeMinorVersion: true
               settings: {
-                fileUris: [
-                  'https://${storageAccountName}.blob.core.windows.net/${storageAccountContainerName}/forwarderSetup.sh'
-                ]
+                skipDos2Unix: false
+                timestamp: 202109300
               }
               protectedSettings: {
-                commandToExecute: 'sh forwarderSetup.sh'
-                storageAccountName: storageAccountName
-                storageAccountKey: listkeys(storageAccountId, '2021-02-01').keys[0].value
+                script: loadFileAsBase64('../../../code/forwarderSetup.sh')
               }
             }
           }

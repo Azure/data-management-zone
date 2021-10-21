@@ -221,6 +221,22 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsA
   }
 }
 
+// module dnsforwarder001 'services/dnsforwarder.bicep' = {  // Uncomment if you want to use a VMSS as DNS Forwarder instead of the Azure Firewall
+//   name: 'dnsforwarder001'
+//   scope: resourceGroup()
+//   params: {
+//     location: location
+//     tags: tags
+//     subnetId: vnet.properties.subnets[1].id
+//     dnsForwarderName: dnsForwarder001Name
+//     vmssSkuName: vmssSkuName
+//     vmssSkuTier: vmssSkuTier
+//     vmssSkuCapacity: vmssSkuCapacity
+//     vmssAdmininstratorUsername: vmssAdmininstratorUsername
+//     vmssAdministratorPublicSshKey: vmssAdministratorPublicSshKey
+//   }
+// }
+
 // Outputs
 output vnetId string = vnet.id
 output serviceSubnet string = vnet.properties.subnets[1].id
