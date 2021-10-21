@@ -39,7 +39,7 @@ Additional required role assignments include:
 
 | Role Name | Description | Scope |
 |:----------|:------------|:------|
-| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datalandingzone}subscriptionId}`</div> |
+| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datamanagementzone}subscriptionId}`</div> |
 
 To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands using Azure CLI/Azure Powershell:
 
