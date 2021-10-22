@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16949742285930853086"
+      "templateHash": "1427724184975824034"
     }
   },
   "parameters": {
@@ -2055,7 +2055,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "17561196655807061612"
+              "templateHash": "9434017586183461209"
             }
           },
           "parameters": {
@@ -2147,7 +2147,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "11780091725180103507"
+                      "templateHash": "7303854044756677568"
                     }
                   },
                   "parameters": {
@@ -2207,7 +2207,7 @@
                       "type": "Microsoft.Purview/accounts",
                       "apiVersion": "2021-07-01",
                       "name": "[parameters('purviewName')]",
-                      "location": "[if(contains(variables('purviewRegions'), parameters('location')), parameters('location'), 'westeurope')]",
+                      "location": "[if(contains(variables('purviewRegions'), parameters('location')), parameters('location'), 'northeurope')]",
                       "tags": "[parameters('tags')]",
                       "identity": {
                         "type": "SystemAssigned"
