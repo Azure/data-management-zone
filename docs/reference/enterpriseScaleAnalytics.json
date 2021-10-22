@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.613.9944",
-      "templateHash": "4381084809339667590"
+      "version": "0.4.1008.15138",
+      "templateHash": "3023502017219327066"
     }
   },
   "parameters": {
@@ -221,6 +221,12 @@
           "purviewId": {
             "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewId.value]"
           },
+          "purviewManagedStorageId": {
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewManagedStorageId.value]"
+          },
+          "purviewManagedEventHubId": {
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewManagedEventHubId.value]"
+          },
           "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""
           },
@@ -272,7 +278,7 @@
         "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "[format('vnetPeeringDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()], deployment().location)]",
       "location": "[deployment().location]",
       "properties": {
@@ -300,8 +306,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "10661167090285460076"
+              "version": "0.4.1008.15138",
+              "templateHash": "1258334118365795592"
             }
           },
           "parameters": {
@@ -324,7 +330,7 @@
                 "count": "[length(parameters('destinationVnetIds'))]"
               },
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "[format('vnetPeering{0}', copyIndex())]",
               "subscriptionId": "[variables('sourceVnetSubscriptionId')]",
               "resourceGroup": "[variables('sourceVnetResourceGroupName')]",
@@ -347,8 +353,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "4315184311947954713"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "10472092457843784458"
                     }
                   },
                   "parameters": {
