@@ -40,7 +40,7 @@ var purviewRegions = [
 // Resources
 resource purview 'Microsoft.Purview/accounts@2021-07-01' = {
   name: purviewName
-  location: contains(purviewRegions, location) ? location : 'westeurope'
+  location: contains(purviewRegions, location) ? location : 'northeurope'
   tags: tags
   identity: {
     type: 'SystemAssigned'
