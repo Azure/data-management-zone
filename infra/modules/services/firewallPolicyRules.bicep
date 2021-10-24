@@ -307,6 +307,8 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
               'cloud.r-project.org'
               '*pytorch.org'
               '*.tensorflow.org'
+              'update.code.visualstudio.com'
+              '*.vo.msecnd.net'
               '*.instances.azureml.net'
               '*.instances.azureml.ms'
             ]
