@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1427724184975824034"
+      "templateHash": "8697436671279371359"
     }
   },
   "parameters": {
@@ -268,7 +268,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "3839964029328842657"
+              "templateHash": "13225731023269573825"
             }
           },
           "parameters": {
@@ -543,7 +543,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "16527880802904420202"
+                      "templateHash": "4207105992990981151"
                     }
                   },
                   "parameters": {
@@ -812,6 +812,8 @@
                                   "cloud.r-project.org",
                                   "*pytorch.org",
                                   "*.tensorflow.org",
+                                  "update.code.visualstudio.com",
+                                  "*.vo.msecnd.net",
                                   "*.instances.azureml.net",
                                   "*.instances.azureml.ms"
                                 ],
@@ -1136,7 +1138,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "16527880802904420202"
+                      "templateHash": "4207105992990981151"
                     }
                   },
                   "parameters": {
@@ -1405,6 +1407,8 @@
                                   "cloud.r-project.org",
                                   "*pytorch.org",
                                   "*.tensorflow.org",
+                                  "update.code.visualstudio.com",
+                                  "*.vo.msecnd.net",
                                   "*.instances.azureml.net",
                                   "*.instances.azureml.ms"
                                 ],
