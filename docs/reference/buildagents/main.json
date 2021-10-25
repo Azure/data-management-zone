@@ -1,0 +1,327 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.613.9944",
+      "templateHash": "15262263412229329785"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the location of your Data Landing Zone or Data Management Zone."
+      }
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev",
+      "metadata": {
+        "description": "Specifies the environment of your Data Landing Zone or Data Management Zone."
+      },
+      "allowedValues": [
+        "dev",
+        "tst",
+        "prd"
+      ]
+    },
+    "prefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the prefix of your Data Landing Zone or Data Management Zone."
+      },
+      "maxLength": 10,
+      "minLength": 2
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {},
+      "metadata": {
+        "description": "Specifies the tags that you want to apply to all resources."
+      }
+    },
+    "subnetId": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the resource ID of the subnet to which all services will connect."
+      }
+    },
+    "virtualMachineSku": {
+      "type": "string",
+      "defaultValue": "Standard_F8s_v2",
+      "metadata": {
+        "description": "Specifies the SKU of the virtual machine that gets created."
+      }
+    },
+    "administratorUsername": {
+      "type": "string",
+      "defaultValue": "VmMainUser",
+      "metadata": {
+        "description": "Specifies the administrator username of the virtual machine."
+      }
+    },
+    "administratorPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "Specifies the administrator password of the virtual machine."
+      }
+    }
+  },
+  "functions": [],
+  "variables": {
+    "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
+    "tagsDefault": {
+      "Owner": "Enterprise Scale Analytics",
+      "Project": "Enterprise Scale Analytics",
+      "Environment": "[parameters('environment')]",
+      "Toolkit": "bicep",
+      "Name": "[variables('name')]"
+    },
+    "tagsJoined": "[union(variables('tagsDefault'), parameters('tags'))]",
+    "selfHostedAgentDevOps001Name": "[format('{0}-agent001', variables('name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "selfHostedAgentDevOps001",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[variables('tagsJoined')]"
+          },
+          "administratorUsername": {
+            "value": "[parameters('administratorUsername')]"
+          },
+          "administratorPassword": {
+            "value": "[parameters('administratorPassword')]"
+          },
+          "subnetId": {
+            "value": "[parameters('subnetId')]"
+          },
+          "vmssName": {
+            "value": "[variables('selfHostedAgentDevOps001Name')]"
+          },
+          "vmssSkuName": {
+            "value": "[parameters('virtualMachineSku')]"
+          },
+          "vmssSkuTier": {
+            "value": "Standard"
+          },
+          "vmssSkuCapacity": {
+            "value": 1
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.613.9944",
+              "templateHash": "16656094663692197516"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "object"
+            },
+            "subnetId": {
+              "type": "string"
+            },
+            "vmssName": {
+              "type": "string"
+            },
+            "vmssSkuName": {
+              "type": "string",
+              "defaultValue": "Standard_F8s_v2"
+            },
+            "vmssSkuTier": {
+              "type": "string",
+              "defaultValue": "Standard"
+            },
+            "vmssSkuCapacity": {
+              "type": "int",
+              "defaultValue": 1
+            },
+            "administratorUsername": {
+              "type": "string",
+              "defaultValue": "VmssMainUser"
+            },
+            "administratorPassword": {
+              "type": "secureString"
+            }
+          },
+          "functions": [],
+          "variables": {
+            "loadBalancerName": "[format('{0}-lb', parameters('vmssName'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/loadBalancers",
+              "apiVersion": "2021-02-01",
+              "name": "[variables('loadBalancerName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+              },
+              "properties": {
+                "backendAddressPools": [
+                  {
+                    "name": "[format('{0}-backendpool', parameters('vmssName'))]"
+                  }
+                ],
+                "frontendIPConfigurations": [
+                  {
+                    "name": "[format('{0}-ipfrontend', parameters('vmssName'))]",
+                    "properties": {
+                      "subnet": {
+                        "id": "[parameters('subnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "inboundNatPools": [
+                  {
+                    "name": "[format('{0}-natpool', parameters('vmssName'))]",
+                    "properties": {
+                      "frontendIPConfiguration": {
+                        "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', format('{0}-lb', parameters('vmssName')), format('{0}-ipfrontend', parameters('vmssName')))]"
+                      },
+                      "protocol": "Tcp",
+                      "frontendPortRangeStart": 50000,
+                      "frontendPortRangeEnd": 50099,
+                      "backendPort": 22,
+                      "idleTimeoutInMinutes": 4
+                    }
+                  }
+                ],
+                "probes": [
+                  {
+                    "name": "[format('{0}-probe', parameters('vmssName'))]",
+                    "properties": {
+                      "intervalInSeconds": 5,
+                      "numberOfProbes": 2,
+                      "port": 22,
+                      "protocol": "Tcp"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachineScaleSets",
+              "apiVersion": "2021-04-01",
+              "name": "[parameters('vmssName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "sku": {
+                "name": "[parameters('vmssSkuName')]",
+                "tier": "[parameters('vmssSkuTier')]",
+                "capacity": "[parameters('vmssSkuCapacity')]"
+              },
+              "properties": {
+                "additionalCapabilities": {},
+                "automaticRepairsPolicy": {},
+                "overprovision": false,
+                "platformFaultDomainCount": 1,
+                "scaleInPolicy": {
+                  "rules": [
+                    "Default"
+                  ]
+                },
+                "singlePlacementGroup": true,
+                "upgradePolicy": {
+                  "mode": "Manual"
+                },
+                "virtualMachineProfile": {
+                  "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                      "enabled": false
+                    }
+                  },
+                  "networkProfile": {
+                    "networkInterfaceConfigurations": [
+                      {
+                        "name": "[format('{0}-nic', parameters('vmssName'))]",
+                        "properties": {
+                          "primary": true,
+                          "ipConfigurations": [
+                            {
+                              "name": "[format('{0}-ipconfig', parameters('vmssName'))]",
+                              "properties": {
+                                "primary": true,
+                                "privateIPAddressVersion": "IPv4",
+                                "subnet": {
+                                  "id": "[parameters('subnetId')]"
+                                },
+                                "loadBalancerBackendAddressPools": [
+                                  {
+                                    "id": "[reference(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))).backendAddressPools[0].id]"
+                                  }
+                                ],
+                                "loadBalancerInboundNatPools": [
+                                  {
+                                    "id": "[reference(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))).inboundNatPools[0].id]"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "osProfile": {
+                    "adminUsername": "[parameters('administratorUsername')]",
+                    "adminPassword": "[parameters('administratorPassword')]",
+                    "computerNamePrefix": "[take(parameters('vmssName'), 9)]",
+                    "customData": "",
+                    "linuxConfiguration": {
+                      "disablePasswordAuthentication": false
+                    }
+                  },
+                  "priority": "Regular",
+                  "storageProfile": {
+                    "imageReference": {
+                      "publisher": "canonical",
+                      "offer": "0001-com-ubuntu-server-focal",
+                      "sku": "20_04-lts",
+                      "version": "latest"
+                    },
+                    "osDisk": {
+                      "createOption": "FromImage",
+                      "caching": "ReadOnly",
+                      "diffDiskSettings": {
+                        "option": "Local",
+                        "placement": "CacheDisk"
+                      },
+                      "osType": "Linux"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
