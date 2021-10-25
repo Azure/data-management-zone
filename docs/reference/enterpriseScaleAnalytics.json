@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "3381100486305273792"
+      "templateHash": "5855717412903041749"
     }
   },
   "parameters": {
@@ -226,6 +226,12 @@
           },
           "purviewId": {
             "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewId.value]"
+          },
+          "purviewManagedStorageId": {
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewManagedStorageId.value]"
+          },
+          "purviewManagedEventHubId": {
+            "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.purviewManagedEventHubId.value]"
           },
           "purviewSelfHostedIntegrationRuntimeAuthKey": {
             "value": ""

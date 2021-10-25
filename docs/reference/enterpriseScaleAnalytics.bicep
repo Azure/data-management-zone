@@ -181,6 +181,12 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       purviewId: {
         value: reference(dataManagementZoneDeployment.name).outputs.purviewId.value
       }
+      purviewManagedStorageId: {
+        value: reference(dataManagementZoneDeployment.name).outputs.purviewManagedStorageId.value
+      }
+      purviewManagedEventHubId: {
+        value: reference(dataManagementZoneDeployment.name).outputs.purviewManagedEventHubId.value
+      }
       purviewSelfHostedIntegrationRuntimeAuthKey: {
         value: ''
       }
