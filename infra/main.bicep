@@ -213,6 +213,8 @@ resource managementResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
 output vnetId string = networkServices.outputs.vnetId
 output firewallPrivateIp string = networkServices.outputs.firewallPrivateIp
 output purviewId string = governanceResources.outputs.purviewId
+output purviewManagedStorageId string = governanceResources.outputs.purviewManagedStorageId
+output purviewManagedEventHubId string = governanceResources.outputs.purviewManagedEventHubId
 output privateDnsZoneIdKeyVault string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdKeyVault : ''
 output privateDnsZoneIdDataFactory string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdDataFactory : ''
 output privateDnsZoneIdDataFactoryPortal string = enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdDataFactoryPortal : ''

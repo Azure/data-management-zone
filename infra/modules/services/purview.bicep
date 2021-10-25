@@ -40,14 +40,10 @@ var purviewRegions = [
 // Resources
 resource purview 'Microsoft.Purview/accounts@2021-07-01' = {
   name: purviewName
-  location: contains(purviewRegions, location) ? location : 'westeurope'
+  location: contains(purviewRegions, location) ? location : 'northeurope'
   tags: tags
   identity: {
     type: 'SystemAssigned'
-  }
-  sku: {
-    name: 'Standard'
-    capacity: 1
   }
   properties: {
     cloudConnectors: {}
@@ -254,3 +250,5 @@ resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoi
 
 // Outputs
 output purviewId string = purview.id
+output purviewManagedStorageId string = purview.properties.managedResources.storageAccount
+output purviewManagedEventHubId string = purview.properties.managedResources.eventHubNamespace

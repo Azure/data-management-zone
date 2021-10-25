@@ -232,6 +232,39 @@ resource networkRules 'Microsoft.Network/firewallPolicies/ruleCollectionGroups@2
           }
         ]
       }
+      {
+        name: 'AzureDevOps-NetworkRules'
+        priority: 10500
+        action: {
+          type: 'Allow'
+        }
+        ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+        rules: [
+          {
+            name: 'AzureDevOps-NetworkRule-001'
+            ruleType: 'NetworkRule'
+            ipProtocols: [
+              'TCP'
+            ]
+            sourceAddresses: [
+              '*'
+            ]
+            sourceIpGroups: []
+            destinationAddresses: [
+              '13.107.6.0/24'
+              '13.107.9.0/24'
+              '13.107.42.0/24'
+              '13.107.43.0/24'
+            ]
+            destinationIpGroups: []
+            destinationFqdns: []
+            destinationPorts: [
+              '443'
+            ]
+            description: 'Allow Self-hosted DevOps Agents to poll for pending jobs'
+          }
+        ]
+      }
     ]
   }
 }
@@ -274,6 +307,8 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
               'cloud.r-project.org'
               '*pytorch.org'
               '*.tensorflow.org'
+              'update.code.visualstudio.com'
+              '*.vo.msecnd.net'
               '*.instances.azureml.net'
               '*.instances.azureml.ms'
             ]
@@ -558,6 +593,39 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
             destinationAddresses: []
             sourceIpGroups: []
             description: 'Allows communication with Azure and Microsoft for Logging and Metrics as well as other services'
+          }
+        ]
+      }
+      {
+        name: 'AzureDevOps-ApplicationRules'
+        priority: 20600
+        action: {
+          type: 'Allow'
+        }
+        ruleCollectionType: 'FirewallPolicyFilterRuleCollection'
+        rules: [
+          {
+            name: 'AzureDevOps-ApplicationRule-001'
+            ruleType: 'ApplicationRule'
+            protocols: [
+              {
+                protocolType: 'Https'
+                port: 443
+              }
+            ]
+            fqdnTags: []
+            targetFqdns: [
+              '*snapcraft.io'
+              'vstsagentpackage.azureedge.net'
+            ]
+            targetUrls: []
+            terminateTLS: false
+            sourceAddresses: [
+              '*'
+            ]
+            destinationAddresses: []
+            sourceIpGroups: []
+            description: 'Allows installation of Visual Studio DevOps Agent extension'
           }
         ]
       }
