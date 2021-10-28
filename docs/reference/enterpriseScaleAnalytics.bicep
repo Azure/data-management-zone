@@ -14,6 +14,10 @@ param environment string = 'dev'
 @description('Specifies the tags that you want to apply to all resources.')
 param tags object
 
+// Common Parameters
+@description('Specifies whether role assignments should be enabled.')
+param enableRoleAssignments bool = false
+
 // Data Management Parameters
 @description('Specifies the subscription ID where your Data Management Zone will be deployed.')
 param dataManagementZoneSubscriptionId string

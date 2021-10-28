@@ -294,6 +294,38 @@
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "name": "generalSettings",
+                            "label": "General Settings",
+                            "type": "Microsoft.Common.Section",
+                            "visible": true,
+                            "elements": [
+                                {
+                                    "name": "generalSettingsText",
+                                    "type": "Microsoft.Common.TextBlock",
+                                    "visible": true,
+                                    "options": {
+                                        "text": "Specify general settings for this deployment.",
+                                        "link": {
+                                            "label": "",
+                                            "uri": ""
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "enableRoleAssignments",
+                                    "label": "Enable role assignments",
+                                    "type": "Microsoft.Common.CheckBox",
+                                    "visible": true,
+                                    "defaultValue": true,
+                                    "toolTip": "Enable role assignments in the Data Management Zone deployment.",
+                                    "constraints": {
+                                        "required": false,
+                                        "validationMessage": "Enable role assignments in the Data Management Zone deployment."
+                                    }
+                                }
+                            ]
                         }
                     ]
                 },
@@ -903,6 +935,7 @@
                 "firewallPrivateIp": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), '', if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), first(map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress)), steps('connectivitySettings').firewallConfiguration.firewallPrivateIp))]",
                 "dnsServerAdresses": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), parse('[]'), if(equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'azureFirewall'), map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(replace(steps('connectivitySettings').firewallConfiguration.dnsServerAdresses, ' ', ''), ',')))]",
                 "firewallPolicyId": "[if(empty(steps('connectivitySettings').firewallConfiguration.firewallPolicyId), '', steps('connectivitySettings').firewallConfiguration.firewallPolicyId)]",
+                "enableRoleAssignments": "[steps('generalSettings').generalSettings.enableRoleAssignments]",
                 "privateDnsZoneIdBlob": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob)]",
                 "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
                 "privateDnsZoneIdNamespace": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace)]",
