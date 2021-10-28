@@ -105,7 +105,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   }
 }
 
-resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = if (enableDnsAndFirewallDeployment) {
+resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicipprefix'
   location: location
   tags: tags
@@ -119,7 +119,7 @@ resource publicIpPrefixes 'Microsoft.Network/publicIPPrefixes@2020-11-01' = if (
   }
 }
 
-resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if (enableDnsAndFirewallDeployment) {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-publicip001'
   location: location
   tags: tags
@@ -139,7 +139,7 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if (enableD
   }
 }
 
-resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if (enableDnsAndFirewallDeployment) {
+resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
@@ -166,7 +166,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if (en
   }
 }
 
-module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsAndFirewallDeployment) {
+module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy-rules'
   scope: resourceGroup()
   dependsOn: [
@@ -177,7 +177,7 @@ module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if (enableDnsA
   }
 }
 
-module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules.bicep' = if (!enableDnsAndFirewallDeployment && !empty(firewallPolicyId)) {
+module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules.bicep' = if(!enableDnsAndFirewallDeployment && !empty(firewallPolicyId)) {
   name: '${prefix}-firewallpolicy-rules-toExistingFirewallPolicy'
   scope: resourceGroup(firewallPolicySubscriptionId, firewallPolicyResourceGroupName)
   params: {
@@ -185,7 +185,7 @@ module firewallPolicyRulesToExistingFirewallPolicy 'services/firewallPolicyRules
   }
 }
 
-resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if (enableDnsAndFirewallDeployment) {
+resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewall'
   dependsOn: [
     firewallPolicyRules
