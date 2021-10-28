@@ -51,7 +51,7 @@ module keyVault001 'services/keyvault.bicep' = {
   }
 }
 
-module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignment.bicep' = if(enableRoleAssignments) {
+module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignmentKeyVault.bicep' = if(enableRoleAssignments) {
   name: 'purviewKeyVaultRoleAssignment'
   scope: resourceGroup()
   params: {

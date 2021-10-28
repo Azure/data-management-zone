@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "5855717412903041749"
+      "templateHash": "6171096669672601699"
     }
   },
   "parameters": {
@@ -176,6 +176,9 @@
           },
           "tags": {
             "value": "[parameters('tags')]"
+          },
+          "purviewRootCollectionAdminObjectIds": {
+            "value": []
           },
           "vnetAddressPrefix": {
             "value": "[format('10.{0}.0.0/16', add(copyIndex(), 1))]"

@@ -20,6 +20,10 @@ param prefix string
 @description('Specifies the tags that you want to apply to all resources.')
 param tags object = {}
 
+// Resource parameters
+@description('Specifies the list of user object IDs that are assigned as collection admin to the root collection in Purview.')
+param purviewRootCollectionAdminObjectIds array = []
+
 // Network parameters
 @description('Specifies whether firewall and private DNS Zones should be deployed.')
 param enableDnsAndFirewallDeployment bool = true
@@ -186,6 +190,18 @@ resource automationResourceGroup 'Microsoft.Resources/resourceGroups@2021-01-01'
   location: location
   tags: tagsJoined
   properties: {}
+}
+
+module automationResources 'modules/automation.bicep' = {
+  name: 'automationResources'
+  scope: automationResourceGroup
+  params: {
+    location: location
+    tags: tagsJoined
+    prefix: name
+    purviewId: governanceResources.outputs.purviewId
+    purviewRootCollectionAdminObjectIds: purviewRootCollectionAdminObjectIds
+  }
 }
 
 // Management services
