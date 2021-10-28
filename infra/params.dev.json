@@ -37,6 +37,9 @@
         "firewallPolicyId": {
             "value": ""
         },
+        "enableRoleAssignments": {
+            "value": true
+        },
         "privateDnsZoneIdBlob": {
             "value": ""
         },

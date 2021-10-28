@@ -10,6 +10,7 @@ param location string
 param prefix string
 param tags object
 param subnetId string
+param enableRoleAssignments bool = false
 param privateDnsZoneIdPurview string = ''
 param privateDnsZoneIdPurviewPortal string = ''
 param privateDnsZoneIdStorageBlob string = ''
@@ -50,7 +51,7 @@ module keyVault001 'services/keyvault.bicep' = {
   }
 }
 
-module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignment.bicep' = {
+module purviewKeyVaultRoleAssignment 'auxiliary/purviewRoleAssignment.bicep' = if(enableRoleAssignments) {
   name: 'purviewKeyVaultRoleAssignment'
   scope: resourceGroup()
   params: {

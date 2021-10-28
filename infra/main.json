@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "8317806982600933966"
+      "templateHash": "5401640029766249252"
     }
   },
   "parameters": {
@@ -91,6 +91,13 @@
       "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`."
+      }
+    },
+    "enableRoleAssignments": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Specifies whether role assignments should be enabled."
       }
     },
     "privateDnsZoneIdKeyVault": {
@@ -2165,6 +2172,9 @@
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.serviceSubnet.value]"
           },
+          "enableRoleAssignments": {
+            "value": "[parameters('enableRoleAssignments')]"
+          },
           "privateDnsZoneIdPurview": {
             "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-06-01').outputs.privateDnsZoneIdPurview.value, parameters('privateDnsZoneIdPurview'))]"
           },
@@ -2191,7 +2201,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9434017586183461209"
+              "templateHash": "16605577172051790476"
             }
           },
           "parameters": {
@@ -2206,6 +2216,10 @@
             },
             "subnetId": {
               "type": "string"
+            },
+            "enableRoleAssignments": {
+              "type": "bool",
+              "defaultValue": false
             },
             "privateDnsZoneIdPurview": {
               "type": "string",
@@ -2754,6 +2768,7 @@
               }
             },
             {
+              "condition": "[parameters('enableRoleAssignments')]",
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-06-01",
               "name": "purviewKeyVaultRoleAssignment",

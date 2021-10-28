@@ -37,6 +37,8 @@ param dnsServerAdresses array = [
 ]
 @description('Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`.')
 param firewallPolicyId string = ''
+@description('Specifies whether role assignments should be enabled.')
+param enableRoleAssignments bool = false
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
@@ -125,6 +127,7 @@ module governanceResources 'modules/governance.bicep' = {
     prefix: name
     tags: tagsJoined
     subnetId: networkServices.outputs.serviceSubnet
+    enableRoleAssignments: enableRoleAssignments
     privateDnsZoneIdPurview: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPurview : privateDnsZoneIdPurview
     privateDnsZoneIdPurviewPortal: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdPurviewPortal : privateDnsZoneIdPurviewPortal
     privateDnsZoneIdStorageBlob: enableDnsAndFirewallDeployment ? globalDnsZones.outputs.privateDnsZoneIdBlob : privateDnsZoneIdBlob
