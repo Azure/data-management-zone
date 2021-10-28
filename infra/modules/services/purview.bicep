@@ -77,7 +77,7 @@ resource purviewPrivateEndpointPortal 'Microsoft.Network/privateEndpoints@2020-1
   }
 }
 
-resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurviewPortal)) {
+resource purviewPrivateEndpointPortalARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdPurviewPortal)) {
   parent: purviewPrivateEndpointPortal
   name: 'default'
   properties: {
@@ -116,7 +116,7 @@ resource purviewPrivateEndpointAccount 'Microsoft.Network/privateEndpoints@2020-
   }
 }
 
-resource purviewPrivateEndpointAccountARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdPurview)) {
+resource purviewPrivateEndpointAccountARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdPurview)) {
   parent: purviewPrivateEndpointAccount
   name: 'default'
   properties: {
@@ -155,7 +155,7 @@ resource purviewPrivateEndpointBlob 'Microsoft.Network/privateEndpoints@2020-11-
   }
 }
 
-resource purviewPrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdStorageBlob)) {
+resource purviewPrivateEndpointBlobARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdStorageBlob)) {
   parent: purviewPrivateEndpointBlob
   name: 'default'
   properties: {
@@ -194,7 +194,7 @@ resource purviewPrivateEndpointQueue 'Microsoft.Network/privateEndpoints@2020-11
   }
 }
 
-resource purviewPrivateEndpointQueueARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdStorageQueue)) {
+resource purviewPrivateEndpointQueueARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdStorageQueue)) {
   parent: purviewPrivateEndpointQueue
   name: 'default'
   properties: {
@@ -233,7 +233,7 @@ resource purviewPrivateEndpointNamespace 'Microsoft.Network/privateEndpoints@202
   }
 }
 
-resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if (!empty(privateDnsZoneIdEventhubNamespace)) {
+resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdEventhubNamespace)) {
   parent: purviewPrivateEndpointNamespace
   name: 'default'
   properties: {

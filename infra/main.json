@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "15375184350555249277"
+      "templateHash": "8317806982600933966"
     }
   },
   "parameters": {
@@ -2872,7 +2872,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "13922209701302207861"
+              "templateHash": "7590531782081910607"
             }
           },
           "parameters": {
@@ -2931,7 +2931,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "3281195981325252632"
+                      "templateHash": "15554382069101917536"
                     }
                   },
                   "parameters": {
@@ -3025,7 +3025,7 @@
                       ]
                     },
                     {
-                      "condition": "[empty(parameters('privateDnsZoneIdContainerRegistry'))]",
+                      "condition": "[not(empty(parameters('privateDnsZoneIdContainerRegistry')))]",
                       "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
                       "apiVersion": "2020-11-01",
                       "name": "[format('{0}/{1}', variables('containerRegistryPrivateEndpointName'), 'default')]",
