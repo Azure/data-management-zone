@@ -147,7 +147,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 There are many benefits that come with this network architecture design. However, the above-mentioned inconsistencies from an access management perspectives make the design subpar and consequently the approach does not qualify as a recommended design.
 
-## 4. Meshed Network Architecture (Recommended)
+## 4. Meshed Network Architecture (recommended)
 
 The recommended design proposes the use of a network mesh, which means adding Vnet peerings between all Data Landing Zone Vnets and between the Data Management Zone and each Data Landing Zone in addition to the existing Hub and Spoke network design that most organizations have setup inside their tenant. For the scenario mentioned in the introduction, data loaded from Storage Account A would first transition a Vnet peering connection (2) that is setup between the two Data Landing Zone Vnets before it would be loaded and processed by VM B ((3) and (4)). Lastly, the data can be stored on Storage Account B by sending the data through the local Private Endpoint (5). With this option, the data does not pass the Connectivity Hub and stays within the Data Platform consisting of a Data Management Zones and one or multiple Data Landing Zones.
 
