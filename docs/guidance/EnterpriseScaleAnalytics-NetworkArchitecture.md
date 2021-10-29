@@ -17,7 +17,7 @@ _Virtual machine B (VM B) hosted in Data Landing Zone B loads a dataset from Sto
 
 ---
 
-## Option 1: Traditional Hub & Spoke Design
+## 1. Traditional Hub & Spoke Design (NOT recommended)
 
 The most obvious option is to leverage the traditional Hub & Spoke network architecture that many enterprises have adopted. Network transitivity would have to be setup in the Connectivity Hub in order to be able to access data in Storage Account A from VM B. Data would traverse two Vnet peerings ((2) and (5)) as well as a Network Virtual Appliance (NVA) hosted inside the Connectivity Hub ((3) and (4)) before it gets loaded by the virtual machine (6) and then stored back into the Storage Account B (8).
 
@@ -59,7 +59,7 @@ Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
 From an access management and partially from a service management perspective, this setup has benefits. But due to the critical limitations pointed out in the service management, cost and bandwidth section, this network design cannot be recommended for cross-Data Landing Zone use cases.
 
-## Option 2: Private Endpoint Projection
+## 2. Private Endpoint Projection (NOT recommended)
 
 Another design alternative that was evaluated was the projection of Private Endpoints across each and every Landing Zone. With this approach, a Private Endpoint for Storage Account A would be created each Data Landing Zone. Therefore, this option leads to a first Private Endpoint in Data Landing Zone A that is connected to the Vnet in Data Landing Zone A, a second Private Endpoint in Data Landing Zone B that is connected to the Vnet in Data Landing Zone B, etc. The same applies to Storage Account B and potentially other services inside the Data Landing Zones. If the number of Data Landing Zones is defined as _n_, one would end up with _n_ Private Endpoints for at least all of the storage accounts and potentially other services within the Data Landing Zones leading to an exponential growth of the number of Private Endpoints.
 
@@ -105,7 +105,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 This network architecture suffers from the potential exponential growth of Private Endpoints which may even cause losing track of which Private Endpoints are used where and for which purpose. Another limiting factor are the access management issues described above as well as the complexities created on the DNS layer. Therefore, this network design cannot be recommended.
 
-## Option 3: Private Endpoints in Connectivity Hub
+## 3. Private Endpoints in Connectivity Hub (NOT recommended)
 
 The third option proposes to host the Private Endpoints in the Connectivity Hub and connect them to the Hub Vnet. With this solution, a single Private Endpoint for each service would be hosted on the corporate Vnet. Transitivity would also not be required due to the existing Hub and Spoke network architecture at most corporations and the fact that the Private Endpoints would be hosted in the Connectivity Hub with this solution. The Vnet peering between the Connectivity Hub and Data Landing Zones allow for a direct access.
 
@@ -147,7 +147,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 There are many benefits that come with this network architecture design. However, the above-mentioned inconsistencies from an access management perspectives make the design subpar and consequently the approach does not qualify as a recommended design.
 
-## Option 4: Meshed Network Architecture (Recommended)
+## 4. Meshed Network Architecture (Recommended)
 
 The recommended design proposes the use of a network mesh, which means adding Vnet peerings between all Data Landing Zone Vnets and between the Data Management Zone and each Data Landing Zone in addition to the existing Hub and Spoke network design that most organizations have setup inside their tenant. For the scenario mentioned in the introduction, data loaded from Storage Account A would first transition a Vnet peering connection (2) that is setup between the two Data Landing Zone Vnets before it would be loaded and processed by VM B ((3) and (4)). Lastly, the data can be stored on Storage Account B by sending the data through the local Private Endpoint (5). With this option, the data does not pass the Connectivity Hub and stays within the Data Platform consisting of a Data Management Zones and one or multiple Data Landing Zones.
 
