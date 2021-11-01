@@ -26,6 +26,43 @@ var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? s
 var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[4] : resourceGroup().name
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
 
+// Subnet Variables
+var generalSubnets = [
+  {
+    name: servicesSubnetName
+    properties: {
+      addressPrefix: servicesSubnetAddressPrefix
+      addressPrefixes: []
+      networkSecurityGroup: {
+        id: nsg.id
+      }
+      routeTable: {
+        id: routeTable.id
+      }
+      delegations: []
+      privateEndpointNetworkPolicies: 'Disabled'
+      privateLinkServiceNetworkPolicies: 'Disabled'
+      serviceEndpointPolicies: []
+      serviceEndpoints: []
+    }
+  }
+]
+var azureFirewallSubnet = enableDnsAndFirewallDeployment ? [
+  {
+    name: azureFirewallSubnetName
+    properties: {
+      addressPrefix: azureFirewallSubnetAddressPrefix
+      addressPrefixes: []
+      delegations: []
+      privateEndpointNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      serviceEndpointPolicies: []
+      serviceEndpoints: []
+    }
+  }
+] : []
+var subnets = concat(azureFirewallSubnet, generalSubnets)
+
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
   name: '${prefix}-routetable'
@@ -70,38 +107,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
       dnsServers: enableDnsAndFirewallDeployment ? [] : dnsServerAdresses
     }
     enableDdosProtection: false
-    subnets: [
-      {
-        name: azureFirewallSubnetName
-        properties: {
-          addressPrefix: azureFirewallSubnetAddressPrefix
-          addressPrefixes: []
-          delegations: []
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpointPolicies: []
-          serviceEndpoints: []
-        }
-      }
-      {
-        name: servicesSubnetName
-        properties: {
-          addressPrefix: servicesSubnetAddressPrefix
-          addressPrefixes: []
-          networkSecurityGroup: {
-            id: nsg.id
-          }
-          routeTable: {
-            id: routeTable.id
-          }
-          delegations: []
-          privateEndpointNetworkPolicies: 'Disabled'
-          privateLinkServiceNetworkPolicies: 'Disabled'
-          serviceEndpointPolicies: []
-          serviceEndpoints: []
-        }
-      }
-    ]
+    subnets: subnets
   }
 }
 

@@ -346,7 +346,7 @@
                                     "name": "azureFirewallSubnetCidrRange",
                                     "label": "Azure Firewall Subnet CIDR Range",
                                     "type": "Microsoft.Common.TextBox",
-                                    "visible": true,
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no')]",
                                     "defaultValue": "10.0.0.0/24",
                                     "toolTip": "Specify a CIDR range for the Azure Firewall Subnet within the range [24,28].",
                                     "constraints": {

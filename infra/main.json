@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16584189192184544370"
+      "templateHash": "6599069018421504462"
     }
   },
   "parameters": {
@@ -67,7 +67,7 @@
       "type": "string",
       "defaultValue": "10.0.0.0/24",
       "metadata": {
-        "description": "Specifies the address space of the subnet that is use for Azure Firewall."
+        "description": "Specifies the address space of the subnet that is use for Azure Firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "servicesSubnetAddressPrefix": {
@@ -275,7 +275,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10662562629090602323"
+              "templateHash": "2462253393990387885"
             }
           },
           "parameters": {
@@ -325,7 +325,29 @@
             "servicesSubnetName": "ServicesSubnet",
             "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[2], subscription().subscriptionId)]",
             "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[4], resourceGroup().name)]",
-            "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
+            "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]",
+            "generalSubnets": [
+              {
+                "name": "[variables('servicesSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('servicesSubnetAddressPrefix')]",
+                  "addressPrefixes": [],
+                  "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                  },
+                  "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
+                  },
+                  "delegations": [],
+                  "privateEndpointNetworkPolicies": "Disabled",
+                  "privateLinkServiceNetworkPolicies": "Disabled",
+                  "serviceEndpointPolicies": [],
+                  "serviceEndpoints": []
+                }
+              }
+            ],
+            "azureFirewallSubnet": "[if(parameters('enableDnsAndFirewallDeployment'), createArray(createObject('name', variables('azureFirewallSubnetName'), 'properties', createObject('addressPrefix', parameters('azureFirewallSubnetAddressPrefix'), 'addressPrefixes', createArray(), 'delegations', createArray(), 'privateEndpointNetworkPolicies', 'Enabled', 'privateLinkServiceNetworkPolicies', 'Enabled', 'serviceEndpointPolicies', createArray(), 'serviceEndpoints', createArray()))), createArray())]",
+            "subnets": "[concat(variables('azureFirewallSubnet'), variables('generalSubnets'))]"
           },
           "resources": [
             {
@@ -379,38 +401,7 @@
                   "dnsServers": "[if(parameters('enableDnsAndFirewallDeployment'), createArray(), parameters('dnsServerAdresses'))]"
                 },
                 "enableDdosProtection": false,
-                "subnets": [
-                  {
-                    "name": "[variables('azureFirewallSubnetName')]",
-                    "properties": {
-                      "addressPrefix": "[parameters('azureFirewallSubnetAddressPrefix')]",
-                      "addressPrefixes": [],
-                      "delegations": [],
-                      "privateEndpointNetworkPolicies": "Enabled",
-                      "privateLinkServiceNetworkPolicies": "Enabled",
-                      "serviceEndpointPolicies": [],
-                      "serviceEndpoints": []
-                    }
-                  },
-                  {
-                    "name": "[variables('servicesSubnetName')]",
-                    "properties": {
-                      "addressPrefix": "[parameters('servicesSubnetAddressPrefix')]",
-                      "addressPrefixes": [],
-                      "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
-                      },
-                      "routeTable": {
-                        "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
-                      },
-                      "delegations": [],
-                      "privateEndpointNetworkPolicies": "Disabled",
-                      "privateLinkServiceNetworkPolicies": "Disabled",
-                      "serviceEndpointPolicies": [],
-                      "serviceEndpoints": []
-                    }
-                  }
-                ]
+                "subnets": "[variables('subnets')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]",

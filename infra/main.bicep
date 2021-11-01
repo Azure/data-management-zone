@@ -29,7 +29,7 @@ param purviewRootCollectionAdminObjectIds array = []
 param enableDnsAndFirewallDeployment bool = true
 @description('Specifies the address space of the vnet.')
 param vnetAddressPrefix string = '10.0.0.0/16'
-@description('Specifies the address space of the subnet that is use for Azure Firewall.')
+@description('Specifies the address space of the subnet that is use for Azure Firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 @description('Specifies the address space of the subnet that is used for the services.')
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
