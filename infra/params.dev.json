@@ -40,6 +40,12 @@
         "firewallPolicyId": {
             "value": ""
         },
+        "virtualNetworkManagerManagementGroupScopes": {
+            "value": []
+        },
+        "virtualNetworkManagerSubscriptionScopes": {
+            "value": []
+        },
         "privateDnsZoneIdBlob": {
             "value": ""
         },

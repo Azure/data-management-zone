@@ -18,10 +18,13 @@ param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 param enableDnsAndFirewallDeployment bool = true
 param firewallPolicyId string = ''
+param virtualNetworkManagerManagementGroupScopes array = []
+param virtualNetworkManagerSubscriptionScopes array = []
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
+var virtualNetworkManagerName = '${prefix}-vnm'
 var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[2] : subscription().subscriptionId
 var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[4] : resourceGroup().name
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
@@ -217,6 +220,25 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
     ]
     firewallPolicy: {
       id: firewallPolicy.id
+    }
+  }
+}
+
+resource virtualNetworkManager 'Microsoft.Network/networkManagers@2021-02-01-preview' = {
+  name: virtualNetworkManagerName
+  location: location
+  tags: tags
+  properties: {
+    displayName: virtualNetworkManagerName
+    description: 'Network Manager for ESA Mesh Network Architecture'
+    networkManagerScopeAccesses: [
+      'Connectivity'
+      'SecurityAdmin'
+      'SecurityUser'
+    ]
+    networkManagerScopes: {
+      managementGroups: union(virtualNetworkManagerManagementGroupScopes, [])
+      subscriptions: union([subscription().id], virtualNetworkManagerSubscriptionScopes)
     }
   }
 }

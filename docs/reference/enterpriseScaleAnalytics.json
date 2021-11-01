@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6171096669672601699"
+      "templateHash": "7641487951163438098"
     }
   },
   "parameters": {
@@ -23,6 +23,7 @@
     },
     "tags": {
       "type": "object",
+      "defaultValue": {},
       "metadata": {
         "description": "Specifies the tags that you want to apply to all resources."
       }
@@ -45,6 +46,13 @@
         "description": "Specifies the location of your Data Management Zone."
       }
     },
+    "virtualNetworkManagerManagementGroupScopes": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Specifies the management group scopes for the Azure Virtual Network Manager."
+      }
+    },
     "administratorPassword": {
       "type": "string",
       "metadata": {
@@ -65,6 +73,7 @@
     },
     "enableBastionHostDeployment": {
       "type": "bool",
+      "defaultValue": false,
       "metadata": {
         "description": "Specifies whether Azure Bastion will be deployed in the first Data Landing Zone."
       }
@@ -123,6 +132,18 @@
           },
           "firewallPolicyId": {
             "value": ""
+          },
+          "virtualNetworkManagerManagementGroupScopes": {
+            "value": "[parameters('virtualNetworkManagerManagementGroupScopes')]"
+          },
+          "virtualNetworkManagerSubscriptionScopes": {
+            "copy": [
+              {
+                "name": "value",
+                "count": "[length(parameters('dataLandingZoneDetails'))]",
+                "input": "[format('/subscriptions/{0}', parameters('dataLandingZoneDetails')[copyIndex('value')].subscription)]"
+              }
+            ]
           },
           "privateDnsZoneIdBlob": {
             "value": ""
