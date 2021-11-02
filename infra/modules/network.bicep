@@ -229,17 +229,29 @@ resource virtualNetworkManager 'Microsoft.Network/networkManagers@2021-02-01-pre
   location: location
   tags: tags
   properties: {
-    displayName: virtualNetworkManagerName
     description: 'Network Manager for ESA Mesh Network Architecture'
+    displayName: virtualNetworkManagerName
     networkManagerScopeAccesses: [
       'Connectivity'
       'SecurityAdmin'
       'SecurityUser'
     ]
     networkManagerScopes: {
-      managementGroups: union(virtualNetworkManagerManagementGroupScopes, [])
-      subscriptions: union([subscription().id], virtualNetworkManagerSubscriptionScopes)
+      managementGroups: union(array(null), virtualNetworkManagerManagementGroupScopes)
+      subscriptions: union(array(subscription().id), virtualNetworkManagerSubscriptionScopes)
     }
+  }
+}
+
+resource test 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'DevelopmentEnterpriseScaleAnalytics'
+  properties: {
+    description: 'Development Group for Enterprise-Scale Analytics'
+    displayName: 'DevelopmentEnterpriseScaleAnalytics'
+    conditionalMembership: 
+    groupMembers: []
+    memberType: ''
   }
 }
 
