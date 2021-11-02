@@ -243,15 +243,69 @@ resource virtualNetworkManager 'Microsoft.Network/networkManagers@2021-02-01-pre
   }
 }
 
-resource test 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+resource virtualNetworkManagerDevNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
   parent: virtualNetworkManager
-  name: 'DevelopmentEnterpriseScaleAnalytics'
+  name: 'EnterpriseScaleAnalyticsDevNetworkGroup'
   properties: {
     description: 'Development Group for Enterprise-Scale Analytics'
-    displayName: 'DevelopmentEnterpriseScaleAnalytics'
-    conditionalMembership: 
+    displayName: 'Enterprise-Scale Analytics Dev Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "dev" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
     groupMembers: []
     memberType: ''
+  }
+}
+
+resource virtualNetworkManagerTestNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsTestNetworkGroup'
+  properties: {
+    description: 'Test Group for Enterprise-Scale Analytics'
+    displayName: 'Enterprise-Scale Analytics Test Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "tst" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
+    groupMembers: []
+    memberType: ''
+  }
+}
+
+resource virtualNetworkManagerProdNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsProdNetworkGroup'
+  properties: {
+    description: 'Production Group for Enterprise-Scale Analytics'
+    displayName: 'Enterprise-Scale Analytics Prod Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "prd" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
+    groupMembers: []
+    memberType: ''
+  }
+}
+
+resource virtualNetworkManagerConnectivityConfiguration 'Microsoft.Network/networkManagers/connectivityConfigurations@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsConnectivityConfig'
+  properties: {
+    connectivityTopology: 'Mesh'
+    appliesToGroups: [
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerDevNetworkGroup.id
+      }
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerTestNetworkGroup.id
+      }
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerProdNetworkGroup.id
+      }
+    ]
+    deleteExistingPeering: 'True'
+    description: 'Enterprise-Scale Analytics Mesh Network Topology'
+    displayName: 'Enterprise-Scale Analytics Connectivity Config'
+    hubs: []
+    isGlobal: 'False'
   }
 }
 
