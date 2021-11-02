@@ -5,4 +5,4 @@
 * @Azure/customer-architecture-team @Azure/esa-admins
 
 .github/CODEOWNERS @uday31in @marvinbuss
-.github/** @Azure/customer-architecture-team @Azure/esa-admins
+.github/** @Azure/customer-architecture-team
