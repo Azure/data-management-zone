@@ -56,7 +56,7 @@ jobs:
         id: data_management_zone_whatif
         uses: azure/CLI@v1
         with:
-          azcliversion: "latest"
+          azcliversion: "2.29.2"
           inlineScript: |
             az account set \
               --subscription ${{ env.AZURE_SUBSCRIPTION_ID }}
