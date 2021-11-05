@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.613.9944",
-      "templateHash": "16612088227531531207"
+      "version": "0.4.1008.15138",
+      "templateHash": "6987624965477586384"
     }
   },
   "parameters": {
@@ -121,7 +121,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "networkServices",
       "subscriptionId": "[variables('vnetSubscriptionId')]",
       "resourceGroup": "[variables('vnetResourceGroupName')]",
@@ -162,8 +162,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "13030817408545927700"
+              "version": "0.4.1008.15138",
+              "templateHash": "10187757659530357192"
             }
           },
           "parameters": {
@@ -421,7 +421,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "bastionServices",
       "resourceGroup": "[format('{0}-bastion', variables('name'))]",
       "properties": {
@@ -443,10 +443,10 @@
             "value": "[parameters('virtualMachineSku')]"
           },
           "bastionSubnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.bastionSubnetId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.bastionSubnetId.value]"
           },
           "jumpboxSubnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2019-10-01').outputs.jumpboxSubnetId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.jumpboxSubnetId.value]"
           },
           "administratorUsername": {
             "value": "[parameters('administratorUsername')]"
@@ -461,8 +461,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "5974803606266919289"
+              "version": "0.4.1008.15138",
+              "templateHash": "4537990983907796400"
             }
           },
           "parameters": {
@@ -501,7 +501,7 @@
           "resources": [
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "bastion001",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -528,8 +528,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "11836717545045514781"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "9194233898920649047"
                     }
                   },
                   "parameters": {
@@ -602,7 +602,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2019-10-01",
+              "apiVersion": "2020-06-01",
               "name": "virtualMachine001",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -638,8 +638,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.613.9944",
-                      "templateHash": "223020605881141162"
+                      "version": "0.4.1008.15138",
+                      "templateHash": "14575974093809669092"
                     }
                   },
                   "parameters": {

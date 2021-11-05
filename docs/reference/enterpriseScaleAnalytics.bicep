@@ -29,6 +29,8 @@ param administratorPassword string
 param dataLandingZoneDetails array
 @description('Specifies the prefix of Data Landing Zones.')
 param dataLandingZonePrefix string
+@description('Specifies whether Azure Bastion will be deployed in the first Data Landing Zone.')
+param enableBastionHostDeployment bool
 
 // Variables
 var dataManagementZoneTemplateLink = 'https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/main.json'
@@ -129,6 +131,9 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       tags: {
         value: tags
       }
+      purviewRootCollectionAdminObjectIds: {
+        value: []
+      }
       vnetAddressPrefix: {
         value: '10.${index + 1}.0.0/16'
       }
@@ -179,6 +184,12 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       purviewId: {
         value: reference(dataManagementZoneDeployment.name).outputs.purviewId.value
       }
+      purviewManagedStorageId: {
+        value: reference(dataManagementZoneDeployment.name).outputs.purviewManagedStorageId.value
+      }
+      purviewManagedEventHubId: {
+        value: reference(dataManagementZoneDeployment.name).outputs.purviewManagedEventHubId.value
+      }
       purviewSelfHostedIntegrationRuntimeAuthKey: {
         value: ''
       }
@@ -221,6 +232,19 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
     }
   }
 }]
+
+module bastionHostDeployment 'bastionhost/main.bicep' = if (enableBastionHostDeployment) {
+  name: 'bastionHostDeployment-${deployment().location}'
+  scope: subscription(dataLandingZoneDetails[0].subscription)
+  params: {
+    location: dataLandingZoneDetails[0].location
+    prefix: '${dataLandingZonePrefix}${padLeft(1, 3, '0')}'
+    administratorPassword: administratorPassword
+    vnetId: reference(dataLandingZoneDeployment[0].name).outputs.vnetId.value
+    defaultNsgId: reference(dataLandingZoneDeployment[0].name).outputs.nsgId.value
+    defaultRouteTableId: reference(dataLandingZoneDeployment[0].name).outputs.routeTableId.value
+  }
+}
 
 module vnetPeeringDeployment 'modules/vnetPeeringOrchestration.bicep' = [for index1 in range(0, length(dataLandingZoneDetails)): {
   name: 'vnetPeeringDeployment-${index1}-${deployment().location}'
