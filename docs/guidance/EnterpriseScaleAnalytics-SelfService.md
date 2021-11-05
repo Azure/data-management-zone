@@ -1,12 +1,12 @@
 # Scaling and Self-Service in Enterprise-Scale Anayltics
 
-Efficient scaling within an Enterprise Data Platform is a much-desired goal of many organizations and IT organizations as business units should be enabled to build their own (data) solutions and applications that fulfill their requirements and needs. However. achieving this goal is a serious challenge as many existing data platforms are not built around the core concepts of scalability and decentralized ownership. This is not only true from an architectural standpoint, but also becomes noticeable when looking at the team structure within many existing data platforms.
+Efficient scaling within an enterprise data platform is a much-desired goal of many organizations and as business units should be enabled to build their own (data) solutions and applications that fulfill their requirements. However, achieving this goal is a challenge as many existing data platforms are not built around the core concepts of scalability and decentralized ownership. This is not only true from an architectural standpoint but also becomes clear when looking at the teams structure and ops model which underpin these data platforms.
 
 ## Introduction
 
-Today, many enterprises have built large data platform monoliths around the concept of a single Azure Data Lake Gen2 account and potentially even a single storage container. In addition, a single Azure subscription is most often used for all data platform related tasks and the concept of subscription level scaling is absent in most architectural patterns. This can hinder continued adoption of Azure if users run into any of the [well-know Azure subscription or service-level limitations](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits). Even though some of the constraints are soft limits, hitting these can still have a significant impact within a data platform that should be avoided at best.
+Today, many enterprises have large data platform monoliths built around the concept of a single Azure Data Lake Gen2 account and sometimes a single storage container. In addition, a single Azure subscription is often used for all data platform related tasks and the concept of subscription level scaling is absent in most architectural patterns. This can hinder continued adoption of Azure if users run into any of the [well-know Azure subscription or service-level limitations](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits). Even though some of the constraints are soft limits, hitting these can still have a significant impact within a data platform that should be avoided at best.
 
-Also, many organizations have organized their data platform architecture and teams around functional responsibilities and pipeline stages that need to be applied to the various data assets of an organization. As a result, specialized teams within a data platform own an orthogonal solution such as ingestion, cleansing, aggregation or serving. This organizational and architectural concept leads to a dramatic loss of velocity, because when data consumers on the serving layer require new data assets to be onboarded or functional changes to be implemented for a specific data asset the following processes will need to be followed o safely roll out these changes:
+Also, many organizations compose their data platform architecture and teams around functional responsibilities, and pipeline stages which must be applied to the various data assets of an organization to make them consumable for downstrea teams. As a result, several specialized teams within a data platform own an orthogonal solution such as ingestion, cleansing, aggregation or serving. This organizational and architectural design leads to a dramatic loss of velocity, because of dependency on several teams. For example, when a data consumer at the serving layer requires new data assets to be onboarded or functional changes to be implemented for a specific data asset, then multiple steps must be executed in a set sequence. The steps may involve:
 
 - The Data Consumer must submit a ticket to the functional teams being responsible for the respective pipeline stages.
 - Synchronization is now required between the functional teams as new ingestion services will be required, which will lead to changes required in the data cleansing layer, which will lead to changes on the data aggregation layer, which will again cause changes to be implemented on the serving layer. In summary, all pipeline stages may be impacted by the requested changes and clear impact on the processing staged will not be visible to any of these teams as no one overviews the end-to-end lifecycle.
@@ -20,7 +20,7 @@ If we now take into consideration that within a large organization there is not 
 
 ![Enterprise-Scale Analytics - Multiple Data Landing Zone Pattern](/docs/images/MultipleLandingZones.png)
 
-Enterprise-Scale Analytics (ESA) uses two core concepts to overcome the issues mentioned in the [introduction](#introduction) above:
+Enterprise-Scale Analytics (ESA) uses two core concepts to address the scaling challenges mentioned in the [introduction](#introduction):
 
 - Scaling through the concept of Data Landing Zones.
 - Scaling through the concept of Data Product or Data Integrations to enable distributed and decentralized data ownership.
@@ -67,7 +67,7 @@ Integrated datasets from source systems become the foundation of the data platfo
 
 The sections above are summarizing the scaling mechanisms within Enterprise-Scale Analytics that organizations can use to grow their data estate within Azure over time without running into well-known technical limitations. Both scaling mechanisms are helping to overcome different technical complexities and can be used in an efficient and simple way.
 
-The previous section promises agility and quick development cycles within the Data Integration and Data Product environments. However, this will only be possible if teams get the required access rights to develop independently and roll out new dataset versions and features over time in a self-service manner. How this can be achieved will be covered as part of the next section.
+In the previous section, we discussed strategies to enable scale; improve agility; and reduce development lifecycle within Data Integration and Data Product environments. However, this will only be possible if teams have appropriate access which enables self-serve. How this can be achieved will be discussed in the following section.
 
 ## Enabling Self-service for Data Products in Enterprise-Scale Analytics
 
