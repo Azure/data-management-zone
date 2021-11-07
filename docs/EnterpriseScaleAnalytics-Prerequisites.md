@@ -62,6 +62,8 @@ For now, we are recommending to select one of the regions mentioned below. The l
 - (US) South Central US
 - (US) West US 2
 
+> **Note:** Purview is gradually being enabled across various Azure regions. If `Azure Purview` is not available in the region where you are deploying Data Management Zone, `purview.bicep` template (by default) will provision `Purview` in `West Europe`. Users can update this template and change it to a different region where [Azure Purview is available](https://azure.microsoft.com/en-us/global-infrastructure/services/?products=purview&regions=all).
+
 ## Prerequisites
 
 Before we start with the deployment, please make sure that you have the following available:
