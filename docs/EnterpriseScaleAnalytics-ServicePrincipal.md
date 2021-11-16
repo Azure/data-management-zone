@@ -39,7 +39,7 @@ Additional required role assignments include:
 
 | Role Name | Description | Scope |
 |:----------|:------------|:------|
-| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{{datamanagementzone}subscriptionId}`</div> |
+| [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) | Required to assign the managed identity of Purview to the Azure Key Vault. | <div style="width: 31ch">(Resource Scope) `/subscriptions/{datamanagementzone-subscriptionId}`</div> |
 
 To add these role assignments, you can use the [Azure Portal](https://portal.azure.com/) or run the following commands using Azure CLI/Azure Powershell:
 
@@ -54,9 +54,9 @@ az ad sp list --display-name "{servicePrincipalName}" --query "[].{objectId:obje
 az role assignment create \
   --assignee "{servicePrincipalObjectId}" \
   --role "{roleName}" \
-  --scopes "{scope}"
+  --scope "{scope}"
 
-# Resource group scope level assignment
+# Resource group scope level assignment (below one is for the Data Landing Zones only)
 az role assignment create \
   --assignee "{servicePrincipalObjectId}" \
   --role "{roleName}" \
@@ -76,13 +76,13 @@ New-AzRoleAssignment `
   -RoleDefinitionName "{roleName}" `
   -Scope "{scope}"
 
-# For Resource group scope level assignment
+# For Resource group scope level assignment (below one is for the Data Landing Zones only)
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
   -ResourceGroupName "{resourceGroupName}"
 
-# For Child-Resource Scope level assignment
+# For Child-Resource Scope level assignment (below one is for the Data Landing Zones only)
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
