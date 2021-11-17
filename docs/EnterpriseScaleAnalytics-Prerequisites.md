@@ -48,19 +48,21 @@ For now, we are recommending to select one of the regions mentioned below. The l
 - (Africa) South Africa North
 - (Asia Pacific) Southeast Asia
 - (Asia Pacific) Australia East
-- (Asia Pacific) Japan East
+- (Asia Pacific) Japan East (*)
 - (Canada) Canada Central
 - (Europe) North Europe
 - (Europe) West Europe
-- (Europe) France Central
-- (Europe) Germany West Central
+- (Europe) France Central (*)
+- (Europe) Germany West Central (*)
 - (Europe) UK South
 - (South America) Brazil South
-- (US) Central US
+- (US) Central US (*)
 - (US) East US
 - (US) East US 2
 - (US) South Central US
 - (US) West US 2
+
+(*) *When the regions currently not supporting Azure Purview gets selected, the Azure Purview deployment gets performed on the default region  (Europe) North Europe*.
 
 ## Prerequisites
 

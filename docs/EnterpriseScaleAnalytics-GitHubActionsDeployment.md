@@ -60,30 +60,30 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 
 | Parameter                                | Description  | Sample value |
 |:-----------------------------------------|:-------------|:-------------|
-| location | Specifies the location for all resources. | `northeurope` |
-| environment | Specifies the environment of the deployment. | `dev`, `tst` or `prd` |
-| prefix | Specifies the prefix for all resources created in this deployment. | `prefi` |
-| tags | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
-| purviewRootCollectionAdminObjectIds | Specifies the list of user object IDs that are assigned as collection admin to the root collection in Purview. | [`{object-id-1}`, `{object-id-2}`] |
-| vnetAddressPrefix | Specifies the address space of the vnet. | `10.0.0.0/16` |
-| azureFirewallSubnetAddressPrefix | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
-| servicesSubnetAddressPrefix | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
-| enableDnsAndFirewallDeployment | Specifies whether firewall and private DNS Zones should be deployed. | `true` |
-| firewallPrivateIp | Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.4` |
-| dnsServerAdresses | Specifies the private IP addresses of the dns servers. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | [ `10.0.0.4` ] |
-| firewallPolicyId | Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/firewallPolicies/{firewallpolicy-name}` |
-| virtualNetworkManagerManagementGroupScopes | Specifies the management group scopes for the Azure Virtual Network Manager. | [`{management-group-id-1}`, `{management-group-id-2}`] |
-| virtualNetworkManagerSubscriptionScopes | Specifies the subscription scopes for the Azure Virtual Network Manager. | [`/subscriptions/{subscription-id-1}`, `/subscriptions/{subscription-id-2}`] |
-| privateDnsZoneIdContainerRegistry | Specifies the resource ID of the private DNS zone for Container Registry. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io` |
-| privateDnsZoneIdKeyVault | Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
-| privateDnsZoneIdNamespace | Specifies the resource ID of the private DNS zone for EventHub namespaces. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net` |
-| privateDnsZoneIdPurview | Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com` |
-| privateDnsZoneIdPurviewPortal | Specifies the resource ID of the private DNS zone for Purview Portal. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.purviewstudio.azure.com` |
-| privateDnsZoneIdBlob | Specifies the resource ID of the private DNS zone for Blob storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net` |
-| privateDnsZoneIdQueue | Specifies the resource ID of the private DNS zone for Queue storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net` |
-| privateDnsZoneIdSynapse | Specifies the resource ID of the private DNS zone for Synapse. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net` |
+| `location` | Specifies the location for all resources. | `northeurope` |
+| `environment` | Specifies the environment of the deployment. | `dev`, `tst` or `prd` |
+| `prefix` | Specifies the prefix for all resources created in this deployment. | `prefi` |
+| `tags` | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
+| `purviewRootCollectionAdminObjectIds` | Specifies the list of user object IDs that are assigned as collection admin to the root collection in Purview. | [`{object-id-1}`, `{object-id-2}`] |
+| `vnetAddressPrefix` | Specifies the address space of the vnet. | `10.0.0.0/16` |
+| `azureFirewallSubnetAddressPrefix` | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
+| `servicesSubnetAddressPrefix` | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
+| `enableDnsAndFirewallDeployment` | Specifies whether firewall and private DNS Zones should be deployed. | `true` |
+| `firewallPrivateIp` | Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.4` |
+| `dnsServerAdresses` | Specifies the private IP addresses of the dns servers. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | [ `10.0.0.4` ] |
+| `firewallPolicyId` | Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/firewallPolicies/{firewallpolicy-name}` |
+| `virtualNetworkManagerManagementGroupScopes` | Specifies the management group scopes for the Azure Virtual Network Manager. | [`{management-group-id-1}`, `{management-group-id-2}`] |
+| `virtualNetworkManagerSubscriptionScopes` | Specifies the subscription scopes for the Azure Virtual Network Manager. | [`/subscriptions/{subscription-id-1}`, `/subscriptions/{subscription-id-2}`] |
+| `privateDnsZoneIdContainerRegistry` | Specifies the resource ID of the private DNS zone for Container Registry. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.azurecr.io` |
+| `privateDnsZoneIdKeyVault` | Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net` |
+| `privateDnsZoneIdNamespace` | Specifies the resource ID of the private DNS zone for EventHub namespaces. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net` |
+| `privateDnsZoneIdPurview` | Specifies the resource ID of the private DNS zone for Purview. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com` |
+| `privateDnsZoneIdPurviewPortal` | Specifies the resource ID of the private DNS zone for Purview Portal. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.purviewstudio.azure.com` |
+| `privateDnsZoneIdBlob` | Specifies the resource ID of the private DNS zone for Blob storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net` |
+| `privateDnsZoneIdQueue` | Specifies the resource ID of the private DNS zone for Queue storage. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net` |
+| `privateDnsZoneIdSynapse` | Specifies the resource ID of the private DNS zone for Synapse. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `/subscriptions/{subscription-id}/resourceGroups/{rg-name}/providers/Microsoft.Network/privateDnsZones/privatelink.azuresynapse.net` |
 
-## Merge these changes back to the `main` branch of your repo
+## Merge these changes back to the `main` branch of your repository
 
 After following the instructions and updating the parameters and variables in your repository in a separate branch and opening the pull request, you can merge the pull request back into the `main` branch of your repository by clicking on **Merge pull request**. Finally, you can click on **Delete branch** to clean up your repository. By doing this, you trigger the deployment workflow.
 
