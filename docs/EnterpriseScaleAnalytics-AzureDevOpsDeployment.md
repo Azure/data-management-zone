@@ -26,7 +26,7 @@ First, you need to create an Azure Resource Manager service connection. To do so
 1. On the next page select **Service principal (manual)**.
 1. Select the appropriate environment to which you would like to deploy the templates. Only the default option **Azure Cloud** is currently supported.
 1. For the **Scope Level**, select **Subscription** and enter your `subscription Id` and `name`.
-1. Enter the details of the service principal that we have generated in step 3. (**Service Principal Id** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
+1. Enter the details of the service principal that we have generated in step 3. (**Service Principal ID** = **clientId**, **Service Principal Key** = **clientSecret**, **Tenant ID** = **tenantId**) and click on **Verify** to make sure that the connection works.
 1. Enter a user-friendly **Connection name** to use when referring to this service connection. Take note of the name because this will be required in the parameter update process.
 1. Optionally, enter a **Description**.
 1. Click on **Verify and save**.
