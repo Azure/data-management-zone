@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "7920090618025606816"
+      "templateHash": "5537532108759461562"
     }
   },
   "parameters": {
@@ -359,7 +359,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4335549807263718061"
+              "templateHash": "16290052854451722348"
             }
           },
           "parameters": {
@@ -830,7 +830,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "2672844143716454115"
+                      "templateHash": "11209946160495582280"
                     }
                   },
                   "parameters": {
@@ -905,7 +905,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.4.1008.15138",
-                              "templateHash": "9194233898920649047"
+                              "templateHash": "9930159468247130623"
                             }
                           },
                           "parameters": {
@@ -944,7 +944,7 @@
                             },
                             {
                               "type": "Microsoft.Network/bastionHosts",
-                              "apiVersion": "2021-02-01",
+                              "apiVersion": "2021-03-01",
                               "name": "[parameters('bastionName')]",
                               "location": "[parameters('location')]",
                               "tags": "[parameters('tags')]",
@@ -966,7 +966,12 @@
                                       "privateIPAllocationMethod": "Dynamic"
                                     }
                                   }
-                                ]
+                                ],
+                                "disableCopyPaste": false,
+                                "enableFileCopy": true,
+                                "enableIpConnect": true,
+                                "enableShareableLink": true,
+                                "enableTunneling": true
                               },
                               "dependsOn": [
                                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpName'))]"
@@ -1018,7 +1023,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.4.1008.15138",
-                              "templateHash": "8684162141135901545"
+                              "templateHash": "5470332929734608133"
                             }
                           },
                           "parameters": {
@@ -1123,7 +1128,11 @@
                                   "computerName": "[take(parameters('virtualmachineName'), 15)]",
                                   "allowExtensionOperations": true,
                                   "windowsConfiguration": {
-                                    "enableAutomaticUpdates": true
+                                    "enableAutomaticUpdates": true,
+                                    "patchSettings": {
+                                      "enableHotpatching": false,
+                                      "patchMode": "AutomaticByOS"
+                                    }
                                   }
                                 },
                                 "priority": "Regular",
@@ -1134,12 +1143,34 @@
                                     "caching": "ReadWrite",
                                     "createOption": "FromImage",
                                     "osType": "Windows",
-                                    "writeAcceleratorEnabled": false
+                                    "writeAcceleratorEnabled": false,
+                                    "managedDisk": {
+                                      "storageAccountType": "Premium_LRS"
+                                    }
                                   }
                                 }
                               },
                               "dependsOn": [
                                 "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+                              ]
+                            },
+                            {
+                              "type": "Microsoft.Compute/virtualMachines/extensions",
+                              "apiVersion": "2021-07-01",
+                              "name": "[format('{0}/{1}', parameters('virtualmachineName'), 'AADLoginForWindows')]",
+                              "location": "[parameters('location')]",
+                              "tags": "[parameters('tags')]",
+                              "properties": {
+                                "publisher": "Microsoft.Azure.ActiveDirectory",
+                                "type": "AADLoginForWindows",
+                                "typeHandlerVersion": "1.0",
+                                "autoUpgradeMinorVersion": true,
+                                "settings": {
+                                  "mdmId": ""
+                                }
+                              },
+                              "dependsOn": [
+                                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualmachineName'))]"
                               ]
                             }
                           ]

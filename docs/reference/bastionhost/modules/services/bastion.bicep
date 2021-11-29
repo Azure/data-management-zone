@@ -29,7 +29,7 @@ resource publicip 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   }
 }
 
-resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
+resource bastion 'Microsoft.Network/bastionHosts@2021-03-01' = {
   name: bastionName
   location: location
   tags: tags
@@ -52,6 +52,11 @@ resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
         }
       }
     ]
+    disableCopyPaste: false
+    enableFileCopy: true
+    enableIpConnect: true
+    enableShareableLink: true
+    enableTunneling: true
   }
 }
 

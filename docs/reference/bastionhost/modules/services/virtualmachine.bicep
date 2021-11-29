@@ -86,6 +86,10 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
       allowExtensionOperations: true
       windowsConfiguration: {
         enableAutomaticUpdates: true
+        patchSettings: {
+          enableHotpatching: false
+          patchMode: 'AutomaticByOS'
+        }
       }
     }
     priority: 'Regular'
@@ -97,7 +101,26 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
         createOption: 'FromImage'
         osType: 'Windows'
         writeAcceleratorEnabled: false
+        managedDisk: {
+          storageAccountType: 'Premium_LRS'
+        }
       }
+    }
+  }
+}
+
+resource extension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  parent: virtualMachine
+  name: 'AADLoginForWindows'
+  location: location
+  tags: tags
+  properties: {
+    publisher: 'Microsoft.Azure.ActiveDirectory'
+    type: 'AADLoginForWindows'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {
+      mdmId: ''
     }
   }
 }
