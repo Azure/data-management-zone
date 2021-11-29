@@ -652,7 +652,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Select an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS.",
+                                        "text": "Select an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS (Username: 'SuperMainUser').",
                                         "link": {
                                             "label": "",
                                             "uri": ""
@@ -712,6 +712,34 @@
                                         "required": false,
                                         "validationMessage": "Enable deployment of Azure Bastion and jumpbox inside the first Data Landing Zone."
                                     }
+                                },
+                                {
+                                    "name": "virtualMachineImage",
+                                    "label": "VM Image",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[steps('dataLandingZoneSettings').azureBastionSettings.azureBastionCheckbox]",
+                                    "defaultValue": "Windows 10",
+                                    "toolTip": "Specify the SKU of the Virtual Machine.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Windows 10",
+                                                "description": "Windows 10 Pro 20H2",
+                                                "value": "Windows10"
+                                            },
+                                            {
+                                                "label": "Windows Server 2022",
+                                                "description": "Windows Server 2022 Datacenter",
+                                                "value": "WindowsServer2022"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
                                 }
                             ]
                         }
@@ -749,10 +777,12 @@
                 "dataManagementZoneSubscriptionId": "[steps('dataManagementZoneSettings').deploymentDetails.subscriptionId]",
                 "dataManagementZonePrefix": "[steps('dataManagementZoneSettings').dataManagementZonesName.dataManagementZonesPrefix]",
                 "dataManagementZoneLocation": "[steps('dataManagementZoneSettings').deploymentDetails.locationName]",
+                "administratorUsername": "SuperMainUser",
                 "administratorPassword": "[steps('dataLandingZoneSettings').dataLandingZonesServicesSettings.administratorPassword.password]",
                 "dataLandingZoneDetails": "[steps('dataLandingZoneSettings').deploymentDetails.dataLandingZones]",
                 "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix]",
                 "enableBastionHostDeployment": "[steps('dataLandingZoneSettings').azureBastionSettings.azureBastionCheckbox]",
+                "virtualMachineImage": "[if(empty(steps('dataLandingZoneSettings').azureBastionSettings.virtualMachineImage), '', steps('dataLandingZoneSettings').azureBastionSettings.virtualMachineImage)]",
                 "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]"
             }
         }
