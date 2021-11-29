@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "8205149698668901153"
+      "templateHash": "7920090618025606816"
     }
   },
   "parameters": {
@@ -78,12 +78,12 @@
     },
     "virtualMachineImage": {
       "type": "string",
-      "defaultValue": "Windows10",
+      "defaultValue": "Windows11",
       "metadata": {
         "description": "Specifies the image of the virtual machine jumpbox that gets created for Azure Bastion."
       },
       "allowedValues": [
-        "Windows10",
+        "Windows11",
         "WindowsServer2022"
       ]
     }
@@ -359,7 +359,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "9175258774835994841"
+              "templateHash": "4335549807263718061"
             }
           },
           "parameters": {
@@ -437,12 +437,12 @@
             },
             "virtualMachineImage": {
               "type": "string",
-              "defaultValue": "Windows10",
+              "defaultValue": "Windows11",
               "metadata": {
                 "description": "Specifies the image of the virtual machine that gets created."
               },
               "allowedValues": [
-                "Windows10",
+                "Windows11",
                 "WindowsServer2022"
               ]
             },
@@ -830,7 +830,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "11116377257653460648"
+                      "templateHash": "2672844143716454115"
                     }
                   },
                   "parameters": {
@@ -855,9 +855,9 @@
                     },
                     "virtualMachineImage": {
                       "type": "string",
-                      "defaultValue": "Windows10",
+                      "defaultValue": "Windows11",
                       "allowedValues": [
-                        "Windows10",
+                        "Windows11",
                         "WindowsServer2022"
                       ]
                     },
@@ -1018,7 +1018,7 @@
                             "_generator": {
                               "name": "bicep",
                               "version": "0.4.1008.15138",
-                              "templateHash": "10043636214272501728"
+                              "templateHash": "8684162141135901545"
                             }
                           },
                           "parameters": {
@@ -1037,9 +1037,9 @@
                             },
                             "virtualMachineImage": {
                               "type": "string",
-                              "defaultValue": "Windows10",
+                              "defaultValue": "Windows11",
                               "allowedValues": [
-                                "Windows10",
+                                "Windows11",
                                 "WindowsServer2022"
                               ]
                             },
@@ -1058,10 +1058,10 @@
                           "variables": {
                             "nicName": "[format('{0}-nic', parameters('virtualmachineName'))]",
                             "diskName": "[format('{0}-disk', parameters('virtualmachineName'))]",
-                            "imageReferenceWindows10": {
-                              "publisher": "MicrosoftWindowsDesktop",
-                              "offer": "Windows-10",
-                              "sku": "20h2-pro",
+                            "imageReferenceWindows11": {
+                              "publisher": "microsoftwindowsdesktop",
+                              "offer": "windows-11",
+                              "sku": "win11-21h2-ent",
                               "version": "latest"
                             },
                             "imageReferenceWindowsServer2022": {
@@ -1128,7 +1128,7 @@
                                 },
                                 "priority": "Regular",
                                 "storageProfile": {
-                                  "imageReference": "[if(equals(parameters('virtualMachineImage'), 'Windows10'), variables('imageReferenceWindows10'), variables('imageReferenceWindowsServer2022'))]",
+                                  "imageReference": "[if(equals(parameters('virtualMachineImage'), 'Windows11'), variables('imageReferenceWindows11'), variables('imageReferenceWindowsServer2022'))]",
                                   "osDisk": {
                                     "name": "[variables('diskName')]",
                                     "caching": "ReadWrite",

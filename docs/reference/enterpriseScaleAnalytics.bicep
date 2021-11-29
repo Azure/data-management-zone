@@ -34,11 +34,11 @@ param dataLandingZonePrefix string
 @description('Specifies whether Azure Bastion will be deployed in the first Data Landing Zone.')
 param enableBastionHostDeployment bool
 @allowed([
-  'Windows10'
+  'Windows11'
   'WindowsServer2022'
 ])
 @description('Specifies the image of the virtual machine jumpbox that gets created for Azure Bastion.')
-param virtualMachineImage string = 'Windows10'
+param virtualMachineImage string = 'Windows11'
 
 // Variables
 var dataManagementZoneTemplateLink = 'https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/main.json'
