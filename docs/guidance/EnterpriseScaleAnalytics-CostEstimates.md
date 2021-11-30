@@ -1,10 +1,10 @@
 # Cost Estimates
 
-This document will provide users an overview of what monthly cost can be expected when using Enterprise-Scale Analytics. Links to the official Cost Calculator will be provided where users can make changes depending on the expected amount of data and data throughput. All cost calculations will specify base cost of Enterprise-Scale Analytics. Base cost means the cost that occur if no data workloads run inside the respective subscriptions.
+This document will provide users an overview of what monthly cost can be expected when using Data Management & Analytics Scenario. Links to the official Cost Calculator will be provided where users can make changes depending on the expected amount of data and data throughput. All cost calculations will specify base cost of Data Management & Analytics Scenario. Base cost means the cost that occur if no data workloads run inside the respective subscriptions.
 
 ## Data Management Zone
 
-In a production scenario, it is recommended to rely on the Azure Firewall and Private DNS Zones hosted in the connectivity Hub of [Enterprise-Scale Landing Zones](https://github.com/Azure/Enterprise-Scale). In MVPs, users may rely on the Azure Firewall and Private DNS Zones bundled with Enterprise-Scale Analytics. Hence, two different cost calclations are provided which can be found below:
+In a production scenario, it is recommended to rely on the Azure Firewall and Private DNS Zones hosted in the connectivity Hub of [Enterprise-Scale Landing Zones](https://github.com/Azure/Enterprise-Scale). In MVPs, users may rely on the Azure Firewall and Private DNS Zones bundled with Data Management & Analytics. Hence, two different cost calclations are provided which can be found below:
 
 - [Pricing Calculator - Data Management Zone w/o Azure Firewall and Private DNS Zones](https://azure.com/e/ebb7508a6d78487b9a1583878d0948cc)
 - [Pricing Calculator - Data Management Zone w/ Azure Firewall and Private DNS Zones](https://azure.com/e/658478643d4b46fdbf8b1972c4b0704b)

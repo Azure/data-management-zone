@@ -1,6 +1,6 @@
 # Data Management Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Management Zone of the Enterprise-Scale Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
+This template repsitory contains all templates to deploy the Data Management Zone of the Data Management & Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
 
 ## What will be deployed?
 
@@ -83,7 +83,7 @@ To use the Deploy to Azure Button, please click on the button below:
 
 | Reference implementation   | Description | Deploy to Azure |
 |:---------------------------|:------------|:----------------|
-| Enterprise-Scale Analytics | Deploys a Data Management Zone and one or multiple [Data Landing Zone](https://github.com/Azure/data-landing-zone) all at once. Provides less options than the the individual Data Management Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FenterpriseScaleAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.enterpriseScaleAnalytics.json) |
+| Data Management & Analytics Scenario | Deploys a Data Management Zone and one or multiple [Data Landing Zone](https://github.com/Azure/data-landing-zone) all at once. Provides less options than the the individual Data Management Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FenterpriseScaleAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.enterpriseScaleAnalytics.json) |
 | Data Management Zone       | Deploys a single Data Management Zone to a subscription. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Finfra%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementZone.json) |
 
 Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Management Zone through GitHub Actions or Azure DevOps.
