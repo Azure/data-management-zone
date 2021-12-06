@@ -10,6 +10,11 @@ param location string
 param tags object
 param virtualmachineName string
 param virtualMachineSku string = 'Standard_DS2_v2'
+@allowed([
+  'Windows11'
+  'WindowsServer2022'
+])
+param virtualMachineImage string = 'Windows11'
 param administratorUsername string = 'VmMainUser'
 @secure()
 param administratorPassword string
@@ -18,6 +23,18 @@ param subnetId string
 // Variables
 var nicName = '${virtualmachineName}-nic'
 var diskName = '${virtualmachineName}-disk'
+var imageReferenceWindows11 = {
+  publisher: 'microsoftwindowsdesktop'
+  offer: 'windows-11'
+  sku: 'win11-21h2-ent'
+  version: 'latest'
+}
+var imageReferenceWindowsServer2022 = {
+  publisher: 'MicrosoftWindowsServer'
+  offer: 'WindowsServer'
+  sku: '2022-datacenter'
+  version: 'latest'
+}
 
 // Resources
 resource nic 'Microsoft.Network/networkInterfaces@2021-02-01' = {
@@ -73,12 +90,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     }
     priority: 'Regular'
     storageProfile: {
-      imageReference: {
-        offer: 'WindowsServer'
-        publisher: 'MicrosoftWindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
-      }
+      imageReference: virtualMachineImage == 'Windows11' ? imageReferenceWindows11 : imageReferenceWindowsServer2022
       osDisk: {
         name: diskName
         caching: 'ReadWrite'

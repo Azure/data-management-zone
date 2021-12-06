@@ -12,6 +12,11 @@ param tags object
 param bastionSubnetId string
 param jumpboxSubnetId string
 param virtualMachineSku string = 'Standard_DS2_v2'
+@allowed([
+  'Windows11'
+  'WindowsServer2022'
+])
+param virtualMachineImage string = 'Windows11'
 param administratorUsername string = 'VmMainUser'
 @secure()
 param administratorPassword string
@@ -41,6 +46,7 @@ module virtualMachine001 'services/virtualmachine.bicep' = {
     subnetId: jumpboxSubnetId
     virtualmachineName: virtualMachine001Name
     virtualMachineSku: virtualMachineSku
+    virtualMachineImage: virtualMachineImage
     administratorUsername: administratorUsername
     administratorPassword: administratorPassword
   }

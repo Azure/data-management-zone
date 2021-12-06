@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "6987624965477586384"
+      "templateHash": "4335549807263718061"
     }
   },
   "parameters": {
@@ -80,6 +80,17 @@
       "metadata": {
         "description": "Specifies the SKU of the virtual machine that gets created."
       }
+    },
+    "virtualMachineImage": {
+      "type": "string",
+      "defaultValue": "Windows11",
+      "metadata": {
+        "description": "Specifies the image of the virtual machine that gets created."
+      },
+      "allowedValues": [
+        "Windows11",
+        "WindowsServer2022"
+      ]
     },
     "administratorUsername": {
       "type": "string",
@@ -442,6 +453,9 @@
           "virtualMachineSku": {
             "value": "[parameters('virtualMachineSku')]"
           },
+          "virtualMachineImage": {
+            "value": "[parameters('virtualMachineImage')]"
+          },
           "bastionSubnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.bastionSubnetId.value]"
           },
@@ -462,7 +476,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "4537990983907796400"
+              "templateHash": "2672844143716454115"
             }
           },
           "parameters": {
@@ -484,6 +498,14 @@
             "virtualMachineSku": {
               "type": "string",
               "defaultValue": "Standard_DS2_v2"
+            },
+            "virtualMachineImage": {
+              "type": "string",
+              "defaultValue": "Windows11",
+              "allowedValues": [
+                "Windows11",
+                "WindowsServer2022"
+              ]
             },
             "administratorUsername": {
               "type": "string",
@@ -625,6 +647,9 @@
                   "virtualMachineSku": {
                     "value": "[parameters('virtualMachineSku')]"
                   },
+                  "virtualMachineImage": {
+                    "value": "[parameters('virtualMachineImage')]"
+                  },
                   "administratorUsername": {
                     "value": "[parameters('administratorUsername')]"
                   },
@@ -639,7 +664,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1008.15138",
-                      "templateHash": "14575974093809669092"
+                      "templateHash": "8684162141135901545"
                     }
                   },
                   "parameters": {
@@ -656,6 +681,14 @@
                       "type": "string",
                       "defaultValue": "Standard_DS2_v2"
                     },
+                    "virtualMachineImage": {
+                      "type": "string",
+                      "defaultValue": "Windows11",
+                      "allowedValues": [
+                        "Windows11",
+                        "WindowsServer2022"
+                      ]
+                    },
                     "administratorUsername": {
                       "type": "string",
                       "defaultValue": "VmMainUser"
@@ -670,7 +703,19 @@
                   "functions": [],
                   "variables": {
                     "nicName": "[format('{0}-nic', parameters('virtualmachineName'))]",
-                    "diskName": "[format('{0}-disk', parameters('virtualmachineName'))]"
+                    "diskName": "[format('{0}-disk', parameters('virtualmachineName'))]",
+                    "imageReferenceWindows11": {
+                      "publisher": "microsoftwindowsdesktop",
+                      "offer": "windows-11",
+                      "sku": "win11-21h2-ent",
+                      "version": "latest"
+                    },
+                    "imageReferenceWindowsServer2022": {
+                      "publisher": "MicrosoftWindowsServer",
+                      "offer": "WindowsServer",
+                      "sku": "2022-datacenter",
+                      "version": "latest"
+                    }
                   },
                   "resources": [
                     {
@@ -729,12 +774,7 @@
                         },
                         "priority": "Regular",
                         "storageProfile": {
-                          "imageReference": {
-                            "offer": "WindowsServer",
-                            "publisher": "MicrosoftWindowsServer",
-                            "sku": "2022-datacenter",
-                            "version": "latest"
-                          },
+                          "imageReference": "[if(equals(parameters('virtualMachineImage'), 'Windows11'), variables('imageReferenceWindows11'), variables('imageReferenceWindowsServer2022'))]",
                           "osDisk": {
                             "name": "[variables('diskName')]",
                             "caching": "ReadWrite",

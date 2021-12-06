@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "policyName": {
+            "value": "Deny-Synapse-Kusto-OptimizedAutoscale"
+        },
+        "policyDescription": {
+            "value": "Enforces optimized autoscale for Synapse Kusto Pools."
+        },
+        "policyMode": {
+            "value": "Indexed"
+        },
+        "policyParameters": {
+            "value": {
+                "effect": {
+                    "type": "String",
+                    "metadata": {
+                        "displayName": "Effect",
+                        "description": "Enable or disable the execution of the policy"
+                    },
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Deny"
+                },
+                "maxNodeCount": {
+                    "type": "Integer",
+                    "metadata": {
+                        "displayName": "Maximum Node Count",
+                        "description": "Specifies the maximum node count of Kusto Pools"
+                    },
+                    "defaultValue": 20
+                }
+            }
+        },
+        "policyDefinition": {
+            "value": {
+                "if": {
+                    "allOf": [
+                        {
+                            "field": "type",
+                            "equals": "Microsoft.Synapse/workspaces/kustoPools"
+                        },
+                        {
+                            "anyOf": [
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/kustoPools/optimizedAutoscale.isEnabled",
+                                    "notEquals": true
+                                },
+                                {
+                                    "field": "Microsoft.Synapse/workspaces/kustoPools/optimizedAutoscale.maximum",
+                                    "greater": "[parameters('maxNodeCount')]"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "then": {
+                    "effect": "[parameters('effect')]"
+                }
+            }
+        },
+        "policyMetadata": {
+            "value": {
+                "version": "1.0.0",
+                "category": "Synapse",
+                "preview": false,
+                "deprecated": false
+            }
+        }
+    }
+}

@@ -56,7 +56,7 @@ az role assignment create \
   --role "{roleName}" \
   --scope "{scope}"
 
-# Resource group scope level assignment (below one is for the Data Landing Zones only)
+# Resource group scope level assignment (below command is required for the Data Landing Zone)
 az role assignment create \
   --assignee "{servicePrincipalObjectId}" \
   --role "{roleName}" \
@@ -76,13 +76,13 @@ New-AzRoleAssignment `
   -RoleDefinitionName "{roleName}" `
   -Scope "{scope}"
 
-# For Resource group scope level assignment (below one is for the Data Landing Zones only)
+# For Resource group scope level assignment (below command is required for the Data Landing Zone)
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
   -ResourceGroupName "{resourceGroupName}"
 
-# For Child-Resource Scope level assignment (below one is for the Data Landing Zones only)
+# For Child-Resource Scope level assignment (below command is required for the Data Landing Zone)
 New-AzRoleAssignment `
   -ObjectId $spObjectId `
   -RoleDefinitionName "{roleName}" `
