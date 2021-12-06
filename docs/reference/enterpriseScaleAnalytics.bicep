@@ -12,7 +12,7 @@ targetScope = 'subscription'
 @description('Specifies the environment.')
 param environment string = 'dev'
 @description('Specifies the tags that you want to apply to all resources.')
-param tags object
+param tags object = {}
 
 // Data Management Parameters
 @description('Specifies the subscription ID where your Data Management Zone will be deployed.')
@@ -21,6 +21,8 @@ param dataManagementZoneSubscriptionId string
 param dataManagementZonePrefix string
 @description('Specifies the location of your Data Management Zone.')
 param dataManagementZoneLocation string
+@description('Specifies the management group scopes for the Azure Virtual Network Manager.')
+param virtualNetworkManagerManagementGroupScopes array = []
 
 // Data Landing Zone Parameters
 @description('Specifies the administrator username of the Synapse workspace and the virtual machine scale sets.')
@@ -32,7 +34,7 @@ param dataLandingZoneDetails array
 @description('Specifies the prefix of Data Landing Zones.')
 param dataLandingZonePrefix string
 @description('Specifies whether Azure Bastion will be deployed in the first Data Landing Zone.')
-param enableBastionHostDeployment bool
+param enableBastionHostDeployment bool = false
 @allowed([
   'Windows11'
   'WindowsServer2022'
@@ -93,6 +95,12 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
       }
       firewallPolicyId: {
         value: ''
+      }
+      virtualNetworkManagerManagementGroupScopes: {
+        value: virtualNetworkManagerManagementGroupScopes
+      }
+      virtualNetworkManagerSubscriptionScopes: {
+        value: [for dataLandingZoneDetail in dataLandingZoneDetails:  '/subscriptions/${dataLandingZoneDetail.subscription}']
       }
       privateDnsZoneIdBlob: {
         value: ''

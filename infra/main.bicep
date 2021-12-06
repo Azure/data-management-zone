@@ -41,6 +41,10 @@ param dnsServerAdresses array = [
 ]
 @description('Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`.')
 param firewallPolicyId string = ''
+@description('Specifies the management group scopes for the Azure Virtual Network Manager.')
+param virtualNetworkManagerManagementGroupScopes array = []
+@description('Specifies the subscription scopes for the Azure Virtual Network Manager.')
+param virtualNetworkManagerSubscriptionScopes array = []
 
 // Private DNS Zone parameters
 @description('Specifies the resource ID of the private DNS zone for Key Vault. Optional if `enableDnsAndFirewallDeployment` is set to `true`.')
@@ -93,6 +97,8 @@ module networkServices 'modules/network.bicep' = {
     enableDnsAndFirewallDeployment: enableDnsAndFirewallDeployment
     firewallPrivateIp: firewallPrivateIp
     firewallPolicyId: firewallPolicyId
+    virtualNetworkManagerManagementGroupScopes: virtualNetworkManagerManagementGroupScopes
+    virtualNetworkManagerSubscriptionScopes: virtualNetworkManagerSubscriptionScopes
   }
 }
 

@@ -18,10 +18,13 @@ param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 param enableDnsAndFirewallDeployment bool = true
 param firewallPolicyId string = ''
+param virtualNetworkManagerManagementGroupScopes array = []
+param virtualNetworkManagerSubscriptionScopes array = []
 
 // Variables
 var azureFirewallSubnetName = 'AzureFirewallSubnet'
 var servicesSubnetName = 'ServicesSubnet'
+var virtualNetworkManagerName = '${prefix}-vnm'
 var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[2] : subscription().subscriptionId
 var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[4] : resourceGroup().name
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
@@ -218,6 +221,91 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
     firewallPolicy: {
       id: firewallPolicy.id
     }
+  }
+}
+
+resource virtualNetworkManager 'Microsoft.Network/networkManagers@2021-02-01-preview' = {
+  name: virtualNetworkManagerName
+  location: location
+  tags: tags
+  properties: {
+    description: 'Network Manager for ESA Mesh Network Architecture'
+    displayName: virtualNetworkManagerName
+    networkManagerScopeAccesses: [
+      'Connectivity'
+      'SecurityAdmin'
+      'SecurityUser'
+    ]
+    networkManagerScopes: {
+      managementGroups: union(array(null), virtualNetworkManagerManagementGroupScopes)
+      subscriptions: union(array(subscription().id), virtualNetworkManagerSubscriptionScopes)
+    }
+  }
+}
+
+resource virtualNetworkManagerDevNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsDevNetworkGroup'
+  properties: {
+    description: 'Development Group for Enterprise-Scale Analytics'
+    displayName: 'Enterprise-Scale Analytics Dev Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "dev" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
+    groupMembers: []
+    memberType: ''
+  }
+}
+
+resource virtualNetworkManagerTestNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsTestNetworkGroup'
+  properties: {
+    description: 'Test Group for Enterprise-Scale Analytics'
+    displayName: 'Enterprise-Scale Analytics Test Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "tst" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
+    groupMembers: []
+    memberType: ''
+  }
+}
+
+resource virtualNetworkManagerProdNetworkGroup 'Microsoft.Network/networkManagers/networkGroups@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsProdNetworkGroup'
+  properties: {
+    description: 'Production Group for Enterprise-Scale Analytics'
+    displayName: 'Enterprise-Scale Analytics Prod Network Group'
+    conditionalMembership: '{ "allOf": [ { "field": "tags[\'Environment\']", "equals": "prd" }, { "value": "[resourceGroup().Name]", "contains": "-network" } ] }'
+    groupMembers: []
+    memberType: ''
+  }
+}
+
+resource virtualNetworkManagerConnectivityConfiguration 'Microsoft.Network/networkManagers/connectivityConfigurations@2021-02-01-preview' = {
+  parent: virtualNetworkManager
+  name: 'EnterpriseScaleAnalyticsConnectivityConfig'
+  properties: {
+    connectivityTopology: 'Mesh'
+    appliesToGroups: [
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerDevNetworkGroup.id
+      }
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerTestNetworkGroup.id
+      }
+      {
+        groupConnectivity: 'DirectlyConnected'
+        isGlobal: 'False'
+        networkGroupId: virtualNetworkManagerProdNetworkGroup.id
+      }
+    ]
+    deleteExistingPeering: 'True'
+    description: 'Enterprise-Scale Analytics Mesh Network Topology'
+    displayName: 'Enterprise-Scale Analytics Connectivity Config'
+    hubs: []
+    isGlobal: 'False'
   }
 }
 

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "16584189192184544370"
+      "templateHash": "18257694432751193303"
     }
   },
   "parameters": {
@@ -98,6 +98,20 @@
       "defaultValue": "",
       "metadata": {
         "description": "Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`."
+      }
+    },
+    "virtualNetworkManagerManagementGroupScopes": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Specifies the management group scopes for the Azure Virtual Network Manager."
+      }
+    },
+    "virtualNetworkManagerSubscriptionScopes": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Specifies the subscription scopes for the Azure Virtual Network Manager."
       }
     },
     "privateDnsZoneIdKeyVault": {
@@ -266,6 +280,12 @@
           },
           "firewallPolicyId": {
             "value": "[parameters('firewallPolicyId')]"
+          },
+          "virtualNetworkManagerManagementGroupScopes": {
+            "value": "[parameters('virtualNetworkManagerManagementGroupScopes')]"
+          },
+          "virtualNetworkManagerSubscriptionScopes": {
+            "value": "[parameters('virtualNetworkManagerSubscriptionScopes')]"
           }
         },
         "template": {
@@ -275,7 +295,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1008.15138",
-              "templateHash": "10662562629090602323"
+              "templateHash": "2364844395026092218"
             }
           },
           "parameters": {
@@ -317,12 +337,21 @@
             "firewallPolicyId": {
               "type": "string",
               "defaultValue": ""
+            },
+            "virtualNetworkManagerManagementGroupScopes": {
+              "type": "array",
+              "defaultValue": []
+            },
+            "virtualNetworkManagerSubscriptionScopes": {
+              "type": "array",
+              "defaultValue": []
             }
           },
           "functions": [],
           "variables": {
             "azureFirewallSubnetName": "AzureFirewallSubnet",
             "servicesSubnetName": "ServicesSubnet",
+            "virtualNetworkManagerName": "[format('{0}-vnm', parameters('prefix'))]",
             "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[2], subscription().subscriptionId)]",
             "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[4], resourceGroup().name)]",
             "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]"
@@ -526,6 +555,107 @@
                 "[resourceId('Microsoft.Resources/deployments', format('{0}-firewallpolicy-rules', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-publicip001', parameters('prefix')))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/networkManagers",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[variables('virtualNetworkManagerName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]",
+              "properties": {
+                "description": "Network Manager for ESA Mesh Network Architecture",
+                "displayName": "[variables('virtualNetworkManagerName')]",
+                "networkManagerScopeAccesses": [
+                  "Connectivity",
+                  "SecurityAdmin",
+                  "SecurityUser"
+                ],
+                "networkManagerScopes": {
+                  "managementGroups": "[union(array(null()), parameters('virtualNetworkManagerManagementGroupScopes'))]",
+                  "subscriptions": "[union(array(subscription().id), parameters('virtualNetworkManagerSubscriptionScopes'))]"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkManagers/networkGroups",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[format('{0}/{1}', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsDevNetworkGroup')]",
+              "properties": {
+                "description": "Development Group for Enterprise-Scale Analytics",
+                "displayName": "Enterprise-Scale Analytics Dev Network Group",
+                "conditionalMembership": "{ \"allOf\": [ { \"field\": \"tags['Environment']\", \"equals\": \"dev\" }, { \"value\": \"[resourceGroup().Name]\", \"contains\": \"-network\" } ] }",
+                "groupMembers": [],
+                "memberType": ""
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', variables('virtualNetworkManagerName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/networkManagers/networkGroups",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[format('{0}/{1}', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsTestNetworkGroup')]",
+              "properties": {
+                "description": "Test Group for Enterprise-Scale Analytics",
+                "displayName": "Enterprise-Scale Analytics Test Network Group",
+                "conditionalMembership": "{ \"allOf\": [ { \"field\": \"tags['Environment']\", \"equals\": \"tst\" }, { \"value\": \"[resourceGroup().Name]\", \"contains\": \"-network\" } ] }",
+                "groupMembers": [],
+                "memberType": ""
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', variables('virtualNetworkManagerName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/networkManagers/networkGroups",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[format('{0}/{1}', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsProdNetworkGroup')]",
+              "properties": {
+                "description": "Production Group for Enterprise-Scale Analytics",
+                "displayName": "Enterprise-Scale Analytics Prod Network Group",
+                "conditionalMembership": "{ \"allOf\": [ { \"field\": \"tags['Environment']\", \"equals\": \"prd\" }, { \"value\": \"[resourceGroup().Name]\", \"contains\": \"-network\" } ] }",
+                "groupMembers": [],
+                "memberType": ""
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', variables('virtualNetworkManagerName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/networkManagers/connectivityConfigurations",
+              "apiVersion": "2021-02-01-preview",
+              "name": "[format('{0}/{1}', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsConnectivityConfig')]",
+              "properties": {
+                "connectivityTopology": "Mesh",
+                "appliesToGroups": [
+                  {
+                    "groupConnectivity": "DirectlyConnected",
+                    "isGlobal": "False",
+                    "networkGroupId": "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsDevNetworkGroup')]"
+                  },
+                  {
+                    "groupConnectivity": "DirectlyConnected",
+                    "isGlobal": "False",
+                    "networkGroupId": "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsTestNetworkGroup')]"
+                  },
+                  {
+                    "groupConnectivity": "DirectlyConnected",
+                    "isGlobal": "False",
+                    "networkGroupId": "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsProdNetworkGroup')]"
+                  }
+                ],
+                "deleteExistingPeering": "True",
+                "description": "Enterprise-Scale Analytics Mesh Network Topology",
+                "displayName": "Enterprise-Scale Analytics Connectivity Config",
+                "hubs": [],
+                "isGlobal": "False"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkManagers', variables('virtualNetworkManagerName'))]",
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsDevNetworkGroup')]",
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsProdNetworkGroup')]",
+                "[resourceId('Microsoft.Network/networkManagers/networkGroups', variables('virtualNetworkManagerName'), 'EnterpriseScaleAnalyticsTestNetworkGroup')]"
               ]
             },
             {
