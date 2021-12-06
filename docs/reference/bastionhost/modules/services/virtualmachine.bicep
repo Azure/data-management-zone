@@ -11,10 +11,10 @@ param tags object
 param virtualmachineName string
 param virtualMachineSku string = 'Standard_DS2_v2'
 @allowed([
-  'Windows10'
+  'Windows11'
   'WindowsServer2022'
 ])
-param virtualMachineImage string = 'Windows10'
+param virtualMachineImage string = 'Windows11'
 param administratorUsername string = 'VmMainUser'
 @secure()
 param administratorPassword string
@@ -23,10 +23,10 @@ param subnetId string
 // Variables
 var nicName = '${virtualmachineName}-nic'
 var diskName = '${virtualmachineName}-disk'
-var imageReferenceWindows10 = {
-  publisher: 'MicrosoftWindowsDesktop'
-  offer: 'Windows-10'
-  sku: '20h2-pro'
+var imageReferenceWindows11 = {
+  publisher: 'microsoftwindowsdesktop'
+  offer: 'windows-11'
+  sku: 'win11-21h2-ent'
   version: 'latest'
 }
 var imageReferenceWindowsServer2022 = {
@@ -90,7 +90,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     }
     priority: 'Regular'
     storageProfile: {
-      imageReference: virtualMachineImage == 'Windows10' ? imageReferenceWindows10 : imageReferenceWindowsServer2022
+      imageReference: virtualMachineImage == 'Windows11' ? imageReferenceWindows11 : imageReferenceWindowsServer2022
       osDisk: {
         name: diskName
         caching: 'ReadWrite'

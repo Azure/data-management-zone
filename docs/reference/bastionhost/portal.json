@@ -272,7 +272,7 @@
                                     "label": "VM Image",
                                     "type": "Microsoft.Common.DropDown",
                                     "visible": true,
-                                    "defaultValue": "Windows 10",
+                                    "defaultValue": "Windows 11",
                                     "toolTip": "Specify the SKU of the Virtual Machine.",
                                     "multiselect": false,
                                     "selectAll": false,
@@ -282,9 +282,9 @@
                                     "constraints": {
                                         "allowedValues": [
                                             {
-                                                "label": "Windows 10",
-                                                "description": "Windows 10 Pro 20H2",
-                                                "value": "Windows10"
+                                                "label": "Windows 11",
+                                                "description": "Windows 11 Enterprise 21H2",
+                                                "value": "Windows11"
                                             },
                                             {
                                                 "label": "Windows Server 2022",
