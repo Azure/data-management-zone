@@ -266,6 +266,34 @@
                                         ],
                                         "required": true
                                     }
+                                },
+                                {
+                                    "name": "virtualMachineImage",
+                                    "label": "VM Image",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": true,
+                                    "defaultValue": "Windows 11",
+                                    "toolTip": "Specify the SKU of the Virtual Machine.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": true,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Windows 11",
+                                                "description": "Windows 11 Enterprise 21H2",
+                                                "value": "Windows11"
+                                            },
+                                            {
+                                                "label": "Windows Server 2022",
+                                                "description": "Windows Server 2022 Datacenter",
+                                                "value": "WindowsServer2022"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
                                 }
                             ]
                         }
@@ -487,6 +515,7 @@
                 "bastionSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').subnetConfiguration.bastionSubnetCidrRange), '', steps('connectivitySettings').subnetConfiguration.bastionSubnetCidrRange)]",
                 "jumpboxSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').subnetConfiguration.jumpboxSubnetAddressPrefix), '', steps('connectivitySettings').subnetConfiguration.jumpboxSubnetAddressPrefix)]",
                 "virtualMachineSku": "[if(empty(steps('generalSettings').virtualMachineSettings.virtualMachineSku), '', steps('generalSettings').virtualMachineSettings.virtualMachineSku)]",
+                "virtualMachineImage": "[if(empty(steps('generalSettings').virtualMachineSettings.virtualMachineImage), '', steps('generalSettings').virtualMachineSettings.virtualMachineImage)]",
                 "administratorUsername": "[if(empty(steps('generalSettings').virtualMachineSettings.administratorUsername), '', steps('generalSettings').virtualMachineSettings.administratorUsername)]",
                 "administratorPassword": "[if(empty(steps('generalSettings').virtualMachineSettings.administratorPassword.password), '', steps('generalSettings').virtualMachineSettings.administratorPassword.password)]"
             }

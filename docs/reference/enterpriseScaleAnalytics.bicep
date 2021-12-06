@@ -23,6 +23,8 @@ param dataManagementZonePrefix string
 param dataManagementZoneLocation string
 
 // Data Landing Zone Parameters
+@description('Specifies the administrator username of the Synapse workspace and the virtual machine scale sets.')
+param administratorUsername string = 'SuperMainUser'
 @description('Specifies the administrator password of the Synapse workspace and the virtual machine scale sets.')
 param administratorPassword string
 @description('Specifies the details of each Data Landing Zone in an array of objects.')
@@ -31,6 +33,12 @@ param dataLandingZoneDetails array
 param dataLandingZonePrefix string
 @description('Specifies whether Azure Bastion will be deployed in the first Data Landing Zone.')
 param enableBastionHostDeployment bool
+@allowed([
+  'Windows11'
+  'WindowsServer2022'
+])
+@description('Specifies the image of the virtual machine jumpbox that gets created for Azure Bastion.')
+param virtualMachineImage string = 'Windows11'
 
 // Variables
 var dataManagementZoneTemplateLink = 'https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/main.json'
@@ -99,6 +107,9 @@ resource dataManagementZoneDeployment 'Microsoft.Resources/deployments@2021-04-0
         value: ''
       }
       privateDnsZoneIdPurview: {
+        value: ''
+      }
+      privateDnsZoneIdPurviewPortal: {
         value: ''
       }
       privateDnsZoneIdQueue: {
@@ -193,9 +204,6 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       purviewSelfHostedIntegrationRuntimeAuthKey: {
         value: ''
       }
-      portalDeployment: {
-        value: true
-      }
       deploySelfHostedIntegrationRuntimes: {
         value: true
       }
@@ -238,11 +246,18 @@ module bastionHostDeployment 'bastionhost/main.bicep' = if (enableBastionHostDep
   scope: subscription(dataLandingZoneDetails[0].subscription)
   params: {
     location: dataLandingZoneDetails[0].location
+    environment: environment
     prefix: '${dataLandingZonePrefix}${padLeft(1, 3, '0')}'
+    tags: tags
+    administratorUsername: administratorUsername
     administratorPassword: administratorPassword
     vnetId: reference(dataLandingZoneDeployment[0].name).outputs.vnetId.value
     defaultNsgId: reference(dataLandingZoneDeployment[0].name).outputs.nsgId.value
     defaultRouteTableId: reference(dataLandingZoneDeployment[0].name).outputs.routeTableId.value
+    bastionSubnetAddressPrefix: '10.1.10.0/24'
+    jumpboxSubnetAddressPrefix: '10.1.11.0/24'
+    virtualMachineSku: 'Standard_DS2_v2'
+    virtualMachineImage: virtualMachineImage
   }
 }
 
