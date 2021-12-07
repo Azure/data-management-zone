@@ -1,6 +1,6 @@
 # Data Management Zone - Prerequisites
 
-This template repsitory contains all templates to deploy the Data Management Zone of the Data Management & Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
+This template repository contains all templates to deploy the Data Management Zone of the Data Management & Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
 
 ## What will be deployed?
 
@@ -88,4 +88,4 @@ To use the Deploy to Azure Button, please click on the button below:
 
 Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Management Zone through GitHub Actions or Azure DevOps.
 
->[Next](/docs/EnterpriseScaleAnalytics-CreateRepository.md)
+>[Next](/docs/DataManagementAnalytics-CreateRepository.md)

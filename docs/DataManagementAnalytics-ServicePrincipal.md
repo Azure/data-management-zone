@@ -92,6 +92,6 @@ New-AzRoleAssignment `
   -ResourceGroupName "{resourceGroupName}
 ```
 
->[Previous](/docs/EnterpriseScaleAnalytics-CreateRepository.md)
->[Next (Option (a) GitHub Actions)](/docs/EnterpriseScaleAnalytics-GitHubActionsDeployment.md)
->[Next (Option (b) Azure DevOps)](/docs/EnterpriseScaleAnalytics-AzureDevOpsDeployment.md)
+>[Previous](/docs/DataManagementAnalytics-CreateRepository.md)
+>[Next (Option (a) GitHub Actions)](/docs/DataManagementAnalytics-GitHubActionsDeployment.md)
+>[Next (Option (b) Azure DevOps)](/docs/DataManagementAnalytics-AzureDevOpsDeployment.md)

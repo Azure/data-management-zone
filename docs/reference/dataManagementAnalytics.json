@@ -414,8 +414,8 @@
           "variables": {
             "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
             "tagsDefault": {
-              "Owner": "Enterprise Scale Analytics",
-              "Project": "Enterprise Scale Analytics",
+              "Owner": "Data Management and Analytics",
+              "Project": "Data Management and Analytics",
               "Environment": "[parameters('environment')]",
               "Toolkit": "bicep",
               "Name": "[variables('name')]"
