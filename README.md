@@ -11,7 +11,7 @@ The Data Management & Analytics architecture consists of two core building block
 
 The architecture is modular by design and allows organizations to start small with a single Data Management Zone and Data Landing Zone, but also allows to scale to a multi-subscription data platform environment by adding more Data Landing Zones to the architecture. Thereby, the reference design allows to implement different modern data platform patterns like data-mesh, data-fabric as well as traditional datalake architectures. Data Management & Analytics has been very well aligned with the data-mesh approach, and is ideally suited to help organizations build data products and share these across business units of an organization. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
 
-![Data Management & Analytics](/docs/images/EnterpriseScaleAnalytics.gif)
+![Data Management & Analytics](/docs/images/DataManagementAnalytics.gif)
 
 ---
 
