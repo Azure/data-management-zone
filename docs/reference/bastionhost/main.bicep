@@ -36,11 +36,11 @@ param jumpboxSubnetAddressPrefix string = '10.1.11.0/24'
 @description('Specifies the SKU of the virtual machine that gets created.')
 param virtualMachineSku string = 'Standard_DS2_v2'
 @allowed([
-  'Windows10'
+  'Windows11'
   'WindowsServer2022'
 ])
 @description('Specifies the image of the virtual machine that gets created.')
-param virtualMachineImage string = 'Windows10'
+param virtualMachineImage string = 'Windows11'
 @description('Specifies the administrator username of the virtual machine.')
 param administratorUsername string = 'VmMainUser'
 @secure()

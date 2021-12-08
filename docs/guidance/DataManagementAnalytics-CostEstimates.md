@@ -6,14 +6,13 @@ This document will provide users an overview of what monthly cost can be expecte
 
 In a production scenario, it is recommended to rely on the Azure Firewall and Private DNS Zones hosted in the connectivity Hub of [Enterprise-Scale Landing Zones](https://github.com/Azure/Enterprise-Scale). In MVPs, users may rely on the Azure Firewall and Private DNS Zones bundled with Data Management & Analytics. Hence, two different cost calclations are provided which can be found below:
 
-- [Pricing Calculator - Data Management Zone w/o Azure Firewall and Private DNS Zones](https://azure.com/e/ebb7508a6d78487b9a1583878d0948cc)
-- [Pricing Calculator - Data Management Zone w/ Azure Firewall and Private DNS Zones](https://azure.com/e/658478643d4b46fdbf8b1972c4b0704b)
+- [Pricing Calculator - Data Management Zone w/o Azure Firewall and Private DNS Zones](https://azure.com/e/070df56959aa4ee89d42e60a1dc3c77b)
+- [Pricing Calculator - Data Management Zone w/ Azure Firewall and Private DNS Zones](https://azure.com/e/3ebdcf80bc9b4d7bb385e555c027c9de)
 
 Please keep in mind that the following services are not listed in the overview, because they are either not available in the official Pricing Calculator or the Pricing Calculator does not allow to set the compute hours to 0:
 
 | Service Name             | Additional Cost |
 |:------------------------:|:---------------:|
-| Azure Purview            | ~$300.03/month  |
 | Synapse Private Link Hub |   ~$7.50/month  |
 | Route Table              |    $0.00/month  |
 | Network Security Group   |    $0.00/month  |
