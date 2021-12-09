@@ -112,7 +112,7 @@ For the second scenario, a rogue admin requires the following rights in the cust
 
 With these rights, a rogue admin has the possibility to create a private endpoint in an external Azure AD tenant and subscription that is linked to a service in the customer’s Azure AD tenant. The scenario is illustrated in Figure 1 (represented as connection B).
 
-On this scenario, the rogue admin needs to first setup an external private Azure AD tenant and Azure subscription. As a next step, a private endpoint needs to be created in the environment of the rogue admin, by manually specifying the resource ID and group id of the service in the corporate Azure AD tenant. Finally, the rogue admin needs to approve the private endpoint on the linked service to allow traffic over the connection across Azure AD tenants.
+On this scenario, the rogue admin needs to first setup an external private Azure AD tenant and Azure subscription. As a next step, a private endpoint needs to be created in the environment of the rogue admin, by manually specifying the resource ID and group ID of the service in the corporate Azure AD tenant. Finally, the rogue admin needs to approve the private endpoint on the linked service to allow traffic over the connection across Azure AD tenants.
 
 Once the private endpoint is approved by the rogue admin or service owner, data can be accessed from the external virtual network.
 
