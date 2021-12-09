@@ -61,7 +61,7 @@ Data Management & Analytics contains custom policies pertaining to **resource an
 |Deny-Storage-NetworkAclsIpRules|Network Isolation|Enforces network ip rules for storage account.|
 |Deny-Storage-NetworkAclsVirtualNetworkRules|Network Isolation|Denies virtual network rules for storage account.|
 |Deny-Storage-Sku|Resource Management|Enforces storage account SKUs.|
-|Deny-Storage-SupportsHttpsTrafficOnly|Encryption|Enforces https traffic for storage account.|
+|Deny-Storage-SupportsHttpsTrafficOnly|Encryption|Enforces HTTPS traffic for storage account.|
 |Deploy-Storage-BlobServices|Resource Management|Deploy blob services default settings for storage account.|
 |Deny-Storage-RoutingPreference|Network Isolation||
 |Deny-Storage-Kind|Resource Management||
@@ -153,10 +153,10 @@ Additional policies that are applied in the Databricks workspace through cluster
 
 |Policy Name  |Policy Area  |Description  |
 |---------|---------|---------|
-|Append-IotHub-MinimalTlsVersion|Encryption|Enforces minimal tls version for iot hub.|
-|Audit-IotHub-PrivateEndpointId|Network Isolation|Audit public endpoints that are created in other subscriptions for iot hubs.|
-|Deny-IotHub-PublicNetworkAccess|Network Isolation|Denies public network access for iot hub.|
-|Deny-IotHub-Sku|Resource Management|Enforces iot hub SKUs.|
+|Append-IotHub-MinimalTlsVersion|Encryption|Enforces minimal tls version for IoT hub.|
+|Audit-IotHub-PrivateEndpointId|Network Isolation|Audit public endpoints that are created in other subscriptions for IoT hubs.|
+|Deny-IotHub-PublicNetworkAccess|Network Isolation|Denies public network access for IoT hub.|
+|Deny-IotHub-Sku|Resource Management|Enforces IoT hub SKUs.|
 |Deploy-IotHub-IoTSecuritySolutions|Security|Deploy Azure defender for IoT for IoT Hubs.|
 
 ## Azure Event Hubs
