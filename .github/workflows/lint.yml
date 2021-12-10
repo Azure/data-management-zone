@@ -30,3 +30,14 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_JSON: false
           FILTER_REGEX_EXCLUDE: (/.devcontainer/|/reference/)
+      
+      # Check Links
+      - name: Check Links
+        id: check_links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: "yes"
+          use-verbose-mode: "yes"
+          folder-path: "."
+          max-depth: -1
+          base-branch: "main"
