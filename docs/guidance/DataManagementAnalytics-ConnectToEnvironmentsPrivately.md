@@ -1,6 +1,6 @@
 # Connecting to Environments Privately
 
-The Enterprise-Scale reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
+The Data Management & Analytics Scenario reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
 
 Network features like private endpoints and disabled public network access greatly reduce the attack surface of a data platform of an organization. However, with these features enabled, additional steps need to be taken to successfully connect to the respective services like Storage Accounts, Synapse workspaces, Purview or Azure Machine Learning from the public internet. Therefore, this document will describe the most common options for connecting to services inside the Data Management Zone or Data Landing Zone in a simple and secure way.
 
@@ -26,7 +26,7 @@ More details about Azure bAstion can be found [here](https://docs.microsoft.com/
 
 ### Deployment
 
-To simplify the setup for Enterprise-Scale Aalytics users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
+To simplify the setup for Data Management & Analytics Scenario users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
 
 ![Azure Bastion Architecture](/docs/images/AzureBastionArchitecture.png)
 
@@ -66,7 +66,7 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
     ![Connect to New SQL Script](/docs/images/new-sql-script.png)
 
-Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
+Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/DataManagementAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
 
 ## Point to Site (P2S) Connection
 

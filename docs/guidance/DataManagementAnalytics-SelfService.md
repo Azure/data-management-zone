@@ -1,4 +1,4 @@
-# Scaling and Self-Service in Enterprise-Scale Anayltics
+# Scaling and Self-Service in Data Management & Analytics Scenario
 
 Efficient scaling within an enterprise data platform is a much-desired goal of many organizations and as business units should be enabled to build their own (data) solutions and applications that fulfill their requirements. However, achieving this goal is a challenge as many existing data platforms are not built around the core concepts of scalability and decentralized ownership. This is not only true from an architectural standpoint but also becomes clear when looking at the teams structure and ops model which underpin these data platforms.
 
@@ -45,7 +45,7 @@ The following factors should be considered when deciding about how many Data Lan
 
 Considering all these factors, an enterprise should target no more than 15 Data Landing Zones as there is also some management overhead attached to each Data Landing Zone.
 
-It is important to emphasize that Data Landing Zones are not creating data silos within an organization, as the recommended network setup in ESA enables secure and in-place data sharing across Landing Zones and therefore enables innovation across data domains and business units. Please read the [network design guidance](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md) to find out more about how this is achieved. The same is true for the identity layer. Since a single Azure AD tenant is recommended to be used, identities can be granted access to data assets within multiple Data Landing Zones. For the actual authorization process of users and identities to data assets it is recommended to leverage Azure Active Directory Entitlement Management and Access Packages.
+It is important to emphasize that Data Landing Zones are not creating data silos within an organization, as the recommended network setup in ESA enables secure and in-place data sharing across Landing Zones and therefore enables innovation across data domains and business units. Please read the [network design guidance](/docs/guidance/DataManagementAnalytics-NetworkArchitecture.md) to find out more about how this is achieved. The same is true for the identity layer. Since a single Azure AD tenant is recommended to be used, identities can be granted access to data assets within multiple Data Landing Zones. For the actual authorization process of users and identities to data assets it is recommended to leverage Azure Active Directory Entitlement Management and Access Packages.
 
 Lastly, it needs to be highlighted that the prescriptive ESA architecture and the concept of Data Landing Zones allows corporations to naturally increase the size of their data platform over time. Additional Data Landing Zones can be added in a phased approach and customers are not forced to start with a multi-Data Landing Zone setup right from the start. When adopting the pattern, companies should start prioritizing few Data Landing Zones as well as Data Products that should land inside them respectively, to make sure that the adoption of ESA is successful.
 
@@ -80,7 +80,7 @@ However, as an organization scales beyond a handful of Data Products and project
 
 Azure Policy should be the core instrument of the Azure (Data) Platform team to ensure compliance of resources within the Data Management Zone, Data Landing Zones as well as other landing zones within the organization's tenant. This platform feature should be used to introduce guardrails and enforce adherence to the overall approved service configuration within the respective management group scope. The platform teams can use Azure Policy to, for example, enforce private endpoints for any storage accounts that are being hosted within the data platform environment or enforce TLS 1.2 encryption in transit for any connections being made to the storage accounts. When done right, this will prohibit any Data Product teams from hosting services in an incompliant state within the respective tenant scope.
 
-The responsible IT teams should use this platform feature to address their security and compliance concerns and open up for a self-service approach within (Data) Landing Zones. [Please follow this link](/docs/guidance/EnterpriseScaleAnalytics-Policies.md) to read more about the Azure policies that are recommended for the ESA data platform environment.
+The responsible IT teams should use this platform feature to address their security and compliance concerns and open up for a self-service approach within (Data) Landing Zones. [Please follow this link](/docs/guidance/DataManagementAnalytics-Policies.md) to read more about the Azure policies that are recommended for the ESA data platform environment.
 
 ### Azure RBAC assignments
 
