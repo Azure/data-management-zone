@@ -30,12 +30,3 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_JSON: false
           FILTER_REGEX_EXCLUDE: (/.devcontainer/|/reference/)
-      
-      # Check Links
-      - name: Link Checker
-        id: check_links
-        uses: lycheeverse/lychee-action@v1.2.0
-        with:
-          fail: true
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
