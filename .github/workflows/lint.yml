@@ -32,12 +32,10 @@ jobs:
           FILTER_REGEX_EXCLUDE: (/.devcontainer/|/reference/)
       
       # Check Links
-      - name: Check Links
+      - name: Link Checker
         id: check_links
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        uses: lycheeverse/lychee-action@v1.2.0
         with:
-          use-quiet-mode: "yes"
-          use-verbose-mode: "yes"
-          folder-path: "."
-          max-depth: -1
-          base-branch: "main"
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
