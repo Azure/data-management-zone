@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "12110763976061491219"
+      "templateHash": "13247179156562340716"
     }
   },
   "parameters": {
@@ -1158,9 +1158,7 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('dataLandingZoneDeployment-{0}-{1}', 0, deployment().location))]",
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('dataLandingZoneDeployment-{0}-{1}', 0, deployment().location))]",
-        "[subscriptionResourceId('Microsoft.Resources/deployments', format('dataLandingZoneDeployment-{0}-{1}', 0, deployment().location))]"
+        "dataLandingZoneDeployment"
       ]
     },
     {
