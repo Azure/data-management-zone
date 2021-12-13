@@ -1,38 +1,39 @@
-# Azure Policies for Enterprise-Scale Analytics and AI
+# Azure Policies for Data Management & Analytics Scenario
 
-[Implementing custom policies](/azure/governance/policy/tutorials/create-and-manage) allows you to do more with Azure Policy. Enterprise-Scale Analytics and AI comes with a set of pre-created policies to help you implement the required guard rails in your environment.
+[Implementing custom policies](/azure/governance/policy/tutorials/create-and-manage) allows you to do more with Azure Policy. The Data Management & Analytics Scenario comes with a set of pre-created policies to help you implement the required guard rails in your environment.
 
-Enterprise-Scale Analytics and AI contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
+Data Management & Analytics contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
 
-- [All Services](#all-services)
-- [Storage](#storage)
-- [Key Vault](#key-vault)
-- [Azure Data Factory](#azure-data-factory)
-- [Azure Synapse Analytics](#azure-synapse-analytics)
-- [Azure Purview](#azure-purview)
-- [Azure Databricks](#azure-databricks)
-- [Azure IoT Hub](#azure-iot-hub)
-- [Azure Event Hubs](#azure-event-hubs)
-- [Azure Stream Analytics](#azure-stream-analytics)
-- [Azure Data Explorer](#azure-data-explorer)
-- [Azure Cosmos DB](#azure-cosmos-db)
-- [Azure Container Registry](#azure-container-registry)
-- [Azure Cognitive Services](#azure-cognitive-services)
-- [Azure Machine Learning](#azure-machine-learning)
-- [Azure SQL Managed Instance](#azure-sql-managed-instance)
-- [Azure SQL](#azure-sql)
-- [Azure Database for MariaDB](#azure-database-for-mariadb)
-- [Azure Database for MySQL](#azure-database-for-mysql)
-- [Azure Database for PostgreSQL](#azure-database-for-postgresql)
-- [Azure Cognitive Search](#azure-cognitive-search)
-- [Azure DNS](#azure-dns)
-- [Network Security Group](#network-security-group)
-- [Batch](#batch)
-- [Azure Cache for Redis](#azure-cache-for-redis)
-- [Container Instances](#container-instances)
-- [Azure Firewall](#azure-firewall)
-- [HDInsight](#hdinsight)
-- [Power BI](#power-bi)
+- [Azure Policies for Data Management & Analytics Scenario](#azure-policies-for-data-management--analytics-scenario)
+  - [All Services](#all-services)
+  - [Storage](#storage)
+  - [Key Vault](#key-vault)
+  - [Azure Data Factory](#azure-data-factory)
+  - [Azure Synapse Analytics](#azure-synapse-analytics)
+  - [Azure Purview](#azure-purview)
+  - [Azure Databricks](#azure-databricks)
+  - [Azure IoT Hub](#azure-iot-hub)
+  - [Azure Event Hubs](#azure-event-hubs)
+  - [Azure Stream Analytics](#azure-stream-analytics)
+  - [Azure Data Explorer](#azure-data-explorer)
+  - [Azure Cosmos DB](#azure-cosmos-db)
+  - [Azure Container Registry](#azure-container-registry)
+  - [Azure Cognitive Services](#azure-cognitive-services)
+  - [Azure Machine Learning](#azure-machine-learning)
+  - [Azure SQL Managed Instance](#azure-sql-managed-instance)
+  - [Azure SQL](#azure-sql)
+  - [Azure Database for MariaDB](#azure-database-for-mariadb)
+  - [Azure Database for MySQL](#azure-database-for-mysql)
+  - [Azure Database for PostgreSQL](#azure-database-for-postgresql)
+  - [Azure Cognitive Search](#azure-cognitive-search)
+  - [Azure DNS](#azure-dns)
+  - [Network Security Group](#network-security-group)
+  - [Batch](#batch)
+  - [Azure Cache for Redis](#azure-cache-for-redis)
+  - [Container Instances](#container-instances)
+  - [Azure Firewall](#azure-firewall)
+  - [HDInsight](#hdinsight)
+  - [Power BI](#power-bi)
 
 > [!NOTE]
 > The policies provided below are not applied by default during deployment. They should be viewed as guidance-only and can be applied depending on business requirements. Policies should always be applied to the highest level possible and in most cases this will be a [management group](/azure/governance/management-groups/overview). All the policies are available in our GitHub repository.
@@ -60,7 +61,7 @@ Enterprise-Scale Analytics and AI contains custom policies pertaining to **resou
 |Deny-Storage-NetworkAclsIpRules|Network Isolation|Enforces network ip rules for storage account.|
 |Deny-Storage-NetworkAclsVirtualNetworkRules|Network Isolation|Denies virtual network rules for storage account.|
 |Deny-Storage-Sku|Resource Management|Enforces storage account SKUs.|
-|Deny-Storage-SupportsHttpsTrafficOnly|Encryption|Enforces https traffic for storage account.|
+|Deny-Storage-SupportsHttpsTrafficOnly|Encryption|Enforces HTTPS traffic for storage account.|
 |Deploy-Storage-BlobServices|Resource Management|Deploy blob services default settings for storage account.|
 |Deny-Storage-RoutingPreference|Network Isolation||
 |Deny-Storage-Kind|Resource Management||
@@ -152,10 +153,10 @@ Additional policies that are applied in the Databricks workspace through cluster
 
 |Policy Name  |Policy Area  |Description  |
 |---------|---------|---------|
-|Append-IotHub-MinimalTlsVersion|Encryption|Enforces minimal tls version for iot hub.|
-|Audit-IotHub-PrivateEndpointId|Network Isolation|Audit public endpoints that are created in other subscriptions for iot hubs.|
-|Deny-IotHub-PublicNetworkAccess|Network Isolation|Denies public network access for iot hub.|
-|Deny-IotHub-Sku|Resource Management|Enforces iot hub SKUs.|
+|Append-IotHub-MinimalTlsVersion|Encryption|Enforces minimal tls version for IoT hub.|
+|Audit-IotHub-PrivateEndpointId|Network Isolation|Audit public endpoints that are created in other subscriptions for IoT hubs.|
+|Deny-IotHub-PublicNetworkAccess|Network Isolation|Denies public network access for IoT hub.|
+|Deny-IotHub-Sku|Resource Management|Enforces IoT hub SKUs.|
 |Deploy-IotHub-IoTSecuritySolutions|Security|Deploy Azure defender for IoT for IoT Hubs.|
 
 ## Azure Event Hubs

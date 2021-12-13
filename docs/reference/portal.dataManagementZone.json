@@ -3,18 +3,18 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Enterprise-Scale Analytics - Data Management Zone",
+            "title": "Data Management & Analytics Scenario - Data Management Zone",
             "steps": [
                 {
                     "name": "basics",
                     "label": "Data Management Zone",
                     "elements": [
                         {
-                            "name": "infoBoxEnterpriseScaleAnalytics",
+                            "name": "infoBoxDataManagementAnalytics",
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "text": "Data Management & Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
                                 "style": "Info",
                                 "uri": "https://aka.ms/adopt/datamanagement"
                             }
@@ -101,7 +101,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, this deployment is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
@@ -421,7 +421,7 @@
                                     "type": "Microsoft.Common.TextBlock",
                                     "visible": true,
                                     "options": {
-                                        "text": "Specify whether the deployment takes place in an existing Enterprise-Scale Landing Zone environment. If so, it is recommended to make use of the existing network infrastructure in your connectivity hub in your tenant.",
+                                        "text": "Specify whether the deployment takes place in an existing Azure Landing Zone (former Enterprise-Scale Landing Zone) environment. If so, it is recommended to make use of the existing network infrastructure in your connectivity hub in your tenant.",
                                         "link": {
                                             "label": "Learn more",
                                             "uri": "https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/enterprise-scale/architecture#high-level-architecture"
@@ -430,7 +430,7 @@
                                 },
                                 {
                                     "name": "disableDnsAndFirewallDeployment",
-                                    "label": "Deploy into Enterprise-Scale Landing Zone environment",
+                                    "label": "Deploy into Azure Landing Zone (former Enterprise-Scale Landing Zone) environment",
                                     "type": "Microsoft.Common.OptionsGroup",
                                     "visible": true,
                                     "toolTip": "If 'Yes' is selected, you can configure the deployment to make use of the networking infrastructure in your ESLZ Connectivity Hub.",
@@ -879,7 +879,7 @@
                             "type": "Microsoft.Common.TagsByResource",
                             "visible": true,
                             "resources": [
-                                "EnterpriseScaleAnalytics"
+                                "DataManagementAnalytics"
                             ]
                         }
                     ]
@@ -894,7 +894,7 @@
                 "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
                 "environment": "[if(empty(steps('basics').dataManagementZoneName.environment), '', steps('basics').dataManagementZoneName.environment)]",
                 "prefix": "[if(empty(steps('basics').dataManagementZoneName.dataManagementZonePrefix), '', steps('basics').dataManagementZoneName.dataManagementZonePrefix)]",
-                "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]",
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'DataManagementAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.DataManagementAnalytics)))]",
                 "purviewRootCollectionAdminObjectIds": "[if(empty(steps('generalSettings').purviewSettings.purviewRootCollectionAdminObjectIds), parse('[]'), split(replace(steps('generalSettings').purviewSettings.purviewRootCollectionAdminObjectIds, ' ', ''), ','))]",
                 "vnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange)]",
                 "azureFirewallSubnetAddressPrefix": "[if(empty(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange), '', steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange)]",
