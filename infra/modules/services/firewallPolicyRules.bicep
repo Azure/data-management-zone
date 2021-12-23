@@ -441,7 +441,7 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
             ]
             destinationAddresses: []
             sourceIpGroups: []
-            description: 'Allows interactive authoring with Self-hosted Integration Runtime'
+            description: 'Allows interactive authoring and logging with Self-hosted Integration Runtime and Azure SSIS'
           }
           {
             name: 'DataFactory-ApplicationRule-003'
