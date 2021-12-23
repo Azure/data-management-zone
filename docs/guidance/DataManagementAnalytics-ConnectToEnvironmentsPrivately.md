@@ -80,7 +80,7 @@ If you are deploying your solution into a corporate tenant, you might bump into 
     2. Close inbound ports;
     3. Make sure to place the VM inside the newly created Vnet;
 5. Create a new Route Table in your own Azure subscription, with the following setup:
-    1. In Settings > Routes add a default route to firewall with: Address prefix: 0.0.0.0/0, Next hop type: Virtual Appliance, Next hop address: 10.0.0.4 (the IP address that is associated with the Firewall in the Data Management Zone in your shared Azure subscription).
+    1. In Settings > Routes add a route with name `default-route-to-firewall` with: Address prefix: 0.0.0.0/0, Next hop type: Virtual Appliance, Next hop address: internal IP of your Firewall (10.0.0.4 is the default internal IP of the Azure Firewall in the Data Management Zone. Please check the Route Table in your Data Landing Zone and apply the same settings).
     2. In Settings > Subnets associate the subnet where your VM is located.
 6. Login to the VM via Azure Bastion with your own admin username and password;
 7. On the VM, complete the following actions:
