@@ -10,7 +10,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this report! Before submitting, please make sure to [search through existing issues](https://github.com/Azure/data-management-zone/issues) and [check the Known Issues section](/docs/DataManagementAnalytics-KnownIssues.md).
+        Thanks for taking the time to fill out this report! Before submitting, please make sure to [search through existing issues](https://github.com/Azure/data-management-zone/issues) and [check the Known Issues section](https://github.com/Azure/data-management-zone/blob/main/docs/DataManagementAnalytics-KnownIssues.md).
 
   - type: textarea
     id: feature_description
@@ -34,7 +34,7 @@ body:
       label: Code of Conduct
       description: The Code of Conduct helps create a safe space for everyone. We require that everyone must abide by it.
       options:
-        - label: I agree to follow this project's [Code of Conduct](/CODE_OF_CONDUCT.md)
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/Azure/data-management-zone/blob/main/CODE_OF_CONDUCT.md)
           required: true
 
   - type: markdown
