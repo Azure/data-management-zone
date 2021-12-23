@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1008.15138",
-      "templateHash": "13247179156562340716"
+      "version": "0.4.1124.51302",
+      "templateHash": "9190298469141626975"
     }
   },
   "parameters": {
@@ -88,7 +88,6 @@
       ]
     }
   },
-  "functions": [],
   "variables": {
     "dataManagementZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-management-zone/main/infra/main.json",
     "dataLandingZoneTemplateLink": "https://raw.githubusercontent.com/Azure/data-landing-zone/main/infra/main.json"
@@ -144,6 +143,9 @@
           },
           "firewallPolicyId": {
             "value": ""
+          },
+          "firewallTier": {
+            "value": "Premium"
           },
           "privateDnsZoneIdBlob": {
             "value": ""
@@ -302,7 +304,7 @@
     {
       "condition": "[parameters('enableBastionHostDeployment')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
+      "apiVersion": "2020-10-01",
       "name": "[format('bastionHostDeployment-{0}', deployment().location)]",
       "subscriptionId": "[parameters('dataLandingZoneDetails')[0].subscription]",
       "location": "[deployment().location]",
@@ -358,8 +360,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "12653787604786881755"
+              "version": "0.4.1124.51302",
+              "templateHash": "5067044301937855137"
             }
           },
           "parameters": {
@@ -460,7 +462,6 @@
               }
             }
           },
-          "functions": [],
           "variables": {
             "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
             "tagsDefault": {
@@ -486,7 +487,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-10-01",
               "name": "networkServices",
               "subscriptionId": "[variables('vnetSubscriptionId')]",
               "resourceGroup": "[variables('vnetResourceGroupName')]",
@@ -527,8 +528,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1008.15138",
-                      "templateHash": "10187757659530357192"
+                      "version": "0.4.1124.51302",
+                      "templateHash": "8836199328749372338"
                     }
                   },
                   "parameters": {
@@ -559,7 +560,6 @@
                       "type": "string"
                     }
                   },
-                  "functions": [],
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
@@ -786,7 +786,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-10-01",
               "name": "bastionServices",
               "resourceGroup": "[format('{0}-bastion', variables('name'))]",
               "properties": {
@@ -811,10 +811,10 @@
                     "value": "[parameters('virtualMachineImage')]"
                   },
                   "bastionSubnetId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.bastionSubnetId.value]"
+                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-10-01').outputs.bastionSubnetId.value]"
                   },
                   "jumpboxSubnetId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-06-01').outputs.jumpboxSubnetId.value]"
+                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('vnetSubscriptionId'), variables('vnetResourceGroupName')), 'Microsoft.Resources/deployments', 'networkServices'), '2020-10-01').outputs.jumpboxSubnetId.value]"
                   },
                   "administratorUsername": {
                     "value": "[parameters('administratorUsername')]"
@@ -829,8 +829,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1008.15138",
-                      "templateHash": "2672844143716454115"
+                      "version": "0.4.1124.51302",
+                      "templateHash": "5443161126409397717"
                     }
                   },
                   "parameters": {
@@ -869,7 +869,6 @@
                       "type": "secureString"
                     }
                   },
-                  "functions": [],
                   "variables": {
                     "bastion001Name": "[format('{0}-bastion001', parameters('prefix'))]",
                     "virtualMachine001Name": "[format('{0}-vm001', parameters('prefix'))]"
@@ -877,7 +876,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2020-10-01",
                       "name": "bastion001",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -904,8 +903,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.1008.15138",
-                              "templateHash": "9194233898920649047"
+                              "version": "0.4.1124.51302",
+                              "templateHash": "5304528866008257447"
                             }
                           },
                           "parameters": {
@@ -922,7 +921,6 @@
                               "type": "string"
                             }
                           },
-                          "functions": [],
                           "variables": {
                             "publicIpName": "[format('{0}-pip', parameters('bastionName'))]"
                           },
@@ -978,7 +976,7 @@
                     },
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2020-10-01",
                       "name": "virtualMachine001",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -1017,8 +1015,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.4.1008.15138",
-                              "templateHash": "8684162141135901545"
+                              "version": "0.4.1124.51302",
+                              "templateHash": "7161877090365327851"
                             }
                           },
                           "parameters": {
@@ -1054,7 +1052,6 @@
                               "type": "string"
                             }
                           },
-                          "functions": [],
                           "variables": {
                             "nicName": "[format('{0}-nic', parameters('virtualmachineName'))]",
                             "diskName": "[format('{0}-disk', parameters('virtualmachineName'))]",
@@ -1167,7 +1164,7 @@
         "count": "[length(range(0, length(parameters('dataLandingZoneDetails'))))]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
+      "apiVersion": "2020-10-01",
       "name": "[format('vnetPeeringDeployment-{0}-{1}', range(0, length(parameters('dataLandingZoneDetails')))[copyIndex()], deployment().location)]",
       "location": "[deployment().location]",
       "properties": {
@@ -1195,8 +1192,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "1258334118365795592"
+              "version": "0.4.1124.51302",
+              "templateHash": "13977441074455205991"
             }
           },
           "parameters": {
@@ -1207,7 +1204,6 @@
               "type": "array"
             }
           },
-          "functions": [],
           "variables": {
             "sourceVnetSubscriptionId": "[split(parameters('sourceVnetId'), '/')[2]]",
             "sourceVnetResourceGroupName": "[split(parameters('sourceVnetId'), '/')[4]]"
@@ -1219,7 +1215,7 @@
                 "count": "[length(parameters('destinationVnetIds'))]"
               },
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-10-01",
               "name": "[format('vnetPeering{0}', copyIndex())]",
               "subscriptionId": "[variables('sourceVnetSubscriptionId')]",
               "resourceGroup": "[variables('sourceVnetResourceGroupName')]",
@@ -1242,8 +1238,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1008.15138",
-                      "templateHash": "10472092457843784458"
+                      "version": "0.4.1124.51302",
+                      "templateHash": "9720784943349899862"
                     }
                   },
                   "parameters": {
@@ -1254,7 +1250,6 @@
                       "type": "string"
                     }
                   },
-                  "functions": [],
                   "variables": {
                     "sourceVnetName": "[if(greaterOrEquals(length(split(parameters('sourceVnetId'), '/')), 9), last(split(parameters('sourceVnetId'), '/')), 'incorrectSegmentLength')]",
                     "destinationVnetName": "[if(greaterOrEquals(length(split(parameters('destinationVnetId'), '/')), 9), last(split(parameters('destinationVnetId'), '/')), 'incorrectSegmentLength')]"
