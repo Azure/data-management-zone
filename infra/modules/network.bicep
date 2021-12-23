@@ -17,6 +17,11 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 param enableDnsAndFirewallDeployment bool = true
+@allowed([
+  'Standard'
+  'Premium'
+])
+param firewallTier string = 'Premium'
 param firewallPolicyId string = ''
 
 // Variables
@@ -163,7 +168,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(ena
       ipAddresses: []
     }
     sku: {
-      tier: 'Premium'
+      tier: firewallTier
     }
     dnsSettings: {
       enableProxy: true
@@ -206,7 +211,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
   properties: {
     sku: {
       name: 'AZFW_VNet'
-      tier: 'Premium'
+      tier: firewallTier
     }
     ipConfigurations: [
       {

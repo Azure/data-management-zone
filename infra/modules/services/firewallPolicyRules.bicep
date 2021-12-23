@@ -369,6 +369,7 @@ resource applicationRules 'Microsoft.Network/firewallPolicies/ruleCollectionGrou
             ]
             fqdnTags: []
             targetFqdns: [
+              #disable-next-line no-hardcoded-env-urls
               'login.microsoftonline.com'
               'login.windows.net'
             ]

@@ -39,6 +39,12 @@ param firewallPrivateIp string = '10.0.0.4'
 param dnsServerAdresses array = [
   '10.0.0.4'
 ]
+@allowed([
+  'Standard'
+  'Premium'
+])
+@description('Specifies the tier of the Azure Firewall.  Optional if `enableDnsAndFirewallDeployment` is set to `false`.')
+param firewallTier string = 'Premium'
 @description('Specifies the resource ID of the Azure Firewall Policy. Optional parameter allows you to deploy Firewall rules to an existing Firewall Policy if `enableDnsAndFirewallDeployment` is set to `false`.')
 param firewallPolicyId string = ''
 
@@ -92,6 +98,7 @@ module networkServices 'modules/network.bicep' = {
     dnsServerAdresses: dnsServerAdresses
     enableDnsAndFirewallDeployment: enableDnsAndFirewallDeployment
     firewallPrivateIp: firewallPrivateIp
+    firewallTier: firewallTier
     firewallPolicyId: firewallPolicyId
   }
 }

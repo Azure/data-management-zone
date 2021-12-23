@@ -47,6 +47,7 @@ resource purview 'Microsoft.Purview/accounts@2021-07-01' = {
   }
   properties: {
     cloudConnectors: {}
+    #disable-next-line BCP073
     friendlyName: purviewName
     managedResourceGroupName: purviewName
     publicNetworkAccess: 'Disabled'
