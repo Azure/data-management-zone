@@ -7,7 +7,7 @@
 <!-- Please review the items on the PR checklist before submitting-->
 ## PR Checklist
 * [ ] Closes Issue #xxx
-* [ ] CLA signed. If not, go over [here](https://cla.opensource.microsoft.com/microsoft/Terminal) and sign the CLA
+* [ ] Code of Conduct signed. If not, go to [Code of Conduct](https://github.com/Azure/data-management-zone/blob/main/CODE_OF_CONDUCT.md).
 
 <!-- Describe how you validated the behavior. Add automated tests wherever possible, but list manual validation steps taken as well -->
 ## Validation Steps Performed
