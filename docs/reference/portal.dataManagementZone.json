@@ -449,6 +449,34 @@
                                     }
                                 },
                                 {
+                                    "name": "firewallTier",
+                                    "label": "Firewall Tier",
+                                    "type": "Microsoft.Common.DropDown",
+                                    "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no')]",
+                                    "defaultValue": "Premium (recommended)",
+                                    "toolTip": "Select the Firewall tier that is used inside your environment.",
+                                    "multiselect": false,
+                                    "selectAll": false,
+                                    "filter": false,
+                                    "filterPlaceholder": "Filter items ...",
+                                    "multiLine": true,
+                                    "constraints": {
+                                        "allowedValues": [
+                                            {
+                                                "label": "Standard",
+                                                "description": "Standard Azure Firewall",
+                                                "value": "Standard"
+                                            },
+                                            {
+                                                "label": "Premium (recommended)",
+                                                "description": "Premium Azure Firewall adds support for TLS inspection, IDPS, URL filtering and web categories.",
+                                                "value": "Premium"
+                                            }
+                                        ],
+                                        "required": true
+                                    }
+                                },
+                                {
                                     "name": "existingFirewallType",
                                     "label": "Existing Firewall",
                                     "type": "Microsoft.Common.DropDown",
@@ -903,6 +931,7 @@
                 "firewallPrivateIp": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), '', if(equals(steps('connectivitySettings').firewallConfiguration.existingFirewallType, 'azureFirewall'), first(map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress)), steps('connectivitySettings').firewallConfiguration.firewallPrivateIp))]",
                 "dnsServerAdresses": "[if(equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no'), parse('[]'), if(equals(steps('connectivitySettings').firewallConfiguration.existingDnsForwarderType, 'azureFirewall'), map(steps('connectivitySettings').firewallConfiguration.azureFirewallPrivateIpApi.properties.ipConfigurations, (item) => item.properties.privateIPAddress), split(replace(steps('connectivitySettings').firewallConfiguration.dnsServerAdresses, ' ', ''), ',')))]",
                 "firewallPolicyId": "[if(empty(steps('connectivitySettings').firewallConfiguration.firewallPolicyId), '', steps('connectivitySettings').firewallConfiguration.firewallPolicyId)]",
+                "firewallTier": "[if(empty(steps('connectivitySettings').firewallConfiguration.firewallTier), 'Premium', steps('connectivitySettings').firewallConfiguration.firewallTier)]",
                 "privateDnsZoneIdBlob": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdBlob)]",
                 "privateDnsZoneIdKeyVault": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdKeyVault)]",
                 "privateDnsZoneIdNamespace": "[if(empty(steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace), '', steps('connectivitySettings').privateDnsZones.privateDnsZoneIdNamespace)]",
