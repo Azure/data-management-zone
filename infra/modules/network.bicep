@@ -180,9 +180,6 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(ena
 module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy-rules'
   scope: resourceGroup()
-  dependsOn: [
-    firewallPolicy
-  ]
   params: {
     firewallPolicyName: firewallPolicy.name
   }
