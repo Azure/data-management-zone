@@ -1,6 +1,6 @@
 # Connecting to Environments Privately
 
-The Enterprise-Scale reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
+The Data Management & Analytics Scenario reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
 
 Network features like private endpoints and disabled public network access greatly reduce the attack surface of a data platform of an organization. However, with these features enabled, additional steps need to be taken to successfully connect to the respective services like Storage Accounts, Synapse workspaces, Purview or Azure Machine Learning from the public internet. Therefore, this document will describe the most common options for connecting to services inside the Data Management Zone or Data Landing Zone in a simple and secure way.
 
@@ -22,11 +22,11 @@ A few other core security benefits of Azure Bastion are:
 4. The service integrates with native security appliances for an Azure virtual network, like Azure Firewall.
 5. Azure Bastion can be used to monitor and manage remote connections.
 
-More details about Azure bAstion can be found [here](https://docs.microsoft.com/en-us/azure/bastion/bastion-overview).
+More details about Azure Bastion can be found [here](https://docs.microsoft.com/en-us/azure/bastion/bastion-overview).
 
 ### Deployment
 
-To simplify the setup for Enterprise-Scale Aalytics users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
+To simplify the setup for Data Management & Analytics Scenario users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
 
 ![Azure Bastion Architecture](/docs/images/AzureBastionArchitecture.png)
 
@@ -66,7 +66,29 @@ If you want to connect to the VM using Azure Bastion, execute the following step
 
     ![Connect to New SQL Script](/docs/images/new-sql-script.png)
 
-Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/EnterpriseScaleAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
+Only a single jumpbox in one of the Data Landing Zone is required to access services across all Data Landing Zones and Data Management Zones, if all the virtual networks have been peered with each other. More details on why this this network setup is recommended can be found [here](/docs/guidance/DataManagementAnalytics-NetworkArchitecture.md). A maximum of one Azure Bastion service is recommended per Data Landing Zone. If more users require access to the environment, additional Azure VMs can be added to the Data Landing Zone.
+
+### Conditional Access Policies: Enroll your private VM to Intune
+
+If you are deploying your solution into a corporate tenant, you might bump into conditional access policies that enforce you to enroll your VM to Intune for it to be considered a trusted device and access your Azure resources from there. Since working in a shared Azure subscription will grant all subscription owners access to the VM, it is recommended to enroll only VMs in your private subscription to Intune. Please follow the steps below to setup an Intune enrolled Jumpbox VM in your own Azure subscription to connect to the shared Data Management Zone and Data Landing Zone Azure resources. If you are not working in a shared subscription you can safely skip the first steps and go directly to step 6. to enroll the Jumpbox VM created above to Intune.
+
+1. Create a Vnet in your own Azure subscription, make sure that the address space does not overlap with the Vnets for the Data Management Zone `{dmz-prefix}-{environment}-vnet` or Data Landing Zone(s) `{dlz-prefix}-{environment}-vnet` in the shared Azure subscription(s);
+2. Once created, go the settings pane of the new Vnet and adjust the DNS server to the a Custom one (in the default setup the Firewall is used as DNS Forwarder and the default IP address of the Firewall in the Data Management Zone is 10.0.0.4). Check the Vnet of the Data Landing Zone and apply the same settings to your new Vnet;
+3. Peer the Vnet to both `{dmz-prefix}-{environment}-vnet` and `{dlz-prefix}-{environment}-vnet` in your shared Azure subscription(s);
+4. Create a Windows 11 Virtual Machine (Windows 11 Pro - Gen2 image - other images might also work) in  your own Azure subscription and:
+    1. Use your own private admin username and password;
+    2. Close inbound ports;
+    3. Make sure to place the VM inside the newly created Vnet;
+5. Create a new Route Table in your own Azure subscription, with the following setup:
+    1. In Settings > Routes add a route with name `default-route-to-firewall` with: Address prefix: 0.0.0.0/0, Next hop type: Virtual Appliance, Next hop address: internal IP of your Firewall (10.0.0.4 is the default internal IP of the Azure Firewall in the Data Management Zone. Please check the Route Table in your Data Landing Zone and apply the same settings).
+    2. In Settings > Subnets associate the subnet where your VM is located.
+6. Login to the VM via Azure Bastion with your own admin username and password;
+7. On the VM, complete the following actions:
+    1. Go to Settings > Accounts > Access work or school > Add a work or school account and connect your Corporate Account;
+    2. Go to the Microsoft Store and sign in with your Corporate Account. Install the Company Portal app, and enroll the device to your corporate network. The app will guide you through the process;
+    3. Open the Edge browser on the VM and sign in with your Corporate Account;
+    4. Go to portal.azure.com and login with your Corporate Account;
+8. Make sure to pause your VM when you are not using it and consider setting an auto-shutdown to prevent high costs.
 
 ## Point to Site (P2S) Connection
 

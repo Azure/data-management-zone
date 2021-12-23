@@ -3,18 +3,18 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Enterprise-Scale Analytics",
+            "title": "Data Management & Analytics Scenario",
             "steps": [
                 {
                     "name": "basics",
-                    "label": "Enterprise-Scale Analytics",
+                    "label": "Data Management & Analytics Scenario",
                     "elements": [
                         {
-                            "name": "infoBoxEnterpriseScaleAnalytics",
+                            "name": "infoBoxDataManagementAnalytics",
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "text": "Data Management & Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
                                 "style": "Info",
                                 "uri": "https://aka.ms/adopt/datamanagement"
                             }
@@ -99,7 +99,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics & AI uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for the Data Management Zone and each Data Landing Zone.",
+                                "text": "Data Management & Analytics Scenario uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for the Data Management Zone and each Data Landing Zone.",
                                 "style": "Info"
                             }
                         },
@@ -175,7 +175,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, this deployment is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
@@ -308,7 +308,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Enterprise-Scale Analytics advises to scale data workloads through the means of one or multiple Data Landing Zones. Each Data Landing Zone should be deployed to a separate subscription.",
+                                "text": "Data Management & Analytics Scenario advises to scale data workloads through the means of one or multiple Data Landing Zones. Each Data Landing Zone should be deployed to a separate subscription.",
                                 "style": "Info"
                             }
                         },
@@ -335,7 +335,7 @@
                                     "type": "Microsoft.Common.InfoBox",
                                     "visible": true,
                                     "options": {
-                                        "text": "Since not all service features are available in all regions, Enterprise-Scale Analytics is available in a subset of regions.",
+                                        "text": "Since not all service features are available in all regions, this deployment is available in a subset of regions.",
                                         "style": "Info"
                                     }
                                 },
@@ -761,7 +761,7 @@
                             "type": "Microsoft.Common.TagsByResource",
                             "visible": true,
                             "resources": [
-                                "EnterpriseScaleAnalytics"
+                                "DataManagementAnalytics"
                             ]
                         }
                     ]
@@ -783,7 +783,7 @@
                 "dataLandingZonePrefix": "[steps('dataLandingZoneSettings').dataLandingZonesName.dataLandingZonesPrefix]",
                 "enableBastionHostDeployment": "[steps('dataLandingZoneSettings').azureBastionSettings.azureBastionCheckbox]",
                 "virtualMachineImage": "[if(empty(steps('dataLandingZoneSettings').azureBastionSettings.virtualMachineImage), '', steps('dataLandingZoneSettings').azureBastionSettings.virtualMachineImage)]",
-                "tags": "[if(not(contains(steps('tags').tagsByResource, 'EnterpriseScaleAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.EnterpriseScaleAnalytics)))]"
+                "tags": "[if(not(contains(steps('tags').tagsByResource, 'DataManagementAnalytics')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.DataManagementAnalytics)))]"
             }
         }
     }

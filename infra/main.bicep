@@ -69,8 +69,8 @@ param privateDnsZoneIdSynapse string = ''
 // Variables
 var name = toLower('${prefix}-${environment}')
 var tagsDefault = {
-  Owner: 'Enterprise Scale Analytics'
-  Project: 'Enterprise Scale Analytics'
+  Owner: 'Data Management and Analytics Scenario'
+  Project: 'Data Management and Analytics Scenario'
   Environment: environment
   Toolkit: 'bicep'
   Name: name

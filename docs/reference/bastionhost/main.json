@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "4335549807263718061"
+      "templateHash": "12653787604786881755"
     }
   },
   "parameters": {
@@ -110,8 +110,8 @@
   "variables": {
     "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
     "tagsDefault": {
-      "Owner": "Enterprise Scale Analytics",
-      "Project": "Enterprise Scale Analytics",
+      "Owner": "Data Management and Analytics Scenario",
+      "Project": "Data Management and Analytics Scenario",
       "Environment": "[parameters('environment')]",
       "Toolkit": "bicep",
       "Name": "[variables('name')]"

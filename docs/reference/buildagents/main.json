@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.613.9944",
-      "templateHash": "15262263412229329785"
+      "version": "0.4.1008.15138",
+      "templateHash": "10224713317377197829"
     }
   },
   "parameters": {
@@ -73,8 +73,8 @@
   "variables": {
     "name": "[toLower(format('{0}-{1}', parameters('prefix'), parameters('environment')))]",
     "tagsDefault": {
-      "Owner": "Enterprise Scale Analytics",
-      "Project": "Enterprise Scale Analytics",
+      "Owner": "Data Management and Analytics Scenario",
+      "Project": "Data Management and Analytics Scenario",
       "Environment": "[parameters('environment')]",
       "Toolkit": "bicep",
       "Name": "[variables('name')]"
@@ -85,7 +85,7 @@
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2019-10-01",
+      "apiVersion": "2020-06-01",
       "name": "selfHostedAgentDevOps001",
       "properties": {
         "expressionEvaluationOptions": {
@@ -127,8 +127,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.613.9944",
-              "templateHash": "16656094663692197516"
+              "version": "0.4.1008.15138",
+              "templateHash": "4038817811886062802"
             }
           },
           "parameters": {

@@ -38,7 +38,11 @@
                         },
                         {
                             "count": {
-                                "field": "Microsoft.Kusto/clusters/trustedExternalTenants[*]"
+                                "field": "Microsoft.Kusto/clusters/trustedExternalTenants[*]",
+                                "where": {
+                                    "field": "Microsoft.Kusto/clusters/trustedExternalTenants[*].value",
+                                    "notEquals": "[subscription().tenantId]"
+                                }
                             },
                             "greater": 0
                         }
