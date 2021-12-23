@@ -74,7 +74,7 @@ If you are deploying your solution into a corporate tenant, you might bump into 
 
 1. Create a Vnet in your own Azure subscription, make sure that the address space does not overlap with the Vnets for the Data Management Zone `{dmz-prefix}-{environment}-vnet` or Data Landing Zone `{dlz-prefix}-{environment}-vnet` in the shared Azure subscription;
 2. Once created, go the settings pane of the new Vnet and adjust the DNS server to a Custom one with IP address 10.0.0.4 (the IP address that is associated with the Firewall in the Data Management Zone in your shared Azure subscription);
-3. Peer the Vnet to both `{dmz-prefix}-{environment}-vnet` and `{dlz-prefix}-{environment}-vnet` in your shared Azure subscription;
+3. Peer the Vnet to both `{dmz-prefix}-{environment}-vnet` and `{dlz-prefix}-{environment}-vnet` in your shared Azure subscription(s);
 4. Create a Windows 11 Virtual Machine (Windows 11 Pro - Gen2 image - other images might also work) in  your own Azure subscription and:
     1. Use your own private admin username and password;
     2. Close inbound ports;
