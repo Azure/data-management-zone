@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "5578542195052608416"
+      "templateHash": "8856691059627304550"
     }
   },
   "parameters": {
@@ -288,7 +288,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "9809742285736900712"
+              "templateHash": "10610951132633934198"
             }
           },
           "parameters": {
@@ -346,6 +346,53 @@
             "firewallPolicySubscriptionId": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[2], subscription().subscriptionId)]",
             "firewallPolicyResourceGroupName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), split(parameters('firewallPolicyId'), '/')[4], resourceGroup().name)]",
             "firewallPolicyName": "[if(greaterOrEquals(length(split(parameters('firewallPolicyId'), '/')), 9), last(split(parameters('firewallPolicyId'), '/')), 'incorrectSegmentLength')]",
+            "firewallPremiumRegions": [
+              "australiacentral",
+              "australiacentral2",
+              "australiaeast",
+              "australiasoutheast",
+              "brazilsouth",
+              "brazilsoutheast",
+              "canadacentral",
+              "canadaeast",
+              "centralindia",
+              "centralus",
+              "centraluseuap",
+              "chinanorth2",
+              "chinaeast2",
+              "eastasia",
+              "eastus",
+              "eastus2",
+              "francecentral",
+              "francesouth",
+              "germanywestcentral",
+              "japaneast",
+              "japanwest",
+              "koreacentral",
+              "koreasouth",
+              "northcentralus",
+              "northeurope",
+              "norwayeast",
+              "southafricanorth",
+              "southcentralus",
+              "southindia",
+              "southeastasia",
+              "swedencentral",
+              "switzerlandnorth",
+              "uaecentral",
+              "uaenorth",
+              "uksouth",
+              "ukwest",
+              "usgovarizona",
+              "usgovtexas",
+              "usgovvirginia",
+              "westcentralus",
+              "westeurope",
+              "westindia",
+              "westus",
+              "westus2",
+              "westus3"
+            ],
             "generalSubnets": [
               {
                 "name": "[variables('servicesSubnetName')]",
@@ -490,7 +537,7 @@
                   "ipAddresses": []
                 },
                 "sku": {
-                  "tier": "[parameters('firewallTier')]"
+                  "tier": "[if(contains(variables('firewallPremiumRegions'), parameters('location')), parameters('firewallTier'), 'Standard')]"
                 },
                 "dnsSettings": {
                   "enableProxy": true,
@@ -513,7 +560,7 @@
               "properties": {
                 "sku": {
                   "name": "AZFW_VNet",
-                  "tier": "[parameters('firewallTier')]"
+                  "tier": "[if(contains(variables('firewallPremiumRegions'), parameters('location')), parameters('firewallTier'), 'Standard')]"
                 },
                 "ipConfigurations": [
                   {
@@ -561,7 +608,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2639643635851475578"
+                      "templateHash": "14459821225494404282"
                     }
                   },
                   "parameters": {
@@ -995,7 +1042,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                                "description": "Allows interactive authoring and logging with Self-hosted Integration Runtime and Azure SSIS"
                               },
                               {
                                 "name": "DataFactory-ApplicationRule-003",
@@ -1221,7 +1268,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2639643635851475578"
+                      "templateHash": "14459821225494404282"
                     }
                   },
                   "parameters": {
@@ -1655,7 +1702,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                                "description": "Allows interactive authoring and logging with Self-hosted Integration Runtime and Azure SSIS"
                               },
                               {
                                 "name": "DataFactory-ApplicationRule-003",
@@ -2206,7 +2253,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "8990124398896578190"
+              "templateHash": "17451550666935843444"
             }
           },
           "parameters": {
@@ -2297,7 +2344,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "8858123747523161344"
+                      "templateHash": "13613768322785013128"
                     }
                   },
                   "parameters": {
@@ -2342,6 +2389,7 @@
                       "centralindia",
                       "eastus",
                       "eastus2",
+                      "francecentral",
                       "northeurope",
                       "southcentralus",
                       "southeastasia",

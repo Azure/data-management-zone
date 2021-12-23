@@ -30,6 +30,53 @@ var servicesSubnetName = 'ServicesSubnet'
 var firewallPolicySubscriptionId = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[2] : subscription().subscriptionId
 var firewallPolicyResourceGroupName = length(split(firewallPolicyId, '/')) >= 9 ? split(firewallPolicyId, '/')[4] : resourceGroup().name
 var firewallPolicyName = length(split(firewallPolicyId, '/')) >= 9 ? last(split(firewallPolicyId, '/')) : 'incorrectSegmentLength'
+var firewallPremiumRegions = [
+  'australiacentral'
+  'australiacentral2'
+  'australiaeast'
+  'australiasoutheast'
+  'brazilsouth'
+  'brazilsoutheast'
+  'canadacentral'
+  'canadaeast'
+  'centralindia'
+  'centralus'
+  'centraluseuap'
+  'chinanorth2'
+  'chinaeast2'
+  'eastasia'
+  'eastus'
+  'eastus2'
+  'francecentral'
+  'francesouth'
+  'germanywestcentral'
+  'japaneast'
+  'japanwest'
+  'koreacentral'
+  'koreasouth'
+  'northcentralus'
+  'northeurope'
+  'norwayeast'
+  'southafricanorth'
+  'southcentralus'
+  'southindia'
+  'southeastasia'
+  'swedencentral'
+  'switzerlandnorth'
+  'uaecentral'
+  'uaenorth'
+  'uksouth'
+  'ukwest'
+  'usgovarizona'
+  'usgovtexas'
+  'usgovvirginia'
+  'westcentralus'
+  'westeurope'
+  'westindia'
+  'westus'
+  'westus2'
+  'westus3'
+]
 
 // Subnet Variables
 var generalSubnets = [
@@ -168,7 +215,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(ena
       ipAddresses: []
     }
     sku: {
-      tier: firewallTier
+      tier: contains(firewallPremiumRegions, location) ? firewallTier : 'Standard'
     }
     dnsSettings: {
       enableProxy: true
@@ -208,7 +255,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
   properties: {
     sku: {
       name: 'AZFW_VNet'
-      tier: firewallTier
+      tier: contains(firewallPremiumRegions, location) ? firewallTier : 'Standard'
     }
     ipConfigurations: [
       {

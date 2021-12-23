@@ -28,6 +28,7 @@ var purviewRegions = [
   'centralindia'
   'eastus'
   'eastus2'
+  'francecentral'
   'northeurope'
   'southcentralus'
   'southeastasia'
