@@ -1,6 +1,6 @@
-# Data Management Zone - Prerequisites
+# Data Management Landing Zone - Prerequisites
 
-This template repository contains all templates to deploy the Data Management Zone of the Data Management & Analytics architecture. The Data Management Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
+This template repository contains all templates to deploy the Data Management Landing Zone of the Data Management & Analytics architecture. The Data Management Landing Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
 
 ## What will be deployed?
 
@@ -8,7 +8,7 @@ By navigating through the deployment steps, you will deploy the following setup 
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
-![Data Management Zone](/docs/images/DataManagementZone.png)
+![Data Management Landing Zone](/docs/images/DataManagementZone.png)
 
 The deployment and code artifacts include the following services:
 
@@ -43,7 +43,7 @@ To help you more quickly understand the structure of the repository, here is an 
 
 ## Supported Regions
 
-For now, we are recommending to select one of the regions mentioned below. The list of regions is limited for now due to the fact that not all services and features are available in all regions. This is mostly related to the fact that we are recommending to leverage at least the zone-redundant storage replication option for all your central Data Lakes in the Data Landing Zones. Since zone-redundant storage is not available in all regions, we are limiting the regions in the Deploy to Azure experience. If you are planning to deploy the Data Management Zone and Data Landing Zone to a region that is not listed below, then please change the setting in the corresponding bicep files in this repository. Deployment has been tested in the following regions:
+For now, we are recommending to select one of the regions mentioned below. The list of regions is limited for now due to the fact that not all services and features are available in all regions. This is mostly related to the fact that we are recommending to leverage at least the zone-redundant storage replication option for all your central Data Lakes in the Data Landing Zones. Since zone-redundant storage is not available in all regions, we are limiting the regions in the Deploy to Azure experience. If you are planning to deploy the Data Management Landing Zone and Data Landing Zone to a region that is not listed below, then please change the setting in the corresponding bicep files in this repository. Deployment has been tested in the following regions:
 
 - (Africa) South Africa North (*)
 - (Asia Pacific) Australia East
@@ -78,7 +78,7 @@ Before we start with the deployment, please make sure that you have the followin
 
 ## Deployment
 
-Now you have two options for the deployment of the Data Management Zone:
+Now you have two options for the deployment of the Data Management Landing Zone:
 
 1. Deploy to Azure Button
 2. GitHub Actions or Azure DevOps Pipelines
@@ -87,9 +87,9 @@ To use the Deploy to Azure Button, please click on the button below:
 
 | Reference implementation   | Description | Deploy to Azure |
 |:---------------------------|:------------|:----------------|
-| Data Management & Analytics Scenario | Deploys a Data Management Zone and one or multiple [Data Landing Zone](https://github.com/Azure/data-landing-zone) all at once. Provides less options than the the individual Data Management Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FdataManagementAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementAnalytics.json) |
-| Data Management Zone       | Deploys a single Data Management Zone to a subscription. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Finfra%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementZone.json) |
+| Data Management & Analytics Scenario | Deploys a Data Management Landing Zone and one or multiple [Data Landing Zone](https://github.com/Azure/data-landing-zone) all at once. Provides less options than the the individual Data Management Landing Zone and Data Landing Zone deployment options. Helps you to quickly get started and make yourself familiar with the reference design. For more advanced scenarios, please deploy the artifacts individually. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2FdataManagementAnalytics.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementAnalytics.json) |
+| Data Management Landing Zone       | Deploys a single Data Management Landing Zone to a subscription. |[![Deploy To Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#blade/Microsoft_Azure_CreateUIDef/CustomDeploymentBlade/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Finfra%2Fmain.json/uiFormDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fdata-management-zone%2Fmain%2Fdocs%2Freference%2Fportal.dataManagementZone.json) |
 
-Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Management Zone through GitHub Actions or Azure DevOps.
+Alternatively, click on `Next` to follow the steps required to successfully deploy the Data Management Landing Zone through GitHub Actions or Azure DevOps.
 
 >[Next](/docs/DataManagementAnalytics-CreateRepository.md)
