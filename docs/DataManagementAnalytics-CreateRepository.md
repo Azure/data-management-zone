@@ -1,4 +1,4 @@
-# Data Management Zone - Create repository from the template
+# Data Management Landing Zone - Create repository from the template
 
 First, you must generate your own respository based off this template respository. To do so, please follow the steps below:
 
