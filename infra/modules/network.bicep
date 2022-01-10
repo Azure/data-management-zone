@@ -78,6 +78,43 @@ var firewallPremiumRegions = [
   'westus3'
 ]
 
+// Firewall Policy Variables
+var firewallPolicyPremiumProperties = {
+  intrusionDetection: {
+    mode: 'Deny'
+    configuration: {
+      bypassTrafficSettings: []
+      signatureOverrides: []
+    }
+  }
+  threatIntelMode: 'Deny'
+  threatIntelWhitelist: {
+    fqdns: []
+    ipAddresses: []
+  }
+  sku: {
+    tier: 'Premium'
+  }
+  dnsSettings: {
+    enableProxy: true
+    servers: []
+  }
+}
+var firewallPolicyStandardProperties = {
+  threatIntelMode: 'Deny'
+  threatIntelWhitelist: {
+    fqdns: []
+    ipAddresses: []
+  }
+  sku: {
+    tier: 'Standard'
+  }
+  dnsSettings: {
+    enableProxy: true
+    servers: []
+  }
+}
+
 // Subnet Variables
 var generalSubnets = [
   {
@@ -197,31 +234,11 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if(enableDn
   }
 }
 
-resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(enableDnsAndFirewallDeployment) {
+resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
-  properties: {
-    intrusionDetection: {
-      mode: 'Deny'
-      configuration: {
-        bypassTrafficSettings: []
-        signatureOverrides: []
-      }
-    }
-    threatIntelMode: 'Deny'
-    threatIntelWhitelist: {
-      fqdns: []
-      ipAddresses: []
-    }
-    sku: {
-      tier: contains(firewallPremiumRegions, location) ? firewallTier : 'Standard'
-    }
-    dnsSettings: {
-      enableProxy: true
-      servers: []
-    }
-  }
+  properties: contains(firewallPremiumRegions, location) && firewallTier == 'Premium' ? firewallPolicyPremiumProperties : firewallPolicyStandardProperties
 }
 
 module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if(enableDnsAndFirewallDeployment) {
