@@ -93,17 +93,7 @@
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
-                                                "metrics": [
-                                                    {
-                                                        "category": "Apache Spark pool",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    }
-                                                ],
+                                                "metrics": [],
                                                 "logs": [
                                                     {
                                                         "category": "BigDataPoolAppsEnded",
@@ -123,7 +113,7 @@
                                         "value": "[field('location')]"
                                     },
                                     "resourceName": {
-                                        "value": "[field('name')]"
+                                        "value": "[field('fullName')]"
                                     }
                                 }
                             }

@@ -93,26 +93,7 @@
                                             "dependsOn": [],
                                             "properties": {
                                                 "workspaceId": "[parameters('logAnalytics')]",
-                                                "metrics": [
-                                                    {
-                                                        "category": "SQL dedicated pool",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    },
-                                                    {
-                                                        "category": "SQL dedicated pool - Workload management",
-                                                        "enabled": true,
-                                                        "retentionPolicy": {
-                                                            "days": 0,
-                                                            "enabled": false
-                                                        },
-                                                        "timeGrain": null
-                                                    }
-                                                ],
+                                                "metrics": [],
                                                 "logs": [
                                                     {
                                                         "category": "SqlRequests",
@@ -133,10 +114,6 @@
                                                     {
                                                         "category": "Waits",
                                                         "enabled": true
-                                                    },
-                                                    {
-                                                        "category": "SQLSecurityAuditEvents",
-                                                        "enabled": true
                                                     }
                                                 ]
                                             }
@@ -152,7 +129,7 @@
                                         "value": "[field('location')]"
                                     },
                                     "resourceName": {
-                                        "value": "[field('name')]"
+                                        "value": "[field('fullName')]"
                                     }
                                 }
                             }
