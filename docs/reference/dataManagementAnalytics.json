@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "9190298469141626975"
+      "templateHash": "7822264590123685624"
     }
   },
   "parameters": {
@@ -264,6 +264,15 @@
           },
           "deploySelfHostedIntegrationRuntimes": {
             "value": true
+          },
+          "dataLandingZoneSubscriptionIds": {
+            "copy": [
+              {
+                "name": "value",
+                "count": "[length(parameters('dataLandingZoneDetails'))]",
+                "input": "[parameters('dataLandingZoneDetails')[copyIndex('value')].subscription]"
+              }
+            ]
           },
           "privateDnsZoneIdKeyVault": {
             "value": "[reference(format('dataManagementZoneDeployment-{0}', deployment().location)).outputs.privateDnsZoneIdKeyVault.value]"

@@ -210,6 +210,9 @@ resource dataLandingZoneDeployment 'Microsoft.Resources/deployments@2021-04-01' 
       deploySelfHostedIntegrationRuntimes: {
         value: true
       }
+      dataLandingZoneSubscriptionIds: {
+        value: [ for item in dataLandingZoneDetails: item.subscription ]
+      }
       privateDnsZoneIdKeyVault: {
         value: reference(dataManagementZoneDeployment.name).outputs.privateDnsZoneIdKeyVault.value
       }
