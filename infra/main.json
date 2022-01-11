@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "8856691059627304550"
+      "templateHash": "2556241326646259361"
     }
   },
   "parameters": {
@@ -288,7 +288,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "10610951132633934198"
+              "templateHash": "6889799885640347788"
             }
           },
           "parameters": {
@@ -393,6 +393,41 @@
               "westus2",
               "westus3"
             ],
+            "firewallPolicyPremiumProperties": {
+              "intrusionDetection": {
+                "mode": "Deny",
+                "configuration": {
+                  "bypassTrafficSettings": [],
+                  "signatureOverrides": []
+                }
+              },
+              "threatIntelMode": "Deny",
+              "threatIntelWhitelist": {
+                "fqdns": [],
+                "ipAddresses": []
+              },
+              "sku": {
+                "tier": "Premium"
+              },
+              "dnsSettings": {
+                "enableProxy": true,
+                "servers": []
+              }
+            },
+            "firewallPolicyStandardProperties": {
+              "threatIntelMode": "Deny",
+              "threatIntelWhitelist": {
+                "fqdns": [],
+                "ipAddresses": []
+              },
+              "sku": {
+                "tier": "Standard"
+              },
+              "dnsSettings": {
+                "enableProxy": true,
+                "servers": []
+              }
+            },
             "generalSubnets": [
               {
                 "name": "[variables('servicesSubnetName')]",
@@ -519,31 +554,11 @@
             {
               "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/firewallPolicies",
-              "apiVersion": "2020-11-01",
+              "apiVersion": "2021-05-01",
               "name": "[format('{0}-firewallpolicy', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
-              "properties": {
-                "intrusionDetection": {
-                  "mode": "Deny",
-                  "configuration": {
-                    "bypassTrafficSettings": [],
-                    "signatureOverrides": []
-                  }
-                },
-                "threatIntelMode": "Deny",
-                "threatIntelWhitelist": {
-                  "fqdns": [],
-                  "ipAddresses": []
-                },
-                "sku": {
-                  "tier": "[if(contains(variables('firewallPremiumRegions'), parameters('location')), parameters('firewallTier'), 'Standard')]"
-                },
-                "dnsSettings": {
-                  "enableProxy": true,
-                  "servers": []
-                }
-              }
+              "properties": "[if(and(equals(parameters('firewallTier'), 'Premium'), contains(variables('firewallPremiumRegions'), parameters('location'))), variables('firewallPolicyPremiumProperties'), variables('firewallPolicyStandardProperties'))]"
             },
             {
               "condition": "[parameters('enableDnsAndFirewallDeployment')]",

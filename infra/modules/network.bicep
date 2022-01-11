@@ -238,7 +238,7 @@ resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = if(ena
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
-  properties: contains(firewallPremiumRegions, location) && firewallTier == 'Premium' ? firewallPolicyPremiumProperties : firewallPolicyStandardProperties
+  properties: firewallTier == 'Premium' && contains(firewallPremiumRegions, location) ? firewallPolicyPremiumProperties : firewallPolicyStandardProperties
 }
 
 module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if(enableDnsAndFirewallDeployment) {
