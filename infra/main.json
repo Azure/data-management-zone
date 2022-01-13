@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "15465780232157848130"
+      "templateHash": "2556241326646259361"
     }
   },
   "parameters": {
@@ -67,7 +67,7 @@
       "type": "string",
       "defaultValue": "10.0.0.0/24",
       "metadata": {
-        "description": "Specifies the address space of the subnet that is use for Azure Firewall."
+        "description": "Specifies the address space of the subnet that is use for Azure Firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
     },
     "servicesSubnetAddressPrefix": {
@@ -92,6 +92,17 @@
       "metadata": {
         "description": "Specifies the private IP addresses of the dns servers. Optional if `enableDnsAndFirewallDeployment` is set to `true`."
       }
+    },
+    "firewallTier": {
+      "type": "string",
+      "defaultValue": "Premium",
+      "metadata": {
+        "description": "Specifies the tier of the Azure Firewall.  Optional if `enableDnsAndFirewallDeployment` is set to `false`."
+      },
+      "allowedValues": [
+        "Standard",
+        "Premium"
+      ]
     },
     "firewallPolicyId": {
       "type": "string",
@@ -263,6 +274,9 @@
           "firewallPrivateIp": {
             "value": "[parameters('firewallPrivateIp')]"
           },
+          "firewallTier": {
+            "value": "[parameters('firewallTier')]"
+          },
           "firewallPolicyId": {
             "value": "[parameters('firewallPolicyId')]"
           }
@@ -274,7 +288,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "13639327577611863750"
+              "templateHash": "6889799885640347788"
             }
           },
           "parameters": {
@@ -312,6 +326,14 @@
             "enableDnsAndFirewallDeployment": {
               "type": "bool",
               "defaultValue": true
+            },
+            "firewallTier": {
+              "type": "string",
+              "defaultValue": "Premium",
+              "allowedValues": [
+                "Standard",
+                "Premium"
+              ]
             },
             "firewallPolicyId": {
               "type": "string",
@@ -370,7 +392,64 @@
               "westus",
               "westus2",
               "westus3"
-            ]
+            ],
+            "firewallPolicyPremiumProperties": {
+              "intrusionDetection": {
+                "mode": "Deny",
+                "configuration": {
+                  "bypassTrafficSettings": [],
+                  "signatureOverrides": []
+                }
+              },
+              "threatIntelMode": "Deny",
+              "threatIntelWhitelist": {
+                "fqdns": [],
+                "ipAddresses": []
+              },
+              "sku": {
+                "tier": "Premium"
+              },
+              "dnsSettings": {
+                "enableProxy": true,
+                "servers": []
+              }
+            },
+            "firewallPolicyStandardProperties": {
+              "threatIntelMode": "Deny",
+              "threatIntelWhitelist": {
+                "fqdns": [],
+                "ipAddresses": []
+              },
+              "sku": {
+                "tier": "Standard"
+              },
+              "dnsSettings": {
+                "enableProxy": true,
+                "servers": []
+              }
+            },
+            "generalSubnets": [
+              {
+                "name": "[variables('servicesSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('servicesSubnetAddressPrefix')]",
+                  "addressPrefixes": [],
+                  "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
+                  },
+                  "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
+                  },
+                  "delegations": [],
+                  "privateEndpointNetworkPolicies": "Disabled",
+                  "privateLinkServiceNetworkPolicies": "Disabled",
+                  "serviceEndpointPolicies": [],
+                  "serviceEndpoints": []
+                }
+              }
+            ],
+            "azureFirewallSubnet": "[if(parameters('enableDnsAndFirewallDeployment'), createArray(createObject('name', variables('azureFirewallSubnetName'), 'properties', createObject('addressPrefix', parameters('azureFirewallSubnetAddressPrefix'), 'addressPrefixes', createArray(), 'delegations', createArray(), 'privateEndpointNetworkPolicies', 'Enabled', 'privateLinkServiceNetworkPolicies', 'Enabled', 'serviceEndpointPolicies', createArray(), 'serviceEndpoints', createArray()))), createArray())]",
+            "subnets": "[concat(variables('azureFirewallSubnet'), variables('generalSubnets'))]"
           },
           "resources": [
             {
@@ -424,38 +503,7 @@
                   "dnsServers": "[if(parameters('enableDnsAndFirewallDeployment'), createArray(), parameters('dnsServerAdresses'))]"
                 },
                 "enableDdosProtection": false,
-                "subnets": [
-                  {
-                    "name": "[variables('azureFirewallSubnetName')]",
-                    "properties": {
-                      "addressPrefix": "[parameters('azureFirewallSubnetAddressPrefix')]",
-                      "addressPrefixes": [],
-                      "delegations": [],
-                      "privateEndpointNetworkPolicies": "Enabled",
-                      "privateLinkServiceNetworkPolicies": "Enabled",
-                      "serviceEndpointPolicies": [],
-                      "serviceEndpoints": []
-                    }
-                  },
-                  {
-                    "name": "[variables('servicesSubnetName')]",
-                    "properties": {
-                      "addressPrefix": "[parameters('servicesSubnetAddressPrefix')]",
-                      "addressPrefixes": [],
-                      "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]"
-                      },
-                      "routeTable": {
-                        "id": "[resourceId('Microsoft.Network/routeTables', format('{0}-routetable', parameters('prefix')))]"
-                      },
-                      "delegations": [],
-                      "privateEndpointNetworkPolicies": "Disabled",
-                      "privateLinkServiceNetworkPolicies": "Disabled",
-                      "serviceEndpointPolicies": [],
-                      "serviceEndpoints": []
-                    }
-                  }
-                ]
+                "subnets": "[variables('subnets')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', format('{0}-nsg', parameters('prefix')))]",
@@ -506,31 +554,11 @@
             {
               "condition": "[parameters('enableDnsAndFirewallDeployment')]",
               "type": "Microsoft.Network/firewallPolicies",
-              "apiVersion": "2020-11-01",
+              "apiVersion": "2021-05-01",
               "name": "[format('{0}-firewallpolicy', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
-              "properties": {
-                "intrusionDetection": {
-                  "mode": "Deny",
-                  "configuration": {
-                    "bypassTrafficSettings": [],
-                    "signatureOverrides": []
-                  }
-                },
-                "threatIntelMode": "Deny",
-                "threatIntelWhitelist": {
-                  "fqdns": [],
-                  "ipAddresses": []
-                },
-                "sku": {
-                  "tier": "Premium"
-                },
-                "dnsSettings": {
-                  "enableProxy": true,
-                  "servers": []
-                }
-              }
+              "properties": "[if(and(equals(parameters('firewallTier'), 'Premium'), contains(variables('firewallPremiumRegions'), parameters('location'))), variables('firewallPolicyPremiumProperties'), variables('firewallPolicyStandardProperties'))]"
             },
             {
               "condition": "[parameters('enableDnsAndFirewallDeployment')]",
@@ -547,7 +575,7 @@
               "properties": {
                 "sku": {
                   "name": "AZFW_VNet",
-                  "tier": "[if(contains(variables('firewallPremiumRegions'), parameters('location')), 'Premium', 'Standard')]"
+                  "tier": "[if(contains(variables('firewallPremiumRegions'), parameters('location')), parameters('firewallTier'), 'Standard')]"
                 },
                 "ipConfigurations": [
                   {
@@ -595,7 +623,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2639643635851475578"
+                      "templateHash": "14459821225494404282"
                     }
                   },
                   "parameters": {
@@ -1029,7 +1057,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                                "description": "Allows interactive authoring and logging with Self-hosted Integration Runtime and Azure SSIS"
                               },
                               {
                                 "name": "DataFactory-ApplicationRule-003",
@@ -1255,7 +1283,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "2639643635851475578"
+                      "templateHash": "14459821225494404282"
                     }
                   },
                   "parameters": {
@@ -1689,7 +1717,7 @@
                                 ],
                                 "destinationAddresses": [],
                                 "sourceIpGroups": [],
-                                "description": "Allows interactive authoring with Self-hosted Integration Runtime"
+                                "description": "Allows interactive authoring and logging with Self-hosted Integration Runtime and Azure SSIS"
                               },
                               {
                                 "name": "DataFactory-ApplicationRule-003",

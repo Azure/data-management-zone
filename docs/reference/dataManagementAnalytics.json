@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "3074724964256243104"
+      "templateHash": "7822264590123685624"
     }
   },
   "parameters": {
@@ -143,6 +143,9 @@
           },
           "firewallPolicyId": {
             "value": ""
+          },
+          "firewallTier": {
+            "value": "Premium"
           },
           "privateDnsZoneIdBlob": {
             "value": ""

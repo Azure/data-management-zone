@@ -17,6 +17,11 @@ param vnetAddressPrefix string = '10.0.0.0/16'
 param azureFirewallSubnetAddressPrefix string = '10.0.0.0/24'
 param servicesSubnetAddressPrefix string = '10.0.1.0/24'
 param enableDnsAndFirewallDeployment bool = true
+@allowed([
+  'Standard'
+  'Premium'
+])
+param firewallTier string = 'Premium'
 param firewallPolicyId string = ''
 
 // Variables
@@ -73,6 +78,80 @@ var firewallPremiumRegions = [
   'westus3'
 ]
 
+// Firewall Policy Variables
+var firewallPolicyPremiumProperties = {
+  intrusionDetection: {
+    mode: 'Deny'
+    configuration: {
+      bypassTrafficSettings: []
+      signatureOverrides: []
+    }
+  }
+  threatIntelMode: 'Deny'
+  threatIntelWhitelist: {
+    fqdns: []
+    ipAddresses: []
+  }
+  sku: {
+    tier: 'Premium'
+  }
+  dnsSettings: {
+    enableProxy: true
+    servers: []
+  }
+}
+var firewallPolicyStandardProperties = {
+  threatIntelMode: 'Deny'
+  threatIntelWhitelist: {
+    fqdns: []
+    ipAddresses: []
+  }
+  sku: {
+    tier: 'Standard'
+  }
+  dnsSettings: {
+    enableProxy: true
+    servers: []
+  }
+}
+
+// Subnet Variables
+var generalSubnets = [
+  {
+    name: servicesSubnetName
+    properties: {
+      addressPrefix: servicesSubnetAddressPrefix
+      addressPrefixes: []
+      networkSecurityGroup: {
+        id: nsg.id
+      }
+      routeTable: {
+        id: routeTable.id
+      }
+      delegations: []
+      privateEndpointNetworkPolicies: 'Disabled'
+      privateLinkServiceNetworkPolicies: 'Disabled'
+      serviceEndpointPolicies: []
+      serviceEndpoints: []
+    }
+  }
+]
+var azureFirewallSubnet = enableDnsAndFirewallDeployment ? [
+  {
+    name: azureFirewallSubnetName
+    properties: {
+      addressPrefix: azureFirewallSubnetAddressPrefix
+      addressPrefixes: []
+      delegations: []
+      privateEndpointNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      serviceEndpointPolicies: []
+      serviceEndpoints: []
+    }
+  }
+] : []
+var subnets = concat(azureFirewallSubnet, generalSubnets)
+
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
   name: '${prefix}-routetable'
@@ -117,38 +196,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
       dnsServers: enableDnsAndFirewallDeployment ? [] : dnsServerAdresses
     }
     enableDdosProtection: false
-    subnets: [
-      {
-        name: azureFirewallSubnetName
-        properties: {
-          addressPrefix: azureFirewallSubnetAddressPrefix
-          addressPrefixes: []
-          delegations: []
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpointPolicies: []
-          serviceEndpoints: []
-        }
-      }
-      {
-        name: servicesSubnetName
-        properties: {
-          addressPrefix: servicesSubnetAddressPrefix
-          addressPrefixes: []
-          networkSecurityGroup: {
-            id: nsg.id
-          }
-          routeTable: {
-            id: routeTable.id
-          }
-          delegations: []
-          privateEndpointNetworkPolicies: 'Disabled'
-          privateLinkServiceNetworkPolicies: 'Disabled'
-          serviceEndpointPolicies: []
-          serviceEndpoints: []
-        }
-      }
-    ]
+    subnets: subnets
   }
 }
 
@@ -186,31 +234,11 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2020-11-01' = if(enableDn
   }
 }
 
-resource firewallPolicy 'Microsoft.Network/firewallPolicies@2020-11-01' = if(enableDnsAndFirewallDeployment) {
+resource firewallPolicy 'Microsoft.Network/firewallPolicies@2021-05-01' = if(enableDnsAndFirewallDeployment) {
   name: '${prefix}-firewallpolicy'
   location: location
   tags: tags
-  properties: {
-    intrusionDetection: {
-      mode: 'Deny'
-      configuration: {
-        bypassTrafficSettings: []
-        signatureOverrides: []
-      }
-    }
-    threatIntelMode: 'Deny'
-    threatIntelWhitelist: {
-      fqdns: []
-      ipAddresses: []
-    }
-    sku: {
-      tier: 'Premium'
-    }
-    dnsSettings: {
-      enableProxy: true
-      servers: []
-    }
-  }
+  properties: firewallTier == 'Premium' && contains(firewallPremiumRegions, location) ? firewallPolicyPremiumProperties : firewallPolicyStandardProperties
 }
 
 module firewallPolicyRules 'services/firewallPolicyRules.bicep' = if(enableDnsAndFirewallDeployment) {
@@ -244,7 +272,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
   properties: {
     sku: {
       name: 'AZFW_VNet'
-      tier: contains(firewallPremiumRegions, location) ? 'Premium' : 'Standard'
+      tier: contains(firewallPremiumRegions, location) ? firewallTier : 'Standard'
     }
     ipConfigurations: [
       {

@@ -11,12 +11,16 @@ param prefix string
 param tags object
 param subnetId string
 param privateDnsZoneIdSynapseprivatelinkhub string = ''
+#disable-next-line no-unused-params
 param privateDnsZoneIdAnalysis string = ''
+#disable-next-line no-unused-params
 param privateDnsZoneIdPbiDedicated string = ''
+#disable-next-line no-unused-params
 param privateDnsZoneIdPowerQuery string = ''
 
 // Variables
 var synapsePrivatelinkHub001Name = '${prefix}-synapseplhub001'
+#disable-next-line no-unused-vars
 var powerbiPrivateLink001Name = '${prefix}-powerbipl001'
 
 // Resources

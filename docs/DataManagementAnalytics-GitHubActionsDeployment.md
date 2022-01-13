@@ -66,7 +66,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `tags` | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
 | `purviewRootCollectionAdminObjectIds` | Specifies the list of user object IDs that are assigned as collection admin to the root collection in Purview. To get the object ID for a user use the following Azure CLI command: `az ad user list --display-name "{user name}" --query "[].objectId"`. | [`{object-id-1}`, `{object-id-2}`] |
 | `vnetAddressPrefix` | Specifies the address space of the vnet. | `10.0.0.0/16` |
-| `azureFirewallSubnetAddressPrefix` | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
+| `azureFirewallSubnetAddressPrefix` | Specifies the address space of the subnet that is use for Azure Firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.0/24` |
 | `servicesSubnetAddressPrefix` | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
 | `enableDnsAndFirewallDeployment` | Specifies whether firewall and private DNS Zones should be deployed. | `true` |
 | `firewallPrivateIp` | Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.4` |
