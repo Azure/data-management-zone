@@ -667,9 +667,7 @@
                                     },
                                     "type": "Microsoft.Common.PasswordBox",
                                     "visible": true,
-                                    "toolTip": {
-                                        "password": "Specify an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS."
-                                    },
+                                    "toolTip": "Specify an administrator password for the Synapse workspaces and Self-hosted integration runtimes hosted on VMSS.",
                                     "constraints": {
                                         "required": true,
                                         "regex": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
@@ -677,8 +675,7 @@
                                     },
                                     "options": {
                                         "hideConfirmation": false
-                                    },
-                                    "osPlatform": "Windows"
+                                    }
                                 }
                             ]
                         },

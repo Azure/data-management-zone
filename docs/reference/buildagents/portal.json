@@ -254,9 +254,7 @@
                                     },
                                     "type": "Microsoft.Common.PasswordBox",
                                     "visible": true,
-                                    "toolTip": {
-                                        "password": "Specify an administrator password for the Virtual Machine."
-                                    },
+                                    "toolTip": "Specify an administrator password for the Virtual Machine.",
                                     "constraints": {
                                         "required": true,
                                         "regex": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
@@ -264,8 +262,7 @@
                                     },
                                     "options": {
                                         "hideConfirmation": false
-                                    },
-                                    "osPlatform": "Windows"
+                                    }
                                 },
                                 {
                                     "name": "virtualMachineSku",
