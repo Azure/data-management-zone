@@ -14,11 +14,11 @@ As the Azure platform evolves and new services and features are validated in pro
 
 We are encouraging you to select between a [Bug Report](#bug-report), a [Feature Request](#feature-request), a [Documentation Issue](#documentation-issue) and a [Vulnerability Report](#vulnerability-report) when opening a new Issue in this repository. Please provide all the required information for the respective issue reports and make sure you accept the [Code of Conduct](/CODE_OF_CONDUCT.md).
 
-Before submitting a report, please search through the open and closed issues in this repository as well as through the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md). If a similar issue already exists, please upvote the existint issue comment(s) or leave a comment instead of opening a new issue. This helps us reduce the number issues and also simplifies the management on our side. Only if no existing item describes your issue report we encourage you to file a new one.
+Before submitting a report, please search through the open and closed issues in this repository as well as through the [Known Issues](/docs/DataManagementAnalytics-KnownIssues.md). If a similar issue already exists, please up-vote the existing issue comment(s) or leave a comment instead of opening a new issue. This helps us reduce the number issues and also simplifies the management on our side. Only if no existing item describes your issue report we encourage you to file a new one.
 
 ### Bug Report
 
-Submit new bug reports using the "Bug Report" issue template. When submitting a bug report, please try to be as specific as possible by including a detailed description of how to reproduce the issue and also share any error messages or screenshots if possible. This will help us throubleshoot the bug/issue and apply fixes in a timely fashion.
+Submit new bug reports using the "Bug Report" issue template. When submitting a bug report, please try to be as specific as possible by including a detailed description of how to reproduce the issue and also share any error messages or screenshots if possible. This will help us troubleshoot the bug/issue and apply fixes in a timely fashion.
 
 ### Feature Request
 
@@ -78,7 +78,7 @@ If the pull request is still work in progress, please open the pull request in d
 
 ### Testing
 
-Testing is a key component in the development workflow. We run automated tests on all pull requests to enforce strict linting rules and also make sure that changes introduced to the IaC are not introducing code degredation.
+Testing is a key component in the development workflow. We run automated tests on all pull requests to enforce strict linting rules and also make sure that changes introduced to the IaC are not introducing code degradation.
 
 ### Code Review
 
@@ -88,13 +88,13 @@ If you want the team to review the changes, mark the pull request as "Ready for 
 
 After the pull request has been reviewed and approved, the feature branch will be merged into the main branch and automatically closed and deleted.
 
-## Steering Committee and Stewardship of the project
+## Stewardship of the code repository
 
-The Data Management & Analytics Scenario Committee and its members (aka Steering Committee Members) are the primary caretakers of the Data Management & Analytics Scenario repos including language, design, policy oversight, and reference implementations. Membership to steering committee will be solely baesd on active contribution and thought leadership in the preject and community.
+The Data Management & Analytics Scenario code repository are maintained by the code owners. The repository including language, design, policy oversight, and reference implementations. Elevated privileges will be solely based on active contributions in the project repository.
 
-Voting members may be added once approved by the Steering Committee. All members abide by all organizational polices, including the code of conduct. The membership of a Steering Committee member can be withdrawn in the case of written notice of resignation or if the member is unreachable or unresponsive for more than three months.
+User may be given elevated privileges once approved by the currents members. All members abide by all organizational polices, including the code of conduct. Elevated privileges can be withdrawn in the case of written notice of resignation or if the member is unreachable or unresponsive for extended time.
 
-The following users are Steering Committee Members:
+The following users have elevated privileges:
 
 | **NAME**             | **GitHub Handle** | **Affiliated Organization** |
 |:---------------------|:------------------|:----------------------------|
@@ -106,22 +106,22 @@ The following users are Steering Committee Members:
 | Roberto Cavalcanti   | @rocavalc         | Microsoft                   |
 | Sanem Sever          | @sasever          | Microsoft                   |
 
-### Steering Committee Member Responsibilities
+### Responsibilities
 
-Committee Members are responsible for reviewing and approving RFCs proposing new features or design changes. The initial Committee consists of Microsoft employees. It is expected that over time, community will grow and new community members will join Committee Members. Membership is heavily dependent on the level of contribution and expertise: individuals who contribute in meaningful ways to the project will be recognized accordingly.
+Code owners are responsible for reviewing and approving issues proposing new features or design changes in the repository. The initial owners consists of Microsoft employees. It is expected that over time, community will grow and new community members will join. Privileges are heavily dependent on the level of contribution and expertise: individuals who contribute in meaningful ways to the project will be recognized accordingly.
 
-At any point in time, a Committee Member can nominate a strong community member to join the Steering Committee. Nominations should be submitted in the form of RFCs detailing why that individual is qualified and how they will contribute. After the RFC has been discussed, a unanimous vote will be required for the new Committee Member to be confirmed.
+At any point in time, current contributors can nominate a strong community member to increased responsibilities. Nominations should be submitted in the form of RFCs detailing why that individual is qualified and how they will contribute. After the RFC has been discussed, a unanimous vote will be required for the new Committee Member to be confirmed.
 
-## Community Colloboration
+## Community Collaboration
 
-Established community members are expected to demonstrate their adherence to the principles in this document, familiarity with project organization, roles, policies, procedures, conventions, etc., and technical and/or writing ability. Role-specific expectations, responsibilities, and requirements are enumerated below, adhereing the principle of Opensource contribution and governance:
+Established community members are expected to demonstrate their adherence to the principles in this document, familiarity with project organization, roles, policies, procedures, conventions, etc., and technical and/or writing ability. Role-specific expectations, responsibilities, and requirements are enumerated below, adhering the principle of OpenSource contribution and governance:
 
 | Role | Responsibilities | Requirements |
 | -----| ---------------- | ------------ |
-| Member | Active contributor in the community | Sponsored by 2 reviewers and multiple contributions to the project |
-| Reviewer | Review contributions from other members | History of review and authorship in the project |
-| Approver | Contributions acceptance approval| Highly experienced active reviewer and contributor to the project |
-| Steering Committee | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the project |
+| Member | Active contributor in the community | Sponsored by 2 reviewers and multiple contributions to the code |
+| Reviewer | Review contributions from other members | History of review and authorship of the code |
+| Approver | Contributions acceptance approval| Highly experienced active reviewer and contributor to the code |
+| Code repository owners | Set direction and priorities for the project | Demonstrated responsibility and excellent technical judgement for the the content of the repository |
 
 ## CLA
 
