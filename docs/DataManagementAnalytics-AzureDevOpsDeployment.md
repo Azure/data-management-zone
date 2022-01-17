@@ -1,4 +1,4 @@
-# Data Management Zone - Azure DevOps Deployment
+# Data Management Landing Zone - Azure DevOps Deployment
 
 In the previous step we have generated a JSON output similar to the following, which will be required in the next steps:
 
@@ -59,7 +59,7 @@ The following table explains each of the parameters:
 
 | Parameter                                   | Description  | Sample value |
 |:--------------------------------------------|:-------------|:-------------|
-| **AZURE_SUBSCRIPTION_ID**                   | Specifies the subscription ID of the Data Management Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
+| **AZURE_SUBSCRIPTION_ID**                   | Specifies the subscription ID of the Data Management Landing Zone where all the resources will be deployed | <div style="width: 36ch">`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`</div> |
 | **AZURE_LOCATION**                          | Specifies the region where you want the resources to be deployed. Please check [Supported Regions](/docs/DataManagementAnalytics-Prerequisites.md#supported-regions). | `northeurope` |
 | **AZURE_RESOURCE_MANAGER _CONNECTION_NAME** | Specifies the resource manager connection name in Azure DevOps. More details on how to create the resource manager service connection in Azure DevOps was described in the previous paragraph or [here](https://docs.microsoft.com/azure/devops/pipelines/library/connect-to-azure?view=azure-devops#create-an-azure-resource-manager-service-connection-with-an-existing-service-principal). | `my-connection-name` |
 
@@ -75,7 +75,7 @@ To begin, please open the [infra/params.dev.json](/infra/params.dev.json). In th
 | `tags` | Specifies the tags that you want to apply to all resources. | {`key`: `value`} |
 | `purviewRootCollectionAdminObjectIds` | Specifies the list of user object IDs that are assigned as collection admin to the root collection in Purview. To get the object ID for a user use the following Azure CLI command: `az ad user list --display-name "{user name}" --query "[].objectId"`. | [`{object-id-1}`, `{object-id-2}`] |
 | `vnetAddressPrefix` | Specifies the address space of the vnet. | `10.0.0.0/16` |
-| `azureFirewallSubnetAddressPrefix` | Specifies the address space of the subnet that is use for Azure Firewall. | `10.0.0.0/24` |
+| `azureFirewallSubnetAddressPrefix` | Specifies the address space of the subnet that is use for Azure Firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.0/24` |
 | `servicesSubnetAddressPrefix` | Specifies the address space of the subnet that is used for the services. | `10.0.1.0/24` |
 | `enableDnsAndFirewallDeployment` | Specifies whether firewall and private DNS Zones should be deployed. | `true` |
 | `firewallPrivateIp` | Specifies the private IP address of the central firewall. Optional if `enableDnsAndFirewallDeployment` is set to `true`. | `10.0.0.4` |

@@ -37,6 +37,9 @@
               "10.0.0.4"
             ]
         },
+        "firewallTier": {
+            "value": "Premium"
+        },
         "firewallPolicyId": {
             "value": ""
         },
