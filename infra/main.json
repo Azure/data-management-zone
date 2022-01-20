@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "2556241326646259361"
+      "templateHash": "18396199484842457086"
     }
   },
   "parameters": {
@@ -288,7 +288,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "6889799885640347788"
+              "templateHash": "7004950783398778434"
             }
           },
           "parameters": {
@@ -390,6 +390,30 @@
               "westeurope",
               "westindia",
               "westus",
+              "westus2",
+              "westus3"
+            ],
+            "availabilityZoneRegions": [
+              "australiaeast",
+              "brazilsouth",
+              "canadacentral",
+              "centralus",
+              "centralindia",
+              "eastasia",
+              "eastus",
+              "eastus2",
+              "francecentral",
+              "germanywestcentral",
+              "japaneast",
+              "koreacentral",
+              "northeurope",
+              "norwayeast",
+              "uksouth",
+              "southeastasia",
+              "southcentralus",
+              "swedencentral",
+              "usgovvirginia",
+              "westeurope",
               "westus2",
               "westus3"
             ],
@@ -567,11 +591,7 @@
               "name": "[format('{0}-firewall', parameters('prefix'))]",
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
-              "zones": [
-                "1",
-                "2",
-                "3"
-              ],
+              "zones": "[if(contains(variables('availabilityZoneRegions'), parameters('location')), createArray('1', '2', '3'), createArray())]",
               "properties": {
                 "sku": {
                   "name": "AZFW_VNet",
