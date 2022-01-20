@@ -77,6 +77,30 @@ var firewallPremiumRegions = [
   'westus2'
   'westus3'
 ]
+var availabilityZoneRegions = [
+  'australiaeast'
+  'brazilsouth'
+  'canadacentral'
+  'centralus'
+  'centralindia'
+  'eastasia'
+  'eastus'
+  'eastus2'
+  'francecentral'
+  'germanywestcentral'
+  'japaneast'
+  'koreacentral'
+  'northeurope'
+  'norwayeast'
+  'uksouth'
+  'southeastasia'
+  'southcentralus'
+  'swedencentral'
+  'usgovvirginia'
+  'westeurope'
+  'westus2'
+  'westus3'
+]
 
 // Firewall Policy Variables
 var firewallPolicyPremiumProperties = {
@@ -264,11 +288,11 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
   ]
   location: location
   tags: tags
-  zones: [
+  zones: contains(availabilityZoneRegions, location) ? [
     '1'
     '2'
     '3'
-  ]
+  ] : []
   properties: {
     sku: {
       name: 'AZFW_VNet'
