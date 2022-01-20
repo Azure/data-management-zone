@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "18396199484842457086"
+      "templateHash": "12904071157118301552"
     }
   },
   "parameters": {
@@ -3191,7 +3191,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "16711233143432259596"
+              "templateHash": "14201920356500171973"
             }
           },
           "parameters": {
@@ -3262,7 +3262,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "6413563287087229385"
+                      "templateHash": "16240531194403531210"
                     }
                   },
                   "parameters": {
@@ -3284,14 +3284,47 @@
                   },
                   "variables": {
                     "synapsePrivatelinkHubNameCleaned": "[replace(parameters('synapsePrivatelinkHubName'), '-', '')]",
-                    "synapsePrivatelinkHubPrivateEndpointName": "[format('{0}-private-endpoint', variables('synapsePrivatelinkHubNameCleaned'))]"
+                    "synapsePrivatelinkHubPrivateEndpointName": "[format('{0}-private-endpoint', variables('synapsePrivatelinkHubNameCleaned'))]",
+                    "synapsePrivatelinkHubRegions": [
+                      "westus2",
+                      "eastus",
+                      "northeurope",
+                      "westeurope",
+                      "southeastasia",
+                      "australiaeast",
+                      "westcentralus",
+                      "southcentralus",
+                      "eastus2",
+                      "uksouth",
+                      "westus",
+                      "australiasoutheast",
+                      "eastasia",
+                      "brazilsouth",
+                      "centralus",
+                      "centralindia",
+                      "japaneast",
+                      "northcentralus",
+                      "canadacentral",
+                      "canadaeast",
+                      "koreacentral",
+                      "southafricanorth",
+                      "ukwest",
+                      "japanwest",
+                      "francecentral",
+                      "switzerlandnorth",
+                      "germanywestcentral",
+                      "norwayeast",
+                      "uaenorth",
+                      "westus3",
+                      "jioindiawest"
+                    ]
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Synapse/privateLinkHubs",
                       "apiVersion": "2021-03-01",
                       "name": "[variables('synapsePrivatelinkHubNameCleaned')]",
-                      "location": "[parameters('location')]",
+                      "location": "[if(contains(variables('synapsePrivatelinkHubRegions'), parameters('location')), parameters('location'), 'northeurope')]",
                       "tags": "[parameters('tags')]",
                       "properties": {}
                     },
