@@ -14,11 +14,44 @@ param privateDnsZoneIdSynapseprivatelinkhub string
 // Variables
 var synapsePrivatelinkHubNameCleaned = replace(synapsePrivatelinkHubName, '-', '')
 var synapsePrivatelinkHubPrivateEndpointName = '${synapsePrivatelinkHub.name}-private-endpoint'
+var synapsePrivatelinkHubRegions = [
+  'westus2'
+  'eastus'
+  'northeurope'
+  'westeurope'
+  'southeastasia'
+  'australiaeast'
+  'westcentralus'
+  'southcentralus'
+  'eastus2'
+  'uksouth'
+  'westus'
+  'australiasoutheast'
+  'eastasia'
+  'brazilsouth'
+  'centralus'
+  'centralindia'
+  'japaneast'
+  'northcentralus'
+  'canadacentral'
+  'canadaeast'
+  'koreacentral'
+  'southafricanorth'
+  'ukwest'
+  'japanwest'
+  'francecentral'
+  'switzerlandnorth'
+  'germanywestcentral'
+  'norwayeast'
+  'uaenorth'
+  'westus3'
+  'jioindiawest'
+]
 
 // Resources
 resource synapsePrivatelinkHub 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
   name: synapsePrivatelinkHubNameCleaned
-  location: location
+  location: contains(synapsePrivatelinkHubRegions, location) ? location : 'northeurope'
   tags: tags
   properties: {}
 }
