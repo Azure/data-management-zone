@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "policyName": {
-            "value": "DiagnosticSettings-SynapseSqlPool-LogAnalytics"
+            "value": "DiagnosticSettings-Synapse-LogAnalytics"
         },
         "policyDescription": {
-            "value": "Send diagnostic settings for synapse sql pool to log analytics workspace."
+            "value": "Send diagnostic settings for synapse workspace to log analytics workspace."
         },
         "policyMode": {
             "value": "Indexed"
@@ -39,7 +39,7 @@
             "value": {
                 "if": {
                     "field": "type",
-                    "equals": "Microsoft.Synapse/workspaces/sqlPools"
+                    "equals": "Microsoft.Synapse/workspaces"
                 },
                 "then": {
                     "effect": "[parameters('effect')]",
@@ -86,7 +86,7 @@
                                     "variables": {},
                                     "resources": [
                                         {
-                                            "type": "Microsoft.Synapse/workspaces/sqlPools/providers/diagnosticSettings",
+                                            "type": "Microsoft.Synapse/workspaces/bigDataPools/providers/diagnosticSettings",
                                             "apiVersion": "2017-05-01-preview",
                                             "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Insights/setByPolicy')]",
                                             "location": "[parameters('location')]",
@@ -96,23 +96,27 @@
                                                 "metrics": [],
                                                 "logs": [
                                                     {
-                                                        "category": "SqlRequests",
+                                                        "category": "SynapseRbacOperations",
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "RequestSteps",
+                                                        "category": "GatewayApiRequests",
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "ExecRequests",
+                                                        "category": "BuiltinSqlReqsEnded",
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "DmsWorkers",
+                                                        "category": "IntegrationPipelineRuns",
                                                         "enabled": true
                                                     },
                                                     {
-                                                        "category": "Waits",
+                                                        "category": "IntegrationActivityRuns",
+                                                        "enabled": true
+                                                    },
+                                                    {
+                                                        "category": "IntegrationTriggerRuns",
                                                         "enabled": true
                                                     }
                                                 ]
@@ -129,7 +133,7 @@
                                         "value": "[field('location')]"
                                     },
                                     "resourceName": {
-                                        "value": "[field('fullName')]"
+                                        "value": "[field('name')]"
                                     }
                                 }
                             }
