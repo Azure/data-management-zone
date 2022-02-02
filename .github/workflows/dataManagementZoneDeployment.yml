@@ -61,7 +61,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           region: ${{ env.AZURE_LOCATION }}
           template: ${{ github.workspace }}/infra/main.bicep
-          parameters: ${{ github.workspace }}/infra/params.dev.json administratorPassword="${{ steps.generate_password_001.outputs.password }}"
+          parameters: ${{ github.workspace }}/infra/params.dev.json
           deploymentMode: Incremental
           deploymentName: "DataManagementZone-${{ github.sha }}"
           failOnStdErr: false
