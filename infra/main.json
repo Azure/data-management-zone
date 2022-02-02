@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1124.51302",
-      "templateHash": "12904071157118301552"
+      "templateHash": "5205541231650286521"
     }
   },
   "parameters": {
@@ -2288,7 +2288,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "17451550666935843444"
+              "templateHash": "8524388414033025523"
             }
           },
           "parameters": {
@@ -2737,7 +2737,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "12660131753967436973"
+                      "templateHash": "9522336369044592370"
                     }
                   },
                   "parameters": {
@@ -2764,7 +2764,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
+                      "apiVersion": "2021-06-01-preview",
                       "name": "[parameters('keyvaultName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2783,6 +2783,7 @@
                           "ipRules": [],
                           "virtualNetworkRules": []
                         },
+                        "publicNetworkAccess": "Disabled",
                         "sku": {
                           "family": "A",
                           "name": "standard"
@@ -3191,7 +3192,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.4.1124.51302",
-              "templateHash": "14201920356500171973"
+              "templateHash": "6420410304354563673"
             }
           },
           "parameters": {
@@ -3262,7 +3263,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.4.1124.51302",
-                      "templateHash": "16240531194403531210"
+                      "templateHash": "13765916949238564881"
                     }
                   },
                   "parameters": {
@@ -3322,7 +3323,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Synapse/privateLinkHubs",
-                      "apiVersion": "2021-03-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('synapsePrivatelinkHubNameCleaned')]",
                       "location": "[if(contains(variables('synapsePrivatelinkHubRegions'), parameters('location')), parameters('location'), 'northeurope')]",
                       "tags": "[parameters('tags')]",

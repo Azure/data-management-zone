@@ -49,7 +49,7 @@ var synapsePrivatelinkHubRegions = [
 ]
 
 // Resources
-resource synapsePrivatelinkHub 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
+resource synapsePrivatelinkHub 'Microsoft.Synapse/privateLinkHubs@2021-06-01' = {
   name: synapsePrivatelinkHubNameCleaned
   location: contains(synapsePrivatelinkHubRegions, location) ? location : 'northeurope'
   tags: tags
