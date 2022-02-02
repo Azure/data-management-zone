@@ -57,9 +57,10 @@ stages:
               subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
               location: ${{ variables.AZURE_LOCATION }}
               templateLocation: "Linked artifact"
-              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.bicep"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
               deploymentMode: "Validation"
+              deploymentName: "DataManagementZone-$(Build.SourceVersion)"
 
           # Deploy Data Management Zone - what-if
           - task: AzureCLI@2
@@ -79,7 +80,8 @@ stages:
                   --location ${{ variables.AZURE_LOCATION }} `
                   --subscription ${{ variables.AZURE_SUBSCRIPTION_ID }} `
                   --exclude-change-types Ignore NoChange Unsupported `
-                  --template-file "$(System.DefaultWorkingDirectory)/infra/main.json" `
+                  --name "DataManagementZone-$(Build.SourceVersion)" `
+                  --template-file "$(System.DefaultWorkingDirectory)/infra/main.bicep" `
                   --parameters "$(System.DefaultWorkingDirectory)/infra/params.dev.json" `
                   --result-format "FullResourcePayloads"
                 
@@ -123,6 +125,7 @@ stages:
               subscriptionId: ${{ variables.AZURE_SUBSCRIPTION_ID }}
               location: ${{ variables.AZURE_LOCATION }}
               templateLocation: "Linked artifact"
-              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.json"
+              csmFile: "$(System.DefaultWorkingDirectory)/infra/main.bicep"
               csmParametersFile: "$(System.DefaultWorkingDirectory)/infra/params.dev.json"
               deploymentMode: "Incremental"
+              deploymentName: "DataManagementZone-$(Build.SourceVersion)"
