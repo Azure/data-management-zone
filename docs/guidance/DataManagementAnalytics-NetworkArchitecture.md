@@ -251,7 +251,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Summary
 
-Global Vnet peering between Data Landing Zones in different regions can have tremendous benefits especially as the cross-region data traffic increases inside the data platform. Service management will be muchsimplified, the core Azure platform team will be relieved and use cases that require low latency and high bandwith will benefit from this option. Also from a cost perspective there are benefits that should be considered when deciding about cross-region Data Landing Zone connectivity. 
+Global Vnet peering between Data Landing Zones in different regions can have tremendous benefits especially as the cross-region data traffic increases inside the data platform. Service management will be muchsimplified, the core Azure platform team will be relieved and use cases that require low latency and high bandwith will benefit from this option. Also from a cost perspective there are benefits that should be considered when deciding about cross-region Data Landing Zone connectivity.
 
 ### 2. Traditional Spoke-Hub-Hub-Spoke Design (NOT Recommended)
 
