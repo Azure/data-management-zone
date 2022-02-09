@@ -225,6 +225,8 @@ With this network design, there is no NVA in between acting as a single point of
 
 This network design change also has the impact that the platform team can no longer inspact and log all traffic using a layer 7 firewall. However, this is not considered as disadvantage as Data Management and Analytics Scenario can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. Also, other platform capabilities such as Network Security Group Flow Logs and service specific Diagnostic Settings can be used to capture necessary network and service logs that can be used to inspect traffic. Such logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/).
 
+In some scenarios, traffic needs to be limited due to regulatory or legal implications. For instance, GDPR requires certain datasets to stay within a european datacenter and therefore would not allowed to be transferred across regions. To comply with such rules and only allow traffic to be sent one direction from East US to West Europe but not vice versa, customers can rely on NSGs. Within the NSGs you can define that traffic originating from East US is denied whereas traffic originating from West Europe would be allowed. This solution approach does not have implications on the bandwith and latency, but will allow customer to stay compliant while still being able to combine datasets from multiple regions.
+
 This option also has no impact on the DNS architecture and allows using an Azure-native solution based on Azure Private DNS Zones.
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
@@ -249,7 +251,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Summary
 
-
+Global Vnet peering between Data Landing Zones in different regions can have tremendous benefits especially as the cross-region data traffic increases inside the data platform. Service management will be muchsimplified, the core Azure platform team will be relieved and use cases that require low latency and high bandwith will benefit from this option. Also from a cost perspective there are benefits that should be considered when deciding about cross-region Data Landing Zone connectivity. 
 
 ### 2. Traditional Spoke-Hub-Hub-Spoke Design (NOT Recommended)
 
@@ -297,22 +299,6 @@ This setup is well-known and established at many customers and therefore is easy
 
 ### Conclusion
 
-* If the amount of data and the number of use-cases is very low, Spoke-Hbub--- is a viable option
-    * customers know what they are doing
-    * established processes
-    * connections can be restricted, etc.
-* if the amount of data grows, the proposed option should be considered as it provides a number of benefits for such use-cases while customers can stil adhere to regulations and legislation
+After reviewing the two options for cross-region Data Landing Zone connectivity, it becomes clear that [Option 1: Global Vnet peering](#1-global-vnet-peering-recommended) between Data Landing Zone has a number of advantages compared to option 2 and therefore is the recommended approach as the amount of data that needs to be exchanged across regions grows. This option can be easily managed and provides compliant, cost effective and performant connectivity across regions.
 
-
-
-
-
-On the other hand, cross-region traffic is often disabled and blocked by default within the connectivity hubs 
-
-, cross-region data traffic would have to traverse two connectivity Hubs and three Vnet peerings. If a VM in West Europe tries to access data that is stored in a storage account in East US, 
-
-If we are assuming that our cross-region traffic is allow-listed, By default, such a setup would result that if data is accessed across 
-
-In a multi-region setup, customers woulgenerally have a connectivity subscription that acts as a Hub in each individual region. So, if we are assuming that the Data Platform is hosted 
-
-For the multi-region Data Landing Zone connectivity, we want to consider the following scenario. A first Data Landing Zone is deployed in the West Euo
+Nonetheless, [Option 2: Traditional Spoke-Hub-Hub-Spoke Design](#2-traditional-spoke-hub-hub-spoke-design-not-recommended) can be a viable option while the need for cross-region data exchange and the data volume is low.
