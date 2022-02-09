@@ -9,7 +9,7 @@ The Data Management and Analytics Scenario promises the possibility to easily sh
 
 ![Meshed Network Architecture](/docs/images/NetworkOptions-NetworkMesh.png)
 
-To explain the rationale behind the recommended design, this article will illustrate the advantages and disadvantages that come with each of the different network architecture approaches that were considered when designing the Data Management and Analytics Scenario. The first section of this article will only look at a single-region pattern, where the Data Management Zone as well as all the Data Landing Zones are hosted in teh same region. The second chapter will specifically focus on the cross-region setup and will provide recommendations for such data access patterns.
+To explain the rationale behind the recommended design, this article will illustrate the advantages and disadvantages that come with each of the different network architecture approaches that were considered when designing the Data Management and Analytics Scenario. The first section of this article will only look at a single-region pattern, where the Data Management Zone as well as all the Data Landing Zones are hosted in the same region. The second chapter will specifically focus on the cross-region setup and will provide recommendations for such data access patterns.
 
 ## Single-region Data Landing Zone Connectivity
 
@@ -57,7 +57,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Bandwidth and Latency
 
-Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light).
+Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fibre cables/light).
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
@@ -145,7 +145,7 @@ Summary: :heavy_plus_sign:
 
 #### Bandwidth and Latency
 
-Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light).
+Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fibre cables/light).
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
@@ -187,7 +187,7 @@ Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Bandwidth and Latency
 
-Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fiber cables/light).
+Due to the fact that there are no NVAs limiting throughput for cross-Data Landing Zone data exchange, there are no known limitations from a bandwidth and latency perspective. Physical limits in our datacenters are the only limiting factor (speed of fibre cables/light).
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
@@ -203,7 +203,7 @@ After reviewing all network architecture options from various angles and identif
 
 ![Cross-region Data Landing Zone Connectivity](/docs/images/CrossRegionConnectivity.png)
 
-If customers have a presence in more than a single Azure region and want to host their data plaform and data applications across multiple geographies, the connectivity becomes slightly more complicated.
+If customers have a presence in more than a single Azure region and want to host their data platform and data applications across multiple geographies, the connectivity becomes slightly more complicated.
 
 Customers with a multi-region setup generally have a connectivity hub subscription in each of the individual Azure locations. For instance, if services are running in East US and West Europe, a connectivity hub subscription with shared network resources would exist in both regions. Shared network resources include services like an NVA such as an Azure Firewall, an ExpressRoute Gateway, a VPN Gateway, the Hub Virtual Network in case of a Hub&Spoke architecture or the vWAN Hub in case of a vWan setup.
 
@@ -221,11 +221,11 @@ Summary: :heavy_plus_sign:/:heavy_minus_sign:
 
 #### Service Management
 
-With this network design, there is no NVA in between acting as a single point of failure or throttling throughput. By not sending the data through the connectiviyt hubs, the manageemnt overhead for the core Azure platform team will aslo be reduced, as there will be no need to scale the virtual appliances and gateways in the connectivity hubs. In addition, the need for allow-listing individual cross-region connections will be omitted. Data team swill no longer have to wait for route table changes in order to be able to acecss data from another Data Landing Zone in anotehr region.
+With this network design, there is no NVA in between acting as a single point of failure or throttling throughput. By not sending the data through the connectivity hubs, the management overhead for the core Azure platform team will also be reduced, as there will be no need to scale the virtual appliances and gateways in the connectivity hubs. In addition, the need for allow-listing individual cross-region connections will be omitted. Data team swill no longer have to wait for route table changes in order to be able to access data from another Data Landing Zone in another region.
 
-This network design change also has the impact that the platform team can no longer inspact and log all traffic using a layer 7 firewall. However, this is not considered as disadvantage as Data Management and Analytics Scenario can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. Also, other platform capabilities such as Network Security Group Flow Logs and service specific Diagnostic Settings can be used to capture necessary network and service logs that can be used to inspect traffic. Such logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/).
+This network design change also has the impact that the platform team can no longer inspect and log all traffic using a layer 7 firewall. However, this is not considered as disadvantage as Data Management and Analytics Scenario can be considered as coherent platform that spans across multiple subscriptions to allow for scale and overcome platform level limitations. Also, other platform capabilities such as Network Security Group Flow Logs and service specific Diagnostic Settings can be used to capture necessary network and service logs that can be used to inspect traffic. Such logs can be captured at scale through the use of [Azure Policies](/infra/Policies/PolicyDefinitions/DiagnosticSettings/).
 
-In some scenarios, traffic needs to be limited due to regulatory or legal implications. For instance, GDPR requires certain datasets to stay within a european datacenter and therefore would not allowed to be transferred across regions. To comply with such rules and only allow traffic to be sent one direction from East US to West Europe but not vice versa, customers can rely on NSGs. Within the NSGs you can define that traffic originating from East US is denied whereas traffic originating from West Europe would be allowed. This solution approach does not have implications on the bandwith and latency, but will allow customer to stay compliant while still being able to combine datasets from multiple regions.
+In some scenarios, traffic needs to be limited due to regulatory or legal implications. For instance, GDPR requires certain datasets to stay within a European datacentre and therefore would not allowed to be transferred across regions. To comply with such rules and only allow traffic to be sent one direction from East US to West Europe but not vice versa, customers can rely on NSGs. Within the NSGs you can define that traffic originating from East US is denied whereas traffic originating from West Europe would be allowed. This solution approach does not have implications on the bandwidth and latency, but will allow customer to stay compliant while still being able to combine datasets from multiple regions.
 
 This option also has no impact on the DNS architecture and allows using an Azure-native solution based on Azure Private DNS Zones.
 
@@ -239,19 +239,19 @@ _When accessing a Private Endpoint across a peered network customers will only e
 
 ---
 
-With this network design customers will only pay for the two Private Endpoints (charged per hour) as well as the ingress and egress traffic that is sent through the Private Endpoints. In addition, customers will have to pay [data transfer cost](https://azure.microsoft.com/en-gb/pricing/details/bandwidth/) for traffic between regions. However, due to teh statement above, you will NOT be charged for the global Vnet peering ingress and egress cost. In summary, this first option has noteworthy cost benefits compared to the option mentioned below.
+With this network design customers will only pay for the two Private Endpoints (charged per hour) as well as the ingress and egress traffic that is sent through the Private Endpoints. In addition, customers will have to pay [data transfer cost](https://azure.microsoft.com/en-gb/pricing/details/bandwidth/) for traffic between regions. However, due to the statement above, you will NOT be charged for the global Vnet peering ingress and egress cost. In summary, this first option has noteworthy cost benefits compared to the option mentioned below.
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Bandwidth and Latency
 
-Due to the fact that there are no NVAs limiting throughput and a lower number of hops for cross-region Data Landing Zone data exchange, the bandwidth and latency will be much lower compared to option 2. Physical limits in our datacenters will dictate the bandwith and latency that can be achieved for cross-region traffic (speed of fiber cables/light, gateways and routers).
+Due to the fact that there are no NVAs limiting throughput and a lower number of hops for cross-region Data Landing Zone data exchange, the bandwidth and latency will be much lower compared to option 2. Physical limits in our datacentres will dictate the bandwidth and latency that can be achieved for cross-region traffic (speed of fibre cables/light, gateways and routers).
 
 Summary: :heavy_plus_sign::heavy_plus_sign::heavy_plus_sign:
 
 #### Summary
 
-Global Vnet peering between Data Landing Zones in different regions can have tremendous benefits especially as the cross-region data traffic increases inside the data platform. Service management will be muchsimplified, the core Azure platform team will be relieved and use cases that require low latency and high bandwith will benefit from this option. Also from a cost perspective there are benefits that should be considered when deciding about cross-region Data Landing Zone connectivity.
+Global Vnet peering between Data Landing Zones in different regions can have tremendous benefits especially as the cross-region data traffic increases inside the data platform. Service management will be much simplified, the core Azure platform team will be relieved and use cases that require low latency and high bandwith will benefit from this option. Also, from a cost perspective there are benefits that should be considered when deciding about cross-region Data Landing Zone connectivity.
 
 ### 2. Traditional Spoke-Hub-Hub-Spoke Design (NOT Recommended)
 
@@ -267,9 +267,9 @@ Summary: :heavy_plus_sign:/:heavy_minus_sign:
 
 A benefit of this solution approach is that it is well-known and consistent with other cross-region connectivity patterns. Therefore, this option is easy to adopt and implement by customers. This option also has no impact on the DNS architecture and allows using an Azure-native solution based on Azure Private DNS Zones.
 
-This connectivity option works seamleass if setup correctly, but also has certain downsides based on our experience. By default, such cross-region traffic is most often denied and needs to be enabled on a case-by-case basis. This means, that for each and every required cross-region data access requirement, a ticket would have to be submitted to the core Azure platform team to allow-list the particular connection between the virtual machine and storage account cross-region. This can create a serious management overhead and can slow-down data project teams, because they are not able to access the data they need to.
+This connectivity option works seamless if setup correctly, but also has certain downsides based on our experience. By default, such cross-region traffic is most often denied and needs to be enabled on a case-by-case basis. This means, that for each and every required cross-region data access requirement, a ticket would have to be submitted to the core Azure platform team to allow-list the particular connection between the virtual machine and storage account cross-region. This can create a serious management overhead and can slow-down data project teams, because they are not able to access the data they need to.
 
-Another point that should be considered when choosing this option is that the connectivity hubs act as single point of failures. In case of a downtime of the NVAs or the Gateways, connectivity will fail and corresponding data pipelines will also fail. In addition, there there is a high risk of misconfiguration of routes in the connectivity hubs. Such misconfiguration can again cause serius downtime in the data platform and can lead to a series of failures of dependent workflows and data products.
+Another point that should be considered when choosing this option is that the connectivity hubs act as single point of failures. In case of a downtime of the NVAs or the Gateways, connectivity will fail and corresponding data pipelines will also fail. In addition, there is a high risk of misconfiguration of routes in the connectivity hubs. Such misconfiguration can again cause serious downtime in the data platform and can lead to a series of failures of dependent workflows and data products.
 
 Lastly, customers should monitor the amount of data that needs to be transferred across regions. Over time, this can result in gigabytes or terabytes of data that is sent through the central instances. However, the bandwidth of existing NVAs is often limited to a one- or two-digit gigabyte throughput. Therefore, the appliances can act as a critical bottleneck limiting the traffic flowing between regions and therefore limiting the shareability of data assets. This may require scaling mechanisms for the shared network resources, which can be a time consuming and costly exercise that may even have an impact on other workloads in the tenant.
 
@@ -295,9 +295,9 @@ Summary: :heavy_minus_sign::heavy_minus_sign::heavy_minus_sign:
 
 #### Summary
 
-This setup is well-known and established at many customers and therefore is easy to establish in an existing enviornment. However, customers should consider the downsides that come with the Spoke-Hub-Hub-Spoke connectivity especially from a service management, cost and bandwith & latency perspoective. Especially as the number of cross-region use cases grows, this setup will show it's challenges.
+This setup is well-known and established at many customers and therefore is easy to establish in an existing environment. However, customers should consider the downsides that come with the Spoke-Hub-Hub-Spoke connectivity especially from a service management, cost, and bandwidth & latency perspective. Especially as the number of cross-region use cases grows, this setup will show its challenges.
 
-### Conclusion
+### Conclusion - Cross-region Data Landing Zone Connectivity
 
 After reviewing the two options for cross-region Data Landing Zone connectivity, it becomes clear that [Option 1: Global Vnet peering](#1-global-vnet-peering-recommended) between Data Landing Zone has a number of advantages compared to option 2 and therefore is the recommended approach as the amount of data that needs to be exchanged across regions grows. This option can be easily managed and provides compliant, cost effective and performant connectivity across regions.
 
