@@ -3,18 +3,18 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Cloud-scale analytics scenario",
+            "title": "Cloud-Scale Analytics Scenario",
             "steps": [
                 {
                     "name": "basics",
-                    "label": "Cloud-scale analytics scenario",
+                    "label": "Cloud-Scale Analytics Scenario",
                     "elements": [
                         {
                             "name": "infoBoxDataManagementAnalytics",
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Cloud-scale analytics scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "text": "Cloud-Scale Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
                                 "style": "Info",
                                 "uri": "https://aka.ms/adopt/datamanagement"
                             }
@@ -99,7 +99,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Cloud-scale analytics scenario uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for the Data Management Zone and each Data Landing Zone.",
+                                "text": "Cloud-Scale Analytics Scenario uses a single landing zone for all data governance tasks. We are advising to use a separate subscription for the Data Management Zone and each Data Landing Zone.",
                                 "style": "Info"
                             }
                         },
@@ -308,7 +308,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Cloud-scale analytics scenario advises to scale data workloads through the means of one or multiple Data Landing Zones. Each Data Landing Zone should be deployed to a separate subscription.",
+                                "text": "Cloud-Scale Analytics Scenario advises to scale data workloads through the means of one or multiple Data Landing Zones. Each Data Landing Zone should be deployed to a separate subscription.",
                                 "style": "Info"
                             }
                         },
