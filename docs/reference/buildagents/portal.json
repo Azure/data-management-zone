@@ -3,7 +3,7 @@
     "view": {
         "kind": "Form",
         "properties": {
-            "title": "Data Management & Analytics Scenario - Self-Hosted Agent",
+            "title": "Cloud-scale analytics scenario - Self-Hosted Agent",
             "steps": [
                 {
                     "name": "basics",
@@ -14,7 +14,7 @@
                             "type": "Microsoft.Common.InfoBox",
                             "visible": true,
                             "options": {
-                                "text": "Data Management & Analytics Scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
+                                "text": "Cloud-scale analytics scenario is a prescriptive reference architecture for data with reference implementation provided by Microsoft. Visit 'aka.ms/adopt/datamanagement' for more details about the solution pattern.",
                                 "style": "Info",
                                 "uri": "https://aka.ms/adopt/datamanagement"
                             }
