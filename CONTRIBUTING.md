@@ -4,7 +4,7 @@ This project welcomes community contributions in the form of [Issues](#issue-rep
 
 > If you have a question, have discovered an issue or perhaps you would like to propose an enhancement or idea, please file an issue report **BEFORE** commencing work on it.
 
-## Contribution scope for Data Management & Analytics Scenario
+## Contribution scope for Cloud-scale analytics scenario
 
 The following is the scope of contributions to this repository:
 
@@ -90,7 +90,7 @@ After the pull request has been reviewed and approved, the feature branch will b
 
 ## Stewardship of the code repository
 
-The Data Management & Analytics Scenario code repository are maintained by the code owners. The repository including language, design, policy oversight, and reference implementations. Elevated privileges will be solely based on active contributions in the project repository.
+The Cloud-scale analytics scenario code repository are maintained by the code owners. The repository including language, design, policy oversight, and reference implementations. Elevated privileges will be solely based on active contributions in the project repository.
 
 User may be given elevated privileges once approved by the currents members. All members abide by all organizational polices, including the code of conduct. Elevated privileges can be withdrawn in the case of written notice of resignation or if the member is unreachable or unresponsive for extended time.
 

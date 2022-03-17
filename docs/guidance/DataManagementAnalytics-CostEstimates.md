@@ -1,6 +1,6 @@
 # Cost Estimates
 
-This document will provide users an overview of what monthly cost can be expected when using Data Management & Analytics Scenario. Links to the official Cost Calculator will be provided where users can make changes depending on the expected amount of data and data throughput. All cost calculations will specify base cost of Data Management & Analytics Scenario. Base cost means the cost that occur if no data workloads run inside the respective subscriptions.
+This document will provide users an overview of what monthly cost can be expected when using Cloud-scale analytics scenario. Links to the official Cost Calculator will be provided where users can make changes depending on the expected amount of data and data throughput. All cost calculations will specify base cost of Cloud-scale analytics scenario. Base cost means the cost that occur if no data workloads run inside the respective subscriptions.
 
 ## Data Management Zone
 
