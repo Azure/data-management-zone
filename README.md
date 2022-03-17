@@ -4,28 +4,28 @@
 
 The [Cloud-Scale Analytics Scenario](https://aka.ms/adopt/datamanagement) provides a prescriptive data platform design coupled with Azure best practices and design principles. These principles serve as a compass for subsequent design decisions across critical technical domains. The architecture will continue to evolve alongside the Azure platform and is ultimately driven by the various design decisions that organizations must make to define their Azure data journey.
 
-The Data Management & Analytics architecture consists of two core building blocks:
+The Cloud-scale Analytics architecture consists of two core building blocks:
 
 1. *Data Management Landing Zone* which provides all data management and data governance capabilities for the data platform of an organization.
-1. *Data Landing Zone* which is a logical construct and a unit of scale in the Data Management & Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
+1. *Data Landing Zone* which is a logical construct and a unit of scale in the Cloud-scale Analytics architecture that enables data retention and execution of data workloads for generating insights and value with data.
 
-The architecture is modular by design and allows organizations to start small with a single Data Management Landing Zone and Data Landing Zone, but also allows to scale to a multi-subscription data platform environment by adding more Data Landing Zones to the architecture. Thereby, the reference design allows to implement different modern data platform patterns like data-mesh, data-fabric as well as traditional datalake architectures. Data Management & Analytics has been very well aligned with the data-mesh approach, and is ideally suited to help organizations build data products and share these across business units of an organization. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
+The architecture is modular by design and allows organizations to start small with a single Data Management Landing Zone and Data Landing Zone, but also allows to scale to a multi-subscription data platform environment by adding more Data Landing Zones to the architecture. Thereby, the reference design allows to implement different modern data platform patterns like data-mesh, data-fabric as well as traditional datalake architectures. Cloud-scale Analytics has been very well aligned with the data-mesh approach, and is ideally suited to help organizations build data products and share these across business units of an organization. If core recommendations are followed, the resulting target architecture will put the customer on a path to sustainable scale.
 
-![Data Management & Analytics](/docs/images/DataManagementAnalytics.gif)
-
----
-
-* The Data Management & Analytics architecture represents the strategic design path and target technical state for your Azure data platform.*
+![Cloud-scale Analytics](/docs/images/DataManagementAnalytics.gif)
 
 ---
 
-This repository describes the Data Management Landing Zone, which is classified as data management hub. It is the heart of the Data Management & Analytics architecture pattern and enables central governance of data assets across all Data Landing Zones. Data Management and Analytics scenario targets the deployment of a single Data Management Landing Zone instance inside a tenant of an organization.
+* The Cloud-scale Analytics architecture represents the strategic design path and target technical state for your Azure data platform.*
+
+---
+
+This repository describes the Data Management Landing Zone, which is classified as data management hub. It is the heart of the Cloud-scale Analytics architecture pattern and enables central governance of data assets across all Data Landing Zones. Data Management and Analytics scenario targets the deployment of a single Data Management Landing Zone instance inside a tenant of an organization.
 
 > **Note:** Before getting started with the deployment, please make sure you are familiar with the [complementary documentation in the Cloud Adoption Framework](https://aka.ms/adopt/datamanagement). After deploying your Data Management Landing Zone, please move on to the [Data Landing Zone](https://github.com/Azure/data-landing-zone) deployment to create an environment in which you can start working on generating insights and value with data. The minimal recommended setup consists of a single Data Management Landing Zone and a single [Data Landing Zone](https://github.com/Azure/data-landing-zone).
 
 ## Deploy Cloud-Scale Analytics Scenario
 
-The Data Management & Analytics architecture is modular by design and allows customers to start with a small footprint and grow over time. In order to not end up in a migration project, customers should decide upfront how they want to organize data domains across Data Landing Zones. All Data Management & Analytics architecture building blocks can be deployed through the Azure Portal as well as through GitHub Actions workflows and Azure DevOps Pipelines. The template repositories contain sample YAML pipelines to more quickly get started with the setup of the environments.
+The Cloud-scale Analytics architecture is modular by design and allows customers to start with a small footprint and grow over time. In order to not end up in a migration project, customers should decide upfront how they want to organize data domains across Data Landing Zones. All Cloud-scale Analytics architecture building blocks can be deployed through the Azure Portal as well as through GitHub Actions workflows and Azure DevOps Pipelines. The template repositories contain sample YAML pipelines to more quickly get started with the setup of the environments.
 
 | Reference implementation   | Description | Deploy to Azure | Link |
 |:---------------------------|:------------|:----------------|------|

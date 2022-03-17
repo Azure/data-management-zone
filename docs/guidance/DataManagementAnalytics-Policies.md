@@ -2,7 +2,7 @@
 
 [Implementing custom policies](/azure/governance/policy/tutorials/create-and-manage) allows you to do more with Azure Policy. The Cloud-Scale Analytics Scenario comes with a set of pre-created policies to help you implement the required guard rails in your environment.
 
-Data Management & Analytics contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
+Cloud-scale Analytics contains custom policies pertaining to **resource and cost management, authentication, encryption, network isolation, logging, resilience and more** that apply to the following services and areas:
 
 - [Azure Policies for Cloud-Scale Analytics Scenario](#azure-policies-for-data-management--analytics-scenario)
   - [All Services](#all-services)

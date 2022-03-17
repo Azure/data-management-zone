@@ -4,7 +4,7 @@ This document will provide users an overview of what monthly cost can be expecte
 
 ## Data Management Zone
 
-In a production scenario, it is recommended to rely on the Azure Firewall and Private DNS Zones hosted in the connectivity Hub of [Enterprise-Scale Landing Zones](https://github.com/Azure/Enterprise-Scale). In MVPs, users may rely on the Azure Firewall and Private DNS Zones bundled with Data Management & Analytics. Hence, two different cost calclations are provided which can be found below:
+In a production scenario, it is recommended to rely on the Azure Firewall and Private DNS Zones hosted in the connectivity Hub of [Enterprise-Scale Landing Zones](https://github.com/Azure/Enterprise-Scale). In MVPs, users may rely on the Azure Firewall and Private DNS Zones bundled with Cloud-scale Analytics. Hence, two different cost calclations are provided which can be found below:
 
 - [Pricing Calculator - Data Management Zone w/o Azure Firewall and Private DNS Zones](https://azure.com/e/070df56959aa4ee89d42e60a1dc3c77b)
 - [Pricing Calculator - Data Management Zone w/ Azure Firewall and Private DNS Zones](https://azure.com/e/3ebdcf80bc9b4d7bb385e555c027c9de)

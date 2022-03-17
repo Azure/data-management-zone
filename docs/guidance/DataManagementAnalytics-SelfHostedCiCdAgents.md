@@ -4,7 +4,7 @@ The Cloud-Scale Analytics Scenario (DMA) reference implementation uses a multi-l
 
 When a Data Product team wants to deploy application code to an Azure service (e.g. a Web Application configured with Private Endpoints) through the means of CI/CD pipelines and the usage of the default Microsoft-hosted or GitHub-hosted agents for Azure DevOps Pipelines or GitHub Actions, the deployment will fail as the Azure service will not be accessible by these publicly hosted virtual machines. The root cause is that agents will not be able to resolve the private IP address of the services as they are not able to leverage the DNS services in the customer environment. And even if the traffic coming from the public agent would be routed to the correct endpoint, the central firewall in the customer tenant would block the traffic. Lastly, it is most likely needless to say that opening firewall ports for such scenarios is also not a recommended pattern.
 
-As a result, customers have to setup self-hosted agents that are connected to the corporate vnet. As these are hosted on the corporate network, the agents will be able to resolve the private IPs of the services and therefore will be able to deploy application code on services that are hosted using private endpoints. In order to simplify this setup, this doc will describe step-by-step how self-hosted agents can be deployed into an Data Management & Analytics environment.
+As a result, customers have to setup self-hosted agents that are connected to the corporate vnet. As these are hosted on the corporate network, the agents will be able to resolve the private IPs of the services and therefore will be able to deploy application code on services that are hosted using private endpoints. In order to simplify this setup, this doc will describe step-by-step how self-hosted agents can be deployed into an Cloud-scale Analytics environment.
 
 As each service has its own way of setting up agents, we will split the following sections by service.
 
@@ -20,7 +20,7 @@ For more details, please visit the [docs](https://docs.microsoft.com/en-us/azure
 
 ### Deployment
 
-Please follow the steps below to deploy a [Linux based Virtual Machine Scale Set Agents](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/scale-set-agents?view=azure-devops) into an existing Data Management & Analytics Data Landing Zone or Data Management Zone:
+Please follow the steps below to deploy a [Linux based Virtual Machine Scale Set Agents](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/scale-set-agents?view=azure-devops) into an existing Cloud-scale Analytics Data Landing Zone or Data Management Zone:
 
 1. Use the [Bicep templates](/docs/reference/buildagents/main.bicep), [ARM template](/docs/reference/buildagents/main.json) or the "Deploy To Azure" Button to deploy a virtual machine scale set (VMSS) into the environment. We are recommending to use the already existing `{prefix}-{environment}-mgmt` resource group and the `ServicesSubnet` for the deployment into your Data Management Zone or Data Landing Zone.
 

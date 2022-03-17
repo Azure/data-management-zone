@@ -1,6 +1,6 @@
 # Data Management Landing Zone - Prerequisites
 
-This template repository contains all templates to deploy the Data Management Landing Zone of the Data Management & Analytics architecture. The Data Management Landing Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
+This template repository contains all templates to deploy the Data Management Landing Zone of the Cloud-scale Analytics architecture. The Data Management Landing Zone is the central management instance to govern all data assets across all Data Landing Zones and possible even beyond that.
 
 ## What will be deployed?
 
