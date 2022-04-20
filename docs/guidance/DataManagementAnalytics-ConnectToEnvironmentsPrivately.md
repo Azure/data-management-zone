@@ -1,6 +1,6 @@
 # Connecting to Environments Privately
 
-The Data Management & Analytics Scenario reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
+The Cloud-Scale Analytics Scenario reference architecture is secure by design and uses a multi-layered security approach to overcome common data exfiltration risks raised by customers. Features on a network, identity, data and service layer, enable customers to define granular access controls to only expose required data to a user. Even if some of these security mechanisms fail, data within the ESA platform stays secure.
 
 Network features like private endpoints and disabled public network access greatly reduce the attack surface of a data platform of an organization. However, with these features enabled, additional steps need to be taken to successfully connect to the respective services like Storage Accounts, Synapse workspaces, Purview or Azure Machine Learning from the public internet. Therefore, this document will describe the most common options for connecting to services inside the Data Management Zone or Data Landing Zone in a simple and secure way.
 
@@ -26,7 +26,7 @@ More details about Azure Bastion can be found [here](https://docs.microsoft.com/
 
 ### Deployment
 
-To simplify the setup for Data Management & Analytics Scenario users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
+To simplify the setup for Cloud-Scale Analytics Scenario users, we have been working on a Bicep/ARM template to quickly recreate this setup inside your Data Management Zone or Data Landing Zone. Our template will create the following setup inside your subscription:
 
 ![Azure Bastion Architecture](/docs/images/AzureBastionArchitecture.png)
 
