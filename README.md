@@ -15,7 +15,7 @@ The architecture is modular by design and allows organizations to start small wi
 
 ---
 
-* The Cloud-scale Analytics architecture represents the strategic design path and target technical state for your Azure data platform.*
+*The Cloud-scale Analytics architecture represents the strategic design path and target technical state for your Azure data platform.*
 
 ---
 
