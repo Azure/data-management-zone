@@ -51,7 +51,7 @@
                                 "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
                                 "where": {
                                     "field": "Microsoft.Network/privateEndpoints/privateLinkServiceConnections[*].groupIds[*]",
-                                    "equals": "workspace"
+                                    "equals": "amlworkspace"
                                 }
                             },
                             "greaterOrEquals": 1
