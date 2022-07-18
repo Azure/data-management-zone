@@ -9,19 +9,19 @@
             "value": "dev"
         },
         "prefix": {
-            "value": "dmz"
+            "value": "wadudmzgt"
         },
         "tags": {
             "value": {}
         },
         "purviewRootCollectionAdminObjectIds": {
-            "value": []
+            "value": [10299557-b0cd-4b82-864b-0f3ac3967903]
         },
         "vnetAddressPrefix": {
             "value": "10.0.0.0/16"
         },
         "azureFirewallSubnetAddressPrefix": {
-            "value": "10.0.0.0/24"
+            "value": "10.0.10.0/24"
         },
         "servicesSubnetAddressPrefix": {
             "value": "10.0.1.0/24"
@@ -38,7 +38,7 @@
             ]
         },
         "firewallTier": {
-            "value": "Premium"
+            "value": "Standard"
         },
         "firewallPolicyId": {
             "value": ""
