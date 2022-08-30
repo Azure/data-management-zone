@@ -8,6 +8,32 @@ By navigating through the deployment steps, you will deploy the following setup 
 
 > **Note:** Before deploying the resources, we recommend to check registration status of the required resource providers in your subscription. For more information, see [Resource providers for Azure services](https://docs.microsoft.com/azure/azure-resource-manager/management/resource-providers-and-types).
 
+(Required)
+- Microsoft.Purview
+- Microsoft.Storage
+- Microsoft.EventHub
+- Microsoft.ContainerRegistry
+- Microsoft.DataFactory
+- Microsoft.DBforMySQL
+
+(Recommended) 
+- Microsoft.PowerBI
+- Microsoft.PowerBIDedicated
+- Microsoft.Databricks
+- Microsoft.Logic
+- Microsoft.DataLakeAnalytics
+- Microsoft.EventGrid
+- Microsoft.Automation
+- Microsoft.NotificationHubs
+- Microsoft.Sql
+- 
+(Default Registered)
+- Microsoft.KeyVault
+- Microsoft.Synapse
+- Microsoft.Network
+- Microsoft.Synapse
+
+
 ![Data Management Landing Zone](/docs/images/DataManagementZone.png)
 
 The deployment and code artifacts include the following services:
