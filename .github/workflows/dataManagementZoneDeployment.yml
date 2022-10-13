@@ -16,7 +16,7 @@ on:
 
 env:
   AZURE_SUBSCRIPTION_ID: "17588eb2-2943-461a-ab3f-00a3ceac3112" # Update to '{dataHubSubscriptionId}'
-  AZURE_LOCATION: "northeurope"                                 # Update to '{regionName}'
+  AZURE_LOCATION: "southcentralus"                                 # Update to '{regionName}'
 
 jobs:
   validation:
