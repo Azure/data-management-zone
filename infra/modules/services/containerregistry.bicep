@@ -16,7 +16,7 @@ var containerRegistryNameCleaned = replace(containerRegistryName, '-', '')
 var containerRegistryPrivateEndpointName = '${containerRegistry.name}-private-endpoint'
 
 // Resources
-resource containerRegistry 'Microsoft.ContainerRegistry/registries@2020-11-01-preview' = {
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' = {
   name: containerRegistryNameCleaned
   location: location
   tags: tags
@@ -37,12 +37,22 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2020-11-01-pr
       virtualNetworkRules: []
     }
     policies: {
+      azureADAuthenticationAsArmPolicy: {
+        status: 'enabled'
+      }
+      exportPolicy: {
+        status: 'enabled'
+      }
       quarantinePolicy: {
         status: 'enabled'
       }
       retentionPolicy: {
         status: 'enabled'
         days: 7
+      }
+      softDeletePolicy: {
+        status: 'disabled'
+        retentionDays: 7
       }
       trustPolicy: {
         status: 'disabled'
