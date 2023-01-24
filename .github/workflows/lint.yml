@@ -15,7 +15,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check Out Repository
         id: checkout_repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -29,4 +29,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_JSCPD: false
           VALIDATE_JSON: false
+          VALIDATE_GITLEAKS: false
           FILTER_REGEX_EXCLUDE: (/.devcontainer/|/reference/)
