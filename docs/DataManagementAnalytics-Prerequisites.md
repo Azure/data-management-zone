@@ -65,7 +65,7 @@ For now, we are recommending to select one of the regions mentioned below. The l
 - (US) West Central US
 - (US) West US 2
 
-(*) *When the regions currently not supporting Azure Purview gets selected, the Azure Purview deployment gets performed on the default region  (Europe) North Europe*.
+(*) *When the regions currently not supporting Microsoft Purview gets selected, the Microsoft Purview deployment gets performed on the default region  (Europe) North Europe*.
 **Please open a pull request if you want to deploy the artifacts into a region that is not listed above.**
 
 ## Prerequisites
