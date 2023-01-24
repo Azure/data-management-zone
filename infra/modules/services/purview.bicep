@@ -29,13 +29,20 @@ var purviewRegions = [
   'eastus'
   'eastus2'
   'francecentral'
+  'japaneast'
+  'koreacentral'
   'northeurope'
+  'southafricanorth'
   'southcentralus'
   'southeastasia'
+  'switzerlandnorth'
+  'uaenorth'
   'uksouth'
   'westcentralus'
   'westeurope'
+  'westus'
   'westus2'
+  'westus3'
 ]
 
 // Resources
@@ -211,46 +218,6 @@ resource purviewPrivateEndpointQueueARecord 'Microsoft.Network/privateEndpoints/
   }
 }
 
-resource purviewPrivateEndpointNamespace 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: purviewPrivateEndpointNameNamespace
-  location: location
-  tags: tags
-  properties: {
-    manualPrivateLinkServiceConnections: []
-    privateLinkServiceConnections: [
-      {
-        name: purviewPrivateEndpointNameNamespace
-        properties: {
-          groupIds: [
-            'namespace'
-          ]
-          privateLinkServiceId: purview.properties.managedResources.eventHubNamespace
-          requestMessage: ''
-        }
-      }
-    ]
-    subnet: {
-      id: subnetId
-    }
-  }
-}
-
-resource purviewPrivateEndpointNamespaceARecord 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-11-01' = if(!empty(privateDnsZoneIdEventhubNamespace)) {
-  parent: purviewPrivateEndpointNamespace
-  name: 'default'
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: '${purviewPrivateEndpointNamespace.name}-arecord'
-        properties: {
-          privateDnsZoneId: privateDnsZoneIdEventhubNamespace
-        }
-      }
-    ]
-  }
-}
-
 // Outputs
 output purviewId string = purview.id
 output purviewManagedStorageId string = purview.properties.managedResources.storageAccount
-output purviewManagedEventHubId string = purview.properties.managedResources.eventHubNamespace
