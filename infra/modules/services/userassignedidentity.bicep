@@ -12,7 +12,7 @@ param userAssignedIdentityName string
 // Variables
 
 // Resources
-resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
   name: userAssignedIdentityName
   location: location
   tags: tags
