@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1124.51302",
-      "templateHash": "12904071157118301552"
+      "version": "0.13.1.58284",
+      "templateHash": "10931783847955992974"
     }
   },
   "parameters": {
@@ -287,8 +287,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "7004950783398778434"
+              "version": "0.13.1.58284",
+              "templateHash": "15665022949774606948"
             }
           },
           "parameters": {
@@ -494,7 +494,7 @@
               "properties": {
                 "addressPrefix": "0.0.0.0/0",
                 "nextHopType": "VirtualAppliance",
-                "nextHopIpAddress": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
+                "nextHopIpAddress": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix'))), '2020-11-01').ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))]",
@@ -605,7 +605,7 @@
                         "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-publicip001', parameters('prefix')))]"
                       },
                       "subnet": {
-                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))).subnets[0].id]"
+                        "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix'))), '2020-06-01').subnets[0].id]"
                       }
                     }
                   }
@@ -642,8 +642,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "14459821225494404282"
+                      "version": "0.13.1.58284",
+                      "templateHash": "9437950411277849947"
                     }
                   },
                   "parameters": {
@@ -1302,8 +1302,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "14459821225494404282"
+                      "version": "0.13.1.58284",
+                      "templateHash": "9437950411277849947"
                     }
                   },
                   "parameters": {
@@ -1944,11 +1944,11 @@
             },
             "serviceSubnet": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix')))).subnets[1].id]"
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', format('{0}-vnet', parameters('prefix'))), '2020-06-01').subnets[1].id]"
             },
             "firewallPrivateIp": {
               "type": "string",
-              "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix')))).ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
+              "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(resourceId('Microsoft.Network/azureFirewalls', format('{0}-firewall', parameters('prefix'))), '2020-11-01').ipConfigurations[0].properties.privateIPAddress, parameters('firewallPrivateIp'))]"
             }
           }
         }
@@ -1982,8 +1982,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "7745049360156901819"
+              "version": "0.13.1.58284",
+              "templateHash": "1297000386697392450"
             }
           },
           "parameters": {
@@ -2018,6 +2018,7 @@
               "privatelink.eventgrid.azure.net",
               "[format('privatelink.file.{0}', environment().suffixes.storage)]",
               "privatelink.gremlin.cosmos.azure.com",
+              "privatelink.kusto.azuresynapse.net",
               "privatelink.mariadb.database.azure.com",
               "privatelink.mongo.cosmos.azure.com",
               "privatelink.mysql.database.azure.com",
@@ -2262,24 +2263,12 @@
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-10-01').outputs.serviceSubnet.value]"
           },
-          "privateDnsZoneIdPurview": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPurview.value, parameters('privateDnsZoneIdPurview'))]"
-          },
-          "privateDnsZoneIdPurviewPortal": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPurviewPortal.value, parameters('privateDnsZoneIdPurviewPortal'))]"
-          },
-          "privateDnsZoneIdStorageBlob": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdBlob.value, parameters('privateDnsZoneIdBlob'))]"
-          },
-          "privateDnsZoneIdStorageQueue": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdQueue.value, parameters('privateDnsZoneIdQueue'))]"
-          },
-          "privateDnsZoneIdEventhubNamespace": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdNamespace.value, parameters('privateDnsZoneIdNamespace'))]"
-          },
-          "privateDnsZoneIdKeyVault": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdKeyVault.value, parameters('privateDnsZoneIdKeyVault'))]"
-          }
+          "privateDnsZoneIdPurview": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPurview.value), createObject('value', parameters('privateDnsZoneIdPurview')))]",
+          "privateDnsZoneIdPurviewPortal": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPurviewPortal.value), createObject('value', parameters('privateDnsZoneIdPurviewPortal')))]",
+          "privateDnsZoneIdStorageBlob": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdBlob.value), createObject('value', parameters('privateDnsZoneIdBlob')))]",
+          "privateDnsZoneIdStorageQueue": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdQueue.value), createObject('value', parameters('privateDnsZoneIdQueue')))]",
+          "privateDnsZoneIdEventhubNamespace": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdNamespace.value), createObject('value', parameters('privateDnsZoneIdNamespace')))]",
+          "privateDnsZoneIdKeyVault": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdKeyVault.value), createObject('value', parameters('privateDnsZoneIdKeyVault')))]"
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -2287,8 +2276,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "17451550666935843444"
+              "version": "0.13.1.58284",
+              "templateHash": "15006489639519450759"
             }
           },
           "parameters": {
@@ -2331,7 +2320,14 @@
           },
           "variables": {
             "purview001Name": "[format('{0}-purview001', parameters('prefix'))]",
-            "keyvault001Name": "[format('{0}-vault001', parameters('prefix'))]"
+            "keyvault001Name": "[format('{0}-vault001', parameters('prefix'))]",
+            "eventhubnamespace001Name": "[format('{0}-eventhub001', parameters('prefix'))]",
+            "eventhubNotificationName": "notification",
+            "eventhubHookName": "hook",
+            "eventhubnamespace001EventhubNames": [
+              "[variables('eventhubNotificationName')]",
+              "[variables('eventhubHookName')]"
+            ]
           },
           "resources": [
             {
@@ -2356,6 +2352,9 @@
                   "purviewName": {
                     "value": "[variables('purview001Name')]"
                   },
+                  "privateDnsZoneIdEventhubNamespace": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001'), '2020-10-01').outputs.eventhubNamespaceId.value]"
+                  },
                   "privateDnsZoneIdPurview": {
                     "value": "[parameters('privateDnsZoneIdPurview')]"
                   },
@@ -2367,9 +2366,6 @@
                   },
                   "privateDnsZoneIdStorageQueue": {
                     "value": "[parameters('privateDnsZoneIdStorageQueue')]"
-                  },
-                  "privateDnsZoneIdEventhubNamespace": {
-                    "value": "[parameters('privateDnsZoneIdEventhubNamespace')]"
                   }
                 },
                 "template": {
@@ -2378,8 +2374,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "13613768322785013128"
+                      "version": "0.13.1.58284",
+                      "templateHash": "6124665895572370292"
                     }
                   },
                   "parameters": {
@@ -2425,13 +2421,20 @@
                       "eastus",
                       "eastus2",
                       "francecentral",
+                      "japaneast",
+                      "koreacentral",
                       "northeurope",
+                      "southafricanorth",
                       "southcentralus",
                       "southeastasia",
+                      "switzerlandnorth",
+                      "uaenorth",
                       "uksouth",
                       "westcentralus",
                       "westeurope",
-                      "westus2"
+                      "westus",
+                      "westus2",
+                      "westus3"
                     ]
                   },
                   "resources": [
@@ -2560,7 +2563,7 @@
                               "groupIds": [
                                 "blob"
                               ],
-                              "privateLinkServiceId": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName'))).managedResources.storageAccount]",
+                              "privateLinkServiceId": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName')), '2021-07-01').managedResources.storageAccount]",
                               "requestMessage": ""
                             }
                           }
@@ -2607,7 +2610,7 @@
                               "groupIds": [
                                 "queue"
                               ],
-                              "privateLinkServiceId": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName'))).managedResources.storageAccount]",
+                              "privateLinkServiceId": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName')), '2021-07-01').managedResources.storageAccount]",
                               "requestMessage": ""
                             }
                           }
@@ -2638,53 +2641,6 @@
                       "dependsOn": [
                         "[resourceId('Microsoft.Network/privateEndpoints', variables('purviewPrivateEndpointNameQueue'))]"
                       ]
-                    },
-                    {
-                      "type": "Microsoft.Network/privateEndpoints",
-                      "apiVersion": "2020-11-01",
-                      "name": "[variables('purviewPrivateEndpointNameNamespace')]",
-                      "location": "[parameters('location')]",
-                      "tags": "[parameters('tags')]",
-                      "properties": {
-                        "manualPrivateLinkServiceConnections": [],
-                        "privateLinkServiceConnections": [
-                          {
-                            "name": "[variables('purviewPrivateEndpointNameNamespace')]",
-                            "properties": {
-                              "groupIds": [
-                                "namespace"
-                              ],
-                              "privateLinkServiceId": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName'))).managedResources.eventHubNamespace]",
-                              "requestMessage": ""
-                            }
-                          }
-                        ],
-                        "subnet": {
-                          "id": "[parameters('subnetId')]"
-                        }
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Purview/accounts', parameters('purviewName'))]"
-                      ]
-                    },
-                    {
-                      "condition": "[not(empty(parameters('privateDnsZoneIdEventhubNamespace')))]",
-                      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-                      "apiVersion": "2020-11-01",
-                      "name": "[format('{0}/{1}', variables('purviewPrivateEndpointNameNamespace'), 'default')]",
-                      "properties": {
-                        "privateDnsZoneConfigs": [
-                          {
-                            "name": "[format('{0}-arecord', variables('purviewPrivateEndpointNameNamespace'))]",
-                            "properties": {
-                              "privateDnsZoneId": "[parameters('privateDnsZoneIdEventhubNamespace')]"
-                            }
-                          }
-                        ]
-                      },
-                      "dependsOn": [
-                        "[resourceId('Microsoft.Network/privateEndpoints', variables('purviewPrivateEndpointNameNamespace'))]"
-                      ]
                     }
                   ],
                   "outputs": {
@@ -2694,11 +2650,217 @@
                     },
                     "purviewManagedStorageId": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName'))).managedResources.storageAccount]"
+                      "value": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName')), '2021-07-01').managedResources.storageAccount]"
+                    }
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "eventhubnamespace001",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "location": {
+                    "value": "[parameters('location')]"
+                  },
+                  "tags": {
+                    "value": "[parameters('tags')]"
+                  },
+                  "subnetId": {
+                    "value": "[parameters('subnetId')]"
+                  },
+                  "eventhubnamespaceName": {
+                    "value": "[variables('eventhubnamespace001Name')]"
+                  },
+                  "eventhubNames": {
+                    "value": "[variables('eventhubnamespace001EventhubNames')]"
+                  },
+                  "eventhubnamespaceMinThroughput": {
+                    "value": 1
+                  },
+                  "eventhubnamespaceMaxThroughput": {
+                    "value": 1
+                  },
+                  "privateDnsZoneIdEventhubNamespace": {
+                    "value": "[parameters('privateDnsZoneIdEventhubNamespace')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "11184303591094618707"
+                    }
+                  },
+                  "parameters": {
+                    "location": {
+                      "type": "string"
                     },
-                    "purviewManagedEventHubId": {
+                    "tags": {
+                      "type": "object"
+                    },
+                    "subnetId": {
+                      "type": "string"
+                    },
+                    "eventhubnamespaceName": {
+                      "type": "string"
+                    },
+                    "eventhubnamespaceMinThroughput": {
+                      "type": "int",
+                      "maxValue": 20,
+                      "minValue": 1
+                    },
+                    "eventhubnamespaceMaxThroughput": {
+                      "type": "int",
+                      "maxValue": 20,
+                      "minValue": 1
+                    },
+                    "eventhubNames": {
+                      "type": "array",
+                      "defaultValue": []
+                    },
+                    "privateDnsZoneIdEventhubNamespace": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.Purview/accounts', parameters('purviewName'))).managedResources.eventHubNamespace]"
+                      "defaultValue": ""
+                    }
+                  },
+                  "variables": {
+                    "eventhubNamespacePrivateEndpointName": "[format('{0}-private-endpoint', parameters('eventhubnamespaceName'))]"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.EventHub/namespaces",
+                      "apiVersion": "2022-01-01-preview",
+                      "name": "[parameters('eventhubnamespaceName')]",
+                      "location": "[parameters('location')]",
+                      "tags": "[parameters('tags')]",
+                      "identity": {
+                        "type": "SystemAssigned"
+                      },
+                      "sku": {
+                        "name": "Standard",
+                        "tier": "Standard",
+                        "capacity": "[parameters('eventhubnamespaceMinThroughput')]"
+                      },
+                      "properties": {
+                        "disableLocalAuth": true,
+                        "isAutoInflateEnabled": true,
+                        "kafkaEnabled": true,
+                        "maximumThroughputUnits": "[parameters('eventhubnamespaceMaxThroughput')]",
+                        "zoneRedundant": true
+                      }
+                    },
+                    {
+                      "type": "Microsoft.EventHub/namespaces/networkRuleSets",
+                      "apiVersion": "2022-01-01-preview",
+                      "name": "[format('{0}/{1}', parameters('eventhubnamespaceName'), 'default')]",
+                      "properties": {
+                        "defaultAction": "Deny",
+                        "ipRules": [],
+                        "virtualNetworkRules": [],
+                        "publicNetworkAccess": "Enabled",
+                        "trustedServiceAccessEnabled": true
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubnamespaceName'))]"
+                      ]
+                    },
+                    {
+                      "copy": {
+                        "name": "eventhubs",
+                        "count": "[length(parameters('eventhubNames'))]"
+                      },
+                      "type": "Microsoft.EventHub/namespaces/eventhubs",
+                      "apiVersion": "2022-01-01-preview",
+                      "name": "[format('{0}/{1}', parameters('eventhubnamespaceName'), parameters('eventhubNames')[copyIndex()])]",
+                      "properties": {
+                        "captureDescription": {
+                          "enabled": false,
+                          "destination": {
+                            "name": "default",
+                            "properties": {
+                              "archiveNameFormat": "",
+                              "blobContainer": "",
+                              "storageAccountResourceId": ""
+                            }
+                          },
+                          "encoding": "Avro",
+                          "intervalInSeconds": 900,
+                          "sizeLimitInBytes": 10485760,
+                          "skipEmptyArchives": true
+                        },
+                        "messageRetentionInDays": 3,
+                        "partitionCount": 1,
+                        "status": "Active"
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubnamespaceName'))]"
+                      ]
+                    },
+                    {
+                      "type": "Microsoft.Network/privateEndpoints",
+                      "apiVersion": "2020-11-01",
+                      "name": "[variables('eventhubNamespacePrivateEndpointName')]",
+                      "location": "[parameters('location')]",
+                      "tags": "[parameters('tags')]",
+                      "properties": {
+                        "manualPrivateLinkServiceConnections": [],
+                        "privateLinkServiceConnections": [
+                          {
+                            "name": "[variables('eventhubNamespacePrivateEndpointName')]",
+                            "properties": {
+                              "groupIds": [
+                                "namespace"
+                              ],
+                              "privateLinkServiceId": "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubnamespaceName'))]",
+                              "requestMessage": ""
+                            }
+                          }
+                        ],
+                        "subnet": {
+                          "id": "[parameters('subnetId')]"
+                        }
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubnamespaceName'))]"
+                      ]
+                    },
+                    {
+                      "condition": "[not(empty(parameters('privateDnsZoneIdEventhubNamespace')))]",
+                      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+                      "apiVersion": "2020-11-01",
+                      "name": "[format('{0}/{1}', variables('eventhubNamespacePrivateEndpointName'), 'default')]",
+                      "properties": {
+                        "privateDnsZoneConfigs": [
+                          {
+                            "name": "[format('{0}-arecord', variables('eventhubNamespacePrivateEndpointName'))]",
+                            "properties": {
+                              "privateDnsZoneId": "[parameters('privateDnsZoneIdEventhubNamespace')]"
+                            }
+                          }
+                        ]
+                      },
+                      "dependsOn": [
+                        "[resourceId('Microsoft.Network/privateEndpoints', variables('eventhubNamespacePrivateEndpointName'))]"
+                      ]
+                    }
+                  ],
+                  "outputs": {
+                    "eventhubNamespaceId": {
+                      "type": "string",
+                      "value": "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubnamespaceName'))]"
                     }
                   }
                 }
@@ -2736,8 +2898,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "12660131753967436973"
+                      "version": "0.13.1.58284",
+                      "templateHash": "373255486735856424"
                     }
                   },
                   "parameters": {
@@ -2764,7 +2926,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.KeyVault/vaults",
-                      "apiVersion": "2021-04-01-preview",
+                      "apiVersion": "2022-07-01",
                       "name": "[parameters('keyvaultName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2783,6 +2945,7 @@
                           "ipRules": [],
                           "virtualNetworkRules": []
                         },
+                        "publicNetworkAccess": "Enabled",
                         "sku": {
                           "family": "A",
                           "name": "standard"
@@ -2851,7 +3014,100 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2020-10-01",
-              "name": "purviewKeyVaultRoleAssignment",
+              "name": "purviewKafkaConfiguration",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "purviewId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2020-10-01').outputs.purviewId.value]"
+                  },
+                  "eventhubnamespaceId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001'), '2020-10-01').outputs.eventhubNamespaceId.value]"
+                  },
+                  "eventhubHookName": {
+                    "value": "[variables('eventhubHookName')]"
+                  },
+                  "eventhubNotificationName": {
+                    "value": "[variables('eventhubNotificationName')]"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "5610001366120048244"
+                    }
+                  },
+                  "parameters": {
+                    "eventhubnamespaceId": {
+                      "type": "string"
+                    },
+                    "eventhubNotificationName": {
+                      "type": "string"
+                    },
+                    "eventhubHookName": {
+                      "type": "string"
+                    },
+                    "purviewId": {
+                      "type": "string"
+                    }
+                  },
+                  "variables": {
+                    "eventhubnamespaceSubscriptionId": "[if(greaterOrEquals(length(split(parameters('eventhubnamespaceId'), '/')), 9), split(parameters('eventhubnamespaceId'), '/')[2], subscription().subscriptionId)]",
+                    "eventhubnamespaceResourceGroupName": "[if(greaterOrEquals(length(split(parameters('eventhubnamespaceId'), '/')), 9), split(parameters('eventhubnamespaceId'), '/')[4], resourceGroup().name)]",
+                    "eventhubnamespaceName": "[if(greaterOrEquals(length(split(parameters('eventhubnamespaceId'), '/')), 9), last(split(parameters('eventhubnamespaceId'), '/')), 'incorrectSegmentLength')]",
+                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Purview/accounts/kafkaConfigurations",
+                      "apiVersion": "2021-12-01",
+                      "name": "[format('{0}/{1}', variables('purviewName'), 'notification')]",
+                      "properties": {
+                        "credentials": {
+                          "type": "SystemAssigned"
+                        },
+                        "eventHubResourceId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('eventhubnamespaceSubscriptionId'), variables('eventhubnamespaceResourceGroupName')), 'Microsoft.EventHub/namespaces/eventhubs', variables('eventhubnamespaceName'), parameters('eventhubNotificationName'))]",
+                        "eventHubType": "Notification",
+                        "eventStreamingState": "Enabled",
+                        "eventStreamingType": "Azure"
+                      }
+                    },
+                    {
+                      "type": "Microsoft.Purview/accounts/kafkaConfigurations",
+                      "apiVersion": "2021-12-01",
+                      "name": "[format('{0}/{1}', variables('purviewName'), 'hook')]",
+                      "properties": {
+                        "credentials": {
+                          "type": "SystemAssigned"
+                        },
+                        "eventHubResourceId": "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('eventhubnamespaceSubscriptionId'), variables('eventhubnamespaceResourceGroupName')), 'Microsoft.EventHub/namespaces/eventhubs', variables('eventhubnamespaceName'), parameters('eventhubHookName'))]",
+                        "eventHubType": "Hook",
+                        "eventStreamingState": "Enabled",
+                        "eventStreamingType": "Azure",
+                        "consumerGroup": "$Default"
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'purview001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'purviewRoleAssignmentEventhubHook')]",
+                "[resourceId('Microsoft.Resources/deployments', 'purviewRoleAssignmentEventhubNotification')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "purviewRoleAssignmentKeyVault",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -2863,6 +3119,9 @@
                   },
                   "keyVaultId": {
                     "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVault001'), '2020-10-01').outputs.keyvaultId.value]"
+                  },
+                  "role": {
+                    "value": "KeyVaultSecretsUser"
                   }
                 },
                 "template": {
@@ -2871,8 +3130,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "11291074661216838287"
+                      "version": "0.13.1.58284",
+                      "templateHash": "5796602811982184644"
                     }
                   },
                   "parameters": {
@@ -2881,13 +3140,22 @@
                     },
                     "keyVaultId": {
                       "type": "string"
+                    },
+                    "role": {
+                      "type": "string",
+                      "allowedValues": [
+                        "KeyVaultSecretsUser"
+                      ]
                     }
                   },
                   "variables": {
                     "keyVaultName": "[if(greaterOrEquals(length(split(parameters('keyVaultId'), '/')), 9), last(split(parameters('keyVaultId'), '/')), 'incorrectSegmentLength')]",
                     "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
                     "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], resourceGroup().name)]",
-                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]"
+                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
+                    "roles": {
+                      "KeyVaultSecretsUser": "4633458b-17de-408a-b874-0445c86b69e6"
+                    }
                   },
                   "resources": [
                     {
@@ -2896,7 +3164,7 @@
                       "scope": "[format('Microsoft.KeyVault/vaults/{0}', variables('keyVaultName'))]",
                       "name": "[guid(uniqueString(resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName'))))]",
                       "properties": {
-                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')]",
+                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('roles')[parameters('role')])]",
                         "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2020-12-01-preview', 'full').identity.principalId]",
                         "principalType": "ServicePrincipal"
                       }
@@ -2906,6 +3174,168 @@
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Resources/deployments', 'keyVault001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'purview001')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "purviewRoleAssignmentEventhubNotification",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "purviewId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2020-10-01').outputs.purviewId.value]"
+                  },
+                  "eventhubnamespaceId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001'), '2020-10-01').outputs.eventhubNamespaceId.value]"
+                  },
+                  "eventhubName": {
+                    "value": "[variables('eventhubNotificationName')]"
+                  },
+                  "role": {
+                    "value": "AzureEventHubsDataSender"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "11880650922445855442"
+                    }
+                  },
+                  "parameters": {
+                    "eventhubnamespaceId": {
+                      "type": "string"
+                    },
+                    "eventhubName": {
+                      "type": "string"
+                    },
+                    "purviewId": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string",
+                      "allowedValues": [
+                        "AzureEventHubsDataReceiver",
+                        "AzureEventHubsDataSender"
+                      ]
+                    }
+                  },
+                  "variables": {
+                    "eventhubnamespaceName": "[if(greaterOrEquals(length(split(parameters('eventhubnamespaceId'), '/')), 9), last(split(parameters('eventhubnamespaceId'), '/')), 'incorrectSegmentLength')]",
+                    "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
+                    "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], resourceGroup().name)]",
+                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
+                    "roles": {
+                      "AzureEventHubsDataReceiver": "a638d3c7-ab3a-418d-83e6-5f17a39d4fde",
+                      "AzureEventHubsDataSender": "2b629674-e913-4c01-ae53-ef4638d8f975"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/roleAssignments",
+                      "apiVersion": "2022-04-01",
+                      "scope": "[format('Microsoft.EventHub/namespaces/{0}/eventhubs/{1}', variables('eventhubnamespaceName'), parameters('eventhubName'))]",
+                      "name": "[guid(uniqueString(resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventhubnamespaceName'), parameters('eventhubName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName'))))]",
+                      "properties": {
+                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('roles')[parameters('role')])]",
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2020-12-01-preview', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001')]",
+                "[resourceId('Microsoft.Resources/deployments', 'purview001')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deployments",
+              "apiVersion": "2020-10-01",
+              "name": "purviewRoleAssignmentEventhubHook",
+              "properties": {
+                "expressionEvaluationOptions": {
+                  "scope": "inner"
+                },
+                "mode": "Incremental",
+                "parameters": {
+                  "purviewId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2020-10-01').outputs.purviewId.value]"
+                  },
+                  "eventhubnamespaceId": {
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001'), '2020-10-01').outputs.eventhubNamespaceId.value]"
+                  },
+                  "eventhubName": {
+                    "value": "[variables('eventhubHookName')]"
+                  },
+                  "role": {
+                    "value": "AzureEventHubsDataReceiver"
+                  }
+                },
+                "template": {
+                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "metadata": {
+                    "_generator": {
+                      "name": "bicep",
+                      "version": "0.13.1.58284",
+                      "templateHash": "11880650922445855442"
+                    }
+                  },
+                  "parameters": {
+                    "eventhubnamespaceId": {
+                      "type": "string"
+                    },
+                    "eventhubName": {
+                      "type": "string"
+                    },
+                    "purviewId": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string",
+                      "allowedValues": [
+                        "AzureEventHubsDataReceiver",
+                        "AzureEventHubsDataSender"
+                      ]
+                    }
+                  },
+                  "variables": {
+                    "eventhubnamespaceName": "[if(greaterOrEquals(length(split(parameters('eventhubnamespaceId'), '/')), 9), last(split(parameters('eventhubnamespaceId'), '/')), 'incorrectSegmentLength')]",
+                    "purviewSubscriptionId": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[2], subscription().subscriptionId)]",
+                    "purviewResourceGroupName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), split(parameters('purviewId'), '/')[4], resourceGroup().name)]",
+                    "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
+                    "roles": {
+                      "AzureEventHubsDataReceiver": "a638d3c7-ab3a-418d-83e6-5f17a39d4fde",
+                      "AzureEventHubsDataSender": "2b629674-e913-4c01-ae53-ef4638d8f975"
+                    }
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.Authorization/roleAssignments",
+                      "apiVersion": "2022-04-01",
+                      "scope": "[format('Microsoft.EventHub/namespaces/{0}/eventhubs/{1}', variables('eventhubnamespaceName'), parameters('eventhubName'))]",
+                      "name": "[guid(uniqueString(resourceId('Microsoft.EventHub/namespaces/eventhubs', variables('eventhubnamespaceName'), parameters('eventhubName')), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName'))))]",
+                      "properties": {
+                        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('roles')[parameters('role')])]",
+                        "principalId": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', variables('purviewSubscriptionId'), variables('purviewResourceGroupName')), 'Microsoft.Purview/accounts', variables('purviewName')), '2020-12-01-preview', 'full').identity.principalId]",
+                        "principalType": "ServicePrincipal"
+                      }
+                    }
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001')]",
                 "[resourceId('Microsoft.Resources/deployments', 'purview001')]"
               ]
             }
@@ -2921,7 +3351,7 @@
             },
             "purviewManagedEventHubId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'purview001'), '2020-10-01').outputs.purviewManagedEventHubId.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespace001'), '2020-10-01').outputs.eventhubNamespaceId.value]"
             }
           }
         }
@@ -2955,9 +3385,7 @@
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-10-01').outputs.serviceSubnet.value]"
           },
-          "privateDnsZoneIdContainerRegistry": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdContainerRegistry.value, parameters('privateDnsZoneIdContainerRegistry'))]"
-          }
+          "privateDnsZoneIdContainerRegistry": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdContainerRegistry.value), createObject('value', parameters('privateDnsZoneIdContainerRegistry')))]"
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -2965,8 +3393,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "405891751471543400"
+              "version": "0.13.1.58284",
+              "templateHash": "11420617460349724342"
             }
           },
           "parameters": {
@@ -3023,8 +3451,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "10570330895745200307"
+                      "version": "0.13.1.58284",
+                      "templateHash": "7061681707222167568"
                     }
                   },
                   "parameters": {
@@ -3052,7 +3480,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.ContainerRegistry/registries",
-                      "apiVersion": "2020-11-01-preview",
+                      "apiVersion": "2022-02-01-preview",
                       "name": "[variables('containerRegistryNameCleaned')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -3073,12 +3501,22 @@
                           "virtualNetworkRules": []
                         },
                         "policies": {
+                          "azureADAuthenticationAsArmPolicy": {
+                            "status": "enabled"
+                          },
+                          "exportPolicy": {
+                            "status": "enabled"
+                          },
                           "quarantinePolicy": {
                             "status": "enabled"
                           },
                           "retentionPolicy": {
                             "status": "enabled",
                             "days": 7
+                          },
+                          "softDeletePolicy": {
+                            "status": "disabled",
+                            "retentionDays": 7
                           },
                           "trustPolicy": {
                             "status": "disabled",
@@ -3171,18 +3609,10 @@
           "subnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-network', variables('name'))), 'Microsoft.Resources/deployments', 'networkServices'), '2020-10-01').outputs.serviceSubnet.value]"
           },
-          "privateDnsZoneIdSynapseprivatelinkhub": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdSynapse.value, parameters('privateDnsZoneIdSynapse'))]"
-          },
-          "privateDnsZoneIdAnalysis": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdAnalysis.value, '')]"
-          },
-          "privateDnsZoneIdPbiDedicated": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPbiDedicated.value, '')]"
-          },
-          "privateDnsZoneIdPowerQuery": {
-            "value": "[if(parameters('enableDnsAndFirewallDeployment'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPowerQuery.value, '')]"
-          }
+          "privateDnsZoneIdSynapseprivatelinkhub": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdSynapse.value), createObject('value', parameters('privateDnsZoneIdSynapse')))]",
+          "privateDnsZoneIdAnalysis": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdAnalysis.value), createObject('value', ''))]",
+          "privateDnsZoneIdPbiDedicated": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPbiDedicated.value), createObject('value', ''))]",
+          "privateDnsZoneIdPowerQuery": "[if(parameters('enableDnsAndFirewallDeployment'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('{0}-global-dns', variables('name'))), 'Microsoft.Resources/deployments', 'globalDnsZones'), '2020-10-01').outputs.privateDnsZoneIdPowerQuery.value), createObject('value', ''))]"
         },
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -3190,8 +3620,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "14201920356500171973"
+              "version": "0.13.1.58284",
+              "templateHash": "11563909519108326296"
             }
           },
           "parameters": {
@@ -3261,8 +3691,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "16240531194403531210"
+                      "version": "0.13.1.58284",
+                      "templateHash": "14299437496902087822"
                     }
                   },
                   "parameters": {
@@ -3286,35 +3716,37 @@
                     "synapsePrivatelinkHubNameCleaned": "[replace(parameters('synapsePrivatelinkHubName'), '-', '')]",
                     "synapsePrivatelinkHubPrivateEndpointName": "[format('{0}-private-endpoint', variables('synapsePrivatelinkHubNameCleaned'))]",
                     "synapsePrivatelinkHubRegions": [
-                      "westus2",
-                      "eastus",
-                      "northeurope",
-                      "westeurope",
-                      "southeastasia",
                       "australiaeast",
-                      "westcentralus",
-                      "southcentralus",
-                      "eastus2",
-                      "uksouth",
-                      "westus",
                       "australiasoutheast",
-                      "eastasia",
                       "brazilsouth",
-                      "centralus",
-                      "centralindia",
-                      "japaneast",
-                      "northcentralus",
                       "canadacentral",
                       "canadaeast",
-                      "koreacentral",
-                      "southafricanorth",
-                      "ukwest",
-                      "japanwest",
+                      "centralindia",
+                      "centralus",
+                      "eastasia",
+                      "eastus",
+                      "eastus2",
                       "francecentral",
-                      "switzerlandnorth",
                       "germanywestcentral",
+                      "japaneast",
+                      "japanwest",
+                      "koreacentral",
+                      "northcentralus",
+                      "northeurope",
                       "norwayeast",
+                      "quatarcentral",
+                      "southafricanorth",
+                      "southcentralus",
+                      "southindia",
+                      "southeastasia",
+                      "switzerlandnorth",
                       "uaenorth",
+                      "uksouth",
+                      "ukwest",
+                      "westcentralus",
+                      "westeurope",
+                      "westus",
+                      "westus2",
                       "westus3",
                       "jioindiawest"
                     ]
@@ -3322,7 +3754,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Synapse/privateLinkHubs",
-                      "apiVersion": "2021-03-01",
+                      "apiVersion": "2021-06-01",
                       "name": "[variables('synapsePrivatelinkHubNameCleaned')]",
                       "location": "[if(contains(variables('synapsePrivatelinkHubRegions'), parameters('location')), parameters('location'), 'northeurope')]",
                       "tags": "[parameters('tags')]",
@@ -3421,8 +3853,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1124.51302",
-              "templateHash": "18084870413505134204"
+              "version": "0.13.1.58284",
+              "templateHash": "104920521759905055"
             }
           },
           "parameters": {
@@ -3475,8 +3907,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "1773924684182957173"
+                      "version": "0.13.1.58284",
+                      "templateHash": "5078395867383769845"
                     }
                   },
                   "parameters": {
@@ -3493,7 +3925,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-                      "apiVersion": "2018-11-30",
+                      "apiVersion": "2022-01-31-preview",
                       "name": "[parameters('userAssignedIdentityName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]"
@@ -3530,8 +3962,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "15089794917938446955"
+                      "version": "0.13.1.58284",
+                      "templateHash": "6545478069686843090"
                     }
                   },
                   "parameters": {
@@ -3594,8 +4026,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.4.1124.51302",
-                      "templateHash": "7632760840318778244"
+                      "version": "0.13.1.58284",
+                      "templateHash": "1984282279033984571"
                     }
                   },
                   "parameters": {
@@ -3620,6 +4052,7 @@
                     }
                   },
                   "variables": {
+                    "$fxv#0": "# Copyright (c) Microsoft Corporation.\r\n# Licensed under the MIT license.\r\n\r\n# Define script arguments\r\n[CmdletBinding()]\r\nparam (\r\n    [Parameter(Mandatory = $true)]\r\n    [ValidateNotNullOrEmpty()]\r\n    [string]\r\n    $PurviewId,\r\n\r\n    [Parameter(Mandatory = $false)]\r\n    [string[]]\r\n    $PurviewRootCollectionAdmins = @(),\r\n\r\n    [Parameter(Mandatory=$false)]\r\n    [Switch]\r\n    $SetPurviewAccountAsDefault\r\n)\r\n\r\n# Install Required Module\r\nWrite-Output \"Installing Required Module\"\r\nSet-PSRepository `\r\n    -Name PSGallery `\r\n    -InstallationPolicy Trusted\r\nInstall-Module `\r\n    -Name Az.Purview `\r\n    -Repository PSGallery `\r\n    -Force\r\n\r\n# Define Parameters\r\nWrite-Output \"Defining Parameters\"\r\n$tenantId = (Get-AzContext).Tenant.Id\r\n$purviewSubscriptionId = $PurviewId.Split(\"/\")[2]\r\n$purviewResourceGroupName = $PurviewId.Split(\"/\")[4]\r\n$purviewAccountName = $PurviewId.Split(\"/\")[8]\r\n\r\nif ($SetPurviewAccountAsDefault) {\r\n    # Set Purview Account as Default in Tenant\r\n    Write-Output \"Setting Purview Account as Default in Tenant\"\r\n    Set-AzPurviewDefaultAccount `\r\n        -ScopeTenantId $tenantId `\r\n        -ScopeType \"Tenant\" `\r\n        -Scope $tenantId `\r\n        -SubscriptionId $purviewSubscriptionId `\r\n        -ResourceGroupName $purviewResourceGroupName `\r\n        -AccountName $purviewAccountName\r\n} else {\r\n    # NOT Set Purview Account as Default in Tenant\r\n    Write-Output \"NOT Setting Purview Account as Default in Tenant\"\r\n}\r\n\r\nforeach ($purviewRootCollectionAdmin in $PurviewRootCollectionAdmins) {\r\n    # Set Purview Root Collection Admin\r\n    Write-Output \"Setting Purview Root Collection Admin '${purviewRootCollectionAdmin}'\"\r\n    Add-AzPurviewAccountRootCollectionAdmin `\r\n        -SubscriptionId $purviewSubscriptionId `\r\n        -ResourceGroupName $purviewResourceGroupName `\r\n        -AccountName $purviewAccountName `\r\n        -ObjectId $purviewRootCollectionAdmin\r\n}\r\n",
                     "purviewName": "[if(greaterOrEquals(length(split(parameters('purviewId'), '/')), 9), last(split(parameters('purviewId'), '/')), 'incorrectSegmentLength')]",
                     "purviewSetupName": "[format('{0}-setup', variables('purviewName'))]",
                     "purviewRootCollectionAdminsInput": "[replace(replace(string(parameters('purviewRootCollectionAdminObjectIds')), '[', ''), ']', '')]"
@@ -3648,7 +4081,7 @@
                         },
                         "environmentVariables": [],
                         "forceUpdateTag": "[parameters('forceUpdateTag')]",
-                        "scriptContent": "# Copyright (c) Microsoft Corporation.\r\n# Licensed under the MIT license.\r\n\r\n# Define script arguments\r\n[CmdletBinding()]\r\nparam (\r\n    [Parameter(Mandatory = $true)]\r\n    [ValidateNotNullOrEmpty()]\r\n    [string]\r\n    $PurviewId,\r\n\r\n    [Parameter(Mandatory = $false)]\r\n    [string[]]\r\n    $PurviewRootCollectionAdmins = @(),\r\n\r\n    [Parameter(Mandatory=$false)]\r\n    [Switch]\r\n    $SetPurviewAccountAsDefault\r\n)\r\n\r\n# Install Required Module\r\nWrite-Output \"Installing Required Module\"\r\nSet-PSRepository `\r\n    -Name PSGallery `\r\n    -InstallationPolicy Trusted\r\nInstall-Module `\r\n    -Name Az.Purview `\r\n    -Repository PSGallery `\r\n    -Force\r\n\r\n# Define Parameters\r\nWrite-Output \"Defining Parameters\"\r\n$tenantId = (Get-AzContext).Tenant.Id\r\n$purviewSubscriptionId = $PurviewId.Split(\"/\")[2]\r\n$purviewResourceGroupName = $PurviewId.Split(\"/\")[4]\r\n$purviewAccountName = $PurviewId.Split(\"/\")[8]\r\n\r\nif ($SetPurviewAccountAsDefault) {\r\n    # Set Purview Account as Default in Tenant\r\n    Write-Output \"Setting Purview Account as Default in Tenant\"\r\n    Set-AzPurviewDefaultAccount `\r\n        -ScopeTenantId $tenantId `\r\n        -ScopeType \"Tenant\" `\r\n        -Scope $tenantId `\r\n        -SubscriptionId $purviewSubscriptionId `\r\n        -ResourceGroupName $purviewResourceGroupName `\r\n        -AccountName $purviewAccountName\r\n} else {\r\n    # NOT Set Purview Account as Default in Tenant\r\n    Write-Output \"NOT Setting Purview Account as Default in Tenant\"\r\n}\r\n\r\nforeach ($purviewRootCollectionAdmin in $PurviewRootCollectionAdmins) {\r\n    # Set Purview Root Collection Admin\r\n    Write-Output \"Setting Purview Root Collection Admin '${purviewRootCollectionAdmin}'\"\r\n    Add-AzPurviewAccountRootCollectionAdmin `\r\n        -SubscriptionId $purviewSubscriptionId `\r\n        -ResourceGroupName $purviewResourceGroupName `\r\n        -AccountName $purviewAccountName `\r\n        -ObjectId $purviewRootCollectionAdmin\r\n}\r\n",
+                        "scriptContent": "[variables('$fxv#0')]",
                         "retentionInterval": "P1D",
                         "supportingScriptUris": [],
                         "timeout": "PT30M"

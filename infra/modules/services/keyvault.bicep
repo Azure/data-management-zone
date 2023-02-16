@@ -15,7 +15,7 @@ param privateDnsZoneIdKeyVault string = ''
 var keyVaultPrivateEndpointName = '${keyVault.name}-private-endpoint'
 
 // Resources
-resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyvaultName
   location: location
   tags: tags
@@ -34,6 +34,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-04-01-preview' = {
       ipRules: []
       virtualNetworkRules: []
     }
+    publicNetworkAccess: 'Enabled'
     sku: {
       family: 'A'
       name: 'standard'
