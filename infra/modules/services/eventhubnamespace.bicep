@@ -43,7 +43,7 @@ resource eventhubNamespace 'Microsoft.EventHub/namespaces@2022-01-01-preview' = 
   }
 }
 
-resource eventhubNamespaceNetworkRuleSets 'Microsoft.EventHub/namespaces/networkRuleSets@2022-01-01-preview' = {
+resource eventhubNamespaceNetworkRuleSets 'Microsoft.EventHub/namespaces/networkRuleSets@2021-06-01-preview' = {
   name: 'default'
   parent: eventhubNamespace
   properties: {
