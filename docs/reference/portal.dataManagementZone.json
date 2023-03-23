@@ -348,13 +348,13 @@
                                     "type": "Microsoft.Common.TextBox",
                                     "visible": "[equals(steps('connectivitySettings').firewallConfiguration.disableDnsAndFirewallDeployment, 'no')]",
                                     "defaultValue": "10.0.0.0/24",
-                                    "toolTip": "Specify a CIDR range for the Azure Firewall Subnet within the range [24,28].",
+                                    "toolTip": "Specify a CIDR range for the Azure Firewall Subnet within the range [24,26].",
                                     "constraints": {
                                         "required": true,
                                         "validations": [
                                             {
-                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-8]))$",
-                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,28]."
+                                                "regex": "^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(?:\/(2[4-6]))$",
+                                                "message": "Invalid CIDR range. The address prefix must be in the range [24,26]."
                                             },
                                             {
                                                 "isValid": "[if(greaterOrEquals(last(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), 8), equals(last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.virtualNetworkAddressCidrRange, '/')), '.'), 1)), last(take(split(first(split(steps('connectivitySettings').virtualNetworkConfiguration.azureFirewallSubnetCidrRange, '/')), '.'), 1))), true)]",
