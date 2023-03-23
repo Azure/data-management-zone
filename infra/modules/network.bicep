@@ -174,7 +174,7 @@ var azureFirewallSubnet = enableDnsAndFirewallDeployment ? [
     }
   }
 ] : []
-var subnets = concat(azureFirewallSubnet, generalSubnets)
+var subnets = concat(generalSubnets, azureFirewallSubnet)
 
 // Resources
 resource routeTable 'Microsoft.Network/routeTables@2020-11-01' = {
@@ -306,7 +306,7 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
             id: publicIp.id
           }
           subnet: {
-            id: vnet.properties.subnets[0].id
+            id: vnet.properties.subnets[1].id
           }
         }
       }
@@ -335,5 +335,5 @@ resource firewall 'Microsoft.Network/azureFirewalls@2020-11-01' = if(enableDnsAn
 
 // Outputs
 output vnetId string = vnet.id
-output serviceSubnet string = vnet.properties.subnets[1].id
+output serviceSubnet string = vnet.properties.subnets[0].id
 output firewallPrivateIp string = enableDnsAndFirewallDeployment ? firewall.properties.ipConfigurations[0].properties.privateIPAddress : firewallPrivateIp
