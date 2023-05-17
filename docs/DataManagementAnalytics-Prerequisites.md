@@ -75,6 +75,7 @@ Before we start with the deployment, please make sure that you have the followin
 - An Azure subscription. If you don't have an Azure subscription, [create your Azure free account today](https://azure.microsoft.com/free/).
 - [User Access Administrator](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator) or [Owner](https://docs.microsoft.com/azure/role-based-access-control/built-in-roles#owner) access to the subscription to be able to create a service principal and role assignments for it.
 - For the deployment, please choose one of the **Supported Regions**.
+- Add the id of one or more users or groups to the **purviewRootCollectionAdminObjectIds** parameter. When deploying from Github Actions or DevOps. This allows you to access Purview after it is deployed.
 
 ## Deployment
 
