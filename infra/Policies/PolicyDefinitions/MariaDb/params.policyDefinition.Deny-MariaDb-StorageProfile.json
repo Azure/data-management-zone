@@ -27,7 +27,7 @@
                     "defaultValue": "Deny"
                 },
                 "minBackupRetentionDays": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Minimum Backup Retention in Days",
                         "description": "Specifies the minimum backup retention in days"
