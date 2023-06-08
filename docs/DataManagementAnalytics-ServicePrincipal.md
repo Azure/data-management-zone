@@ -36,7 +36,7 @@ This will generate the following JSON output:
 
 ```powershell
 # Ensure you are in the right subscription
-Set-AzContext -Subscription "{subscriptionName}"
+Set-AzContext -Subscription "{SubscriptionId or SubscriptionName}"
 
 # Create service principal
 $sp = New-AzADServicePrincipal -DisplayName {name}
