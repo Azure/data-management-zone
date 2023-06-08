@@ -38,7 +38,7 @@ This will generate the following JSON output:
 # Ensure you are in the right subscription
 Set-AzContext -Subscription "{subscriptionName}"
 
-#Create service principal
+# Create service principal
 $sp = New-AzADServicePrincipal -DisplayName {name}
 $sp.PasswordCredentials.SecretText
 ```
