@@ -35,7 +35,7 @@ This will generate the following JSON output:
 **Azure PowerShell:**
 
 ```powershell
-#Ensure you are in the right subscription
+# Ensure you are in the right subscription
 Set-AzContext -Subscription "{subscriptionName}"
 
 #Create service principal
