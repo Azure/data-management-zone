@@ -32,6 +32,20 @@ This will generate the following JSON output:
 
 > **Note:** Take note of the output. It will be required for the next steps.
 
+**Azure PowerShell:**
+
+```powershell
+# Ensure you are in the right subscription
+Set-AzContext -Subscription "{SubscriptionId or SubscriptionName}"
+
+# Create service principal
+$sp = New-AzADServicePrincipal -DisplayName {name}
+$sp.PasswordCredentials.SecretText
+```
+The returned object contains the generated password. Make sure that you store this value somewhere secure to authenticate with the service principal.
+
+> **Note:** Beginning with Az PowerShell module version 7.x, `New-AzADServicePrincipal` no longer assigns the Contributor role to the service principal by default. Follow steps below to grant it the `Contributor` role.
+
 ## Adding additional role assigments
 
 For automation purposes, one more role assignments is required for the service principal.
