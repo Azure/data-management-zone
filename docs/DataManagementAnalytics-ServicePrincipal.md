@@ -44,7 +44,7 @@ $sp.PasswordCredentials.SecretText
 ```
 The returned object contains the generated password. Make sure that you store this value somewhere secure to authenticate with the service principal.
 
-Note: Beginning with Az PowerShell module version 7.x, `New-AzADServicePrincipal` no longer assigns the Contributor role to the service principal by default. Follow steps below to grant it the `Contributor` role.
+> **Note:** Beginning with Az PowerShell module version 7.x, `New-AzADServicePrincipal` no longer assigns the Contributor role to the service principal by default. Follow steps below to grant it the `Contributor` role.
 
 ## Adding additional role assigments
 
