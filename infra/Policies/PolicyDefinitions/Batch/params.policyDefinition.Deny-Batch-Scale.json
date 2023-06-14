@@ -27,7 +27,7 @@
                     "defaultValue": "Deny"
                 },
                 "maxTargetDedicatedNodes": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Target Dedicated Nodes",
                         "description": "Specifies the maximum target for dedicated nodes"
@@ -35,7 +35,7 @@
                     "defaultValue": 10
                 },
                 "maxTargetLowPriorityNodes": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Maximum Target Low Priority Nodes",
                         "description": "Specifies the maximum target for low priority nodes"

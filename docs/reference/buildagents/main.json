@@ -153,7 +153,7 @@
               "defaultValue": "Standard"
             },
             "vmssSkuCapacity": {
-              "type": "int",
+              "type": "Integer",
               "defaultValue": 1
             },
             "administratorUsername": {

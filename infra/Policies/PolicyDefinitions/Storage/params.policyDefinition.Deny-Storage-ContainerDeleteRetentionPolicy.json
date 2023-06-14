@@ -27,7 +27,7 @@
                     "defaultValue": "Deny"
                 },
                 "minContainerDeleteRetentionInDays": {
-                    "type": "Int",
+                    "type": "Integer",
                     "metadata": {
                         "displayName": "Minimum Container Delete Retention in Days",
                         "description": "Specifies the minimum number of days for the container delete retention policy"
