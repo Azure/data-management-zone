@@ -1,5 +1,27 @@
-# Copyright (c) Microsoft Corporation.
-# Licensed under the MIT license.
+<#
+.SYNOPSIS
+    Sets up a Purview account with specified parameters.
+
+.DESCRIPTION
+    This script installs the required Az.Purview module, defines necessary parameters, and optionally sets the specified Purview account as the default account in the tenant.
+
+.PARAMETER PurviewId
+    The resource ID of the Purview account.
+
+.PARAMETER PurviewRootCollectionAdmins
+    An array of root collection administrators for the Purview account.
+
+.PARAMETER SetPurviewAccountAsDefault
+    A switch to set the specified Purview account as the default account in the tenant.
+
+.EXAMPLE
+    .\SetupPurview.ps1 -PurviewId "/subscriptions/xxxx/resourceGroups/xxxx/providers/Microsoft.Purview/accounts/xxxx" -SetPurviewAccountAsDefault
+
+.NOTES
+    Copyright (c) Microsoft Corporation.
+    Licensed under the MIT license.
+#>
+
 
 # Define script arguments
 [CmdletBinding()]
