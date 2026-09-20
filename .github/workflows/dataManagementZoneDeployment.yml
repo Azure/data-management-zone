@@ -29,19 +29,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check Out Repository
         id: checkout_repository
-        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Login to Azure
       - name: Azure Login
         id: azure_login
-        uses: azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Deploy Data Management Zone - validation
       - name: Deploy Data Management Zone - validation
         id: data_management_zone_validation
-        uses: azure/arm-deploy@65ae74fb7aec7c680c88ef456811f353adae4d06 # v1.0.9
+        uses: azure/arm-deploy@a1361c2c2cd398621955b16ca32e01c65ea340f5 # v2.0.0
         with:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -54,7 +54,7 @@ jobs:
       # Deploy Data Management Zone - what-if
       - name: Deploy Data Management Zone - what-if
         id: data_management_zone_whatif
-        uses: azure/CLI@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1.0.9
+        uses: azure/CLI@9eb25b8360668fb0ecbafa808d40e2197b2f5f52 # v3.0.0
         with:
           azcliversion: "agentazcliversion"
           inlineScript: |
@@ -72,7 +72,7 @@ jobs:
       # Log out from Azure
       - name: Log out from Azure
         id: azure_logout
-        uses: azure/cli@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1.0.9
+        uses: azure/cli@9eb25b8360668fb0ecbafa808d40e2197b2f5f52 # v3.0.0
         with:
           azcliversion: "agentazcliversion"
           inlineScript: |
@@ -89,12 +89,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check Out Repository
         id: checkout_repository
-        uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Login to Azure
       - name: Azure Login
         id: azure_login
-        uses: azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
@@ -102,7 +102,7 @@ jobs:
       # Deploy Data Management Zone
       - name: Deploy Data Management Zone
         id: data_management_zone_deployment
-        uses: azure/arm-deploy@65ae74fb7aec7c680c88ef456811f353adae4d06 # v1.0.9
+        uses: azure/arm-deploy@a1361c2c2cd398621955b16ca32e01c65ea340f5 # v2.0.0
         with:
           scope: subscription
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -115,7 +115,7 @@ jobs:
       # Log out from Azure
       - name: Log out from Azure
         id: azure_logout
-        uses: azure/cli@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1.0.9
+        uses: azure/cli@9eb25b8360668fb0ecbafa808d40e2197b2f5f52 # v3.0.0
         with:
           azcliversion: "agentazcliversion"
           inlineScript: |
